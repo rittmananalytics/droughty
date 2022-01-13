@@ -2,9 +2,9 @@
 import sys
 import click
 
-from .lookml_module import output
-from .dbt_test_module import schema_output
-from .dbml_module import dbml_output
+from droughty.lookml_module import output
+from droughty.dbt_test_module import schema_output
+from droughty.dbml_module import dbml_output
 
 @click.group(invoke_without_command=False)
 @click.pass_context

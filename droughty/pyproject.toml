@@ -3,12 +3,28 @@ name = "droughty"
 version = "0.1.0"
 description = ""
 authors = ["Lewis <lewischarlesbaker@gmail.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.11"
+lkml = "1.1.0"
+SQLAlchemy = "1.4.22"
+pandas = "1.3.1"
+click = "8.0.1"
+snowflake = "0.0.3"
+pandas-gbq = "0.15.0"
+GitPython = "3.1.26"
+protobuf = "3.19.3"
+PyYAML = "6.0"
+"ruamel.base" = "1.0.0"
+snowflake-connector-python = "^2.7.2"
+snowflake-sqlalchemy = "^1.3.3"
+"ruamel.yaml" = "^0.17.20"
+
+[tool.poetry.scripts]
+droughty = "droughty_cli:cli"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

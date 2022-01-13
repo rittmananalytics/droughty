@@ -2,7 +2,7 @@
 import sys
 import click
 
-from .lookml_module import output
+from droughty.lookml_module import output
 
 
 @click.command()

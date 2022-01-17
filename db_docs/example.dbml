@@ -1,0 +1,505 @@
+project project_value
+{ database_type: 'bigquery' }
+table budgets_sales      {
+budget_pk varchar [pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+budget_group varchar
+budget_name varchar
+intake_name varchar
+institution_name varchar
+entry_type_code varchar
+sales_region_group varchar
+budget_amt numeric
+}
+table core_agents      {
+agent_pk varchar [pk]
+country_fk varchar [ref: - core_countries.country_pk]
+agent_natural_key numeric
+agent_salesforce_business_key varchar
+country_natural_key numeric
+name varchar
+group varchar
+status varchar
+sales_channel varchar
+uk_based_agent boolean
+}
+table core_countries      {
+country_pk varchar [pk]
+country_natural_key numeric
+country varchar
+country_iso_key varchar
+salesforce_country_key varchar
+country_nationality varchar
+country_is_sanctioned boolean
+}
+table core_country_mapping      {
+country_mapping_pk varchar [pk]
+country_fk varchar [ref: - core_countries.country_pk]
+nationality_fk varchar // [ref: - not_available.not_available]
+country_natural_key numeric
+sales_region varchar
+sales_region_group varchar
+schols_region varchar
+valid_from timestamp
+valid_to timestamp
+}
+table core_institutions      {
+institution_pk varchar [pk]
+country_fk varchar [ref: - core_countries.country_pk]
+institution_natural_key numeric
+country_natural_key numeric
+institution_type varchar
+institution_code varchar
+institution_name varchar
+institution_group varchar
+}
+table core_program_intakes      {
+program_intake_pk varchar [pk]
+program_fk varchar // [ref: - not_available.not_available]
+program_intake_natural_key numeric
+program_natural_key numeric
+program_fee numeric
+intake date
+intake_season varchar
+intake_name varchar
+intake_academic_year varchar
+status varchar
+intake_quota_exists numeric
+enrolment_start date
+enrolment_end date
+teaching_start date
+teaching_end date
+}
+table core_programs      {
+program_pk varchar [pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+program_natural_key numeric
+institution_natural_key numeric
+program_code varchar
+name varchar
+level varchar
+status varchar
+type varchar
+university_unit_faculty varchar
+university_unit_school varchar
+university_unit_department varchar
+university_unit_college varchar
+university_unit_institute varchar
+university_unit_division varchar
+entry_level varchar
+award_type varchar
+award_title varchar
+award_code varchar
+duration_length varchar
+entry_type_code varchar
+}
+table core_scholarship_reason_owners      {
+scholarship_reason_owner_pk varchar [pk]
+sales_region_group varchar
+budget_pot varchar
+budget_owner varchar
+}
+table core_scholarship_reasons      {
+scholarship_reason_pk varchar [pk]
+scholarship_reason varchar
+budget_pot varchar
+}
+table core_sponsors      {
+sponsor_pk varchar [pk]
+country_fk varchar [ref: - core_countries.country_pk]
+sponsor_natural_key numeric
+sponsor_salesforce_business_key varchar
+country_natural_key numeric
+name varchar
+group varchar
+status varchar
+uk_sponsor boolean
+}
+table core_subjects      {
+program_subject_pk varchar [pk]
+program_fk varchar // [ref: - not_available.not_available]
+program_natural_key numeric
+subject varchar
+subject_group varchar
+}
+table core_user_mapping      {
+user_mapping_pk varchar [pk]
+user_fk varchar [ref: - core_users.user_pk]
+user_natural_key varchar
+sales_region varchar
+sales_region_group varchar
+valid_from timestamp
+valid_to timestamp
+}
+table core_users      {
+user_pk varchar [pk]
+user_natural_key varchar
+name varchar
+sales_region varchar
+sales_region_group varchar
+}
+table product_progression_plans      {
+progression_plan_pk varchar [pk]
+progression_plan_fk varchar // [ref: - not_available.not_available]
+application_fk varchar [ref: - sales_applications.application_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+progression_plan_program_intake_fk varchar // [ref: - not_available.not_available]
+progression_plan_program_fk varchar // [ref: - not_available.not_available]
+institution_natural_key numeric
+progression_plan_program_natural_key numeric
+version_number numeric
+entry_type_code varchar
+degree_code varchar
+degree_name varchar
+degree_entry_level varchar
+is_primary_progression varchar
+university_intake_date date
+university_intake_season varchar
+university_enrolment date
+degree_teaching_end date
+degree_start date
+degree_end date
+degree_teaching_start date
+created_at timestamp
+modified_at timestamp
+}
+table product_progression_plans_history      {
+study_plan_history_pk varchar [pk]
+progression_plan_pk varchar [pk]
+progression_plan_fk varchar // [ref: - not_available.not_available]
+application_fk varchar [ref: - sales_applications.application_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+progression_plan_program_intake_fk varchar // [ref: - not_available.not_available]
+progression_plan_program_fk varchar // [ref: - not_available.not_available]
+institution_natural_key numeric
+progression_plan_program_natural_key numeric
+progression_plan_version_number numeric
+progression_plan_track_entry_type_code varchar
+progression_plan_program_code varchar
+progression_plan_program_name varchar
+progression_plan_entry_level varchar
+is_primary_progression varchar
+progression_plan_intake_date date
+progression_plan_intake_season varchar
+enrolment_date date
+progression_plan_teaching_end_date date
+progression_plan_program_start_date date
+progression_plan_program_end_date date
+progression_plan_teaching_start_date date
+progression_plan_created_at timestamp
+progression_plan_modified_at timestamp
+progression_plan_valid_from timestamp
+progression_plan_valid_to timestamp
+progression_plan_index numeric
+is_current_progression_plan_record boolean
+}
+table product_study_plans      {
+study_plan_pk varchar [pk]
+study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+study_plan_program_intake_fk varchar // [ref: - not_available.not_available]
+study_plan_program_fk varchar // [ref: - not_available.not_available]
+study_plan_natural_key numeric
+institution_natural_key numeric
+study_plan_program_natural_key numeric
+version_number numeric
+entry_type_code varchar
+course_code varchar
+course_name varchar
+intake_date date
+intake_season varchar
+intake_name varchar
+intake_academic_year varchar
+entry_level varchar
+enrolment date
+course_start date
+course_end date
+teaching_end date
+teaching_start date
+created_at timestamp
+modified_at timestamp
+is_current_version boolean
+has_deferred boolean
+is_deferred boolean
+}
+table product_study_plans_history      {
+study_plan_history_pk varchar [pk]
+pathway_sk varchar
+study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+study_plan_program_intake_fk varchar // [ref: - not_available.not_available]
+study_plan_program_fk varchar // [ref: - not_available.not_available]
+study_plan_natural_key numeric
+institution_natural_key numeric
+study_plan_program_natural_key numeric
+study_plan_version_number numeric
+study_plan_track_entry_type_code varchar
+study_plan_program_code varchar
+study_plan_program_name varchar
+study_plan_intake_date date
+study_plan_intake_season varchar
+study_plan_program_entry_level varchar
+enrolment_date date
+study_plan_program_start_date date
+study_plan_program_end_date date
+study_plan_teaching_end_date date
+study_plan_teaching_start_date date
+study_plan_created_at timestamp
+study_plan_modified_at timestamp
+study_plan_valid_from timestamp
+study_plan_valid_to timestamp
+study_plan_index numeric
+is_current_study_plan_record boolean
+has_deferred varchar
+}
+table sales_application_agent_bridge      {
+application_agent_pk varchar [pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+agent_fk varchar [ref: - core_agents.agent_pk]
+is_main_agent boolean
+}
+table sales_application_history      {
+application_history_pk varchar [pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+program_fk varchar // [ref: - not_available.not_available]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+program_intake_fk varchar // [ref: - not_available.not_available]
+student_fk varchar [ref: - sales_student.student_pk]
+sales_manager_fk varchar // [ref: - not_available.not_available]
+application_owner_fk varchar // [ref: - not_available.not_available]
+cas_team_owner_fk varchar // [ref: - not_available.not_available]
+sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
+valid_from timestamp
+valid_to timestamp
+status varchar
+status_group varchar
+study_plan_version_number numeric
+program_code varchar
+program_name varchar
+intake date
+salesforce_opportunity_natural_key varchar
+created_at timestamp
+modified_at timestamp
+applications numeric
+offers numeric
+deposits numeric
+enrolled numeric
+lost numeric
+change_count numeric
+change varchar
+has_deferred varchar
+}
+table sales_applications      {
+study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+application_pk varchar [pk]
+student_fk varchar [ref: - sales_student.student_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+sales_manager_fk varchar // [ref: - not_available.not_available]
+application_owner_fk varchar // [ref: - not_available.not_available]
+cas_team_owner_fk varchar // [ref: - not_available.not_available]
+sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
+application_natural_key numeric
+student_natural_key varchar
+sales_manager_natural_key varchar
+application_owner_natural_key varchar
+cas_team_owner_natural_key varchar
+salesforce_opportunity_natural_key varchar
+sponsor_natural_key numeric
+created_at timestamp
+modified_at timestamp
+status_update timestamp
+intake_date date
+payment_status varchar
+immigration_category varchar
+learning_mode varchar
+returning_student varchar
+accommodation_required varchar
+sponsor_reference varchar
+is_offer_letter_issued boolean
+is_acceptance_form_issued boolean
+is_visa_needed boolean
+is_application_submitted boolean
+is_application_completed boolean
+is_confirmation_required boolean
+has_second_agent boolean
+has_deferred varchar
+class_application_id numeric
+status varchar
+status_group varchar
+is_deferred boolean
+weighting numeric
+weighting_non_deferred numeric
+}
+table sales_applications_history      {
+application_history_pk varchar [pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+student_fk varchar [ref: - sales_student.student_pk]
+sales_manager_fk varchar // [ref: - not_available.not_available]
+application_owner_fk varchar // [ref: - not_available.not_available]
+cas_team_owner_fk varchar // [ref: - not_available.not_available]
+sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
+application_natural_key numeric
+student_natural_key varchar
+sales_manager_natural_key varchar
+application_owner_natural_key varchar
+cas_team_owner_natural_key varchar
+salesforce_opportunity_natural_key varchar
+sponsor_natural_key numeric
+created_ts timestamp
+modified_ts timestamp
+application_status_log_created_ts timestamp
+application_status varchar
+application_status_group varchar
+payment_status varchar
+immigration_category varchar
+learning_mode varchar
+returning_student varchar
+accommodation_required varchar
+sponsor_reference varchar
+is_offer_letter_issued boolean
+is_acceptance_form_issued boolean
+is_visa_needed boolean
+is_application_submitted boolean
+is_application_completed boolean
+is_confirmation_required boolean
+has_second_agent boolean
+class_application_id numeric
+old_title varchar
+new_title varchar
+application_valid_from timestamp
+application_valid_to timestamp
+application_index numeric
+is_current_application_record boolean
+application_status_duration_seconds numeric
+application_weight numeric
+}
+table sales_applications_quota      {
+application_quota_pk varchar [pk]
+quota_allocation_fk varchar [ref: - sales_quota_allocations.quota_allocation_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+degree_name varchar
+application_status_group varchar
+}
+table sales_applications_summary      {
+application_summary_pk varchar [pk]
+sales_applications_application_count numeric
+sales_applications_unweighted_offer_count numeric
+sales_applications_application_offer_count numeric
+sales_applications_unconverted_application_count numeric
+sales_applications_application_count_non_deferred numeric
+sales_applications_application_offer_count_non_deferred numeric
+sales_applications_unconverted_application_count_non_deferred numeric
+sales_applications_application_deposit_count numeric
+sales_applications_application_enrolled_count numeric
+sales_applications_enrollments_and_deposit_count numeric
+}
+table sales_new_programs      {
+program_launch_pk varchar [pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+program_fk varchar // [ref: - not_available.not_available]
+program_intake_fk varchar // [ref: - not_available.not_available]
+launch_name varchar
+launch date
+launch_expiry date
+institution_name varchar
+program_code varchar
+program_name varchar
+program_type varchar
+award_name varchar
+intake_name varchar
+}
+table sales_priority_programs      {
+priority_program_pk varchar [pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+program_fk varchar // [ref: - not_available.not_available]
+program_intake_fk varchar // [ref: - not_available.not_available]
+priority_reason varchar
+institution_name varchar
+program_code varchar
+program_name varchar
+intake_name varchar
+}
+table sales_quota_allocations      {
+quota_allocation_pk varchar [pk]
+university_code varchar
+university_name varchar
+college_code varchar
+degree_concat varchar
+quota_group varchar
+nationaility_criteria varchar
+sponsor_criteria varchar
+agent_region_criteria varchar
+program_criteria varchar
+quota_year numeric
+deposits_amt numeric
+cas_enrolment_amt numeric
+progression_amt numeric
+limited timestamp
+closed timestamp
+}
+table sales_scholarships      {
+scholarships_pk varchar [pk]
+study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+scholarship_reason varchar
+scholarship_note varchar
+student_ledger_currency_code varchar
+student_ledger_sop_line_item_actual_amount numeric
+budget_pot varchar
+created_at timestamp
+application_status_group varchar
+}
+table sales_student      {
+student_pk varchar [pk]
+country_fk varchar [ref: - core_countries.country_pk]
+nationality_fk varchar // [ref: - not_available.not_available]
+student_natural_key varchar
+kss_student_id varchar
+class_student_id varchar
+student_salesforce_natural_key varchar
+name varchar
+gender varchar
+country_iso_key varchar
+country_natural_key numeric
+source varchar
+nationality varchar
+dob date
+created_at timestamp
+modified_at timestamp
+}
+table scholarship_budgets      {
+scholarship_budgets_pk varchar [pk]
+intake_name varchar
+sales_region_group varchar
+schols_region varchar
+budget_pot varchar
+budget_amt numeric
+budget_owner varchar
+}
+table scholarship_targets      {
+scholarship_targets_pk varchar [pk]
+intake_name varchar
+sales_region_group varchar
+schols_region varchar
+target_amt numeric
+budget_amt numeric
+}
+table targets_institutions      {
+institution_target_pk varchar [pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+intake_name varchar
+institution_name varchar
+target_amt numeric
+}
+table targets_sales_regions      {
+sales_region_target_pk varchar [pk]
+sales_region_target_country_fk varchar // [ref: - not_available.not_available]
+intake_name varchar
+country_name varchar
+sales_region varchar
+sales_region_group varchar
+sales_channel varchar
+target_amt numeric
+}

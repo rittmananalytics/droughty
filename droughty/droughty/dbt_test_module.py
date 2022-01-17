@@ -10,7 +10,7 @@ import json
 import sys
 from itertools import chain
 
-from droughty.dbt_test_base_dict import d1
+from dbt_test_base_dict import d1
 
 import sys
 import ruamel.yaml

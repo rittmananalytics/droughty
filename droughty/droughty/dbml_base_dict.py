@@ -13,8 +13,8 @@ import json
 import sys
 import yaml
 
-from droughty import warehouse_target
-from droughty import config
+import warehouse_target
+import config
 
 import git
 

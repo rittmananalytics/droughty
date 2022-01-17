@@ -13,8 +13,8 @@ import sys
 import yaml
 import git
 
-from .dbml_base_dict import d1
-from .config import project_value
+from dbml_base_dict import d1
+from config import project_value
 
 
 

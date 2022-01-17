@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "droughty"
-version = "0.1.0"
+version = "0.1.11"
 description = ""
 authors = ["Lewis <lewischarlesbaker@gmail.com>"]
 license = "MIT"
@@ -20,6 +20,7 @@ PyYAML = "6.0"
 snowflake-connector-python = "^2.7.2"
 snowflake-sqlalchemy = "^1.3.3"
 "ruamel.yaml" = "^0.17.20"
+pycryptodomex = "3.10.1"
 
 [tool.poetry.scripts]
 droughty = "droughty_cli:cli"

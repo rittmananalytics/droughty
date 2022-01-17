@@ -13,8 +13,8 @@ import json
 import sys
 from itertools import chain
 
-from droughty import warehouse_target
-from droughty import config
+import warehouse_target
+import config
 
 import sys
 import ruamel.yaml

@@ -13,10 +13,8 @@ import sys
 import yaml
 import git
 
-from dbml_base_dict import d1
-from config import project_value
-
-
+from droughty.dbml_base_dict import d1
+from droughty.config import project_value
 
 def get_all_values(nested_dictionary):
 

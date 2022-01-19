@@ -1,8 +1,27 @@
+.. droughty documentation master file, created by
+   sphinx-quickstart on Wed Jan 19 11:39:42 2022.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to droughty's documentation!
+====================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
 # droughty
 #### adjective, drought·i·er, drought·i·est.
 #### dry.
-
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 droughty is an analytics engineering toolkit, helping keep your workflow dry. Current tools are:
 
@@ -12,7 +31,7 @@ droughty is an analytics engineering toolkit, helping keep your workflow dry. Cu
 
 The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done...
 
-## Tech
+## Dependencies
 
 droughty uses a number of open-source projects to work properly:
 
@@ -32,10 +51,6 @@ some more generic:
 
 You need to run Droughty from a git repo. It uses the Git package to control certain relative dirs
 Currently the cli sub-commands have an issue where all they are not mutally exclusive. This needs to be resolved but doesn't impact usage dramatically.
-
-
-And of course droughty itself is open source with a [public repository][dill]
- on GitHub.
 
 ## Installation
 

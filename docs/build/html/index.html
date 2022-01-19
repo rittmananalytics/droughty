@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to droughty’s documentation! &#8212; droughty 0.1.21 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-droughty-s-documentation">
+<h1>Welcome to droughty’s documentation!<a class="headerlink" href="#welcome-to-droughty-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<p># droughty
+#### adjective, drought·i·er, drought·i·est.
+#### dry.</p>
+<p>droughty is an analytics engineering toolkit, helping keep your workflow dry. Current tools are:</p>
+<ul class="simple">
+<li><p>lookml - generates a base layer.lkml file with views and explores from a warehouse schema</p></li>
+<li><p>dbt-tests - generates a base schema from specified warehouse schemas. Includes standard testing routines</p></li>
+<li><p>dbml - generates an ERD based on the warehouse layer of your warehouse. Includes pk, fk relationships</p></li>
+</ul>
+<p>The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done…</p>
+<p>## Dependencies</p>
+<p>droughty uses a number of open-source projects to work properly:</p>
+<ul class="simple">
+<li><p>[lkml](<a class="reference external" href="https://pypi.org/project/lkml/">https://pypi.org/project/lkml/</a>) - This project uses lkml  as its base parser - John Temple</p></li>
+<li><p>[ruamel.yaml](<a class="reference external" href="https://pypi.org/project/ruamel.yaml/">https://pypi.org/project/ruamel.yaml/</a>) - Yaml parser -  Anthon van der Neut</p></li>
+</ul>
+<p>some more generic:</p>
+<ul class="simple">
+<li><p>Pandas</p></li>
+<li><p>Python Git</p></li>
+<li><p>Click</p></li>
+<li><p>Pandas GBQ</p></li>
+<li><p>Protobuf</p></li>
+<li><p>snowflake_connector_python</p></li>
+</ul>
+<p>##Considerations</p>
+<p>You need to run Droughty from a git repo. It uses the Git package to control certain relative dirs
+Currently the cli sub-commands have an issue where all they are not mutally exclusive. This needs to be resolved but doesn’t impact usage dramatically.</p>
+<p>## Installation</p>
+<ul class="simple">
+<li><p>pip install droughty</p></li>
+<li><p>profile.yaml set-up</p></li>
+</ul>
+<p>## Profile.yaml example</p>
+<p>droughty_demo:</p>
+<blockquote>
+<div><p>host:</p>
+<p>key_file: /Users/droughty_user/[key_file]</p>
+<p>password:</p>
+<p>port:</p>
+<p>project_name: example-project</p>
+<p>schema_name: analytics_qa</p>
+<p>user:</p>
+<p>warehouse_name: big_query</p>
+<p>test_schemas:</p>
+<blockquote>
+<div><p>example_dev_staging</p>
+<p>example_dev_integration</p>
+<p>example_analytics_dev</p>
+</div></blockquote>
+</div></blockquote>
+<p>Droughty depends on a droughty_project.yaml file. There are plans to extend the variables available within a project but for the moment it simply instructs Droughty what profile.yaml project you want to run against.</p>
+<p>## droughty_project.yaml example</p>
+<p>profile: droughty_demo</p>
+<p>## License</p>
+<p>MIT</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">droughty</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, lewis baker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

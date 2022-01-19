@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "droughty"
-version = "0.1.21"
+version = "0.1.22"
 description = ""
 authors = ["Lewis <lewischarlesbaker@gmail.com>"]
 license = "MIT"

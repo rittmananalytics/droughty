@@ -15,6 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Warehouse Support" href="warehouse_support.html" />
     <link rel="prev" title="Installation" href="installation.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -34,13 +35,17 @@
             
   <section id="configuration">
 <h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<p>drought_project.yaml</p>
+<p>Setting up droughty to run it pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
+<hr class="docutils" />
+<p><strong>drought_project.yaml set-up</strong></p>
 <p>To allow for multiple warehouse targets, droughty uses a drought_project.yaml to specify a project specific target. At the moment, the only requirement is to define a project name.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span><span class="p">:</span> <span class="n">example_project</span>
 </pre></div>
 </div>
-<p>Profile.yaml</p>
-<p>A profile.yaml file is used to provide target information to droughty, such as warehouse key files, project, schema and general permissions.</p>
+<p>Create this file in the root of your git repo</p>
+<hr class="docutils" />
+<p><strong>profile.yaml set-up</strong></p>
+<p>A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions.</p>
 <p>This file should be created in a .droughty dir, such as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">titus_groan</span><span class="o">/.</span><span class="n">droughty</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
@@ -74,9 +79,10 @@
     <span class="o">-</span> <span class="n">example_analytics_dev</span>
 </pre></div>
 </div>
-<p>Configuration Considerations</p>
+<hr class="docutils" />
+<p><strong>Configuration Considerations</strong></p>
 <p>droughty has been developed to work with dbt, db docs and looker. However, it only really depends accessing the information schema within a supported warehouse.</p>
-<p>When using droughty it’s assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer.</p>
+<p>When using droughty it’s assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer. Look at the usage page for further information.</p>
 </section>
 
 
@@ -99,6 +105,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
 </ul>
 
 <div class="relations">
@@ -106,6 +115,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="warehouse_support.html" title="next chapter">Warehouse Support</a></li>
   </ul></li>
 </ul>
 </div>

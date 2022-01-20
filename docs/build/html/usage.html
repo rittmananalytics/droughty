@@ -35,21 +35,22 @@
             
   <section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<p>Droughty depends on a number factors to be useful. These factors be be split into two considerations, tooling and develop approaches.</p>
+<p>Droughty depends on a number factors to be useful. These factors can be split into two considerations, tooling and development approaches.</p>
+<hr class="docutils" />
 <p><strong>Tooling</strong></p>
-<p>Droughty is most useful when using one of the supported warehouses (goes without saying), dbt, Looker and dbml. With these all being present, droughty can nicely fit within a development workflow and automate some of the boring stuff.</p>
+<p>Droughty is most useful when using one of the supported warehouses (goes without saying), dbt, looker and dbml. With these all being present, droughty can nicely fit within a development workflow and automate some of the boring stuff.</p>
+<hr class="docutils" />
 <p><strong>Development approaches</strong></p>
-<p>This is perhaps the most important factor.</p>
 <p><strong>Looker approaches</strong></p>
-<p>Droughty outputs a base.layer which contains dimensions from the analytics layer. This is most useful when using either a series of refinements or extends that sit over the base layer. It’s best then paired with a layed modelling approach with a staging, integration and aggregate layer.</p>
+<p>Droughty outputs a base.layer which contains dimensions from the analytics layer. This is most useful when using either a series of refinements or extends that sit over the base layer. It’s best then paired with a layered modelling approach with a staging, integration and aggregate layer.</p>
 <p><strong>Why is this useful?</strong></p>
 <ul class="simple">
-<li><p>it allows you to have a floating base layer that’s coupled to the warehouse through machine generated code, saving time, perhaps reducing error</p></li>
+<li><p>it allows you to have a floating base layer that’s coupled to the warehouse through machine generated code, saving time and perhaps reducing error</p></li>
 <li><p>it ensures that the labelling and descriptions are identical within the warehouse and looker.</p></li>
 <li><p>there’s scope to automate the generation of measures</p></li>
 </ul>
 <p><strong>Warehousing approaches</strong></p>
-<p>Droughty outputs lookml, dbml and dbt schemas based on an fundamental warehouse structure. It depends on their being a separate dataset/schema for the staging, integration and the warehouse/analytics layer. This is pretty easy to achieve with these dbt_project.yml configs:</p>
+<p>Droughty outputs lookml, dbml and dbt schemas based on an dataset/schema warehouse structure. It depends on their being a separate dataset/schema for the staging, integration and the warehouse/analytics layer. This is pretty easy to achieve with these dbt_project.yml configs:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">models</span><span class="p">:</span>
 <span class="o">+</span><span class="n">persist_docs</span><span class="p">:</span>
     <span class="n">relation</span><span class="p">:</span> <span class="n">true</span>
@@ -80,7 +81,13 @@
 </ul>
 </div></blockquote>
 <p><strong>Summary</strong></p>
-<p>If you meet the majority of the requirements above, there’s a chance this will be useful…</p>
+<p>If you meet the majority of the requirements above, there’s a chance this will be useful… I personally use droughty with the following steps:</p>
+<ul class="simple">
+<li><p>I run dbt-test to generate tests as I go throughout my dbt dev work</p></li>
+<li><p>I run dbml before raising a PR so that there’s an update ERD of the warehouse for documentation and to include in the PR Summary</p></li>
+<li><p>I run lookml as a pre-commit hook so that looker is always up-to-date with the warehouse</p></li>
+</ul>
+<p>Any questions, raise them in GitHub. Thanks.</p>
 </section>
 
 

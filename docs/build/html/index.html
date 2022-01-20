@@ -15,6 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,6 +35,13 @@
   <section id="welcome-to-droughty-s-documentation">
 <h1>Welcome to droughty’s documentation!<a class="headerlink" href="#welcome-to-droughty-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+</ul>
 </div>
 </section>
 <section id="indices-and-tables">
@@ -43,9 +51,12 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+<p><strong>What’s with the name?</strong></p>
 <p># droughty
 #### adjective, drought·i·er, drought·i·est.
 #### dry.</p>
+<hr class="docutils" />
+<p><strong>What is droughty?</strong></p>
 <p>droughty is an analytics engineering toolkit, helping keep your workflow dry. Current tools are:</p>
 <ul class="simple">
 <li><p>lookml - generates a base layer.lkml file with views and explores from a warehouse schema</p></li>
@@ -53,14 +64,12 @@
 <li><p>dbml - generates an ERD based on the warehouse layer of your warehouse. Includes pk, fk relationships</p></li>
 </ul>
 <p>The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done…</p>
-<p>## Dependencies</p>
+<hr class="docutils" />
+<p><strong>Dependencies</strong></p>
 <p>droughty uses a number of open-source projects to work properly:</p>
 <ul class="simple">
 <li><p>[lkml](<a class="reference external" href="https://pypi.org/project/lkml/">https://pypi.org/project/lkml/</a>) - This project uses lkml  as its base parser - John Temple</p></li>
 <li><p>[ruamel.yaml](<a class="reference external" href="https://pypi.org/project/ruamel.yaml/">https://pypi.org/project/ruamel.yaml/</a>) - Yaml parser -  Anthon van der Neut</p></li>
-</ul>
-<p>some more generic:</p>
-<ul class="simple">
 <li><p>Pandas</p></li>
 <li><p>Python Git</p></li>
 <li><p>Click</p></li>
@@ -68,35 +77,10 @@
 <li><p>Protobuf</p></li>
 <li><p>snowflake_connector_python</p></li>
 </ul>
-<p>##Considerations</p>
+<hr class="docutils" />
+<p><strong>Considerations</strong></p>
 <p>You need to run Droughty from a git repo. It uses the Git package to control certain relative dirs
-Currently the cli sub-commands have an issue where all they are not mutally exclusive. This needs to be resolved but doesn’t impact usage dramatically.</p>
-<p>## Installation</p>
-<ul class="simple">
-<li><p>pip install droughty</p></li>
-<li><p>profile.yaml set-up</p></li>
-</ul>
-<p>## Profile.yaml example</p>
-<p>droughty_demo:</p>
-<blockquote>
-<div><p>host:</p>
-<p>key_file: /Users/droughty_user/[key_file]</p>
-<p>password:</p>
-<p>port:</p>
-<p>project_name: example-project</p>
-<p>schema_name: analytics_qa</p>
-<p>user:</p>
-<p>warehouse_name: big_query</p>
-<p>test_schemas:</p>
-<blockquote>
-<div><p>example_dev_staging</p>
-<p>example_dev_integration</p>
-<p>example_analytics_dev</p>
-</div></blockquote>
-</div></blockquote>
-<p>Droughty depends on a droughty_project.yaml file. There are plans to extend the variables available within a project but for the moment it simply instructs Droughty what profile.yaml project you want to run against.</p>
-<p>## droughty_project.yaml example</p>
-<p>profile: droughty_demo</p>
+Currently the cli sub-commands have an issue where all they are not mutually exclusive. This needs to be resolved but doesn’t impact usage dramatically.</p>
 <p>## License</p>
 <p>MIT</p>
 </section>
@@ -118,11 +102,19 @@ Currently the cli sub-commands have an issue where all they are not mutally excl
 
 
 <h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="installation.html" title="next chapter">Installation</a></li>
   </ul></li>
 </ul>
 </div>

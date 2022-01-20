@@ -21,19 +21,14 @@ Welcome to droughty's documentation!
    usage
    commands
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 
 **What's with the name?**
 
 # droughty
 #### adjective, drought·i·er, drought·i·est.
 #### dry.
+
+It helps keep your workflow *ah hem* dry 
 
 ==================
 

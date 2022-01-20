@@ -21,19 +21,14 @@ Welcome to droughty's documentation!
    usage
    commands
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 
 **What's with the name?**
 
 # droughty
 #### adjective, drought·i·er, drought·i·est.
 #### dry.
+
+It helps keep your workflow *ah hem* dry 
 
 ==================
 
@@ -45,7 +40,10 @@ droughty is an analytics engineering toolkit, helping keep your workflow dry. Cu
 - dbt-tests - generates a base schema from specified warehouse schemas. Includes standard testing routines
 - dbml - generates an ERD based on the warehouse layer of your warehouse. Includes pk, fk relationships
 
+Please read the usage section for details on how to use these tools
+
 The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done...
+
 
 ==================
 

@@ -6,11 +6,20 @@
 Welcome to droughty's documentation!
 ====================================
 
-.. toctree::
+.. toctree:
    :maxdepth: 2
    :caption: Contents:
 
 
+
+.. toctree::
+   :maxdepth: 2
+
+   installation
+   configuration
+   warehouse_support
+   usage
+   commands
 
 Indices and tables
 ==================
@@ -19,9 +28,16 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+**What's with the name?**
+
 # droughty
 #### adjective, drought·i·er, drought·i·est.
 #### dry.
+
+==================
+
+**What is droughty?**
 
 droughty is an analytics engineering toolkit, helping keep your workflow dry. Current tools are:
 
@@ -31,15 +47,14 @@ droughty is an analytics engineering toolkit, helping keep your workflow dry. Cu
 
 The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done...
 
-## Dependencies
+==================
+
+**Dependencies**
 
 droughty uses a number of open-source projects to work properly:
 
 - [lkml](https://pypi.org/project/lkml/) - This project uses lkml  as its base parser - John Temple
 - [ruamel.yaml](https://pypi.org/project/ruamel.yaml/) - Yaml parser -  Anthon van der Neut
-
-some more generic:
-
 - Pandas
 - Python Git
 - Click
@@ -47,51 +62,14 @@ some more generic:
 - Protobuf
 - snowflake_connector_python
 
-##Considerations
+==================
+
+**Considerations**
 
 You need to run Droughty from a git repo. It uses the Git package to control certain relative dirs
-Currently the cli sub-commands have an issue where all they are not mutally exclusive. This needs to be resolved but doesn't impact usage dramatically.
-
-## Installation
-
-- pip install droughty
-- profile.yaml set-up
+Currently the cli sub-commands have an issue where all they are not mutually exclusive. This needs to be resolved but doesn't impact usage dramatically.
 
 
-## Profile.yaml example 
-
-droughty_demo:
-
-  host:
-
-  key_file: /Users/droughty_user/[key_file]
-
-  password: 
-
-  port: 
-
-  project_name: example-project
-
-  schema_name: analytics_qa
-
-  user: 
-
-  warehouse_name: big_query
-
-  test_schemas:
-
-     example_dev_staging
-
-     example_dev_integration
-
-     example_analytics_dev
-      
-      
-Droughty depends on a droughty_project.yaml file. There are plans to extend the variables available within a project but for the moment it simply instructs Droughty what profile.yaml project you want to run against.
-
-## droughty_project.yaml example 
-
-profile: droughty_demo
 
 ## License
 

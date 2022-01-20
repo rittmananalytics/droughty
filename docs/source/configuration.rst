@@ -1,19 +1,25 @@
 Configuration
 =============
 
+Setting up droughty to run it pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
 
-drought_project.yaml
+--------------
 
+
+**drought_project.yaml set-up**
 
 To allow for multiple warehouse targets, droughty uses a drought_project.yaml to specify a project specific target. At the moment, the only requirement is to define a project name.::
 
    profile: example_project
 
+Create this file in the root of your git repo
 
-Profile.yaml
 
+--------------
 
-A profile.yaml file is used to provide target information to droughty, such as warehouse key files, project, schema and general permissions. 
+**profile.yaml set-up**
+
+A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions. 
 
 This file should be created in a .droughty dir, such as::
 
@@ -49,8 +55,11 @@ profile example::
 
         - example_analytics_dev
 
-Configuration Considerations
+--------------
+
+
+**Configuration Considerations**
 
 droughty has been developed to work with dbt, db docs and looker. However, it only really depends accessing the information schema within a supported warehouse.
 
-When using droughty it's assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer.
+When using droughty it's assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer. Look at the usage page for further information.

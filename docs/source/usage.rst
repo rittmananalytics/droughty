@@ -13,7 +13,7 @@ This is perhaps the most important factor.
 
 **Looker approaches**
 
-Droughty outputs a base.layer which contains dimensions from the analytics layer. This is most useful when using either a series of refinements or extends that sit over the base layer. It's best then paired with a layed modelling approach with a staging, integration and aggregate layer. I have also written about this, find a link **here**.
+Droughty outputs a base.layer which contains dimensions from the analytics layer. This is most useful when using either a series of refinements or extends that sit over the base layer. It's best then paired with a layed modelling approach with a staging, integration and aggregate layer.
 
 **Why is this useful?**
 
@@ -50,7 +50,6 @@ Droughty also depends on some naming conventions
 
     * primary key's end in pk
     * foreign key's end in fk 
-    * warehouse tables start with "wh_"
 
 **Summary**
 

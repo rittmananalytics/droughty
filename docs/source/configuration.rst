@@ -5,7 +5,7 @@ Setting up droughty to run is pretty easy. It depends on two files, a drought_pr
 
 **droughty_project.yaml set-up**
 
-To allow for multiple warehouse targets, droughty uses a drought_project.yaml to specify a project specific target. At the moment, the only requirement is to define a project name::
+To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. At the moment, the only requirement is to define a project name, for example::
 
    profile: example_project
 

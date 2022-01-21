@@ -1,10 +1,7 @@
 Configuration
 =============
 
-Setting up droughty to run it pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
-
---------------
-
+Setting up droughty to run is pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
 
 **droughty_project.yaml set-up**
 

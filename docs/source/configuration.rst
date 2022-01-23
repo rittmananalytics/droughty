@@ -9,7 +9,9 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
 
    profile: example_project
 
-Create this file in the root of your git repo
+Create this file in the root of your git repo.
+
+**It's important that the profile name with the drought_project.yaml aligns with the paired entry within your profile.yaml.**
 
 
 --------------

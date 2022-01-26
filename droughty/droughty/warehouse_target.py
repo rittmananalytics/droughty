@@ -172,3 +172,13 @@ test_warehouse_schema =   """
 
 """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
 
+lookml_explore_schema =     """
+
+
+        select * from {0}.information_schema.columns;
+
+
+""".format(database)
+
+
+

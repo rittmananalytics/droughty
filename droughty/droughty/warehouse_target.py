@@ -235,3 +235,100 @@ lookml_explore_schema =     """
 
 
         """.format(project_name,schema_name,single_list_tables[0],single_list_tables[1],single_list_tables[2])
+
+flat_list = []
+for sublist in explore_tables:
+    for item in sublist:
+        flat_list.append(item)
+
+params = {
+    'project_id': project_name,
+    'schema_id': schema_name, 
+    'table_names': flat_list
+    
+}
+
+
+user_transaction_template = '''
+
+with source as (
+
+select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+where table_name in 
+{% for tables in table_names [2:] %} {{ table_names | inclause }} {% endfor %}
+
+),
+
+{% for value in table_names  %}
+
+explore_table_row_count_{{ value | sqlsafe }} as (
+
+select 
+
+'{{ value | sqlsafe }}' as table_name,
+count(*) as {{ value | sqlsafe }}_row_count
+
+from `{{project_id}}.{{schema_id}}.{{ value | sqlsafe }}`
+
+group by 1
+
+),
+
+{% endfor %}
+
+
+merge_counts as (
+
+select * from source 
+
+{% for value in table_names  %}
+
+left join 
+
+explore_table_row_count_{{value | sqlsafe }} on source.table_name = explore_table_row_count_{{value | sqlsafe }}.table_name
+
+{% endfor %}
+
+),
+
+pks as (
+    select 
+    table_name as pk_table_name,
+    column_name as pk_column_name,
+    trim(column_name, "_pk") as pk_sk,
+    from source
+    where column_name like '%pk%'
+),
+
+fks as (
+    select
+    table_name as fk_table_name,
+    column_name as fk_column_name,
+    trim(column_name, "_fk") as fk_sk,
+    from source
+    where column_name like '%fk%'
+
+),
+    
+final as (
+
+select 
+
+pk_table_name,
+pk_column_name,
+fk_table_name,
+fk_column_name,
+
+
+from pks
+
+inner join fks on pks.pk_sk = fks.fk_sk
+
+
+select * from 
+
+select * from merge_counts
+
+
+
+'''

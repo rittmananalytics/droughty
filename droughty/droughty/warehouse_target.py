@@ -49,7 +49,7 @@ for key,value in enviroment_project.items():
                 project_name =  lookml_config[value]['project_name']
                 schema_name =  lookml_config[value]['schema_name']
                 test_schemas = lookml_config[value]['test_schemas']
-
+                
                 warehouse_schema =   """
 
                 with source as (
@@ -174,6 +174,8 @@ test_warehouse_schema =   """
 
 explores = (enviroment_project.get("explores"))
 
+## 
+
 explore_tables = []
 
 for key,value in explores.items():
@@ -182,49 +184,54 @@ for key,value in explores.items():
 
         explore_tables.append(value)
 
+## reduce explore_tables from array to single list
+        
+single_list_tables = [i[0] for i in explore_tables]
 
+## I need to come up with a way of added the explore_tables as a range within the sql...It's restricted to three tables at the moment...
+        
 lookml_explore_schema =     """
 
 
-                with source as (
+                        with source as (
 
-                select * from `ra-development.jordan_analytics_dev.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-                
-                where table_name in ('wh_website_event_pages_fct','wh_website_event_tracks_fct','wh_website_users_dim')
+                        select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
 
-                ),
-                
-                pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    trim(column_name, "_pk") as pk_sk,
-                    from source
-                    where column_name like '%pk%'
-                    ),
+                        where table_name in ('{2}','{3}','{4}')
 
-                    fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    trim(column_name, "_fk") as fk_sk,
-                    from source
-                    where column_name like '%fk%'
+                        ),
 
-                    )
+                        pks as (
+                            select 
+                            table_name as pk_table_name,
+                            column_name as pk_column_name,
+                            trim(column_name, "_pk") as pk_sk,
+                            from source
+                            where column_name like '%pk%'
+                            ),
 
-                    
-                    select 
-                    
-                    pk_table_name,
-                    pk_column_name,
-                    fk_table_name,
-                    pk_table_name as pk_table_name_value,
-                    fk_column_name
-                    from pks
+                            fks as (
+                            select
+                            table_name as fk_table_name,
+                            column_name as fk_column_name,
+                            trim(column_name, "_fk") as fk_sk,
+                            from source
+                            where column_name like '%fk%'
 
-                    inner join fks on pks.pk_sk = fks.fk_sk
+                            )
 
 
+                            select 
 
-""".format(project_name,explore_tables[0],explore_tables[1],explore_tables[2])
+                            pk_table_name,
+                            pk_column_name,
+                            fk_table_name,
+                            pk_table_name as pk_table_name_value,
+                            fk_column_name
+                            from pks
+
+                            inner join fks on pks.pk_sk = fks.fk_sk
+
+
+
+        """.format(project_name,schema_name,single_list_tables[0],single_list_tables[1],single_list_tables[2])

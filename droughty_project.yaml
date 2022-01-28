@@ -1,4 +1,4 @@
-profile: kaplan_poc
+profile: ra-development
 
 explores:
 
@@ -8,5 +8,5 @@ explores:
       dimensions: 
         - wh_website_users_dim
       facts:
-        - wh_website_pages_fct
+        - wh_website_pages_fact
 

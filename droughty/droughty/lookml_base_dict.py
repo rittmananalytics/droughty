@@ -13,8 +13,8 @@ import json
 import sys
 import yaml
 
-from droughty import warehouse_target
-from  droughty import config
+import warehouse_target
+import config
 
 import git
 
@@ -26,6 +26,7 @@ warehouse_name = config.warehouse_name
 lookml_project = config.project_name
 
 sql = warehouse_target.warehouse_schema
+explore_sql = warehouse_target.lookml_explore_schema
 
 if warehouse_name == 'big_query':
 
@@ -46,6 +47,9 @@ if warehouse_name == 'big_query':
     df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
 
     df2 = df1
+
+    explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=lookml_project, credentials=credentials)
+   
 
 elif warehouse_name == 'snowflake': 
 
@@ -86,3 +90,25 @@ df3 = {n: grp.loc[n].to_dict('index')
 for n, grp in df2.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
 
 d1 = df3
+
+##
+
+df4 = {n: grp.loc[n].to_dict('index')
+    
+for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name']).groupby(level='pk_table_name')}
+
+d2 = df4
+
+##
+
+def recur_dictify(frame):
+    if len(frame.columns) == 1:
+        if frame.values.size == 1: return frame.values[0][0]
+        return frame.values.squeeze()
+    grouped = frame.groupby(frame.columns[0])
+    d = {k: recur_dictify(g.iloc[:,1:]) for k,g in grouped}
+    return d
+
+d5 = (recur_dictify(explore_df))
+
+				

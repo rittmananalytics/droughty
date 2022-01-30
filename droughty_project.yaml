@@ -4,8 +4,8 @@ explores:
 
   sales_explore:
       parent_table: 
-        - wh_marketing_website_event_pages_fact
+        - wh_marketing_website_event_tracks_fact
       dimensions: 
         - wh_marketing_website_users_dim
       facts:
-        - wh_marketing_website_event_tracks_fact
+        - wh_marketing_website_event_pages_fact

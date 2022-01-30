@@ -188,63 +188,23 @@ for key,value in explores.items():
         
 single_list_tables = [i[0] for i in explore_tables]
 
-## I need to come up with a way of added the explore_tables as a range within the sql...It's restricted to three tables at the moment...
-        
-lookml_explore_schema =     """
-
-
-                        with source as (
-
-                        select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-
-                        where table_name in ('{2}','{3}','{4}')
-
-                        ),
-
-                        pks as (
-                            select 
-                            table_name as pk_table_name,
-                            column_name as pk_column_name,
-                            trim(column_name, "_pk") as pk_sk,
-                            from source
-                            where column_name like '%pk%'
-                            ),
-
-                            fks as (
-                            select
-                            table_name as fk_table_name,
-                            column_name as fk_column_name,
-                            trim(column_name, "_fk") as fk_sk,
-                            from source
-                            where column_name like '%fk%'
-
-                            )
-
-
-                            select 
-
-                            pk_table_name,
-                            pk_column_name,
-                            fk_table_name,
-                            pk_table_name as pk_table_name_value,
-                            fk_column_name
-                            from pks
-
-                            inner join fks on pks.pk_sk = fks.fk_sk
-
-
-
-        """.format(project_name,schema_name,single_list_tables[0],single_list_tables[1],single_list_tables[2])
 
 flat_list = []
 for sublist in explore_tables:
     for item in sublist:
         flat_list.append(item)
+        
+final_list = []
+for x in flat_list:
+    final_list.append("'" + x + "'")
+    
+pk_fk_join_key_list = ['merge_counts_fk','merge_counts_pk']
 
 params = {
     'project_id': project_name,
     'schema_id': schema_name, 
-    'table_names': flat_list
+    'table_names': final_list,
+    'table_names_unqouted': flat_list
     
 }
 
@@ -255,11 +215,11 @@ with source as (
 
 select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
 where table_name in 
-{% for tables in table_names [2:] %} {{ table_names | inclause }} {% endfor %}
+{% for tables in table_names [2:] %} {{table_names | inclause }} {% endfor %}
 
 ),
 
-{% for value in table_names  %}
+{% for value in table_names_unqouted  %}
 
 explore_table_row_count_{{ value | sqlsafe }} as (
 
@@ -279,15 +239,29 @@ group by 1
 
 merge_counts as (
 
-select * from source 
+select
 
-{% for value in table_names  %}
+source.table_name,
+
+{% for value in table_names_unqouted  %}
+
+{{ value | sqlsafe }}_row_count
+
+{% if not loop.last %},{% endif %}
+
+{% endfor %}
+
+from source 
+
+{% for value in table_names_unqouted  %}
 
 left join 
 
 explore_table_row_count_{{value | sqlsafe }} on source.table_name = explore_table_row_count_{{value | sqlsafe }}.table_name
 
 {% endfor %}
+
+group by 1,2,3,4
 
 ),
 
@@ -297,7 +271,7 @@ pks as (
     column_name as pk_column_name,
     trim(column_name, "_pk") as pk_sk,
     from source
-    where column_name like '%pk%'
+    where column_name like '%%pk%%'
 ),
 
 fks as (
@@ -306,11 +280,10 @@ fks as (
     column_name as fk_column_name,
     trim(column_name, "_fk") as fk_sk,
     from source
-    where column_name like '%fk%'
+    where column_name like '%%fk%%'
 
-),
-    
-final as (
+)
+
 
 select 
 
@@ -319,16 +292,30 @@ pk_column_name,
 fk_table_name,
 fk_column_name,
 
+{% for value in table_names_unqouted  %}
+
+    {% for merge_values in pk_fk_join_key_list  %}
+
+            {% set item_1 = pk_fk_join_key_list[loop.index-1] %}
+            {% set item_2 = table_names_unqouted[loop.index-1] %}
+
+ {{item_1}}.{{ value | sqlsafe }}_row_count
+
+{% if not loop.last %},{% endif %}
+
+{% endfor %}
+
+{% endfor %}
 
 from pks
 
 inner join fks on pks.pk_sk = fks.fk_sk
 
+{% for merge_values in pk_fk_join_key_list  %}
 
-select * from 
+inner join merge_counts on {{merge_values | sqlsafe }}.table_name = pks.pk_table_name
 
-select * from merge_counts
-
+{% endfor %}
 
 
 '''

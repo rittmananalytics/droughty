@@ -95,7 +95,7 @@ d1 = df3
 
 df4 = {n: grp.loc[n].to_dict('index')
     
-for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name']).groupby(level='pk_table_name')}
+for n, grp in explore_df.set_index(['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name']).groupby(level='parent_table_name')}
 
 d2 = df4
 

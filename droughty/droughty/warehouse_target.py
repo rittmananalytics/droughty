@@ -198,13 +198,14 @@ final_list = []
 for x in flat_list:
     final_list.append("'" + x + "'")
     
-pk_fk_join_key_list = ['merge_counts_fk','merge_counts_pk']
+join_key_list = ['merge_counts_fk','merge_counts_pk']
 
 params = {
     'project_id': project_name,
     'schema_id': schema_name, 
     'table_names': final_list,
-    'table_names_unqouted': flat_list
+    'table_names_unqouted': flat_list,
+    'pk_fk_join_key_list': join_key_list
     
 }
 
@@ -213,9 +214,14 @@ user_transaction_template = '''
 
 with source as (
 
-select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+select 
+
+*
+
+
+from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
 where table_name in 
-{% for tables in table_names [2:] %} {{table_names | inclause }} {% endfor %}
+{{ table_names |inclause }}
 
 ),
 
@@ -226,7 +232,7 @@ explore_table_row_count_{{ value | sqlsafe }} as (
 select 
 
 '{{ value | sqlsafe }}' as table_name,
-count(*) as {{ value | sqlsafe }}_row_count
+count(*) as row_count
 
 from `{{project_id}}.{{schema_id}}.{{ value | sqlsafe }}`
 
@@ -239,29 +245,16 @@ group by 1
 
 merge_counts as (
 
-select
-
-source.table_name,
 
 {% for value in table_names_unqouted  %}
 
-{{ value | sqlsafe }}_row_count
+select * from explore_table_row_count_{{ value | sqlsafe }}
 
-{% if not loop.last %},{% endif %}
+{% if not loop.last %}union all{% endif %}
 
-{% endfor %}
-
-from source 
-
-{% for value in table_names_unqouted  %}
-
-left join 
-
-explore_table_row_count_{{value | sqlsafe }} on source.table_name = explore_table_row_count_{{value | sqlsafe }}.table_name
 
 {% endfor %}
 
-group by 1,2,3,4
 
 ),
 
@@ -287,35 +280,55 @@ fks as (
 
 select 
 
+'{{table_names_unqouted[0]}}' as parent_table_name,
 pk_table_name,
 pk_column_name,
 fk_table_name,
 fk_column_name,
+merge_counts_pk.row_count as pk_row_count,
+merge_counts_fk.row_count as fk_row_count,
+merge_counts_parent.row_count as parent_row_count,
 
-{% for value in table_names_unqouted  %}
+case when merge_counts_pk.row_count > merge_counts_fk.row_count
+        then 'many_to_one'   
+     when merge_counts_pk.row_count < merge_counts_fk.row_count
+        then 'one_to_many'
+     when merge_counts_pk.row_count = merge_counts_fk.row_count
+        then 'one_to_one'
+end as true_relationship,
 
-    {% for merge_values in pk_fk_join_key_list  %}
+case when merge_counts_pk.row_count < merge_counts_parent.row_count
+    and merge_counts_fk.row_count < merge_counts_parent.row_count
+     or  merge_counts_pk.row_count != merge_counts_parent.row_count
+     and  merge_counts_fk.row_count != merge_counts_parent.row_count
 
-            {% set item_1 = pk_fk_join_key_list[loop.index-1] %}
-            {% set item_2 = table_names_unqouted[loop.index-1] %}
+        then 'many_to_one'
+     when merge_counts_pk.row_count > merge_counts_parent.row_count
+        then 'one_to_many'
+     when merge_counts_fk.row_count > merge_counts_parent.row_count
+        then 'one_to_many'
+     when merge_counts_pk.row_count = merge_counts_parent.row_count
+     or merge_counts_fk.row_count = merge_counts_parent.row_count
+        then 'one_to_one'                
+        
+end as looker_relationship,
 
- {{item_1}}.{{ value | sqlsafe }}_row_count
-
-{% if not loop.last %},{% endif %}
-
-{% endfor %}
-
-{% endfor %}
-
+     
+    
+ 
+ 
 from pks
 
 inner join fks on pks.pk_sk = fks.fk_sk
 
-{% for merge_values in pk_fk_join_key_list  %}
+left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
 
-inner join merge_counts on {{merge_values | sqlsafe }}.table_name = pks.pk_table_name
+left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
 
-{% endfor %}
+left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = 'sales_applications'
+
+
+order by looker_relationship
 
 
 '''

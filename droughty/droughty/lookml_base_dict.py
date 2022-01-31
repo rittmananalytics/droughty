@@ -26,7 +26,7 @@ warehouse_name = config.warehouse_name
 lookml_project = config.project_name
 
 sql = warehouse_target.warehouse_schema
-explore_sql = warehouse_target.lookml_explore_schema
+explore_sql = warehouse_target.explore_sql
 
 if warehouse_name == 'big_query':
 

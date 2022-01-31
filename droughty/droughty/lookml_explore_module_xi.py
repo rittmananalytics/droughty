@@ -15,39 +15,48 @@ import yaml
 import git
 
 from lookml_base_dict import d2
+from lookml_base_dict import d5
+from lookml_base_dict import relationship_dict
+
 
 
 def get_all_values(nested_dictionary):
 
+    for key,relationship_value in relationship_dict.items():
+
+        table_relationship = relationship_value
     
-    for key,value in nested_dictionary.items():
+        for key,value in nested_dictionary.items():
 
-        explore = {
+            explore = {
 
-            "explore": key,
+                "explore": key,
 
-            "view_name": key
+                "view_name": key
+                    
+            }
                 
-        }
             
-        
-        yield(looker.dump(explore))
+            yield(looker.dump(explore))
 
-        for key1 in value.keys():     
 
-            join = {
+            for key1 in value.keys():     
 
-                "joins": [
-                    {
-                    "sql_on": key1[0]+"."+key1[1]+" = "+ key1[2]+"."+key1[3],
-                    "relationship": key1[4],
-                    "name": key1[0]
+                join = {
+
+                    "joins": [
+                        {
+                        "sql_on": key1[0]+"."+key1[1]+" = "+ key1[2]+"."+key1[3],
+                        "relationship": table_relationship,
+                        "name": key1[0]
+                        }
+
+                    ]
                     }
 
-                ]
-                }
+                yield(looker.dump(join))
 
-            yield(looker.dump(join))
+
 
 
 nested_dictionary = d2

@@ -15,44 +15,55 @@ import yaml
 import git
 
 from lookml_base_dict import d2
-
+from lookml_base_dict import d5
 
 def get_all_values(nested_dictionary):
 
-    
+
     for key,value in nested_dictionary.items():
 
-        explore = {
+        for key2,value2 in value.items():
+
+                for key2,value2 in value2.items():
+
+                        elem_2 = [value2]
+
+    res = [{"includes": "test/path"}]
+
+    for key,value in nested_dictionary.items():
+
+        seq = []
+
+        res.append([{
 
             "explore": key,
 
-            "view_name": key
-                
-        }
-            
-        
-        yield(looker.dump(explore))
+            "view_name": key,
 
-        for key1 in value.keys():     
+            "joins": seq
 
-            join = {
+        }])
+
+        for key1,value in value.items():     
+
+            elem = ([{
 
                 "joins": [
                     {
                     "sql_on": key1[0]+"."+key1[1]+" = "+ key1[2]+"."+key1[3],
-                    "relationship": key1[4],
-                    "name": key1[0]
+                    ##"relationship": 
+                    "name": key1[0],
+                    "relationship": elem_2
                     }
 
                 ]
-                }
+                }])
 
-            yield(looker.dump(join))
+            seq.append(elem)
 
+    yield(looker.dump(res))
 
 nested_dictionary = d2
-
-get_all_values(nested_dictionary)
 
 def get_git_root(path):
 
@@ -83,6 +94,7 @@ def explore_output():
                 for value in get_all_values(nested_dictionary):
 
                     print(value)
+
 
 explore_output()
     

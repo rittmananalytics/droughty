@@ -15,40 +15,51 @@ import yaml
 import git
 
 from lookml_base_dict import d2
-
+from lookml_base_dict import d5
 
 def get_all_values(nested_dictionary):
 
-    
+    res = []
+        
     for key,value in nested_dictionary.items():
 
-        explore = {
+        seq = []
+
+        res.append({
 
             "explore": key,
 
-            "view_name": key
-                
-        }
+            "view_name": key,
             
-        
-        yield(looker.dump(explore))
+            "joins": seq
 
-        for key1 in value.keys():     
+        })
 
-            join = {
+        for key1,value in value.items():     
+
+            seq_2 = []
+
+            seq.append = ({
 
                 "joins": [
                     {
                     "sql_on": key1[0]+"."+key1[1]+" = "+ key1[2]+"."+key1[3],
-                    "relationship": key1[4],
-                    "name": key1[0]
+                    ##"relationship": 
+                    "name": key1[0],
+                    "relationship": seq_2
                     }
 
                 ]
-                }
+                })
+            
+            for value2 in value.items():
 
-            yield(looker.dump(join))
+                    elem = [value2]
 
+                    seq_2.append(elem)
+
+    yield(looker.dump(res))
+   
 
 nested_dictionary = d2
 
@@ -83,6 +94,7 @@ def explore_output():
                 for value in get_all_values(nested_dictionary):
 
                     print(value)
+
 
 explore_output()
     

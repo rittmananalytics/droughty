@@ -19,6 +19,14 @@ from lookml_base_dict import d5
 
 
 def get_all_values(nested_dictionary):
+
+    for key,value in nested_dictionary.items():
+
+        for key2,value2 in value.items():
+                
+                for key2,value2 in value2.items():
+
+                        elem_2 = [value2]
     
     for key,value in nested_dictionary.items():
 
@@ -41,23 +49,15 @@ def get_all_values(nested_dictionary):
                     {
                     "sql_on": key1[0]+"."+key1[1]+" = "+ key1[2]+"."+key1[3],
                     ##"relationship": 
-                    "name": key1[0]
+                    "name": key1[0],
+                    "relationship": elem_2
+                    
                     }
 
                 ]
                 }
 
             yield(looker.dump(join))
-
-        for key2 in key1:     
-
-            relationship = {
-
-                "relationship": key2
-
-                }
-
-        yield(looker.dump(relationship))
 
 
 nested_dictionary = d2

@@ -169,7 +169,7 @@ def output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = '_basic.layer.lkml'
+    filename = '_base.layer.lkml'
 
     with open(os.path.join(path, filename), 'w') as file:
 

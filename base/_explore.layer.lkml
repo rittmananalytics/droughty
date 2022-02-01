@@ -1,4 +1,7 @@
+include: "/_base/base.layer.lkml"
+include: "/_aggregate/aggregate.layer.lkml"
 explore: sales_applications_explore {
+hidden: no
 view_name: sales_applications
 join: core_users {
   sql_on: core_users.user_fk = core_user_mapping.user_pk ;;

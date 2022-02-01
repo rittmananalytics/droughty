@@ -20,12 +20,15 @@ from lookml_base_dict import distinct_duplicate_explore_rows
 
 def get_all_values(nested_dictionary):
 
-    
     for key,value in nested_dictionary.items():
 
         explore = {
 
+            "includes": ["/_base/base.layer.lkml","/_aggregate/aggregate.layer.lkml"  ],
+
             "explore": key+"_explore"+" {",
+
+            "hidden": "no",
 
             "view_name": key
                 

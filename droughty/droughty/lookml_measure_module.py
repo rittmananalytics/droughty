@@ -47,7 +47,7 @@ def get_all_values(nested_dictionary):
 
                 yield(looker.dump(count_distinct))
 
-            if "pk" in key[0]:
+            if "pk" in key[0] and key[1] == 'number':
 
                 sum_distinct = {
 

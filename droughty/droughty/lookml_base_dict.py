@@ -51,7 +51,12 @@ if warehouse_name == 'big_query':
     explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=lookml_project, credentials=credentials)
 
     explore_df_2 = explore_df[['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']]
-   
+
+    pk_table_name_df = explore_df[['pk_table_name']]
+
+    duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
+
+    distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
 
 elif warehouse_name == 'snowflake': 
 

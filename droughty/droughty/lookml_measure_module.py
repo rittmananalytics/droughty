@@ -14,7 +14,7 @@ import sys
 import yaml
 import git
 
-from lookml_base_dict import d1
+from droughty.lookml_base_dict import d1
 
 
 def get_all_values(nested_dictionary):
@@ -95,7 +95,7 @@ def get_git_root(path):
 
 git_def_path = get_git_root(os.getcwd())
 
-def output():
+def measure_output():
     
     git_path = git_def_path
 
@@ -116,5 +116,5 @@ def output():
 
                     print(value)
 
-output()
+measure_output()
     

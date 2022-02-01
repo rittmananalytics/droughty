@@ -3,8 +3,11 @@ import sys
 import click
 
 from droughty.lookml_module import output
+from droughty.lookml_measure_module import measure_output
+from droughty.lookml_explore_module import explore_output
 from droughty.dbt_test_module import schema_output
 from droughty.dbml_module import dbml_output
+
 
 @click.group(invoke_without_command=False)
 @click.pass_context
@@ -26,6 +29,24 @@ def lookml():
     click.echo("lookml generated")
 
     return output()
+
+@cli.command()
+
+def lookml_measures():
+
+    """Generates base lookml"""
+    click.echo("lookml generated")
+
+    return measure_output()
+
+@cli.command()
+
+def lookml_explore():
+
+    """Generates base lookml"""
+    click.echo("lookml generated")
+
+    return explore_output()
 
 @cli.command()
 

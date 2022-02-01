@@ -14,8 +14,8 @@ import sys
 import yaml
 import git
 
-from lookml_base_dict import d2
-from lookml_base_dict import distinct_duplicate_explore_rows
+from droughty.lookml_base_dict import d2
+from droughty.lookml_base_dict import distinct_duplicate_explore_rows
 
 
 def get_all_values(nested_dictionary):

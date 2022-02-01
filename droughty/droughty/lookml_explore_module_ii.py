@@ -36,7 +36,7 @@ def get_all_values(nested_dictionary):
 
         for key1 in value.keys():  
 
-            if key1[0] != key1[0]:
+            if key1[0] == key1[0] and key1[0] not in distinct_duplicate_explore_rows:
 
                 join = {
 
@@ -52,7 +52,25 @@ def get_all_values(nested_dictionary):
 
                 yield(looker.dump(join))
 
-            if key1[0] == distinct_duplicate_explore_rows:
+
+            elif key1[2] == key1[2] and key1[0] not in distinct_duplicate_explore_rows:
+
+                join = {
+
+                "joins": [
+                    {
+                    "sql_on": key1[2]+"."+key1[3]+" = "+ key1[0]+"."+key1[1],
+                    "relationship": key1[4],
+                    "name": key1[2]
+                    }
+
+                ]
+                }
+
+                yield(looker.dump(join))
+
+
+            if key1[0] in distinct_duplicate_explore_rows:
 
 
                 join = {
@@ -69,22 +87,6 @@ def get_all_values(nested_dictionary):
                     }
 
                 yield(looker.dump(join))
-
-            else:
-
-                join = {
-
-                "joins": [
-                    {
-                    "sql_on": key1[2]+"."+key1[3]+" = "+ key1[0]+"."+key1[1],
-                    "relationship": key1[4],
-                    "name": key1[2]
-                    }
-
-                ]
-                }
-
-                yield(looker.dump(join))                   
 
 
 

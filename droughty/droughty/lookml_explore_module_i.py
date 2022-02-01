@@ -35,8 +35,7 @@ def get_all_values(nested_dictionary):
 
         for key1 in value.keys():  
 
-            if key1[0] != key and key1[0] != key1[0]:
-
+            if key1[0] != key or key1[0] != key1[0]:
 
                 join = {
 

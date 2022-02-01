@@ -23,7 +23,7 @@ def get_all_values(nested_dictionary):
 
         view = {
 
-            "view": "+"+key
+            "view": "+"+key+" {"
                                 
             }
 

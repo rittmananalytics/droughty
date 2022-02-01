@@ -15,51 +15,78 @@ import yaml
 import git
 
 from lookml_base_dict import d2
-from lookml_base_dict import d5
+
 
 def get_all_values(nested_dictionary):
 
-    res = []
-        
+    
     for key,value in nested_dictionary.items():
 
-        seq = []
-
-        res.append({
+        explore = {
 
             "explore": key,
 
-            "view_name": key,
+            "view_name": key
+                
+        }
             
-            "joins": seq
+        
+        yield(looker.dump(explore))
 
-        })
+        for key1 in value.keys():  
 
-        for key1,value in value.items():     
+            if key1[0] != key and key1[0] != key1[0]:
 
-            seq_2 = []
 
-            seq.append = ({
+                join = {
+
+                    "joins": [
+                        {
+                        "sql_on": key1[0]+"."+key1[3]+" = "+ key1[2]+"."+key1[1],
+                        "relationship": key1[4],
+                        "name": key1[0]
+                        }
+
+                    ]
+                    }
+
+                yield(looker.dump(join))
+
+            if key1[0] == key1[0]:
+
+
+                join = {
+
+                    "joins": [
+                        {
+                        "sql_on": key1[0]+"."+key1[3]+" = "+ key1[2]+"."+key1[1],
+                        "relationship": key1[4],
+                        "from": key1[0],
+                        "name": key1[2]+"_"+key1[0]
+                        }
+
+                    ]
+                    }
+
+                yield(looker.dump(join))
+
+            else:
+
+                join = {
 
                 "joins": [
                     {
-                    "sql_on": key1[0]+"."+key1[1]+" = "+ key1[2]+"."+key1[3],
-                    ##"relationship": 
-                    "name": key1[0],
-                    "relationship": seq_2
+                    "sql_on": key1[2]+"."+key1[3]+" = "+ key1[0]+"."+key1[1],
+                    "relationship": key1[4],
+                    "name": key1[2]
                     }
 
                 ]
-                })
-            
-            for value2 in value.items():
+                }
 
-                    elem = [value2]
+                yield(looker.dump(join))                   
 
-                    seq_2.append(elem)
 
-    yield(looker.dump(res))
-   
 
 nested_dictionary = d2
 
@@ -94,7 +121,6 @@ def explore_output():
                 for value in get_all_values(nested_dictionary):
 
                     print(value)
-
 
 explore_output()
     

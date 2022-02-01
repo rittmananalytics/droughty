@@ -25,7 +25,7 @@ def get_all_values(nested_dictionary):
 
         explore = {
 
-            "explore": key,
+            "explore": key+"_explore"+" {",
 
             "view_name": key
                 
@@ -87,6 +87,13 @@ def get_all_values(nested_dictionary):
                     }
 
                 yield(looker.dump(join))
+
+        for key,value in nested_dictionary.items():
+
+            syntax = "}"
+
+
+        yield(syntax)
 
 
 

@@ -1,4 +1,4 @@
-explore: sales_applications
+explore: sales_applications_explore {
 view_name: sales_applications
 join: core_users {
   sql_on: core_users.user_fk = core_user_mapping.user_pk ;;
@@ -85,4 +85,5 @@ join: sales_applications_product_study_plans {
   sql_on: product_study_plans.study_plan_fk = sales_applications.study_plan_pk ;;
   relationship: one_to_one
   from: product_study_plans
+}
 }

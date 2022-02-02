@@ -14,75 +14,81 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_base_dict import d1
-from droughty.lookml_base_dict import d2
-from droughty.lookml_base_dict import distinct_duplicate_explore_rows
+from lookml_base_dict import d1
+from lookml_base_dict import d2
+from lookml_base_dict import distinct_duplicate_explore_rows
 
 
-def get_all_values(nested_dictionary_measure_dimension,nested_dictionary_cube):
+import lkml as looker
+from pprint import pprint
+from google.oauth2 import service_account
+import pandas_gbq
+from contextlib import redirect_stdout
+import snowflake.connector
+from sqlalchemy import create_engine
+from snowflake.sqlalchemy import URL
+import pandas as pd
+import pandas
+import os
+import json
+import sys
+import yaml
+import git
 
-    for key,value in nested_dictionary_cube.items():
 
-        cube = {
+def get_all_values(nested_dictionary_measure_dimension):
 
-            "cube": "'"+key,
-
-            "sql": "` select * from"+key+"`"
-                
-        }
-            
         
-        yield(cube)
+    for key,value in nested_dictionary_measure_dimension.items():
+        
 
-        for key, value in nested_dictionary_measure_dimension.items():
+        
+        sql =  { 
             
-            if "pk" in key[0]:
+            "cube" : "(`"+key+"`,",
+            
+            "sql ": " select * from  "+key+",",
+            
+            "dimensions": ""
+        
+        }            
 
-                count_distinct = {
 
-                    "measure": {
-                        "type": "count_distinct",
+        yield(looker.dump(sql))
+        
+        for key, value in value.items():
+
+                dimension = {
+
+                   key[0]: {
+                        "type": key[1],
                         "sql": "${TABLE}."+key[0],
-                        "name": "count_of_"+key[0],
                         "description": key[2]
-
                     }
+                
                 }
-
-                yield(looker.dump(count_distinct))
-
-            if "pk" in key[0] and key[1] == 'number':
-
-                sum_distinct = {
-
-                    "measure": {
-                        "type": "sum_distinct",
-                        "sql": "${TABLE}."+key[0],
-                        "name": "sum_of_"+key[0],
-                        "description": key[2]
-
-                    }
-                }
-
-                yield(looker.dump(sum_distinct))
+                
 
 
-
+                yield(looker.dump(dimension))
+                
+                comma = ","
+                
+                yield(comma)      
 
         for key,value in nested_dictionary_measure_dimension.items():
 
-            syntax = "}"
+            syntax = "});"
 
 
         yield(syntax)
-
-
+        
 
 
 nested_dictionary_cube = d2
 nested_dictionary_measure_dimension = d1
 
-get_all_values(nested_dictionary_measure_dimension,nested_dictionary_cube)
+get_all_values(nested_dictionary_measure_dimension)
 
 def get_git_root(path):
 
@@ -93,7 +99,7 @@ def get_git_root(path):
 git_def_path = get_git_root(os.getcwd())
 
 
-def explore_output():
+def cube_output():
     
     git_path = git_def_path
 
@@ -114,5 +120,5 @@ def explore_output():
 
                     print(value)
 
-explore_output()
+cube_output()
     

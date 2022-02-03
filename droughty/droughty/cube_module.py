@@ -35,6 +35,10 @@ import sys
 import yaml
 import git
 
+from droughty.lookml_base_dict import d1
+from droughty.lookml_base_dict import d2
+
+
 
 def get_all_values(nested_dictionary_measure_dimension):
 
@@ -45,7 +49,7 @@ def get_all_values(nested_dictionary_measure_dimension):
         
         sql =  { 
             
-            "cube" : "(`"+key+"`,",
+            "cube" : "(`"+key+"`, { ",
             
             "sql ": " select * from  "+key+",",
             
@@ -61,8 +65,8 @@ def get_all_values(nested_dictionary_measure_dimension):
                 dimension = {
 
                    key[0]: {
-                        "type": key[1],
-                        "sql": "${TABLE}."+key[0],
+                        "type": "`"+key[1]+"`"+",",
+                        "sql ": "`"+key[0]+"`,",
                         "description": key[2]
                     }
                 
@@ -78,11 +82,10 @@ def get_all_values(nested_dictionary_measure_dimension):
 
         for key,value in nested_dictionary_measure_dimension.items():
 
-            syntax = "});"
+            syntax = "},  });"
 
 
         yield(syntax)
-        
 
 
 nested_dictionary_cube = d2

@@ -103,5 +103,4 @@ def dbml_output():
 
                     print(value)
 
-dbml_output()
     

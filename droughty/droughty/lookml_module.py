@@ -177,4 +177,4 @@ def output():
 
                 for value in get_all_values(nested_dictionary):
 
-                    print(value)    
+                    print(value)

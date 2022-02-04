@@ -28,7 +28,8 @@ def base():
 
     finally:
 
-        print ("lookml base layer generated")
+        typer.secho("lookml base layer generated",fg=typer.colors.GREEN)
+
 
 @app.command()
 
@@ -48,7 +49,7 @@ def explore():
 
     finally:
 
-        print ("lookml explore layer generated")
+        typer.secho("lookml explore layer generated",fg=typer.colors.GREEN)
 
 @app.command()
 
@@ -69,3 +70,11 @@ def measures():
     finally:
 
         typer.secho("lookml measure layer generated",fg=typer.colors.GREEN)
+
+@app.command()
+
+def full_refresh():
+
+    for func in [base, explore, measures]:
+
+        result = func()

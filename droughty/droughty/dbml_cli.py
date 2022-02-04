@@ -2,16 +2,16 @@
 
 import typer
 
-from dbt_test_module import schema_output
+from dbml_module import dbml_output
 
 app = typer.Typer()
 
 
 @app.command()
-def tests():
-    typer.echo(f"Generating dbt tests")
+def erd():
+    typer.echo(f"Generating erd")
 
-    return schema_output()
+    return dbml_output()
 
 
 if __name__ == "__main__":

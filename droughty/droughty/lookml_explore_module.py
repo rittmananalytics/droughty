@@ -132,7 +132,4 @@ def explore_output():
 
                 for value in get_all_values(nested_dictionary):
 
-                    print(value)
-
-explore_output()
-    
+                    print(value)    

@@ -25,8 +25,7 @@ def tests():
 
     finally:
 
-        print ("dbt tests generated")
-
+        typer.secho("dbt tests generated",fg=typer.colors.GREEN)
 
 if __name__ == "__main__":
     app()

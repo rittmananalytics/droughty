@@ -63,6 +63,3 @@ def dbml():
     click.echo("dbml generated")
 
     return dbml_output()
-
-
-

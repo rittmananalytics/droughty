@@ -3,9 +3,9 @@ import typer
 import time
 from tqdm import tqdm
 
-from lookml_module import output
-from lookml_explore_module import explore_output
-from lookml_measure_module import measure_output
+from droughty.lookml_module import output
+from droughty.lookml_explore_module import explore_output
+from droughty.lookml_measure_module import measure_output
 
 app = typer.Typer()
 

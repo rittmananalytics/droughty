@@ -4,7 +4,7 @@ import typer
 import time
 from tqdm import tqdm
 
-from dbt_test_module import schema_output
+from droughty.dbt_test_module import schema_output
 
 app = typer.Typer()
 

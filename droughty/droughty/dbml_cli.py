@@ -3,7 +3,7 @@
 import typer
 import time
 
-from dbml_module import dbml_output
+from droughty.dbml_module import dbml_output
 
 app = typer.Typer()
 

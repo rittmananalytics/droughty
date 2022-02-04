@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "droughty"
-version = "0.1.29"
+version = "0.1.30"
 description = "droughty is an analytics engineering toolkit, helping keep your workflow dry."
 authors = ["Lewis <lewischarlesbaker@gmail.com>"]
 license = "MIT"
@@ -16,14 +16,18 @@ click = "8.0.1"
 snowflake = "0.0.3"
 pandas-gbq = "0.15.0"
 GitPython = "3.1.26"
-protobuf = "3.19.3"
+protobuf = "3.19.4"
 PyYAML = "6.0"
 "ruamel.base" = "1.0.0"
 snowflake-connector-python = "^2.7.2"
-snowflake-sqlalchemy = "^1.3.3"
+snowflake-sqlalchemy = "1.3.3"
 "ruamel.yaml" = "^0.17.20"
 pycryptodomex = "3.10.1"
 Sphinx = "^4.4.0"
+typer = "0.4.0"
+jinjasql = "0.1.8"
+six = "1.16.0"
+tqdm = "4.62.3"
 
 [tool.poetry.scripts]
 droughty = "droughty.main:app"

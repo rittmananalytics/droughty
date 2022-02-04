@@ -1,8 +1,8 @@
 import typer
 
-import lookml_cli 
-import dbt_test_cli
-import dbml_cli
+from droughty import lookml_cli 
+from droughty import dbt_test_cli
+from droughty import dbml_cli
 
 app = typer.Typer()
 

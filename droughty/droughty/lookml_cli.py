@@ -49,18 +49,18 @@ def explore():
             time.sleep(0.01)
             total += 1
 
-    if dimensional_inference_status == "enabled":
 
-        return explore_output()
+        if dimensional_inference_status == "enabled":
 
-    else: 
+            return explore_output()
 
-        raise Exception("Please enable dimensional inference")
+            typer.secho("lookml explore layer generated",fg=typer.colors.GREEN)
 
-    
-  ##  finally:
 
-    ##    typer.secho("lookml explore layer generated",fg=typer.colors.GREEN)
+        else: 
+
+            raise Exception("Please enable dimensional inference")
+
 
 @app.command()
 

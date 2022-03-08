@@ -7,6 +7,11 @@ from droughty.lookml_module import output
 from droughty.lookml_explore_module import explore_output
 from droughty.lookml_measure_module import measure_output
 
+from droughty import warehouse_target
+
+dimensional_inference_status = warehouse_target.dimensional_inference
+
+
 app = typer.Typer()
 
 
@@ -43,13 +48,19 @@ def explore():
             # Fake processing time
             time.sleep(0.01)
             total += 1
-    try:
+
+    if dimensional_inference_status == "enabled":
 
         return explore_output()
 
-    finally:
+    else: 
 
-        typer.secho("lookml explore layer generated",fg=typer.colors.GREEN)
+        raise Exception("Please enable dimensional inference")
+
+    
+  ##  finally:
+
+    ##    typer.secho("lookml explore layer generated",fg=typer.colors.GREEN)
 
 @app.command()
 

@@ -83,7 +83,4 @@ def schema_output():
                 
                 yaml = ruamel.yaml.YAML()
                 yaml.indent(mapping=2, sequence=4, offset=2)            
-                yaml.dump(i,file)
-
-schema_output()
-    
+                yaml.dump(i,file)    

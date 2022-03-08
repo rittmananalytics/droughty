@@ -16,58 +16,65 @@ import git
 from droughty.dbml_base_dict import d1
 from droughty.config import project_value
 
-def get_all_values(nested_dictionary):
+try: 
 
+    def get_all_values(nested_dictionary):
+
+        
+        project = 'project'+' '+'project_value'
+
+        yield (project)
+
+        project_params = "{ database_type"+":"+" 'bigquery' }"
+
+        yield (project_params)
     
-    project = 'project'+' '+'project_value'
-
-    yield (project)
-
-    project_params = "{ database_type"+":"+" 'bigquery' }"
-
-    yield (project_params)
-   
-    for key,value in nested_dictionary.items():
-
-        explore = "table"+" "+key+"      {"
-                
-        yield(explore)
-
-        for key,value in value.items():
-
-            if "pk" not in key[0] and "fk" not in key[0]:
-
-               dimension = key[0]+" "+key[1]
-
-               yield(dimension)
-
-            elif "pk" in key[0]:
-
-                dimension = key[0]+" "+key[1]+" [pk]"
-
-                yield(dimension)   
-
-            elif "fk" in key[0] and "not_available" not in key[3]:
-
-                dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
-
-                yield(dimension)
-
-            elif "fk" in key[0] and "not_available" in key[3]:
-
-                dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
-
-                yield(dimension)
-
-            else:   
-
-               pass
-
         for key,value in nested_dictionary.items():
 
-            syntax = "}"
+            explore = "table"+" "+key+"      {"
+                    
+            yield(explore)
 
-        yield(syntax)
+            for key,value in value.items():
+
+                if "pk" not in key[0] and "fk" not in key[0]:
+
+                    dimension = key[0]+" "+key[1]
+
+                    yield(dimension)
+
+                elif "pk" in key[0]:
+
+                    dimension = key[0]+" "+key[1]+" [pk]"
+
+                    yield(dimension)   
+
+                elif "fk" in key[0] and "not_available" not in key[3]:
+
+                    dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
+
+                    yield(dimension)
+
+                elif "fk" in key[0] and "not_available" in key[3]:
+
+                    dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
+
+                    yield(dimension)
+
+                else:   
+
+                    pass
+
+            for key,value in nested_dictionary.items():
+
+                syntax = "}"
+
+            yield(syntax)
+
+
+except:
+
+    print("I doesn't look like you have any primary or foreign keys declared")
             
 
 nested_dictionary = d1
@@ -102,5 +109,3 @@ def dbml_output():
                 for value in get_all_values(nested_dictionary):
 
                     print(value)
-
-    

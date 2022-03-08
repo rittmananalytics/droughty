@@ -83,5 +83,3 @@ for key,value in enviroment_project.items():
 
                 warehouse_name =  lookml_config[value]['warehouse_name']
                 project_name =  lookml_config[value]['project_name']
-                enviroment_project = enviroment_project['profile']
-

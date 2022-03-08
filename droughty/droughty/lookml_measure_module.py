@@ -114,7 +114,4 @@ def measure_output():
 
                 for value in get_all_values(nested_dictionary):
 
-                    print(value)
-
-measure_output()
-    
+                    print(value)    

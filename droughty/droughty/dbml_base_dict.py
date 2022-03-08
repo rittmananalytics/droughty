@@ -26,72 +26,79 @@ warehouse_name = config.warehouse_name
 lookml_project = config.project_name
 
 sql = warehouse_target.dbml_reference_dict
+dimensional_inference_status = warehouse_target.dimensional_inference
 
-if warehouse_name == 'big_query':
+if dimensional_inference_status == 'enabled':
 
-    sql = warehouse_target.dbml_reference_dict
+    if warehouse_name == 'big_query':
 
-    # Run a Standard SQL query with the project set explicitly
-    project_id = lookml_project
-    df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
+        sql = warehouse_target.dbml_reference_dict
 
-    df['description'] = df['description'].fillna('not available')
+        # Run a Standard SQL query with the project set explicitly
+        project_id = lookml_project
+        df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
 
-    df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
+        df['description'] = df['description'].fillna('not available')
 
-    df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
-    df2['data_type'] = df2['data_type'].str.replace('DATE','date')
-    df2['data_type'] = df2['data_type'].str.replace('INT64','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('FLOAT64','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('NUMERIC','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('STRING','varchar')
-    df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
+        df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
 
-elif warehouse_name == 'snowflake': 
+        df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
+        df2['data_type'] = df2['data_type'].str.replace('DATE','date')
+        df2['data_type'] = df2['data_type'].str.replace('INT64','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('FLOAT64','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('NUMERIC','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('STRING','varchar')
+        df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
 
-    url = URL(
+    elif warehouse_name == 'snowflake': 
 
-        account = config.snowflake_account,
-        user =  config.snowflake_user,
-        schema =  config.snowflake_schema,
-        database =  config.snowflake_database,
-        password =  config.snowflake_password,
-        warehouse= config.snowflake_warehouse,
-        role =  config.snowflake_role
+        url = URL(
 
-    )
+            account = config.snowflake_account,
+            user =  config.snowflake_user,
+            schema =  config.snowflake_schema,
+            database =  config.snowflake_database,
+            password =  config.snowflake_password,
+            warehouse= config.snowflake_warehouse,
+            role =  config.snowflake_role
 
-    engine = create_engine(url)
+        )
 
-    connection = engine.connect()
+        engine = create_engine(url)
 
-    query = '''
-    select * from snowflake_sample_data.information_schema.columns;
-    '''
+        connection = engine.connect()
 
-    df = pd.read_sql(query, connection)
-    
-    df['description'] = df['comment'].fillna('not available')
-    
-    df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
+        query = '''
+        select * from snowflake_sample_data.information_schema.columns;
+        '''
 
-    df2 = df1[['table_name','column_name','data_type','description']]
+        df = pd.read_sql(query, connection)
+        
+        df['description'] = df['comment'].fillna('not available')
+        
+        df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 
-    df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
-    df2['data_type'] = df2['data_type'].str.replace('DATE','date')
-    df2['data_type'] = df2['data_type'].str.replace('INT64','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('FLOAT64','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('NUMERIC','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('NUMBER','numeric')
-    df2['data_type'] = df2['data_type'].str.replace('TEXT','varchar')
-    df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
+        df2 = df1[['table_name','column_name','data_type','description']]
 
-    connection.close()
-    engine.dispose()
+        df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
+        df2['data_type'] = df2['data_type'].str.replace('DATE','date')
+        df2['data_type'] = df2['data_type'].str.replace('INT64','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('FLOAT64','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('NUMERIC','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('NUMBER','numeric')
+        df2['data_type'] = df2['data_type'].str.replace('TEXT','varchar')
+        df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
 
-    
-df3 = {n: grp.loc[n].to_dict('index')
-    
-for n, grp in df2.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level='table_name')}
+        connection.close()
+        engine.dispose()
+        
+        
+    df3 = {n: grp.loc[n].to_dict('index')
+        
+    for n, grp in df2.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level='table_name')}
 
-d1 = df3
+    d1 = df3
+
+else:
+
+    d1 = {None}

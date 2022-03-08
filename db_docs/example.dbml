@@ -1,0 +1,2 @@
+project project_value
+{ database_type: 'bigquery' }

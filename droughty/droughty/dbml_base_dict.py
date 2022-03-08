@@ -101,4 +101,4 @@ if dimensional_inference_status == 'enabled':
 
 else:
 
-    d1 = {None}
+    d1 = (False)

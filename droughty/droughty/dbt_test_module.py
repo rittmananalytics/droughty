@@ -73,7 +73,7 @@ def schema_output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = 'schema.yml'
+    filename = 'droughty_schema.yml'
 
     with open(os.path.join(path, filename), 'w') as file:
 

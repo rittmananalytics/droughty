@@ -38,7 +38,9 @@ if dimensional_inference_status == 'enabled':
         project_id = lookml_project
         df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
 
-        df2 = df[['table_name','column_name','data_type','pk_table_name','pk_column_name']]
+        df['description'] = df['description'].fillna('not available')
+
+        df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
 
         df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
         df2['data_type'] = df2['data_type'].str.replace('DATE','date')
@@ -70,7 +72,17 @@ if dimensional_inference_status == 'enabled':
 
         df = pd.read_sql(query, connection)
 
-        df2 = df[['table_name','column_name','data_type','pk_table_name','pk_column_name']]
+        df.drop_duplicates(keep=False, inplace=True)
+
+        df['description'] = df['comment'].fillna('not available')
+
+        df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
+
+        df2['table_name'] = df2['table_name'].str.lower()
+        df2['column_name'] = df2['column_name'].str.lower()    
+        df2['data_type'] = df2['data_type'].str.lower()
+        df2['pk_table_name'] = df2['pk_table_name'].str.lower()
+        df2['pk_column_name'] = df2['pk_column_name'].str.lower()
 
         df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
         df2['data_type'] = df2['data_type'].str.replace('DATE','date')
@@ -83,11 +95,11 @@ if dimensional_inference_status == 'enabled':
 
         connection.close()
         engine.dispose()
+
         
+    df3 = {n: grp.loc[n].to_dict('index')
         
-    df3 = {n: grp.loc[n].to_dict('records')
-        
-    for n, grp in df2.set_index(['table_name', 'column_name','data_type','pk_table_name','pk_column_name']).groupby(level='table_name')}
+    for n, grp in df2.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level='table_name')}
 
     d1 = df3
 

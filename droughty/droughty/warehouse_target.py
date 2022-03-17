@@ -234,12 +234,14 @@ for key,value in enviroment_project.items():
                 dbml_reference_dict = """
                 with source as (
                 select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+                where table_schema = '{1}'
+
                 ),
                     pks as (
                     select 
                     table_name as pk_table_name,
                     column_name as pk_column_name,
-                    trim(column_name, '_pk') as pk_sk
+                    rtrim(column_name, '_pk') as pk_sk
                     from source
                     where column_name like '%PK%'
                     ),
@@ -247,7 +249,7 @@ for key,value in enviroment_project.items():
                     select
                     table_name as fk_table_name,
                     column_name as fk_column_name,
-                    trim(column_name, '_fk') as fk_sk
+                    rtrim(column_name, '_fk') as fk_sk
                     from source
                     where column_name like '%FK%'
                     ),
@@ -274,7 +276,7 @@ for key,value in enviroment_project.items():
                     from source
                     left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
                 
-                """.format(database)
+                """.format(database,schema_name)
 
                 lookml_explore_schema = '''
                 with source as (

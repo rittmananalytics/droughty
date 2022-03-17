@@ -5,9 +5,15 @@ dimensional_inference: enabled
 explores:
 
   sales_explore:
-      parent_table: 
+      PARENT_TABLE: 
+        - WH_PLATFORM__POLICIES_FACT
+      DIMENSIONS: 
+        - WH_PLATFORM__PRODUCTS_DIM
+        - WH_PLATFORM__VEHICLES_DIM
+      FACTS:
         - WH_PLATFORM__INVOICES_FACT
-      dimensions: 
-        - WH_PLATFORM__POLICIES_FACT
-      facts:
-        - WH_PLATFORM__POLICIES_FACT
+        - WH_PLATFORM__BORDEREAUX_FACT
+        - WH_PLATFORM__BROKERS_FACT
+        - WH_PLATFORM__PRODUCTS_DIM
+        - WH_PLATFORM__SCHEDULES_FACT
+        - WH_PLATFORM__QUOTES_FACT

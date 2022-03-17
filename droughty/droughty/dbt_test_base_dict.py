@@ -68,13 +68,15 @@ elif warehouse_name == 'snowflake':
 
     connection = engine.connect()
 
-    query = '''
-    select * from snowflake_sample_data.information_schema.columns;
-    '''
+    query = warehouse_target.test_warehouse_schema
 
     df = pd.read_sql(query, connection)
     
     df['description'] = df['comment'].fillna('not available')
+
+    df['column_name'] = df['column_name'].str.lower()
+    df['table_name'] = df['table_name'].str.lower()
+    df['description'] = df['description'].str.lower()
     
     df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 

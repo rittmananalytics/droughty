@@ -227,7 +227,9 @@ for key,value in enviroment_project.items():
                     select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
                     )
                     select * from source
-                """.format(database)
+
+                    where table_schema = '{1}'
+                """.format(database,schema_name)
 
                 dbml_reference_dict = """
                 with source as (
@@ -237,17 +239,17 @@ for key,value in enviroment_project.items():
                     select 
                     table_name as pk_table_name,
                     column_name as pk_column_name,
-                    trim(column_name, '_pk') as pk_sk,
+                    trim(column_name, '_pk') as pk_sk
                     from source
-                    where column_name like '%pk%'
+                    where column_name like '%PK%'
                     ),
                     fks as (
                     select
                     table_name as fk_table_name,
                     column_name as fk_column_name,
-                    trim(column_name, '_fk') as fk_sk,
+                    trim(column_name, '_fk') as fk_sk
                     from source
-                    where column_name like '%fk%'
+                    where column_name like '%FK%'
                     ),
                     references as (
                     select * from pks
@@ -255,7 +257,12 @@ for key,value in enviroment_project.items():
                     )
                     select 
                     
-                    *except (pk_column_name,pk_table_name),
+
+                    source.data_type,
+                    source.table_name,
+                    source.column_name,
+                    source.comment,
+
                     case when pk_column_name is null
                         then 'not_available'
                     else pk_column_name
@@ -298,7 +305,7 @@ for key,value in enviroment_project.items():
                     column_name as pk_column_name,
                     trim(column_name, '_pk') as pk_sk
                     from source
-                    where column_name like '%%pk%%'
+                    where column_name ilike '%%PK%%'
                 ),
                 fks as (
                     select
@@ -306,7 +313,7 @@ for key,value in enviroment_project.items():
                     column_name as fk_column_name,
                     trim(column_name, '_fk') as fk_sk
                     from source
-                    where column_name like '%%fk%%'
+                    where column_name ilike '%%FK%%'
                 )
                 select 
                 {{ table_names [0] }} as parent_table_name,
@@ -352,15 +359,24 @@ for key,value in enviroment_project.items():
 
                 test_warehouse_schema =   """
                 with source_1 as (
-                    select * from "{0}"."{1}"."INFORMATION_SCHEMA.COLUMNS"
+                    select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+
+                    where table_schema = '{1}'
+
                     ),
+
                 source_2 as (
-                select * from "{0}"."{2}"."INFORMATION_SCHEMA.COLUMNS"
-                
+                    select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+
+                    where table_schema = '{2}'
+
+            
                 ),
                 
                 source_3 as (
-                select * from "{0}"."{3}"."INFORMATION_SCHEMA.COLUMNS"
+                select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+
+                    where table_schema = '{3}'
                 
                 ),
                 

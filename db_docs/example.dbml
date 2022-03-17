@@ -1,0 +1,3 @@
+project project_value
+{ database_type: 'bigquery' }
+table APPLICABLE_ROLES      {

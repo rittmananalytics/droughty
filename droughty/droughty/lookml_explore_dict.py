@@ -93,6 +93,12 @@ elif warehouse_name == 'snowflake':
 
     explore_df = pd.read_sql(explore_sql, connection)
 
+    explore_df['parent_table_name'] = explore_df['parent_table_name'].str.lower()
+    explore_df['pk_table_name'] = explore_df['pk_table_name'].str.lower()
+    explore_df['pk_column_name'] = explore_df['pk_column_name'].str.lower()
+    explore_df['fk_table_name'] = explore_df['fk_table_name'].str.lower()
+    explore_df['fk_column_name'] = explore_df['fk_column_name'].str.lower()
+
     explore_df_2 = explore_df[['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']]
 
     pk_table_name_df = explore_df[['pk_table_name']]

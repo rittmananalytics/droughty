@@ -38,9 +38,7 @@ if dimensional_inference_status == 'enabled':
         project_id = lookml_project
         df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
 
-        df['description'] = df['description'].fillna('not available')
-
-        df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
+        df2 = df[['table_name','column_name','data_type','pk_table_name','pk_column_name']]
 
         df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
         df2['data_type'] = df2['data_type'].str.replace('DATE','date')
@@ -68,17 +66,11 @@ if dimensional_inference_status == 'enabled':
 
         connection = engine.connect()
 
-        query = '''
-        select * from snowflake_sample_data.information_schema.columns;
-        '''
+        query = sql
 
         df = pd.read_sql(query, connection)
-        
-        df['description'] = df['comment'].fillna('not available')
-        
-        df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 
-        df2 = df1[['table_name','column_name','data_type','description']]
+        df2 = df[['table_name','column_name','data_type','pk_table_name','pk_column_name']]
 
         df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
         df2['data_type'] = df2['data_type'].str.replace('DATE','date')
@@ -93,9 +85,9 @@ if dimensional_inference_status == 'enabled':
         engine.dispose()
         
         
-    df3 = {n: grp.loc[n].to_dict('index')
+    df3 = {n: grp.loc[n].to_dict('records')
         
-    for n, grp in df2.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level='table_name')}
+    for n, grp in df2.set_index(['table_name', 'column_name','data_type','pk_table_name','pk_column_name']).groupby(level='table_name')}
 
     d1 = df3
 

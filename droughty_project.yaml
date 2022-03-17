@@ -8,6 +8,6 @@ explores:
       parent_table: 
         - WH_PLATFORM__INVOICES_FACT
       dimensions: 
-        - WH_PLATFORM__VEHICLES_DIM
+        - WH_PLATFORM__POLICIES_FACT
       facts:
         - WH_PLATFORM__POLICIES_FACT

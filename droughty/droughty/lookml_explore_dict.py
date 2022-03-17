@@ -93,6 +93,8 @@ elif warehouse_name == 'snowflake':
 
     explore_df = pd.read_sql(explore_sql, connection)
 
+    explore_df.drop_duplicates(keep=False, inplace=True)
+
     explore_df['parent_table_name'] = explore_df['parent_table_name'].str.lower()
     explore_df['pk_table_name'] = explore_df['pk_table_name'].str.lower()
     explore_df['pk_column_name'] = explore_df['pk_column_name'].str.lower()

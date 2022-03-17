@@ -285,7 +285,9 @@ for key,value in enviroment_project.items():
                 from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
                 where table_name in 
                 {{ table_names |inclause }}
+                
                 ),
+                
                 {% for value in table_names_unqouted  %}
                 explore_table_row_count_{{ value | sqlsafe }} as (
                 select 
@@ -293,30 +295,36 @@ for key,value in enviroment_project.items():
                 count(*) as row_count
                 from "{{database}}"."{{schema_id}}"."{{ value | sqlsafe }}"
                 group by 1
+                
                 ),
+                
                 {% endfor %}
                 merge_counts as (
                 {% for value in table_names_unqouted  %}
                 select * from explore_table_row_count_{{ value | sqlsafe }}
                 {% if not loop.last %}union all{% endif %}
                 {% endfor %}
+                
                 ),
+                
                 pks as (
                     select 
                     table_name as pk_table_name,
                     column_name as pk_column_name,
-                    trim(column_name, '_pk') as pk_sk
+                    rtrim(column_name, '_PK') as pk_sk
                     from source
-                    where column_name ilike '%%PK%%'
+                    where column_name ilike '%%pk%%'
                 ),
                 fks as (
                     select
                     table_name as fk_table_name,
                     column_name as fk_column_name,
-                    trim(column_name, '_fk') as fk_sk
+                    rtrim(column_name, '_FK') as fk_sk
                     from source
-                    where column_name ilike '%%FK%%'
-                )
+                    where column_name ilike '%%fk%%'
+                ),
+                
+                joined as (
                 select 
                 {{ table_names [0] }} as parent_table_name,
                 pk_table_name,
@@ -352,11 +360,16 @@ for key,value in enviroment_project.items():
                 
                 
                 from pks
-                inner join fks on pks.pk_sk = fks.fk_sk
+                join fks on pks.pk_sk = fks.fk_sk
                 left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
                 left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
                 left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
                 order by looker_relationship
+                
+                )
+                
+                select * from joined
+                
                 '''
 
                 test_warehouse_schema =   """

@@ -1,19 +1,27 @@
-profile: flock
+
+profile: kaplan_poc
 
 dimensional_inference: enabled
 
 explores:
 
   sales_explore:
-      PARENT_TABLE: 
-        - WH_PLATFORM__POLICIES_FACT
-      DIMENSIONS: 
-        - WH_PLATFORM__PRODUCTS_DIM
-        - WH_PLATFORM__VEHICLES_DIM
-      FACTS:
-        - WH_PLATFORM__INVOICES_FACT
-        - WH_PLATFORM__BORDEREAUX_FACT
-        - WH_PLATFORM__BROKERS_FACT
-        - WH_PLATFORM__PRODUCTS_DIM
-        - WH_PLATFORM__SCHEDULES_FACT
-        - WH_PLATFORM__QUOTES_FACT
+      parent_table: 
+        - sales_applications
+      dimensions: 
+        - core_countries
+        - core_agents
+        - core_sponsors
+        - sales_application_agent_bridge
+        - core_users
+        - core_country_mapping
+        - core_institutions
+        - sales_student
+        - core_user_mapping
+        - core_program_intakes
+        - core_programs
+        - core_subjects
+      facts:
+        - sales_applications_summary
+        - product_progression_plans
+        - product_study_plans

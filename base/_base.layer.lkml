@@ -14,12 +14,6 @@ explore: wh_platform__schedules_fact
 { hidden: yes }
 explore: wh_platform__vehicles_dim
 { hidden: yes }
-explore: wh_platform_brokers_fact
-{ hidden: yes }
-explore: wh_platform_products_dim
-{ hidden: yes }
-explore: wh_platform_vehicles_dim
-{ hidden: yes }
 view: wh_platform__bordereaux_fact {
 sql_table_name: wh_platform__bordereaux_fact ;;
 dimension: bordereaux_brokerage {
@@ -527,100 +521,6 @@ dimension: schedule_pk {
 }
 view: wh_platform__vehicles_dim {
 sql_table_name: wh_platform__vehicles_dim ;;
-dimension: vehicle_gross_weight_kg {
-  type: number
-  sql: ${TABLE}.vehicle_gross_weight_kg ;;
-  description: "not available"
-}
-dimension: vehicle_manufacturer {
-  type: string
-  sql: ${TABLE}.vehicle_manufacturer ;;
-  description: "not available"
-}
-dimension: vehicle_model {
-  type: string
-  sql: ${TABLE}.vehicle_model ;;
-  description: "not available"
-}
-dimension: vehicle_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.vehicle_pk ;;
-  description: "not available"
-}
-dimension: vehicle_type {
-  type: string
-  sql: ${TABLE}.vehicle_type ;;
-  description: "not available"
-}
-}
-view: wh_platform_brokers_fact {
-sql_table_name: wh_platform_brokers_fact ;;
-dimension_group: broker_created_at_ts {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp_TZ
-  sql: ${TABLE}.broker_created_at_ts ;;
-  description: "not available"
-}
-dimension: broker_email_addresses {
-  type: VARIANT
-  sql: ${TABLE}.broker_email_addresses ;;
-  description: "not available"
-}
-dimension: broker_name {
-  type: string
-  sql: ${TABLE}.broker_name ;;
-  description: "not available"
-}
-dimension: broker_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.broker_pk ;;
-  description: "not available"
-}
-dimension: broker_remuneration_rate {
-  type: number
-  sql: ${TABLE}.broker_remuneration_rate ;;
-  description: "not available"
-}
-dimension_group: broker_remuneration_start_ts {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp_TZ
-  sql: ${TABLE}.broker_remuneration_start_ts ;;
-  description: "not available"
-}
-}
-view: wh_platform_products_dim {
-sql_table_name: wh_platform_products_dim ;;
-dimension: product_display_name {
-  type: string
-  sql: ${TABLE}.product_display_name ;;
-  description: "not available"
-}
-dimension: product_name {
-  type: string
-  sql: ${TABLE}.product_name ;;
-  description: "not available"
-}
-dimension: product_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.product_pk ;;
-  description: "not available"
-}
-dimension: product_type {
-  type: string
-  sql: ${TABLE}.product_type ;;
-  description: "not available"
-}
-}
-view: wh_platform_vehicles_dim {
-sql_table_name: wh_platform_vehicles_dim ;;
 dimension: vehicle_gross_weight_kg {
   type: number
   sql: ${TABLE}.vehicle_gross_weight_kg ;;

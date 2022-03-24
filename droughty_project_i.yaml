@@ -1,0 +1,9 @@
+profile: flock
+
+dimensional_inference: enabled
+
+explores:
+
+  sales_explore:
+      PARENT_TABLE: 
+        - WH_PLATFORM__INVOICES_FACT

@@ -117,7 +117,7 @@ def explore_output():
     
     git_path = git_def_path
 
-    rel_path = "base"
+    rel_path = "lookml/base"
 
     path = os.path.join(git_path, rel_path)
 
@@ -133,5 +133,3 @@ def explore_output():
                 for value in get_all_values(nested_dictionary):
 
                     print(value)
-
-explore_output()

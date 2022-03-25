@@ -28,22 +28,22 @@ def get_all_values(nested_dictionary):
                 
                 if "pk" in key1:
                     
-                    elem = {"name": key1, "tests": ["not_null", "unique"]}
+                    elem = {"name": key1, "tests": ["not_null", "unique"], "description": ["{{doc("+'"'+key1+'"'+")}}"]}
                     seq.append(elem)
                     
                 elif "fk" in key1:
                     
-                    elem = {"name": key1, "tests": ["not_null"]}
+                    elem = {"name": key1, "tests": ["not_null"], "description": ["{{doc("+'"'+key1+'"'+")}}"]}
                     seq.append(elem)   
                     
                 elif "valid_to" in key1 or "valid_from" in key1:
                     
-                    elem = {"name": key1, "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
+                    elem = {"name": key1, "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"],"description": ["{{doc("+'"'+key1+'"'+")}}"]}
                     seq.append(elem)  
 
                 elif "pk" not in key1 or "fk" not in key1:
             
-                    elem = {"name": key1, "tests": [""+"dbt_utils.at_least_one"]}
+                    elem = {"name": key1, "tests": [""+"dbt_utils.at_least_one"],"description": ["{{doc("+'"'+key1+'"'+")}}"]}
                     seq.append(elem)  
 
     return res

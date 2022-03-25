@@ -99,7 +99,7 @@ def measure_output():
     
     git_path = git_def_path
 
-    rel_path = "base"
+    rel_path = "lookml/base"
 
     path = os.path.join(git_path, rel_path)
 

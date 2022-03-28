@@ -24,7 +24,7 @@ def get_all_values(nested_dictionary):
 
         explore = {
 
-            "includes": ["/_base/base.layer.lkml","/_aggregate/aggregate.layer.lkml"  ],
+            "includes": ["/lookml/base/_base.layer.lkml","/lookml/aggregate/_aggregate.layer.lkml"  ],
 
             "explore": key+"_explore"+" {",
 

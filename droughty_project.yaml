@@ -2,6 +2,8 @@ profile: sytner
 
 dimensional_inference: enabled
 
+field_description_path: warehouse_docs_test
+
 explores:
 
   sales_explore:

@@ -22,7 +22,7 @@ def get_all_values(nested_dictionary):
 
     includes = {
 
-        "includes": ["/base/_base.layer.lkml" ]
+        "includes": ["/lookml/base/_base.layer.lkml" ]
             
     }
 

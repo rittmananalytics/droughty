@@ -1,0 +1,11 @@
+profile: sytner
+
+dimensional_inference: enabled
+
+explores:
+
+  sales_explore:
+      parent_table: 
+        - wh_marketing__web_events_fact
+      facts:
+        - wh_marketing__web_sessions_fact

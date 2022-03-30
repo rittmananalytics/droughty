@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "droughty"
-version = "0.1.39"
+version = "0.1.44"
 description = "droughty is an analytics engineering toolkit, helping keep your workflow dry."
 authors = ["Lewis <lewischarlesbaker@gmail.com>"]
 license = "MIT"
@@ -28,6 +28,8 @@ typer = "0.4.0"
 jinjasql = "0.1.8"
 six = "1.16.0"
 tqdm = "4.62.3"
+Markdown = "^3.3.6"
+Jinja2 = "3.0.1"
 
 [tool.poetry.scripts]
 droughty = "droughty.main:app"

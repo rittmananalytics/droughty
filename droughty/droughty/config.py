@@ -55,10 +55,10 @@ for key,value in environment_project.items():
 
             if warehouse_name == 'big_query':
 
-                service_account_path = lookml_config[value]['key_file']
+                service_account_path = os.environ['DBT_GOOGLE_BIGQUERY_KEYFILE_DEV']
 
                 warehouse_name =  lookml_config[value]['warehouse_name']
-                project_name =  lookml_config[value]['project_name']
+                project_name =  os.environ['DBT_GOOGLE_PROJECT_DEV']
 
                 service_account = service_account.Credentials.from_service_account_file(
                     service_account_path,

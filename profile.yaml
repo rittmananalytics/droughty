@@ -1,0 +1,13 @@
+sytner:
+  host:
+  key_file: /Users/lewischarlesbaker/Documents/Sytner/sytner-dwh-deea7a912b4e.json
+  password: 
+  port: 
+  project_name: "{{ env_var('DBT_GOOGLE_PROJECT_DEV') }}"
+  schema_name: "{{ env_var('DBT_GOOGLE_BIGQUERY_DATASET_DEV') }}"
+  user: 
+  warehouse_name: big_query
+  test_schemas:
+      - lewis_analytics_dev_staging
+      - lewis_analytics_dev_integration
+      - lewis_analytics_dev

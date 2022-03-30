@@ -10,37 +10,11 @@ from jinjasql import JinjaSql
 from six import string_types
 from copy import deepcopy
 
-
-## source vars
-
-path = os.path.expanduser('~')
-
-profile_pass = os.path.join(path,".droughty/profile.yaml")
-
-with open(profile_pass) as f:
-    lookml_config = yaml.load(f, Loader=yaml.FullLoader)
-
-def get_git_root(path):
-
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return (git_root)
-    
-    
-git_def_path = get_git_root(os.getcwd())
-
-git_path = git_def_path
-
-filename = 'droughty_project.yaml'
-
-droughty_project = os.path.join(git_path,filename)
-
-with open(droughty_project) as f:
-    enviroment_project = yaml.load(f, Loader=yaml.FullLoader)
+from droughty.config import lookml_config
+from droughty.config import environment_project
 
 
-
-for key,value in enviroment_project.items():
+for key,value in environment_project.items():
     
     if key == 'profile':
 
@@ -412,9 +386,9 @@ for key,value in enviroment_project.items():
 
 
 
-explores = (enviroment_project.get("explores"))
+explores = (environment_project.get("explores"))
 
-dimensional_inference = (enviroment_project.get("dimensional_inference"))
+dimensional_inference = (environment_project.get("dimensional_inference"))
 
 ## 
 
@@ -444,7 +418,7 @@ join_key_list = ['merge_counts_fk','merge_counts_pk']
 
 ## add for snowflake
 
-for key,value in enviroment_project.items():
+for key,value in environment_project.items():
 
     if key == 'profile':
 

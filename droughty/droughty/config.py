@@ -3,14 +3,9 @@ import os
 import yaml
 import git
 
-## source vars
+## global vars
 
 path = os.path.expanduser('~')
-
-profile_pass = os.path.join(path,".droughty/profile.yaml")
-
-with open(profile_pass) as f:
-    lookml_config = yaml.load(f, Loader=yaml.FullLoader)
 
 def get_git_root(path):
 
@@ -23,17 +18,27 @@ git_def_path = get_git_root(os.getcwd())
 
 git_path = git_def_path
 
+## profile vars 
+
+filename = 'profile.yaml'
+
+profile_pass = os.path.join(git_path,filename)
+
+with open(profile_pass) as f:
+    lookml_config = yaml.load(f, Loader=yaml.FullLoader)
+
+profile_key = list(lookml_config.keys())
+
+## project vars 
+
 filename = 'droughty_project.yaml'
 
 droughty_project = os.path.join(git_path,filename)
 
 with open(droughty_project) as f:
-    enviroment_project = yaml.load(f, Loader=yaml.FullLoader)
+    environment_project = yaml.load(f, Loader=yaml.FullLoader)
 
-project_value = list(enviroment_project.values())
-profile_key = list(lookml_config.keys())
-
-for key,value in enviroment_project.items():
+for key,value in environment_project.items():
     
     if key == 'profile':
 
@@ -43,7 +48,7 @@ for key,value in enviroment_project.items():
 
             warehouse_name =  lookml_config[value]['warehouse_name']
             project_name =  lookml_config[value]['project_name']
-            enviroment_project = enviroment_project['profile']
+            environment_profile = environment_project['profile']
             
 
             ## big_query vars

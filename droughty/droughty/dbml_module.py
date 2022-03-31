@@ -14,14 +14,14 @@ import yaml
 import git
 
 from droughty.dbml_base_dict import d1
-from droughty.config import project_value
+from droughty.config import environment_profile
 
 try: 
 
     def get_all_values(nested_dictionary):
 
         
-        project = 'project'+' '+'project_value'
+        project = 'project'+' '+environment_profile
 
         yield (project)
 

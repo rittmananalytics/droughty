@@ -67,10 +67,9 @@ for key,value in environment_project.items():
 
             elif path_source == 'external_vars':
 
-                warehouse_name =  os.environ.get("BIG_QUERY_WAREHOUSE_NAME")
-                schema_name = os.environ.get('BIG_QUERY_DATASET_DEV')
-                test_schemas = lookml_config[value]['test_schemas']
-
+                warehouse_name =  os.environ.get("WAREHOUSE_NAME")
+                schema_name = os.environ.get('SCHEMA_NAME')
+                test_schemas = os.environ.get('TEST_SCHEMAS')
 
             environment_profile = environment_project['profile']
 
@@ -106,7 +105,7 @@ for key,value in environment_project.items():
 
                 if warehouse_name == 'big_query':
 
-                    project_name =   os.environ.get('BIG_QUERY_PROJECT_DEV')
+                    project_name =  os.environ.get('PROJECT_NAME')
 
                     service_account_path = "./droughty-service-account.json"
                     service_account = service_account.Credentials.from_service_account_file(

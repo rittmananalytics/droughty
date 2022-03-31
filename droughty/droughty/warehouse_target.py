@@ -10,24 +10,25 @@ from jinjasql import JinjaSql
 from six import string_types
 from copy import deepcopy
 
-from droughty.config import lookml_config
-from droughty.config import environment_project
+from droughty import config
 
+environment_project = config.environment_project
+lookml_config = config.lookml_config
+warehouse_name = config.warehouse_name
 
 for key,value in environment_project.items():
     
     if key == 'profile':
 
-        if lookml_config[value]['warehouse_name'] == 'big_query':
+        if warehouse_name == 'big_query':
 
             if value in lookml_config:
 
         ## global vars 
 
-                warehouse_name =  lookml_config[value]['warehouse_name']
-                project_name =  lookml_config[value]['project_name']
-                schema_name =  lookml_config[value]['schema_name']
-                test_schemas = lookml_config[value]['test_schemas']
+                project_name =  config.project_name
+                schema_name =  config.schema_name
+                test_schemas = config.test_schemas
                 
                 warehouse_schema =   """
                 with source as (
@@ -186,15 +187,14 @@ for key,value in environment_project.items():
                 select * from unioned
                 """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
 
-        elif lookml_config[value]['warehouse_name'] == 'snowflake':
+        elif warehouse_name == 'snowflake':
             
             if value in lookml_config:
 
-                warehouse_name =  lookml_config[value]['warehouse_name']
-                project_name =  lookml_config[value]['project_name']
-                schema_name =  lookml_config[value]['schema_name']
-                test_schemas = lookml_config[value]['test_schemas']
-                database = lookml_config[value]['database']
+                project_name =  config.project_name
+                schema_name =  config.schema_name
+                test_schemas = config.test_schemas
+                database = config.snowflake_database
 
                 warehouse_schema =   """
                 with source as (
@@ -422,7 +422,7 @@ for key,value in environment_project.items():
 
     if key == 'profile':
 
-        if lookml_config[value]['warehouse_name'] == 'big_query':
+        if warehouse_name == 'big_query':
 
             params = {
                 'project_id': project_name,
@@ -433,7 +433,7 @@ for key,value in environment_project.items():
 
             }
 
-        elif lookml_config[value]['warehouse_name'] == 'snowflake':
+        elif warehouse_name == 'snowflake':
 
             params = {
                 'database': database,

@@ -50,7 +50,7 @@ def get_all_values(nested_dictionary):
 
         for key, value in value.items():
             
-            if "pk" not in key[0] and "fk" not in key[0] and "date" not in key[1] and "timestamp" not in key[1]:
+            if "pk" not in key[0] and "fk" not in key[0] and "date" not in key[1] and "timestamp" not in key[1] and "number" not in key [1]:
 
                 dimension = {
 

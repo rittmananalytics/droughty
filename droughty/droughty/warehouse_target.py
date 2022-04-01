@@ -191,7 +191,6 @@ for key,value in environment_project.items():
             
             if value in lookml_config:
 
-                project_name =  config.project_name
                 schema_name =  config.schema_name
                 test_schemas = config.test_schemas
                 database = config.snowflake_database

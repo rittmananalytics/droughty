@@ -91,6 +91,7 @@ for key,value in environment_project.items():
 
                     ## snowflake vars
 
+                    project_name = ['']
                     snowflake_account = lookml_config[value]['account']
                     snowflake_user = lookml_config[value]['user']
                     snowflake_schema = lookml_config[value]['schema_name']
@@ -117,10 +118,11 @@ for key,value in environment_project.items():
 
                 elif warehouse_name == 'snowflake':
 
-                    snowflake_account = os.environ.get('ACCOUNT')
-                    snowflake_user = os.environ.get('USER')
-                    snowflake_schema = os.environ.get('SCHEMA_NAME')
-                    snowflake_database = os.environ.get('DATABASE')
-                    snowflake_password = os.environ.get('PASSWORD')
-                    snowflake_warehouse = os.environ.get('WAREHOUSE')
-                    snowflake_role = os.environ.get('ROLE')
+                    project_name = ['']
+                    snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
+                    snowflake_user = os.environ.get('SNOWFLAKE_USER')
+                    snowflake_schema = os.environ.get('SNOWFLAKE_SCHEMA_NAME')
+                    snowflake_database = os.environ.get('SNOWFLAKE_DATABASE')
+                    snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')
+                    snowflake_warehouse = os.environ.get('SNOWFLAKE_WAREHOUSE')
+                    snowflake_role = os.environ.get('SNOWFLAKE_ROLE')

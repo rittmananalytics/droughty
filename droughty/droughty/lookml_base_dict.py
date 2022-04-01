@@ -89,13 +89,18 @@ elif warehouse_name == 'snowflake':
     df1 = df1[['table_name','column_name','data_type','description']]
 
     df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
+    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_TZ','timestamp')
+    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_NTZ','timestamp')
     df1['data_type'] = df1['data_type'].str.replace('DATE','date')
     df1['data_type'] = df1['data_type'].str.replace('INT64','number')
     df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
     df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
     df1['data_type'] = df1['data_type'].str.replace('NUMBER','number')
+    df1['data_type'] = df1['data_type'].str.replace('FLOAT','number')
     df1['data_type'] = df1['data_type'].str.replace('TEXT','string')
-    df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
+    df1['data_type'] = df1['data_type'].str.replace('VARIANT','string')   
+    df1['data_type'] = df1['data_type'].str.replace('BOOLEAN','yesno')
+
 
     df2 = df1
 

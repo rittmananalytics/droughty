@@ -88,9 +88,9 @@ elif warehouse_name == 'snowflake':
 
     df1 = df1[['table_name','column_name','data_type','description']]
 
-    df1['data_type'] = df1['data_type'].str.replace(r'\TIMESTAMP\b','timestamp')
-    df1['data_type'] = df1['data_type'].str.replace(r'\TIMESTAMP_TZ\b','timestamp')
-    df1['data_type'] = df1['data_type'].str.replace(r'\TIMESTAMP_NTZ\b','timestamp')
+    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
+    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_TZ','timestamp')
+    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_NTZ','timestamp')
     df1['data_type'] = df1['data_type'].str.replace('DATE','date')
     df1['data_type'] = df1['data_type'].str.replace('INT64','number')
     df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')

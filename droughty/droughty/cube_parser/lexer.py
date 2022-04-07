@@ -2,8 +2,8 @@
 
 from typing import List, Tuple
 
-import cube_js_parser.tokens as tokens
-from cube_js_parser.keys import CHARACTER_TO_TOKEN, PARENTHESES_KEYS
+import cube_parser.tokens as tokens
+from cube_parser.keys import CHARACTER_TO_TOKEN, EXPR_BLOCK_KEYS
 
 
 class Lexer:
@@ -75,7 +75,7 @@ class Lexer:
                 self.advance()
                 self.tokens.append(self.scan_comment())
             elif ch == ";":
-                if self.peek_multiple(2) == "(":
+                if self.peek_multiple(2) == ";;":
                     self.advance(2)
                     self.tokens.append(CHARACTER_TO_TOKEN[ch](self.line_number))
             elif ch == '"':
@@ -100,7 +100,7 @@ class Lexer:
     @staticmethod
     def check_for_expression_block(string: str) -> bool:
         """Returns True if the input string is an expression block."""
-        return any(string.startswith(key + ":") for key in PARENTHESES_KEYS)
+        return any(string.startswith(key + ":") for key in EXPR_BLOCK_KEYS)
 
     def scan_whitespace(self) -> tokens.WhitespaceToken:
         r"""Returns a token from one or more whitespace characters.

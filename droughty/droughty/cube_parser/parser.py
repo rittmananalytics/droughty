@@ -5,9 +5,9 @@ from dataclasses import dataclass, field
 from functools import wraps
 from typing import List, Optional, Sequence, Tuple, Type, Union
 
-import cube_js_parser.tokens as tokens
-import cube_js_parser.tree as tree
-import cube_js_parser.utils as utils
+import cube_parser.tokens as tokens
+import cube_parser.tree as tree
+import cube_parser.utils as utils
 
 # Delimiter character used during logging to show the depth of nesting
 DELIMITER = ". "
@@ -231,7 +231,7 @@ class Parser:
         if self.log_debug:
             grammar = "[expression] = (block / pair / list)*"
             logger.debug("%sTry to parse %s", self.depth * DELIMITER, grammar)
-        items: List[Union[tree.BlockNode, tree.PairNode, tree.ListNode]] = []
+        items: List[Union[tree.BlockNode, tree.SingleNode, tree.ListNode]] = []
         while not self.check(
             tokens.StreamEndToken, tokens.BlockEndToken, skip_trivia=True
         ):
@@ -240,9 +240,14 @@ class Parser:
                 items.append(block)
                 continue
 
-            pair = self.parse_pair()
-            if pair is not None:
-                items.append(pair)
+            ##pair = self.parse_pair()
+            ##if pair is not None:
+            ##    items.append(pair)
+            ##    continue
+
+            single = self.parse_single()
+            if single is not None:
+                items.append(single)
                 continue
 
             list_ = self.parse_list()
@@ -295,44 +300,6 @@ class Parser:
         else:
             return None
 
-
-        ##### cube.js
-        
-        container = self.parse_container()
-
-        prefix = self.consume_trivia()
-        if self.check(tokens.OpenParenthesisToken):
-            self.advance()
-            suffix = self.consume_trivia()
-            left_brace = tree.LeftCurlyBrace(prefix=prefix, suffix=suffix)
-        else:
-            return None
-
-        container = self.parse_container()
-
-        prefix = self.consume_trivia()
-        if self.check(tokens.CloseParenthesisToken):
-            self.advance()
-            suffix = self.consume_trivia()
-            right_brace = tree.RightCurlyBrace(prefix=prefix, suffix=suffix)
-
-            block = tree.BlockNode(
-                type=key[0],
-                colon=key[1],
-                name=name,
-                left_brace=left_brace,
-                container=container,
-                right_brace=right_brace,
-            )
-
-            if self.log_debug:
-                logger.debug("%sSuccessfully parsed block.", self.depth * DELIMITER)
-            return block
-        else:
-            return None
-
-        ##### cube.js
-
         container = self.parse_container()
 
         prefix = self.consume_trivia()
@@ -355,7 +322,6 @@ class Parser:
             return block
         else:
             return None
-
 
     @backtrack_if_none
     def parse_pair(self) -> Optional[tree.PairNode]:
@@ -381,6 +347,31 @@ class Parser:
         pair = tree.PairNode(type=key[0], colon=key[1], value=value)
         logger.debug(self.depth * DELIMITER + "Successfully parsed pair.")
         return pair
+
+    @backtrack_if_none
+    def parse_single(self) -> Optional[tree.SingleNode]:
+        """Returns a dictionary that represents a LookML key/value pair.
+
+        Grammar: ``pair`` ← ``key value``
+
+        Returns:
+            A dictionary with the parsed pair or None if the grammar doesn't match.
+
+        """
+        if self.log_debug:
+            grammar = "[pair] = key value"
+            logger.debug("%sTry to parse %s", self.depth * DELIMITER, grammar)
+
+        key = self.parse_key()
+        if key is None:
+            return None
+        value = self.parse_value(parse_prefix=True, parse_suffix=True)
+        if value is None:
+            return None
+
+        single = tree.SingleNode(type=key[0], value=value)
+        logger.debug(self.depth * DELIMITER + "Successfully parsed pair.")
+        return single
 
     @backtrack_if_none
     def parse_key(self) -> Optional[Tuple[tree.SyntaxToken, tree.Colon]]:
@@ -466,8 +457,6 @@ class Parser:
             )
         else:
             return None
-
-
 
     @backtrack_if_none
     def parse_list(self) -> Optional[tree.ListNode]:

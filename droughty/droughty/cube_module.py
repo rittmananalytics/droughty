@@ -18,8 +18,6 @@ from lookml_base_dict import d1
 from lookml_base_dict import d2
 from lookml_base_dict import distinct_duplicate_explore_rows
 
-
-import lkml as looker
 from pprint import pprint
 from google.oauth2 import service_account
 import pandas_gbq
@@ -35,63 +33,144 @@ import sys
 import yaml
 import git
 
+import cube_parser.cube as cube
+
 from droughty.lookml_base_dict import d1
 from droughty.lookml_base_dict import d2
 
 
+def get_all_values(nested_dictionary):
 
-def get_all_values(nested_dictionary_measure_dimension):
+    
+    for key,value in nested_dictionary.items():
 
-        
-    for key,value in nested_dictionary_measure_dimension.items():
-        
+        explore = {
 
-        
-        sql =  { 
+
+            "explore": key,
+                
+            "{ hidden": "yes }"
+                
+            }
             
-            "cube" : "(`"+key+"`, { ",
-            
-            "sql ": " select * from  "+key+",",
-            
-            "dimensions": ""
         
-        }            
+        yield(looker.dump(explore))
+        
+    for key,value in nested_dictionary.items():
+
+        view = {
 
 
-        yield(looker.dump(sql))
+            "view": key+" {",
+                    
+            "sql_table_name": key
+                                
+            }
+
+        yield(looker.dump(view))
         
+
         for key, value in value.items():
+            
+            if "pk" not in key[0] and "fk" not in key[0] and "date" not in key[1] and "timestamp" not in key[1] and "number" not in key [1]:
 
                 dimension = {
 
-                   key[0]: {
-                        "type": "`"+key[1]+"`"+",",
-                        "sql ": "`"+key[0]+"`,",
+                    "dimension": {
+                        "type": key[1],
+                        "sql": "${TABLE}."+key[0],
+                        "name": key[0],
                         "description": key[2]
                     }
-                
                 }
-                
+
+                yield(looker.dump(dimension))
+
+            elif "pk" in key[0]:
+
+                dimension = {
+
+                    "dimension": {
+                        "primary_key": "yes",
+                        "hidden": "yes",
+                        "type": key[1],
+                        "sql": "${TABLE}."+key[0],
+                        "name": key[0],
+                        "description": key[2]
+
+                    }
+                }
+
+                yield(looker.dump(dimension))
+
+            elif "date" in key[1]:
+
+                dimension = {
+
+                    "dimension_group": {
+
+                            "timeframes": "[raw,date,week,month,quarter,year]",
+
+                        "type": "time",
+                        "datatype": key[1],
+                        "sql": "${TABLE}."+key[0],
+                        "name": key[0],
+                        "description": key[2]
+
+                    }
+                }
+
+                yield(looker.dump(dimension))
+
+            elif "timestamp" in key[1]:
+
+
+                dimension = {
+
+                    "dimension_group": {
+
+                            "timeframes": "[time,raw,date,week,month,quarter,year]",
+
+                        "type": "time",
+                        "datatype": key[1],
+                        "sql": "${TABLE}."+key[0],
+                        "name": key[0],
+                        "description": key[2]
+
+                    }
+                }
 
 
                 yield(looker.dump(dimension))
-                
-                comma = ","
-                
-                yield(comma)      
 
-        for key,value in nested_dictionary_measure_dimension.items():
+            else:
 
-            syntax = "},  });"
+                dimension = {
+
+                    "dimension": {
+                        "hidden": "yes ",
+                        "type": key[1],
+                        "sql": "${TABLE}."+key[0],
+                        "name": key[0],
+                        "description": key[2]
+
+                    }
+                }
+
+                yield(looker.dump(dimension))
+
+                
+        for key,value in nested_dictionary.items():
+
+            syntax = "}"
 
 
         yield(syntax)
+                
 
+nested_dictionary = d1
 
-nested_dictionary_cube = d2
-nested_dictionary_measure_dimension = d1
-
-get_all_values(nested_dictionary_measure_dimension)
+get_all_values(nested_dictionary)
 
 def get_git_root(path):
 
@@ -101,19 +180,18 @@ def get_git_root(path):
 
 git_def_path = get_git_root(os.getcwd())
 
-
-def cube_output():
+def output():
     
     git_path = git_def_path
 
-    rel_path = "base"
+    rel_path = "lookml/base"
 
     path = os.path.join(git_path, rel_path)
 
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = 'cube.sql'
+    filename = 'cube.js'
 
     with open(os.path.join(path, filename), 'w') as file:
 
@@ -122,6 +200,3 @@ def cube_output():
                 for value in get_all_values(nested_dictionary):
 
                     print(value)
-
-cube_output()
-    

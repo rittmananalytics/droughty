@@ -96,7 +96,7 @@ class ValueToken(Token):
 class ExpressionBlockEndToken(Token):
     """Represents the end of an expression block."""
 
-    id = "("
+    id = ";;"
 
 
 class CommaToken(Token):
@@ -116,15 +116,6 @@ class ListEndToken(Token):
 
     id = "]"
 
-class OpenParenthesisToken(Token):
-    """Separates elements in a list."""
-
-    id = "("
-
-class CloseParenthesisToken(Token):
-    """Separates elements in a list."""
-
-    id = "("
 
 class TriviaToken(ContentToken):
     """Represents a comment or whitespace."""
@@ -163,3 +154,12 @@ class QuotedLiteralToken(ContentToken):
     id = "<quoted literal>"
 
 
+class OpenParenthesisToken(Token):
+    """Separates elements in a list."""
+
+    id = "("
+
+class CloseParenthesisToken(Token):
+    """Separates elements in a list."""
+
+    id = "("

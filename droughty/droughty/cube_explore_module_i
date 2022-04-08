@@ -1,0 +1,90 @@
+from cube_base_dict import d1
+from config import schema_name
+import cube_parser.cube as cube
+
+def get_all_values(nested_dictionary,explore_dictionary):
+    
+    for key,value in nested_dictionary.items():
+    
+        for explore_key, explore_value in explore_dictionary.items():
+
+            if explore_key in key:
+
+                explore = {
+
+
+                    "cube": key,
+                    "sql": "select * from"+" "+schema_name+"."+key
+
+                }
+
+
+                yield(cube.dump(explore))
+        
+
+                for key1 in explore_value.keys():  
+                    
+                    join_start = "joins: {"
+                    
+
+                    join = {
+
+
+                        "joins": 
+                        [
+                        
+                        {
+                        "relationship": "belongsTo",
+                        "sql": "${CUBE."+key1[3]+"}"+" = "+"${"+key1[0]+"."+key1[1]+"}",
+                        "name": key1[0]
+
+                        }
+                            
+                        ]
+
+                    }
+                    
+                    join_end = "},"
+                    
+                    dimension_start = "dimensions: {"
+                 
+                    
+
+                yield(join_start)
+                
+                yield(cube.dump(join))
+                
+                yield(join_end)
+                
+                yield(dimension_start)
+                
+                for key, value in value.items():
+                    
+                    dimension = {
+
+
+                        "dimension": {
+                        "sql": key[0],
+                        "type": key[1],
+                        "name": key[0]
+
+                        }
+
+                    }
+                    
+                    yield(cube.dump(dimension))
+                    
+                for key,value in nested_dictionary.items():
+
+                    closing_syntax = "}});"
+
+                yield (closing_syntax)
+
+        
+nested_dictionary = d1
+explore_dictionary = d2
+
+        
+for value in get_all_values(nested_dictionary,explore_dictionary):
+
+    print(value)

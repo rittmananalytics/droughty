@@ -1,23 +1,3 @@
-import lkml as looker
-from pprint import pprint
-from google.oauth2 import service_account
-import pandas_gbq
-from contextlib import redirect_stdout
-import snowflake.connector
-from sqlalchemy import create_engine
-from snowflake.sqlalchemy import URL
-import pandas as pd
-import pandas
-import os
-import json
-import sys
-import yaml
-import git
-
-from lookml_base_dict import d1
-from lookml_base_dict import d2
-from lookml_base_dict import distinct_duplicate_explore_rows
-
 from pprint import pprint
 from google.oauth2 import service_account
 import pandas_gbq
@@ -35,140 +15,76 @@ import git
 
 import cube_parser.cube as cube
 
-from droughty.lookml_base_dict import d1
-from droughty.lookml_base_dict import d2
-
-
+from droughty.cube_base_dict import d1
+from droughty.lookml_explore_dict import d2
+from droughty.config import schema_name
+    
 def get_all_values(nested_dictionary):
 
+    for key,value in nested_dictionary.items():
     
-    for key,value in nested_dictionary.items():
+        for explore_key, explore_value in explore_dictionary.items():
 
-        explore = {
-
-
-            "explore": key,
+            if explore_key not in key:
                 
-            "{ hidden": "yes }"
-                
-            }
-            
-        
-        yield(looker.dump(explore))
-        
-    for key,value in nested_dictionary.items():
-
-        view = {
+                explore = {
 
 
-            "view": key+" {",
-                    
-            "sql_table_name": key
-                                
-            }
+                    "cube": key,
+                    "sql": "select * from"+" "+schema_name+"."+key,
+                    "dimensions": '{'
 
-        yield(looker.dump(view))
-        
+                }
 
-        for key, value in value.items():
-            
-            if "pk" not in key[0] and "fk" not in key[0] and "date" not in key[1] and "timestamp" not in key[1] and "number" not in key [1]:
 
-                dimension = {
+                yield(cube.dump(explore))
+                            
 
-                    "dimension": {
+            for key, value in value.items():
+
+                if "pk" not in key[0] and "number" not in key [1]:
+
+
+                    dimension = {
+
+
+                        "dimension": {
+                        "sql": key[0],
                         "type": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
-                    }
-                }
+                        "name": key[0]
 
-                yield(looker.dump(dimension))
-
-            elif "pk" in key[0]:
-
-                dimension = {
-
-                    "dimension": {
-                        "primary_key": "yes",
-                        "hidden": "yes",
-                        "type": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
+                        }
 
                     }
-                }
 
-                yield(looker.dump(dimension))
+                    yield(cube.dump(dimension))
 
-            elif "date" in key[1]:
 
-                dimension = {
+                elif "pk" in key[0]:
 
-                    "dimension_group": {
+                    dimension = {
 
-                            "timeframes": "[raw,date,week,month,quarter,year]",
+                        "dimension": {
+                            "primaryKey": "true",
+                            "type": key[1],
+                            "sql": key[0],
+                            "name": key[0],
+                            "description": key[2]
 
-                        "type": "time",
-                        "datatype": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
-
+                        }
                     }
-                }
 
-                yield(looker.dump(dimension))
-
-            elif "timestamp" in key[1]:
+                    yield(cube.dump(dimension))
 
 
-                dimension = {
+            for key,value in nested_dictionary.items():
 
-                    "dimension_group": {
+                closing_syntax = "}});"
 
-                            "timeframes": "[time,raw,date,week,month,quarter,year]",
-
-                        "type": "time",
-                        "datatype": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
-
-                    }
-                }
-
-
-                yield(looker.dump(dimension))
-
-            else:
-
-                dimension = {
-
-                    "dimension": {
-                        "hidden": "yes ",
-                        "type": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
-
-                    }
-                }
-
-                yield(looker.dump(dimension))
-
-                
-        for key,value in nested_dictionary.items():
-
-            syntax = "}"
-
-
-        yield(syntax)
-                
-
+            yield (closing_syntax)
+        
 nested_dictionary = d1
+explore_dictionary = d2
 
 get_all_values(nested_dictionary)
 
@@ -184,7 +100,7 @@ def output():
     
     git_path = git_def_path
 
-    rel_path = "lookml/base"
+    rel_path = "schema"
 
     path = os.path.join(git_path, rel_path)
 

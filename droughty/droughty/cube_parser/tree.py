@@ -108,7 +108,7 @@ class ExpressionSyntaxToken(SyntaxToken):
 @dataclass(frozen=True)
 class CubeSyntaxToken(SyntaxToken):
     prefix: str = " "
-    expr_suffix: str = " "
+    expr_suffix: str = ""
 
     def __str__(self) -> str:
         return cube_to_str(

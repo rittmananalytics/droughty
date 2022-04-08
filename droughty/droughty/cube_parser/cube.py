@@ -7,10 +7,10 @@ import logging
 import sys
 from typing import IO, Optional, Sequence, Union
 
-from cube_parser.lexer import Lexer
-from cube_parser.parser import Parser
-from cube_parser.simple import DictParser, DictVisitor
-from cube_parser.tree import DocumentNode
+from droughty.cube_parser.lexer import Lexer
+from droughty.cube_parser.parser import Parser
+from droughty.cube_parser.simple import DictParser, DictVisitor
+from droughty.cube_parser.tree import DocumentNode
 
 
 def parse(text: str) -> DocumentNode:

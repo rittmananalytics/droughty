@@ -9,7 +9,7 @@ to interact with the parse tree.
 import logging
 from typing import Any, Dict, List, Optional, Sequence, Type, Union, cast
 
-from cube_parser.keys import (
+from droughty.cube_parser.keys import (
     EXPR_BLOCK_KEYS,
     KEYS_WITH_NAME_FIELDS,
     PLURAL_KEYS,
@@ -19,7 +19,7 @@ from cube_parser.keys import (
     pluralize,
     singularize,
 )
-from cube_parser.tree import (
+from droughty.cube_parser.tree import (
     BlockNode,
     Comma,
     ContainerNode,
@@ -38,7 +38,7 @@ from cube_parser.tree import (
     SyntaxNode,
     SyntaxToken,
 )
-from cube_parser.visitors import Visitor
+from droughty.cube_parser.visitors import Visitor
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@
 
 from typing import Dict, Tuple, Type
 
-from cube_parser import tokens
+import droughty.cube_parser.tokens as tokens
 
 # These are repeatable keys in LookML that the parser should collapse into a single
 # Python dictionary key. For example, LookML can have multiple dimensions, so the parser

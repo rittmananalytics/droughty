@@ -14,7 +14,7 @@ import sys
 import yaml
 import git
 
-import cube_parser.cube as cube
+import droughty.cube_parser.cube as cube
 
 from droughty.cube_base_dict import d1
 from droughty.config import schema_name

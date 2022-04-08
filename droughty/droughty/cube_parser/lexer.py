@@ -2,8 +2,8 @@
 
 from typing import List, Tuple
 
-import cube_parser.tokens as tokens
-from cube_parser.keys import CHARACTER_TO_TOKEN, EXPR_BLOCK_KEYS
+import droughty.cube_parser.tokens as tokens
+from droughty.cube_parser.keys import CHARACTER_TO_TOKEN, EXPR_BLOCK_KEYS
 
 
 class Lexer:

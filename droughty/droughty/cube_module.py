@@ -19,8 +19,8 @@ from droughty.cube_base_dict import d1
 from droughty.lookml_explore_dict import d2
 from droughty.config import schema_name
     
-def get_all_values(nested_dictionary):
-
+def get_all_values(nested_dictionary,explore_dictionary):
+        
     for key,value in nested_dictionary.items():
     
         for explore_key, explore_value in explore_dictionary.items():
@@ -38,50 +38,49 @@ def get_all_values(nested_dictionary):
 
 
                 yield(cube.dump(explore))
-                            
-
-            for key, value in value.items():
-
-                if "pk" not in key[0] and "number" not in key [1]:
 
 
-                    dimension = {
+                for key, value in value.items():
+                    
+                    if "pk" not in key[0] and "number" not in key [1]:  
+
+                        dimension = {
 
 
-                        "dimension": {
-                        "sql": key[0],
-                        "type": key[1],
-                        "name": key[0]
+                                "dimension": {
+                                "sql": key[0],
+                                "type": key[1],
+                                "name": key[0]
 
+                                }
+
+                            }
+
+                        yield(cube.dump(dimension))
+                        
+                    elif "pk" in key[0]:
+
+                        dimension = {
+
+
+                            "dimension": {
+                                "primaryKey": "true",
+                                "type": key[1],
+                                "sql": key[0],
+                                "name": key[0],
+                                "description": key[2]
+
+                            }
                         }
 
-                    }
+                        yield(cube.dump(dimension))
+                
+                
+                for key,value in nested_dictionary.items():
 
-                    yield(cube.dump(dimension))
+                    closing_syntax = "}});"
 
-
-                elif "pk" in key[0]:
-
-                    dimension = {
-
-                        "dimension": {
-                            "primaryKey": "true",
-                            "type": key[1],
-                            "sql": key[0],
-                            "name": key[0],
-                            "description": key[2]
-
-                        }
-                    }
-
-                    yield(cube.dump(dimension))
-
-
-            for key,value in nested_dictionary.items():
-
-                closing_syntax = "}});"
-
-            yield (closing_syntax)
+                yield (closing_syntax)
         
 nested_dictionary = d1
 explore_dictionary = d2
@@ -107,7 +106,7 @@ def output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = 'cube.js'
+    filename = 'cube_base.js'
 
     with open(os.path.join(path, filename), 'w') as file:
 

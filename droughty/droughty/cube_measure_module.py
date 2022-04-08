@@ -93,7 +93,7 @@ def get_git_root(path):
 
 git_def_path = get_git_root(os.getcwd())
 
-def output():
+def measure_output():
     
     git_path = git_def_path
 

@@ -13,7 +13,7 @@ import sys
 import yaml
 import git
 
-import cube_parser.cube as cube
+import droughty.cube_parser.cube as cube
 
 from droughty.cube_base_dict import d1
 from droughty.lookml_explore_dict import d2
@@ -85,7 +85,7 @@ def get_all_values(nested_dictionary,explore_dictionary):
 nested_dictionary = d1
 explore_dictionary = d2
 
-get_all_values(nested_dictionary)
+get_all_values(nested_dictionary,explore_dictionary)
 
 def get_git_root(path):
 
@@ -112,6 +112,6 @@ def output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(nested_dictionary,explore_dictionary):
 
                     print(value)

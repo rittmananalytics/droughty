@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Counter, Optional, Tuple, Union, cast
 
-from cube_parser.keys import PLURAL_KEYS
+from droughty.cube_parser.keys import PLURAL_KEYS
 
 
 def items_to_str(*items: Any) -> str:

@@ -2,7 +2,7 @@ import logging
 from dataclasses import replace
 from typing import Union, overload
 
-from cube_parser.tree import (
+from droughty.cube_parser.tree import (
     BlockNode,
     ContainerNode,
     DocumentNode,

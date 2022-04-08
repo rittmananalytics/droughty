@@ -1,0 +1,348 @@
+cube (`sales_applications`, {
+sql: `select * from analytics_qa.sales_applications`,
+joins: {
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+} ,
+},
+dimensions: {
+study_plan_fk:  {
+  sql: `study_plan_fk`,
+  type: `string`,
+} ,
+application_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `application_pk`,
+  description: `Unique id for an application. Keep in mind that a student may have multiple applications`,
+} ,
+student_fk:  {
+  sql: `student_fk`,
+  type: `string`,
+} ,
+institution_fk:  {
+  sql: `institution_fk`,
+  type: `string`,
+} ,
+sales_manager_fk:  {
+  sql: `sales_manager_fk`,
+  type: `string`,
+} ,
+application_owner_fk:  {
+  sql: `application_owner_fk`,
+  type: `string`,
+} ,
+cas_team_owner_fk:  {
+  sql: `cas_team_owner_fk`,
+  type: `string`,
+} ,
+sponsor_fk:  {
+  sql: `sponsor_fk`,
+  type: `string`,
+} ,
+student_natural_key:  {
+  sql: `student_natural_key`,
+  type: `string`,
+} ,
+sales_manager_natural_key:  {
+  sql: `sales_manager_natural_key`,
+  type: `string`,
+} ,
+application_owner_natural_key:  {
+  sql: `application_owner_natural_key`,
+  type: `string`,
+} ,
+cas_team_owner_natural_key:  {
+  sql: `cas_team_owner_natural_key`,
+  type: `string`,
+} ,
+salesforce_opportunity_natural_key:  {
+  sql: `salesforce_opportunity_natural_key`,
+  type: `string`,
+} ,
+created_at:  {
+  sql: `created_at`,
+  type: `time`,
+} ,
+modified_at:  {
+  sql: `modified_at`,
+  type: `time`,
+} ,
+status_update:  {
+  sql: `status_update`,
+  type: `time`,
+} ,
+intake_date:  {
+  sql: `intake_date`,
+  type: `time`,
+} ,
+payment_status:  {
+  sql: `payment_status`,
+  type: `string`,
+} ,
+immigration_category:  {
+  sql: `immigration_category`,
+  type: `string`,
+} ,
+learning_mode:  {
+  sql: `learning_mode`,
+  type: `string`,
+} ,
+returning_student:  {
+  sql: `returning_student`,
+  type: `string`,
+} ,
+accommodation_required:  {
+  sql: `accommodation_required`,
+  type: `string`,
+} ,
+sponsor_reference:  {
+  sql: `sponsor_reference`,
+  type: `string`,
+} ,
+is_offer_letter_issued:  {
+  sql: `is_offer_letter_issued`,
+  type: `boolean`,
+} ,
+is_acceptance_form_issued:  {
+  sql: `is_acceptance_form_issued`,
+  type: `boolean`,
+} ,
+is_visa_needed:  {
+  sql: `is_visa_needed`,
+  type: `boolean`,
+} ,
+is_application_submitted:  {
+  sql: `is_application_submitted`,
+  type: `boolean`,
+} ,
+is_application_completed:  {
+  sql: `is_application_completed`,
+  type: `boolean`,
+} ,
+is_confirmation_required:  {
+  sql: `is_confirmation_required`,
+  type: `boolean`,
+} ,
+has_second_agent:  {
+  sql: `has_second_agent`,
+  type: `boolean`,
+} ,
+has_deferred:  {
+  sql: `has_deferred`,
+  type: `string`,
+} ,
+status:  {
+  sql: `status`,
+  type: `string`,
+} ,
+status_group:  {
+  sql: `status_group`,
+  type: `string`,
+} ,
+is_deferred:  {
+  sql: `is_deferred`,
+  type: `boolean`,
+} ,
+}});
+cube (`sales_applications_history`, {
+sql: `select * from analytics_qa.sales_applications_history`,
+joins: {
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+} ,
+},
+dimensions: {
+application_history_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `application_history_pk`,
+  description: `not available`,
+} ,
+application_fk:  {
+  sql: `application_fk`,
+  type: `string`,
+} ,
+student_fk:  {
+  sql: `student_fk`,
+  type: `string`,
+} ,
+sales_manager_fk:  {
+  sql: `sales_manager_fk`,
+  type: `string`,
+} ,
+application_owner_fk:  {
+  sql: `application_owner_fk`,
+  type: `string`,
+} ,
+cas_team_owner_fk:  {
+  sql: `cas_team_owner_fk`,
+  type: `string`,
+} ,
+sponsor_fk:  {
+  sql: `sponsor_fk`,
+  type: `string`,
+} ,
+student_natural_key:  {
+  sql: `student_natural_key`,
+  type: `string`,
+} ,
+sales_manager_natural_key:  {
+  sql: `sales_manager_natural_key`,
+  type: `string`,
+} ,
+application_owner_natural_key:  {
+  sql: `application_owner_natural_key`,
+  type: `string`,
+} ,
+cas_team_owner_natural_key:  {
+  sql: `cas_team_owner_natural_key`,
+  type: `string`,
+} ,
+salesforce_opportunity_natural_key:  {
+  sql: `salesforce_opportunity_natural_key`,
+  type: `string`,
+} ,
+created_ts:  {
+  sql: `created_ts`,
+  type: `time`,
+} ,
+modified_ts:  {
+  sql: `modified_ts`,
+  type: `time`,
+} ,
+application_status_log_created_ts:  {
+  sql: `application_status_log_created_ts`,
+  type: `time`,
+} ,
+application_status:  {
+  sql: `application_status`,
+  type: `string`,
+} ,
+application_status_group:  {
+  sql: `application_status_group`,
+  type: `string`,
+} ,
+payment_status:  {
+  sql: `payment_status`,
+  type: `string`,
+} ,
+immigration_category:  {
+  sql: `immigration_category`,
+  type: `string`,
+} ,
+learning_mode:  {
+  sql: `learning_mode`,
+  type: `string`,
+} ,
+returning_student:  {
+  sql: `returning_student`,
+  type: `string`,
+} ,
+accommodation_required:  {
+  sql: `accommodation_required`,
+  type: `string`,
+} ,
+sponsor_reference:  {
+  sql: `sponsor_reference`,
+  type: `string`,
+} ,
+is_offer_letter_issued:  {
+  sql: `is_offer_letter_issued`,
+  type: `boolean`,
+} ,
+is_acceptance_form_issued:  {
+  sql: `is_acceptance_form_issued`,
+  type: `boolean`,
+} ,
+is_visa_needed:  {
+  sql: `is_visa_needed`,
+  type: `boolean`,
+} ,
+is_application_submitted:  {
+  sql: `is_application_submitted`,
+  type: `boolean`,
+} ,
+is_application_completed:  {
+  sql: `is_application_completed`,
+  type: `boolean`,
+} ,
+is_confirmation_required:  {
+  sql: `is_confirmation_required`,
+  type: `boolean`,
+} ,
+has_second_agent:  {
+  sql: `has_second_agent`,
+  type: `boolean`,
+} ,
+old_title:  {
+  sql: `old_title`,
+  type: `string`,
+} ,
+new_title:  {
+  sql: `new_title`,
+  type: `string`,
+} ,
+application_valid_from:  {
+  sql: `application_valid_from`,
+  type: `time`,
+} ,
+application_valid_to:  {
+  sql: `application_valid_to`,
+  type: `time`,
+} ,
+is_current_application_record:  {
+  sql: `is_current_application_record`,
+  type: `boolean`,
+} ,
+}});
+cube (`sales_applications_quota`, {
+sql: `select * from analytics_qa.sales_applications_quota`,
+joins: {
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+} ,
+},
+dimensions: {
+application_quota_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `application_quota_pk`,
+  description: `not available`,
+} ,
+quota_allocation_fk:  {
+  sql: `quota_allocation_fk`,
+  type: `string`,
+} ,
+application_fk:  {
+  sql: `application_fk`,
+  type: `string`,
+} ,
+degree_name:  {
+  sql: `degree_name`,
+  type: `string`,
+} ,
+application_status_group:  {
+  sql: `application_status_group`,
+  type: `string`,
+} ,
+}});
+cube (`sales_applications_summary`, {
+sql: `select * from analytics_qa.sales_applications_summary`,
+joins: {
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+} ,
+},
+dimensions: {
+application_summary_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `application_summary_pk`,
+  description: `not available`,
+} ,
+}});

@@ -2,6 +2,8 @@ profile: kaplan_poc
 
 dimensional_inference: enabled
 
+field_description_path: warehouse_docs
+
 explores:
 
   sales_explore:

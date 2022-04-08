@@ -5,9 +5,9 @@ from dataclasses import dataclass, field
 from functools import wraps
 from typing import List, Optional, Sequence, Tuple, Type, Union
 
-import cube_parser.tokens as tokens
-import cube_parser.tree as tree
-import cube_parser.utils as utils
+import droughty.cube_parser.tokens as tokens
+import droughty.cube_parser.tree as tree
+import droughty.cube_parser.utils as utils
 
 # Delimiter character used during logging to show the depth of nesting
 DELIMITER = ". "

@@ -104,7 +104,7 @@ def output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = 'cube.js'
+    filename = 'cube_aggregates.js'
 
     with open(os.path.join(path, filename), 'w') as file:
 

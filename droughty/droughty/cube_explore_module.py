@@ -64,7 +64,7 @@ def get_all_values(nested_dictionary,explore_dictionary):
                     
                     join_end = "},"
                     
-                    dimension_start = "dimensions {"
+                    dimension_start = "dimensions: {"
                  
                     
 
@@ -78,25 +78,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
                 
                 for key, value in value.items():
                     
-                    dimension = {
-
-
-                        "dimension": {
-                        "sql": key[0],
-                        "type": key[1],
-                        "name": key[0]
-
-                        }
-
-                    }
+                    if "pk" not in key[0] and "number" not in key [1]:  
                     
-                    yield(cube.dump(dimension))
-
-
-                for key, value in value.items():
-            
-                    if "pk" not in key[0] and "number" not in key [1]:
-
                         dimension = {
 
 
@@ -108,13 +91,13 @@ def get_all_values(nested_dictionary,explore_dictionary):
                             }
 
                         }
-
+                    
                         yield(cube.dump(dimension))
                         
-
                     elif "pk" in key[0]:
 
                         dimension = {
+
 
                             "dimension": {
                                 "primaryKey": "true",
@@ -130,9 +113,9 @@ def get_all_values(nested_dictionary,explore_dictionary):
                     
                 for key,value in nested_dictionary.items():
 
-                        closing_syntax = "}});"
+                    closing_syntax = "}});"
 
-                        yield (closing_syntax)
+                yield (closing_syntax)
 
         
 nested_dictionary = d1
@@ -164,7 +147,7 @@ def explore_output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = '_explore.layer.lkml'
+    filename = 'cube_integration.js'
 
     with open(os.path.join(path, filename), 'w') as file:
 

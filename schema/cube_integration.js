@@ -1,9 +1,413 @@
+cube (`core_agents`, {
+sql: `select * from analytics_qa.core_agents`,
+joins: {
+('agent_pk', 'sales_application_agent_bridge', 'agent_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.agent_fk} = ${agent_pk.sales_application_agent_bridge}`,
+} ,
+},
+dimensions: {
+agent_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `agent_pk`,
+  description: `The key and link to an agent`,
+} ,
+country_fk:  {
+  sql: `country_fk`,
+  type: `string`,
+} ,
+agent_salesforce_business_key:  {
+  sql: `agent_salesforce_business_key`,
+  type: `string`,
+} ,
+name:  {
+  sql: `name`,
+  type: `string`,
+} ,
+group:  {
+  sql: `group`,
+  type: `string`,
+} ,
+status:  {
+  sql: `status`,
+  type: `string`,
+} ,
+sales_channel:  {
+  sql: `sales_channel`,
+  type: `string`,
+} ,
+uk_based_agent:  {
+  sql: `uk_based_agent`,
+  type: `boolean`,
+} ,
+}});
+cube (`core_countries`, {
+sql: `select * from analytics_qa.core_countries`,
+joins: {
+('country_pk', 'core_sponsors', 'country_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.country_fk} = ${country_pk.core_sponsors}`,
+} ,
+},
+dimensions: {
+country_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `country_pk`,
+  description: `The key and link to a country`,
+} ,
+country:  {
+  sql: `country`,
+  type: `string`,
+} ,
+country_iso_key:  {
+  sql: `country_iso_key`,
+  type: `string`,
+} ,
+salesforce_country_key:  {
+  sql: `salesforce_country_key`,
+  type: `string`,
+} ,
+country_nationality:  {
+  sql: `country_nationality`,
+  type: `string`,
+} ,
+country_is_sanctioned:  {
+  sql: `country_is_sanctioned`,
+  type: `boolean`,
+} ,
+}});
+cube (`core_institutions`, {
+sql: `select * from analytics_qa.core_institutions`,
+joins: {
+('institution_pk', 'product_study_plans', 'institution_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.institution_fk} = ${institution_pk.product_study_plans}`,
+} ,
+},
+dimensions: {
+institution_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `institution_pk`,
+  description: `The key and link to an institution`,
+} ,
+country_fk:  {
+  sql: `country_fk`,
+  type: `string`,
+} ,
+institution_type:  {
+  sql: `institution_type`,
+  type: `string`,
+} ,
+institution_code:  {
+  sql: `institution_code`,
+  type: `string`,
+} ,
+institution_name:  {
+  sql: `institution_name`,
+  type: `string`,
+} ,
+institution_group:  {
+  sql: `institution_group`,
+  type: `string`,
+} ,
+}});
+cube (`core_sponsors`, {
+sql: `select * from analytics_qa.core_sponsors`,
+joins: {
+('sponsor_pk', 'sales_application_history', 'sponsor_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.sponsor_fk} = ${sponsor_pk.sales_application_history}`,
+} ,
+},
+dimensions: {
+sponsor_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `sponsor_pk`,
+  description: `The key to link a sponsor to a certain record`,
+} ,
+country_fk:  {
+  sql: `country_fk`,
+  type: `string`,
+} ,
+sponsor_salesforce_business_key:  {
+  sql: `sponsor_salesforce_business_key`,
+  type: `string`,
+} ,
+name:  {
+  sql: `name`,
+  type: `string`,
+} ,
+group:  {
+  sql: `group`,
+  type: `string`,
+} ,
+status:  {
+  sql: `status`,
+  type: `string`,
+} ,
+uk_sponsor:  {
+  sql: `uk_sponsor`,
+  type: `boolean`,
+} ,
+}});
+cube (`core_users`, {
+sql: `select * from analytics_qa.core_users`,
+joins: {
+('user_pk', 'core_user_mapping', 'user_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.user_fk} = ${user_pk.core_user_mapping}`,
+} ,
+},
+dimensions: {
+user_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `user_pk`,
+  description: `The key to link an user to a record`,
+} ,
+user_natural_key:  {
+  sql: `user_natural_key`,
+  type: `string`,
+} ,
+name:  {
+  sql: `name`,
+  type: `string`,
+} ,
+sales_region:  {
+  sql: `sales_region`,
+  type: `string`,
+} ,
+sales_region_group:  {
+  sql: `sales_region_group`,
+  type: `string`,
+} ,
+}});
+cube (`product_study_plans`, {
+sql: `select * from analytics_qa.product_study_plans`,
+joins: {
+('study_plan_pk', 'product_study_plans', 'study_plan_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_fk} = ${study_plan_pk.product_study_plans}`,
+} ,
+},
+dimensions: {
+study_plan_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `study_plan_pk`,
+  description: `The key to link a record to a study plan`,
+} ,
+study_plan_fk:  {
+  sql: `study_plan_fk`,
+  type: `string`,
+} ,
+application_fk:  {
+  sql: `application_fk`,
+  type: `string`,
+} ,
+institution_fk:  {
+  sql: `institution_fk`,
+  type: `string`,
+} ,
+study_plan_program_intake_fk:  {
+  sql: `study_plan_program_intake_fk`,
+  type: `string`,
+} ,
+study_plan_program_fk:  {
+  sql: `study_plan_program_fk`,
+  type: `string`,
+} ,
+entry_type_code:  {
+  sql: `entry_type_code`,
+  type: `string`,
+} ,
+course_code:  {
+  sql: `course_code`,
+  type: `string`,
+} ,
+course_name:  {
+  sql: `course_name`,
+  type: `string`,
+} ,
+intake_date:  {
+  sql: `intake_date`,
+  type: `time`,
+} ,
+intake_season:  {
+  sql: `intake_season`,
+  type: `string`,
+} ,
+intake_name:  {
+  sql: `intake_name`,
+  type: `string`,
+} ,
+intake_academic_year:  {
+  sql: `intake_academic_year`,
+  type: `string`,
+} ,
+entry_level:  {
+  sql: `entry_level`,
+  type: `string`,
+} ,
+enrolment:  {
+  sql: `enrolment`,
+  type: `time`,
+} ,
+course_start:  {
+  sql: `course_start`,
+  type: `time`,
+} ,
+course_end:  {
+  sql: `course_end`,
+  type: `time`,
+} ,
+teaching_end:  {
+  sql: `teaching_end`,
+  type: `time`,
+} ,
+teaching_start:  {
+  sql: `teaching_start`,
+  type: `time`,
+} ,
+created_at:  {
+  sql: `created_at`,
+  type: `time`,
+} ,
+modified_at:  {
+  sql: `modified_at`,
+  type: `time`,
+} ,
+is_current_version:  {
+  sql: `is_current_version`,
+  type: `boolean`,
+} ,
+has_deferred:  {
+  sql: `has_deferred`,
+  type: `boolean`,
+} ,
+is_deferred:  {
+  sql: `is_deferred`,
+  type: `boolean`,
+} ,
+}});
+cube (`product_study_plans_history`, {
+sql: `select * from analytics_qa.product_study_plans_history`,
+joins: {
+('study_plan_pk', 'product_study_plans', 'study_plan_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_fk} = ${study_plan_pk.product_study_plans}`,
+} ,
+},
+dimensions: {
+study_plan_history_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `study_plan_history_pk`,
+  description: `The key to link a record to the study plan history record`,
+} ,
+pathway_sk:  {
+  sql: `pathway_sk`,
+  type: `string`,
+} ,
+study_plan_fk:  {
+  sql: `study_plan_fk`,
+  type: `string`,
+} ,
+application_fk:  {
+  sql: `application_fk`,
+  type: `string`,
+} ,
+institution_fk:  {
+  sql: `institution_fk`,
+  type: `string`,
+} ,
+study_plan_program_intake_fk:  {
+  sql: `study_plan_program_intake_fk`,
+  type: `string`,
+} ,
+study_plan_program_fk:  {
+  sql: `study_plan_program_fk`,
+  type: `string`,
+} ,
+study_plan_track_entry_type_code:  {
+  sql: `study_plan_track_entry_type_code`,
+  type: `string`,
+} ,
+study_plan_program_code:  {
+  sql: `study_plan_program_code`,
+  type: `string`,
+} ,
+study_plan_program_name:  {
+  sql: `study_plan_program_name`,
+  type: `string`,
+} ,
+study_plan_intake_date:  {
+  sql: `study_plan_intake_date`,
+  type: `time`,
+} ,
+study_plan_intake_season:  {
+  sql: `study_plan_intake_season`,
+  type: `string`,
+} ,
+study_plan_program_entry_level:  {
+  sql: `study_plan_program_entry_level`,
+  type: `string`,
+} ,
+enrolment_date:  {
+  sql: `enrolment_date`,
+  type: `time`,
+} ,
+study_plan_program_start_date:  {
+  sql: `study_plan_program_start_date`,
+  type: `time`,
+} ,
+study_plan_program_end_date:  {
+  sql: `study_plan_program_end_date`,
+  type: `time`,
+} ,
+study_plan_teaching_end_date:  {
+  sql: `study_plan_teaching_end_date`,
+  type: `time`,
+} ,
+study_plan_teaching_start_date:  {
+  sql: `study_plan_teaching_start_date`,
+  type: `time`,
+} ,
+study_plan_created_at:  {
+  sql: `study_plan_created_at`,
+  type: `time`,
+} ,
+study_plan_modified_at:  {
+  sql: `study_plan_modified_at`,
+  type: `time`,
+} ,
+study_plan_valid_from:  {
+  sql: `study_plan_valid_from`,
+  type: `time`,
+} ,
+study_plan_valid_to:  {
+  sql: `study_plan_valid_to`,
+  type: `time`,
+} ,
+is_current_study_plan_record:  {
+  sql: `is_current_study_plan_record`,
+  type: `boolean`,
+} ,
+has_deferred:  {
+  sql: `has_deferred`,
+  type: `string`,
+} ,
+}});
 cube (`sales_applications`, {
 sql: `select * from analytics_qa.sales_applications`,
 joins: {
-product_study_plans:  {
+('application_pk', 'product_study_plans', 'application_fk'):  {
   relationship: `belongsTo`,
-  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
 } ,
 },
 dimensions: {
@@ -149,9 +553,9 @@ is_deferred:  {
 cube (`sales_applications_history`, {
 sql: `select * from analytics_qa.sales_applications_history`,
 joins: {
-product_study_plans:  {
+('application_pk', 'product_study_plans', 'application_fk'):  {
   relationship: `belongsTo`,
-  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
 } ,
 },
 dimensions: {
@@ -301,9 +705,9 @@ is_current_application_record:  {
 cube (`sales_applications_quota`, {
 sql: `select * from analytics_qa.sales_applications_quota`,
 joins: {
-product_study_plans:  {
+('application_pk', 'product_study_plans', 'application_fk'):  {
   relationship: `belongsTo`,
-  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
 } ,
 },
 dimensions: {
@@ -333,9 +737,9 @@ application_status_group:  {
 cube (`sales_applications_summary`, {
 sql: `select * from analytics_qa.sales_applications_summary`,
 joins: {
-product_study_plans:  {
+('application_pk', 'product_study_plans', 'application_fk'):  {
   relationship: `belongsTo`,
-  sql: `${CUBE.study_plan_fk} = ${product_study_plans.study_plan_pk}`,
+  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
 } ,
 },
 dimensions: {
@@ -344,5 +748,137 @@ application_summary_pk:  {
   type: `string`,
   sql: `application_summary_pk`,
   description: `not available`,
+} ,
+}});
+cube (`sales_quota_allocations`, {
+sql: `select * from analytics_qa.sales_quota_allocations`,
+joins: {
+('quota_allocation_pk', 'sales_applications_quota', 'quota_allocation_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.quota_allocation_fk} = ${quota_allocation_pk.sales_applications_quota}`,
+} ,
+},
+dimensions: {
+quota_allocation_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `quota_allocation_pk`,
+  description: `not available`,
+} ,
+university_code:  {
+  sql: `university_code`,
+  type: `string`,
+} ,
+university_name:  {
+  sql: `university_name`,
+  type: `string`,
+} ,
+college_code:  {
+  sql: `college_code`,
+  type: `string`,
+} ,
+degree_concat:  {
+  sql: `degree_concat`,
+  type: `string`,
+} ,
+quota_group:  {
+  sql: `quota_group`,
+  type: `string`,
+} ,
+nationaility_criteria:  {
+  sql: `nationaility_criteria`,
+  type: `string`,
+} ,
+sponsor_criteria:  {
+  sql: `sponsor_criteria`,
+  type: `string`,
+} ,
+agent_region_criteria:  {
+  sql: `agent_region_criteria`,
+  type: `string`,
+} ,
+program_criteria:  {
+  sql: `program_criteria`,
+  type: `string`,
+} ,
+limited:  {
+  sql: `limited`,
+  type: `time`,
+} ,
+closed:  {
+  sql: `closed`,
+  type: `time`,
+} ,
+}});
+cube (`sales_student`, {
+sql: `select * from analytics_qa.sales_student`,
+joins: {
+('student_pk', 'sales_application_history', 'student_fk'):  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.student_fk} = ${student_pk.sales_application_history}`,
+} ,
+},
+dimensions: {
+student_pk:  {
+  primaryKey: true,
+  type: `string`,
+  sql: `student_pk`,
+  description: `The key to link to/indicate a certain student`,
+} ,
+country_fk:  {
+  sql: `country_fk`,
+  type: `string`,
+} ,
+nationality_fk:  {
+  sql: `nationality_fk`,
+  type: `string`,
+} ,
+student_natural_key:  {
+  sql: `student_natural_key`,
+  type: `string`,
+} ,
+kss_student_id:  {
+  sql: `kss_student_id`,
+  type: `string`,
+} ,
+class_student_id:  {
+  sql: `class_student_id`,
+  type: `string`,
+} ,
+student_salesforce_natural_key:  {
+  sql: `student_salesforce_natural_key`,
+  type: `string`,
+} ,
+name:  {
+  sql: `name`,
+  type: `string`,
+} ,
+gender:  {
+  sql: `gender`,
+  type: `string`,
+} ,
+country_iso_key:  {
+  sql: `country_iso_key`,
+  type: `string`,
+} ,
+source:  {
+  sql: `source`,
+  type: `string`,
+} ,
+nationality:  {
+  sql: `nationality`,
+  type: `string`,
+} ,
+dob:  {
+  sql: `dob`,
+  type: `time`,
+} ,
+created_at:  {
+  sql: `created_at`,
+  type: `time`,
+} ,
+modified_at:  {
+  sql: `modified_at`,
+  type: `time`,
 } ,
 }});

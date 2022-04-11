@@ -146,9 +146,6 @@ for key,value in environment_project.items():
                         then 'one_to_one'                
                         
                 end as looker_relationship,
-                    
-                    
-                
                 
                 from pks
                 inner join fks on pks.pk_sk = fks.fk_sk
@@ -157,6 +154,71 @@ for key,value in environment_project.items():
                 left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
                 order by looker_relationship
                 '''
+
+                test_warehouse_schema =   """
+                with source_1 as (
+                    select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMNS`
+                    ),
+                source_2 as (
+                select * from `{0}.{2}.INFORMATION_SCHEMA.COLUMNS`
+                
+                ),
+                
+                source_3 as (
+                select * from `{0}.{3}.INFORMATION_SCHEMA.COLUMNS`
+                
+                ),
+                
+                unioned as (
+                select * from source_1
+                
+                union all
+                
+                select * from source_2
+                
+                union all
+                
+                select * from source_3
+                
+                )
+                select * from unioned
+                """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
+
+                cube_explore_schema = '''
+                with source as (
+                select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+                ),
+                pks as (
+                    select 
+                    table_name as pk_table_name,
+                    column_name as pk_column_name,
+                    trim(column_name, "_pk") as pk_sk,
+                    from source
+                    where column_name like '%%pk%%'
+                ),
+                fks as (
+                    select
+                    table_name as fk_table_name,
+                    column_name as fk_column_name,
+                    trim(column_name, "_fk") as fk_sk,
+                    from source
+                    where column_name like '%%fk%%'
+                ),
+
+                references as (
+                select * from pks
+                inner join fks on pks.pk_sk = fks.fk_sk
+                )
+
+                select 
+                pk_table_name,
+                pk_column_name,
+                fk_table_name,
+                fk_column_name
+                
+                from references
+
+                '''.format(project_name,schema_name)
 
                 test_warehouse_schema =   """
                 with source_1 as (

@@ -16,8 +16,8 @@ import git
 import droughty.cube_parser.cube as cube
 
 from droughty.cube_base_dict import d1
-from droughty.lookml_explore_dict import d2
-from droughty.lookml_explore_dict import distinct_duplicate_explore_rows
+from droughty.cube_explore_dict import d2
+from droughty.cube_explore_dict import distinct_duplicate_explore_rows
 from droughty.config import schema_name
 
 def get_all_values(nested_dictionary,explore_dictionary):
@@ -32,7 +32,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
 
                     "cube": key,
-                    "sql": "select * from"+" "+schema_name+"."+key
+                    "sql": "select * from"+" "+schema_name+"."+key,
+                    "joins ": "{"
 
                 }
 
@@ -40,9 +41,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
                 yield(cube.dump(explore))
         
 
-                for key1 in explore_value.keys():  
-                    
-                    join_start = "joins: {"
+                for key1, value1 in explore_value.items(): 
+
                     
 
                     join = {
@@ -53,8 +53,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
                         
                         {
                         "relationship": "belongsTo",
-                        "sql": "${CUBE."+key1[3]+"}"+" = "+"${"+key1[0]+"."+key1[1]+"}",
-                        "name": key1[0]
+                        "sql": "${CUBE."+key1[0]+"}"+" = "+"${"+key1[1]+"."+key1[2]+"}",
+                        "name": key1[1]
 
                         }
                             
@@ -62,20 +62,20 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                     }
                     
-                    join_end = "},"
-                    
-                    dimension_start = "dimensions: {"
-                 
                     
 
-                yield(join_start)
-                
-                yield(cube.dump(join))
-                
+                    yield(cube.dump(join))
+                    
+                    join_end = "},"                 
+
                 yield(join_end)
                 
+                        
+                dimension_start = "dimensions: {"
+
                 yield(dimension_start)
-                
+
+
                 for key, value in value.items():
                     
                     if "pk" not in key[0] and "number" not in key [1]:  

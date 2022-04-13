@@ -423,12 +423,14 @@ for key,value in environment_project.items():
                 select 
                 *
                 from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+                where table_schema = '{1}'
                 ),
                 row_counts as (
                 select
                     table_name,
                     sum(row_count) as row_count
                 from "{0}"."INFORMATION_SCHEMA"."TABLES"
+                where table_schema = '{1}'
                 group by 1
                 ),
                 pks as (
@@ -464,7 +466,7 @@ for key,value in environment_project.items():
                 left join fks on pks.pk_sk = fks.fk_sk
                 left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
                 left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-                '''.format(database)
+                '''.format(database,schema_name)
 
                 test_warehouse_schema =   """
                 with source_1 as (

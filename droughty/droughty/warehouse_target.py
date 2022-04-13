@@ -194,13 +194,13 @@ for key,value in environment_project.items():
                 select
                     table_id as table_name,
                     row_count
-                from `client-kaplan-poc.analytics_qa.__TABLES__`
+                from `{{project_id}}.{{schema_id}}.__TABLES__`
                 ),
                 pks as (
                     select 
                     table_name as pk_table_name,
                     column_name as pk_column_name,
-                    trim(column_name, "_pk") as pk_sk,
+                    trim(column_name, "_pk") as pk_sk
                     from source
                     where column_name like '%%pk%%'
                 ),
@@ -208,7 +208,7 @@ for key,value in environment_project.items():
                     select
                     table_name as fk_table_name,
                     column_name as fk_column_name,
-                    trim(column_name, "_fk") as fk_sk,
+                    trim(column_name, "_fk") as fk_sk
                     from source
                     where column_name like '%%fk%%'
                 )
@@ -418,6 +418,54 @@ for key,value in environment_project.items():
                 
                 '''
 
+                cube_explore_schema = '''
+                with source as (
+                select 
+                *
+                from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+                ),
+                row_counts as (
+                select
+                    table_name,
+                    sum(row_count) as row_count
+                from "{0}"."INFORMATION_SCHEMA"."TABLES"
+                group by 1
+                ),
+                pks as (
+                    select 
+                    table_name as pk_table_name,
+                    column_name as pk_column_name,
+                    rtrim(column_name, '_PK') as pk_sk
+                    from source
+                    where column_name ilike '%pk%'
+                ),
+                fks as (
+                    select
+                    table_name as fk_table_name,
+                    column_name as fk_column_name,
+                    rtrim(column_name, '_FK') as fk_sk
+                    from source
+                    where column_name ilike '%fk%'
+                )
+                select 
+                pk_table_name,
+                pk_column_name,
+                fk_table_name,
+                fk_column_name,
+                case when merge_counts_pk.row_count > merge_counts_fk.row_count
+                        then 'belongsTo'   
+                    when merge_counts_pk.row_count < merge_counts_fk.row_count
+                        then 'hasMany'
+                    when merge_counts_pk.row_count = merge_counts_fk.row_count
+                        then 'HasOne'
+                end as true_relationship
+                
+                from pks
+                left join fks on pks.pk_sk = fks.fk_sk
+                left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+                left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+                '''.format(database)
+
                 test_warehouse_schema =   """
                 with source_1 as (
                     select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
@@ -556,4 +604,10 @@ def apply_sql_template(template, parameters):
 
 explore_sql = (query % bind_params)
 
-cube_explore_schema = (cube_query % cube_bind_params)
+if warehouse_name =='big_query':
+
+    cube_explore_schema = (query % bind_params)
+
+elif warehouse_name == 'snowflake':
+    
+    cube_explore_schema = cube_explore_schema

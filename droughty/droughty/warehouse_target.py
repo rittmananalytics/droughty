@@ -186,7 +186,15 @@ for key,value in environment_project.items():
 
                 cube_explore_schema = '''
                 with source as (
-                select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+                select 
+                *
+                from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+                ),
+                row_counts as (
+                select
+                    table_id as table_name,
+                    row_count
+                from `client-kaplan-poc.analytics_qa.__TABLES__`
                 ),
                 pks as (
                     select 
@@ -203,22 +211,25 @@ for key,value in environment_project.items():
                     trim(column_name, "_fk") as fk_sk,
                     from source
                     where column_name like '%%fk%%'
-                ),
-
-                references as (
-                select * from pks
-                inner join fks on pks.pk_sk = fks.fk_sk
                 )
-
                 select 
                 pk_table_name,
                 pk_column_name,
                 fk_table_name,
-                fk_column_name
+                fk_column_name,
+                case when merge_counts_pk.row_count > merge_counts_fk.row_count
+                        then 'belongsTo'   
+                    when merge_counts_pk.row_count < merge_counts_fk.row_count
+                        then 'hasMany'
+                    when merge_counts_pk.row_count = merge_counts_fk.row_count
+                        then 'HasOne'
+                end as true_relationship
                 
-                from references
-
-                '''.format(project_name,schema_name)
+                from pks
+                inner join fks on pks.pk_sk = fks.fk_sk
+                left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+                left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+                '''
 
                 test_warehouse_schema =   """
                 with source_1 as (
@@ -507,7 +518,11 @@ for key,value in environment_project.items():
 
 
 j = JinjaSql(param_style='pyformat')
+
 query, bind_params = j.prepare_query(lookml_explore_schema,params)
+
+cube_query, cube_bind_params = j.prepare_query(cube_explore_schema,params)
+
 
 isinstance(value, string_types)
 
@@ -540,3 +555,5 @@ def apply_sql_template(template, parameters):
     return get_sql_from_template(query, bind_params)
 
 explore_sql = (query % bind_params)
+
+cube_explore_schema = (cube_query % cube_bind_params)

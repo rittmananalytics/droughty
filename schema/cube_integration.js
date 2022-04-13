@@ -1,9 +1,9 @@
 cube (`core_agents`, {
 sql: `select * from analytics_qa.core_agents`,
-joins: {
-('agent_pk', 'sales_application_agent_bridge', 'agent_fk'):  {
-  relationship: `belongsTo`,
-  sql: `${CUBE.agent_fk} = ${agent_pk.sales_application_agent_bridge}`,
+joins : {
+sales_application_agent_bridge:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.agent_pk} = ${sales_application_agent_bridge.agent_fk}`,
 } ,
 },
 dimensions: {
@@ -44,10 +44,26 @@ uk_based_agent:  {
 }});
 cube (`core_countries`, {
 sql: `select * from analytics_qa.core_countries`,
-joins: {
-('country_pk', 'core_sponsors', 'country_fk'):  {
+joins : {
+core_country_mapping:  {
+  relationship: `HasOne`,
+  sql: `${CUBE.country_pk} = ${core_country_mapping.country_fk}`,
+} ,
+core_institutions:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.country_fk} = ${country_pk.core_sponsors}`,
+  sql: `${CUBE.country_pk} = ${core_institutions.country_fk}`,
+} ,
+sales_student:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.country_pk} = ${sales_student.country_fk}`,
+} ,
+core_agents:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.country_pk} = ${core_agents.country_fk}`,
+} ,
+core_sponsors:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.country_pk} = ${core_sponsors.country_fk}`,
 } ,
 },
 dimensions: {
@@ -80,10 +96,50 @@ country_is_sanctioned:  {
 }});
 cube (`core_institutions`, {
 sql: `select * from analytics_qa.core_institutions`,
-joins: {
-('institution_pk', 'product_study_plans', 'institution_fk'):  {
+joins : {
+budgets_sales:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${budgets_sales.institution_fk}`,
+} ,
+sales_new_programs:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.institution_fk} = ${institution_pk.product_study_plans}`,
+  sql: `${CUBE.institution_pk} = ${sales_new_programs.institution_fk}`,
+} ,
+product_study_plans_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${product_study_plans_history.institution_fk}`,
+} ,
+product_progression_plans:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${product_progression_plans.institution_fk}`,
+} ,
+sales_applications:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${sales_applications.institution_fk}`,
+} ,
+sales_priority_programs:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${sales_priority_programs.institution_fk}`,
+} ,
+targets_institutions:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${targets_institutions.institution_fk}`,
+} ,
+core_programs:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${core_programs.institution_fk}`,
+} ,
+product_progression_plans_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${product_progression_plans_history.institution_fk}`,
+} ,
+sales_application_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${sales_application_history.institution_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.institution_pk} = ${product_study_plans.institution_fk}`,
 } ,
 },
 dimensions: {
@@ -116,10 +172,18 @@ institution_group:  {
 }});
 cube (`core_sponsors`, {
 sql: `select * from analytics_qa.core_sponsors`,
-joins: {
-('sponsor_pk', 'sales_application_history', 'sponsor_fk'):  {
-  relationship: `belongsTo`,
-  sql: `${CUBE.sponsor_fk} = ${sponsor_pk.sales_application_history}`,
+joins : {
+sales_applications:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.sponsor_pk} = ${sales_applications.sponsor_fk}`,
+} ,
+sales_applications_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.sponsor_pk} = ${sales_applications_history.sponsor_fk}`,
+} ,
+sales_application_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.sponsor_pk} = ${sales_application_history.sponsor_fk}`,
 } ,
 },
 dimensions: {
@@ -156,10 +220,10 @@ uk_sponsor:  {
 }});
 cube (`core_users`, {
 sql: `select * from analytics_qa.core_users`,
-joins: {
-('user_pk', 'core_user_mapping', 'user_fk'):  {
-  relationship: `belongsTo`,
-  sql: `${CUBE.user_fk} = ${user_pk.core_user_mapping}`,
+joins : {
+core_user_mapping:  {
+  relationship: `HasOne`,
+  sql: `${CUBE.user_pk} = ${core_user_mapping.user_fk}`,
 } ,
 },
 dimensions: {
@@ -188,10 +252,22 @@ sales_region_group:  {
 }});
 cube (`product_study_plans`, {
 sql: `select * from analytics_qa.product_study_plans`,
-joins: {
-('study_plan_pk', 'product_study_plans', 'study_plan_fk'):  {
+joins : {
+product_study_plans_history:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.study_plan_fk} = ${study_plan_pk.product_study_plans}`,
+  sql: `${CUBE.study_plan_pk} = ${product_study_plans_history.study_plan_fk}`,
+} ,
+sales_scholarships:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_pk} = ${sales_scholarships.study_plan_fk}`,
+} ,
+sales_applications:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.study_plan_pk} = ${sales_applications.study_plan_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `HasOne`,
+  sql: `${CUBE.study_plan_pk} = ${product_study_plans.study_plan_fk}`,
 } ,
 },
 dimensions: {
@@ -296,10 +372,22 @@ is_deferred:  {
 }});
 cube (`product_study_plans_history`, {
 sql: `select * from analytics_qa.product_study_plans_history`,
-joins: {
-('study_plan_pk', 'product_study_plans', 'study_plan_fk'):  {
+joins : {
+product_study_plans_history:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.study_plan_fk} = ${study_plan_pk.product_study_plans}`,
+  sql: `${CUBE.study_plan_pk} = ${product_study_plans_history.study_plan_fk}`,
+} ,
+sales_scholarships:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.study_plan_pk} = ${sales_scholarships.study_plan_fk}`,
+} ,
+sales_applications:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.study_plan_pk} = ${sales_applications.study_plan_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `HasOne`,
+  sql: `${CUBE.study_plan_pk} = ${product_study_plans.study_plan_fk}`,
 } ,
 },
 dimensions: {
@@ -404,10 +492,42 @@ has_deferred:  {
 }});
 cube (`sales_applications`, {
 sql: `select * from analytics_qa.sales_applications`,
-joins: {
-('application_pk', 'product_study_plans', 'application_fk'):  {
+joins : {
+sales_application_agent_bridge:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
+  sql: `${CUBE.application_pk} = ${sales_application_agent_bridge.application_fk}`,
+} ,
+product_study_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans_history.application_fk}`,
+} ,
+product_progression_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans.application_fk}`,
+} ,
+sales_scholarships:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_scholarships.application_fk}`,
+} ,
+sales_applications_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.application_pk} = ${sales_applications_history.application_fk}`,
+} ,
+product_progression_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans_history.application_fk}`,
+} ,
+sales_applications_quota:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_applications_quota.application_fk}`,
+} ,
+sales_application_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_application_history.application_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans.application_fk}`,
 } ,
 },
 dimensions: {
@@ -552,10 +672,42 @@ is_deferred:  {
 }});
 cube (`sales_applications_history`, {
 sql: `select * from analytics_qa.sales_applications_history`,
-joins: {
-('application_pk', 'product_study_plans', 'application_fk'):  {
+joins : {
+sales_application_agent_bridge:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
+  sql: `${CUBE.application_pk} = ${sales_application_agent_bridge.application_fk}`,
+} ,
+product_study_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans_history.application_fk}`,
+} ,
+product_progression_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans.application_fk}`,
+} ,
+sales_scholarships:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_scholarships.application_fk}`,
+} ,
+sales_applications_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.application_pk} = ${sales_applications_history.application_fk}`,
+} ,
+product_progression_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans_history.application_fk}`,
+} ,
+sales_applications_quota:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_applications_quota.application_fk}`,
+} ,
+sales_application_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_application_history.application_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans.application_fk}`,
 } ,
 },
 dimensions: {
@@ -704,10 +856,42 @@ is_current_application_record:  {
 }});
 cube (`sales_applications_quota`, {
 sql: `select * from analytics_qa.sales_applications_quota`,
-joins: {
-('application_pk', 'product_study_plans', 'application_fk'):  {
+joins : {
+sales_application_agent_bridge:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
+  sql: `${CUBE.application_pk} = ${sales_application_agent_bridge.application_fk}`,
+} ,
+product_study_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans_history.application_fk}`,
+} ,
+product_progression_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans.application_fk}`,
+} ,
+sales_scholarships:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_scholarships.application_fk}`,
+} ,
+sales_applications_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.application_pk} = ${sales_applications_history.application_fk}`,
+} ,
+product_progression_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans_history.application_fk}`,
+} ,
+sales_applications_quota:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_applications_quota.application_fk}`,
+} ,
+sales_application_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_application_history.application_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans.application_fk}`,
 } ,
 },
 dimensions: {
@@ -736,10 +920,42 @@ application_status_group:  {
 }});
 cube (`sales_applications_summary`, {
 sql: `select * from analytics_qa.sales_applications_summary`,
-joins: {
-('application_pk', 'product_study_plans', 'application_fk'):  {
+joins : {
+sales_application_agent_bridge:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.application_fk} = ${application_pk.product_study_plans}`,
+  sql: `${CUBE.application_pk} = ${sales_application_agent_bridge.application_fk}`,
+} ,
+product_study_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans_history.application_fk}`,
+} ,
+product_progression_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans.application_fk}`,
+} ,
+sales_scholarships:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_scholarships.application_fk}`,
+} ,
+sales_applications_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.application_pk} = ${sales_applications_history.application_fk}`,
+} ,
+product_progression_plans_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_progression_plans_history.application_fk}`,
+} ,
+sales_applications_quota:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_applications_quota.application_fk}`,
+} ,
+sales_application_history:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${sales_application_history.application_fk}`,
+} ,
+product_study_plans:  {
+  relationship: `belongsTo`,
+  sql: `${CUBE.application_pk} = ${product_study_plans.application_fk}`,
 } ,
 },
 dimensions: {
@@ -752,10 +968,10 @@ application_summary_pk:  {
 }});
 cube (`sales_quota_allocations`, {
 sql: `select * from analytics_qa.sales_quota_allocations`,
-joins: {
-('quota_allocation_pk', 'sales_applications_quota', 'quota_allocation_fk'):  {
-  relationship: `belongsTo`,
-  sql: `${CUBE.quota_allocation_fk} = ${quota_allocation_pk.sales_applications_quota}`,
+joins : {
+sales_applications_quota:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.quota_allocation_pk} = ${sales_applications_quota.quota_allocation_fk}`,
 } ,
 },
 dimensions: {
@@ -812,10 +1028,18 @@ closed:  {
 }});
 cube (`sales_student`, {
 sql: `select * from analytics_qa.sales_student`,
-joins: {
-('student_pk', 'sales_application_history', 'student_fk'):  {
+joins : {
+sales_applications:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.student_pk} = ${sales_applications.student_fk}`,
+} ,
+sales_applications_history:  {
+  relationship: `hasMany`,
+  sql: `${CUBE.student_pk} = ${sales_applications_history.student_fk}`,
+} ,
+sales_application_history:  {
   relationship: `belongsTo`,
-  sql: `${CUBE.student_fk} = ${student_pk.sales_application_history}`,
+  sql: `${CUBE.student_pk} = ${sales_application_history.student_fk}`,
 } ,
 },
 dimensions: {

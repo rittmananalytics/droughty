@@ -52,7 +52,7 @@ def get_all_values(nested_dictionary,explore_dictionary):
                         [
                         
                         {
-                        "relationship": "belongsTo",
+                        "relationship": key1[3],
                         "sql": "${CUBE."+key1[0]+"}"+" = "+"${"+key1[1]+"."+key1[2]+"}",
                         "name": key1[1]
 

@@ -51,7 +51,7 @@ if warehouse_name == 'big_query':
 
     explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=lookml_project, credentials=credentials)
 
-    explore_df_2 = explore_df[['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name']]
+    explore_df_2 = explore_df[['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']]
 
     pk_table_name_df = explore_df[['pk_table_name']]
 
@@ -61,7 +61,7 @@ if warehouse_name == 'big_query':
 
     df4 = {n: grp.loc[n].to_dict('index')
         
-    for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name']).groupby(level='pk_table_name')}
+    for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']).groupby(level='pk_table_name')}
 
     d2 = df4
 

@@ -1,4 +1,4 @@
-profile: kaplan_poc
+profile: snowflake_demo
 
 dimensional_inference: enabled
 
@@ -8,21 +8,8 @@ explores:
 
   sales_explore:
       parent_table: 
-        - sales_applications
+        - ITEM
       dimensions: 
-        - core_countries
-        - core_agents
-        - core_sponsors
-        - sales_application_agent_bridge
-        - core_users
-        - core_country_mapping
-        - core_institutions
-        - sales_student
-        - core_user_mapping
-        - core_program_intakes
-        - core_programs
-        - core_subjects
+        - REASON
       facts:
-        - sales_applications_summary
-        - product_progression_plans
-        - product_study_plans
+        - STORE

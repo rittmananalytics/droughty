@@ -80,13 +80,7 @@ elif warehouse_name == 'snowflake':
     
     df['description'] = df['comment'].fillna('not available')
 
-    df['column_name'] = df['column_name'].str.lower()
-    df['table_name'] = df['table_name'].str.lower()
-    df['description'] = df['description'].str.lower()
-
-    df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
-
-    df1 = df1[['table_name','column_name','data_type','description']]
+    df1 = df[['table_name','column_name','data_type','description']]
 
     df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','time')
     df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_TZ','time')
@@ -101,6 +95,13 @@ elif warehouse_name == 'snowflake':
     df1['data_type'] = df1['data_type'].str.replace('VARIANT','string')   
     df1['data_type'] = df1['data_type'].str.replace('BOOLEAN','boolean')
 
+    df['column_name'] = df['column_name'].str.lower()
+    df['table_name'] = df['table_name'].str.lower()
+    df['description'] = df['description'].str.lower()
+
+    df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
+
+    df1 = df1[['table_name','column_name','data_type','description']]
 
     df2 = df1
 

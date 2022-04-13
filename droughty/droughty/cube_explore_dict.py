@@ -65,14 +65,6 @@ if warehouse_name == 'big_query':
 
     d2 = df4
 
-    def recur_dictify(frame):
-        if len(frame.columns) == 1:
-            if frame.values.size == 1: return frame.values[0][0]
-            return frame.values.squeeze()
-        grouped = frame.groupby(frame.columns[0])
-        d = {k: recur_dictify(g.iloc[:,1:]) for k,g in grouped}
-        return d
-
 elif warehouse_name == 'snowflake': 
 
     url = URL(
@@ -95,13 +87,7 @@ elif warehouse_name == 'snowflake':
 
     explore_df.drop_duplicates(keep=False, inplace=True)
 
-    explore_df['parent_table_name'] = explore_df['parent_table_name'].str.lower()
-    explore_df['pk_table_name'] = explore_df['pk_table_name'].str.lower()
-    explore_df['pk_column_name'] = explore_df['pk_column_name'].str.lower()
-    explore_df['fk_table_name'] = explore_df['fk_table_name'].str.lower()
-    explore_df['fk_column_name'] = explore_df['fk_column_name'].str.lower()
-
-    explore_df_2 = explore_df[['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']]
+    explore_df_2 = explore_df[['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']]
 
     pk_table_name_df = explore_df[['pk_table_name']]
 
@@ -109,19 +95,11 @@ elif warehouse_name == 'snowflake':
 
     distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
 
-    connection.close()
-    engine.dispose()
-
     df4 = {n: grp.loc[n].to_dict('index')
         
-    for n, grp in explore_df.set_index(['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']).groupby(level='parent_table_name')}
+    for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']).groupby(level='pk_table_name')}
 
     d2 = df4
 
-    def recur_dictify(frame):
-        if len(frame.columns) == 1:
-            if frame.values.size == 1: return frame.values[0][0]
-            return frame.values.squeeze()
-        grouped = frame.groupby(frame.columns[0])
-        d = {k: recur_dictify(g.iloc[:,1:]) for k,g in grouped}
-        return d
+    connection.close()
+    engine.dispose()

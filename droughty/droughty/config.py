@@ -3,6 +3,8 @@ import os
 import yaml
 import git
 
+from droughty import cli_profile_path
+
 ## global vars
 
 path = os.path.expanduser('~')
@@ -22,25 +24,41 @@ git_path = git_def_path
 
 try:
 
-    path_source = 'local_vars'
+    print(f"{cli_profile_path}")
+    
+#    path_source = 'local_vars'
 
-    path = os.path.expanduser('~')
+#    path = main.cli_profile_path
 
-    profile_pass = os.path.join(path,".droughty/profile.yaml")
+#    profile_pass = os.path.join(path,"profile.yaml")
 
-    with open(profile_pass) as f:
-        lookml_config = yaml.load(f, Loader=yaml.FullLoader)
+#    with open(profile_pass) as f:
+#        lookml_config = yaml.load(f, Loader=yaml.FullLoader)
 
 except:
 
-    path_source = 'external_vars'
+    print("I cannot find this variable")
 
-    filename = 'profile.yaml'
+#    path_source = 'local_vars'
+#
+#    path = os.path.expanduser('~')
+#
+#    profile_pass = os.path.join(path,".droughty/profile.yaml")
+#
+#    with open(profile_pass) as f:
+#        lookml_config = yaml.load(f, Loader=yaml.FullLoader)
 
-    profile_pass = os.path.join(git_path,filename)
+#except:
+#
+#    path_source = 'external_vars'
+#
+#    filename = 'profile.yaml'
+#
+#    profile_pass = os.path.join(git_path,filename)
+#
+#    with open(profile_pass) as f:
+#        lookml_config = yaml.load(f, Loader=yaml.FullLoader)
 
-    with open(profile_pass) as f:
-        lookml_config = yaml.load(f, Loader=yaml.FullLoader)
 
 ## project vars 
 

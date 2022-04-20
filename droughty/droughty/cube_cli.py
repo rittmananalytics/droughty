@@ -14,7 +14,6 @@ dimensional_inference_status = warehouse_target.dimensional_inference
 
 app = typer.Typer()
 
-
 @app.command()
 
 def base():

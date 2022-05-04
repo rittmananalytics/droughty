@@ -1,0 +1,28 @@
+"""Console script for droughty."""
+
+import typer
+import time
+from dataclasses import dataclass
+
+app = typer.Typer()
+
+@dataclass
+class Common:
+    profile_dir: str
+
+    @app.callback()
+    def profile_callback(ctx: typer.Context, profile_dir: str = typer.Option(..., )):
+
+        typer.echo(f"Hello {profile_dir}")
+
+        test_dir = "/Users/lewischarlesbaker/.droughty/"
+
+        ##test_dir = (f"{profile_dir}")
+
+        """Common Entry Point"""
+        ctx.obj = Common(profile_dir)
+
+        return (test_dir)
+
+
+cli_profile_path = Common.profile_callback()

@@ -6,7 +6,11 @@ from cgi import test
 from dataclasses import dataclass
 from google.oauth2 import service_account
 
-from droughty.config_cli import Common
+def cli_option_path_import():
+
+    from droughty import config_cli
+
+    return(config_cli.cli_profile_path)
 
 path = os.path.expanduser('~')
 
@@ -24,7 +28,7 @@ git_path = get_git_root(os.getcwd())
 ## profile vars
 
 @dataclass
-class IdentifyConfigVariables(Common):
+class IdentifyConfigVariables:
     
     path_source: str
     profile_path: str
@@ -32,13 +36,13 @@ class IdentifyConfigVariables(Common):
 
 def assign_droughty_paths():
 
-    if Common.profile_dir != None:
+    if cli_option_path_import() != None:
 
-        IdentifyConfigVariables.profile_path = Common.profile_dir
+        IdentifyConfigVariables.profile_path = cli_option_path_import()
 
         print ("Using option path")
 
-        print (Common.profile_dir)
+        print (cli_option_path_import())
 
 
     else:

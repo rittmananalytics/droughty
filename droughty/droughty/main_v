@@ -1,0 +1,51 @@
+from cgi import test
+import typer
+import click
+
+from dataclasses import dataclass
+
+
+from droughty import lookml_cli 
+from droughty import dbt_test_cli
+from droughty import dbml_cli
+from droughty import cube_cli
+
+app = typer.Typer()
+
+app.add_typer(lookml_cli.app, name="lookml")
+app.add_typer(dbt_test_cli.app, name="dbt")
+app.add_typer(dbml_cli.app, name="dbml")
+app.add_typer(cube_cli.app, name="cube")
+
+##app.add_typer(config_cli.app)
+
+#####
+
+@dataclass
+class Common:
+    profile_dir: str
+
+    @app.callback()
+    def profile_callback(ctx: typer.Context,
+                         profile_dir: str = typer.Option(..., )):
+
+        typer.echo(f"Hello {profile_dir}")
+
+        #test_dir = "/Users/lewischarlesbaker/.droughty/"
+
+        test_dir = (f"{profile_dir}")
+
+        """Common Entry Point"""
+        ctx.obj = Common(profile_dir)
+
+        return (test_dir)
+
+
+cli_profile_path_class = Common()
+
+cli_profile_path = (cli_profile_path_class.profile_dir)
+
+##print (cli_profile_path)
+
+if __name__ == "__main__":
+    app()

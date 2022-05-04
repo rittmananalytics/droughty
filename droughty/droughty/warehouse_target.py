@@ -10,606 +10,599 @@ from jinjasql import JinjaSql
 from six import string_types
 from copy import deepcopy
 
-from droughty import config
+from droughty.config import ProjectVariables
 
-environment_project = config.environment_project
-lookml_config = config.lookml_config
-warehouse_name = config.warehouse_name
+def warehouse_schema():
 
-for key,value in environment_project.items():
+    if ProjectVariables.warehouse == 'big_query':
+        
+        warehouse_schema =   """
+        with source as (
+            select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+            )
+            select * from source
+        """.format(ProjectVariables.project,ProjectVariables.schema)
+
+    elif ProjectVariables.warehouse_name == 'snowflake':
+
+        warehouse_schema =   """
+        with source as (
+            select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+            )
+            select * from source
+
+            where table_schema = '{1}'
+        """.format(ProjectVariables.database,ProjectVariables.schema)
+
+    return warehouse_schema
+
+def dbml_schema():
+
+    if ProjectVariables.warehouse == 'big_query':   
+
+        dbml_query = """
+        with source as (
+        select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+        ),
+            pks as (
+            select 
+            table_name as pk_table_name,
+            column_name as pk_column_name,
+            trim(column_name, "_pk") as pk_sk,
+            from source
+            where column_name like '%pk%'
+            ),
+            fks as (
+            select
+            table_name as fk_table_name,
+            column_name as fk_column_name,
+            trim(column_name, "_fk") as fk_sk,
+            from source
+            where column_name like '%fk%'
+            ),
+            references as (
+            select * from pks
+            inner join fks on pks.pk_sk = fks.fk_sk
+            )
+            select 
+            
+            *except (pk_column_name,pk_table_name),
+            case when pk_column_name is null
+                then 'not_available'
+            else pk_column_name
+            end as pk_column_name,
+            case when pk_table_name is null
+                then 'not_available'
+            else pk_table_name
+            end as pk_table_name                   
+            from source
+            left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
+        
+        """.format(ProjectVariables.project_name,ProjectVariables.schema_name)
+
+        return dbml_query
+
+    if ProjectVariables.warehouse_name == 'snowflake':   
+
+        dbml_query = """
+        with source as (
+        select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+        where table_schema = '{1}'
+
+        ),
+            pks as (
+            select 
+            table_name as pk_table_name,
+            column_name as pk_column_name,
+            rtrim(column_name, '_pk') as pk_sk
+            from source
+            where column_name like '%PK%'
+            ),
+            fks as (
+            select
+            table_name as fk_table_name,
+            column_name as fk_column_name,
+            rtrim(column_name, '_fk') as fk_sk
+            from source
+            where column_name like '%FK%'
+            ),
+            references as (
+            select * from pks
+            inner join fks on pks.pk_sk = fks.fk_sk
+            )
+            select 
+            
+
+            source.data_type,
+            source.table_name,
+            source.column_name,
+            source.comment,
+
+            case when pk_column_name is null
+                then 'not_available'
+            else pk_column_name
+            end as pk_column_name,
+            case when pk_table_name is null
+                then 'not_available'
+            else pk_table_name
+            end as pk_table_name                   
+            from source
+            left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
+        
+        """.format(database,schema_name)
+
+    lookml_explore_schema = '''
+    with source as (
+    select 
+    *
+    from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+    where table_name in 
+    {{ table_names |inclause }}
+    ),
+    {% for value in table_names_unqouted  %}
+    explore_table_row_count_{{ value | sqlsafe }} as (
+    select 
+    '{{ value | sqlsafe }}' as table_name,
+    count(*) as row_count
+    from `{{project_id}}.{{schema_id}}.{{ value | sqlsafe }}`
+    group by 1
+    ),
+    {% endfor %}
+    merge_counts as (
+    {% for value in table_names_unqouted  %}
+    select * from explore_table_row_count_{{ value | sqlsafe }}
+    {% if not loop.last %}union all{% endif %}
+    {% endfor %}
+    ),
+    pks as (
+        select 
+        table_name as pk_table_name,
+        column_name as pk_column_name,
+        trim(column_name, "_pk") as pk_sk,
+        from source
+        where column_name like '%%pk%%'
+    ),
+    fks as (
+        select
+        table_name as fk_table_name,
+        column_name as fk_column_name,
+        trim(column_name, "_fk") as fk_sk,
+        from source
+        where column_name like '%%fk%%'
+    )
+    select 
+    {{ table_names [0] }} as parent_table_name,
+    pk_table_name,
+    pk_column_name,
+    fk_table_name,
+    fk_column_name,
+    merge_counts_pk.row_count as pk_row_count,
+    merge_counts_fk.row_count as fk_row_count,
+    merge_counts_parent.row_count as parent_row_count,
+    case when merge_counts_pk.row_count > merge_counts_fk.row_count
+            then 'many_to_one'   
+        when merge_counts_pk.row_count < merge_counts_fk.row_count
+            then 'one_to_many'
+        when merge_counts_pk.row_count = merge_counts_fk.row_count
+            then 'one_to_one'
+    end as true_relationship,
+    case when merge_counts_pk.row_count < merge_counts_parent.row_count
+        and merge_counts_fk.row_count < merge_counts_parent.row_count
+        or  merge_counts_pk.row_count != merge_counts_parent.row_count
+        and  merge_counts_fk.row_count != merge_counts_parent.row_count
+            then 'many_to_one'
+        when merge_counts_pk.row_count > merge_counts_parent.row_count
+            then 'one_to_many'
+        when merge_counts_fk.row_count > merge_counts_parent.row_count
+            then 'one_to_many'
+        when merge_counts_pk.row_count = merge_counts_parent.row_count
+        or merge_counts_fk.row_count = merge_counts_parent.row_count
+            then 'one_to_one'                
+            
+    end as looker_relationship,
     
-    if key == 'profile':
+    from pks
+    inner join fks on pks.pk_sk = fks.fk_sk
+    left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
+    order by looker_relationship
+    '''
 
-        if warehouse_name == 'big_query':
+    test_warehouse_schema =   """
+    with source_1 as (
+        select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMNS`
+        ),
+    source_2 as (
+    select * from `{0}.{2}.INFORMATION_SCHEMA.COLUMNS`
+    
+    ),
+    
+    source_3 as (
+    select * from `{0}.{3}.INFORMATION_SCHEMA.COLUMNS`
+    
+    ),
+    
+    unioned as (
+    select * from source_1
+    
+    union all
+    
+    select * from source_2
+    
+    union all
+    
+    select * from source_3
+    
+    )
+    select * from unioned
+    """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
 
-            if value in lookml_config:
+    cube_explore_schema = '''
+    with source as (
+    select 
+    *
+    from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+    ),
+    row_counts as (
+    select
+        table_id as table_name,
+        row_count
+    from `{{project_id}}.{{schema_id}}.__TABLES__`
+    ),
+    pks as (
+        select 
+        table_name as pk_table_name,
+        column_name as pk_column_name,
+        trim(column_name, "_pk") as pk_sk
+        from source
+        where column_name like '%%pk%%'
+    ),
+    fks as (
+        select
+        table_name as fk_table_name,
+        column_name as fk_column_name,
+        trim(column_name, "_fk") as fk_sk
+        from source
+        where column_name like '%%fk%%'
+    )
+    select 
+    pk_table_name,
+    pk_column_name,
+    fk_table_name,
+    fk_column_name,
+    case when merge_counts_pk.row_count > merge_counts_fk.row_count
+            then 'belongsTo'   
+        when merge_counts_pk.row_count < merge_counts_fk.row_count
+            then 'hasMany'
+        when merge_counts_pk.row_count = merge_counts_fk.row_count
+            then 'HasOne'
+    end as true_relationship
+    
+    from pks
+    inner join fks on pks.pk_sk = fks.fk_sk
+    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    '''
 
-        ## global vars 
+    test_warehouse_schema =   """
+    with source_1 as (
+        select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMNS`
+        ),
+    source_2 as (
+    select * from `{0}.{2}.INFORMATION_SCHEMA.COLUMNS`
+    
+    ),
+    
+    source_3 as (
+    select * from `{0}.{3}.INFORMATION_SCHEMA.COLUMNS`
+    
+    ),
+    
+    unioned as (
+    select * from source_1
+    
+    union all
+    
+    select * from source_2
+    
+    union all
+    
+    select * from source_3
+    
+    )
+    select * from unioned
+    """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
+#### snow flake
 
-                project_name =  config.project_name
-                schema_name =  config.schema_name
-                test_schemas = config.test_schemas
-                
-                warehouse_schema =   """
-                with source as (
-                    select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-                    )
-                    select * from source
-                """.format(project_name,schema_name)
 
-                dbml_reference_dict = """
-                with source as (
-                select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-                ),
-                    pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    trim(column_name, "_pk") as pk_sk,
-                    from source
-                    where column_name like '%pk%'
-                    ),
-                    fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    trim(column_name, "_fk") as fk_sk,
-                    from source
-                    where column_name like '%fk%'
-                    ),
-                    references as (
-                    select * from pks
-                    inner join fks on pks.pk_sk = fks.fk_sk
-                    )
-                    select 
-                    
-                    *except (pk_column_name,pk_table_name),
-                    case when pk_column_name is null
-                        then 'not_available'
-                    else pk_column_name
-                    end as pk_column_name,
-                    case when pk_table_name is null
-                        then 'not_available'
-                    else pk_table_name
-                    end as pk_table_name                   
-                    from source
-                    left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
-                
-                """.format(project_name,schema_name)
 
-                lookml_explore_schema = '''
-                with source as (
-                select 
-                *
-                from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-                where table_name in 
-                {{ table_names |inclause }}
-                ),
-                {% for value in table_names_unqouted  %}
-                explore_table_row_count_{{ value | sqlsafe }} as (
-                select 
-                '{{ value | sqlsafe }}' as table_name,
-                count(*) as row_count
-                from `{{project_id}}.{{schema_id}}.{{ value | sqlsafe }}`
-                group by 1
-                ),
-                {% endfor %}
-                merge_counts as (
-                {% for value in table_names_unqouted  %}
-                select * from explore_table_row_count_{{ value | sqlsafe }}
-                {% if not loop.last %}union all{% endif %}
-                {% endfor %}
-                ),
-                pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    trim(column_name, "_pk") as pk_sk,
-                    from source
-                    where column_name like '%%pk%%'
-                ),
-                fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    trim(column_name, "_fk") as fk_sk,
-                    from source
-                    where column_name like '%%fk%%'
-                )
-                select 
-                {{ table_names [0] }} as parent_table_name,
-                pk_table_name,
-                pk_column_name,
-                fk_table_name,
-                fk_column_name,
-                merge_counts_pk.row_count as pk_row_count,
-                merge_counts_fk.row_count as fk_row_count,
-                merge_counts_parent.row_count as parent_row_count,
-                case when merge_counts_pk.row_count > merge_counts_fk.row_count
-                        then 'many_to_one'   
-                    when merge_counts_pk.row_count < merge_counts_fk.row_count
-                        then 'one_to_many'
-                    when merge_counts_pk.row_count = merge_counts_fk.row_count
-                        then 'one_to_one'
-                end as true_relationship,
-                case when merge_counts_pk.row_count < merge_counts_parent.row_count
-                    and merge_counts_fk.row_count < merge_counts_parent.row_count
-                    or  merge_counts_pk.row_count != merge_counts_parent.row_count
-                    and  merge_counts_fk.row_count != merge_counts_parent.row_count
-                        then 'many_to_one'
-                    when merge_counts_pk.row_count > merge_counts_parent.row_count
-                        then 'one_to_many'
-                    when merge_counts_fk.row_count > merge_counts_parent.row_count
-                        then 'one_to_many'
-                    when merge_counts_pk.row_count = merge_counts_parent.row_count
-                    or merge_counts_fk.row_count = merge_counts_parent.row_count
-                        then 'one_to_one'                
-                        
-                end as looker_relationship,
-                
-                from pks
-                inner join fks on pks.pk_sk = fks.fk_sk
-                left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-                left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-                left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
-                order by looker_relationship
-                '''
-
-                test_warehouse_schema =   """
-                with source_1 as (
-                    select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMNS`
-                    ),
-                source_2 as (
-                select * from `{0}.{2}.INFORMATION_SCHEMA.COLUMNS`
-                
-                ),
-                
-                source_3 as (
-                select * from `{0}.{3}.INFORMATION_SCHEMA.COLUMNS`
-                
-                ),
-                
-                unioned as (
-                select * from source_1
-                
-                union all
-                
-                select * from source_2
-                
-                union all
-                
-                select * from source_3
-                
-                )
-                select * from unioned
-                """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
-
-                cube_explore_schema = '''
-                with source as (
-                select 
-                *
-                from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-                ),
-                row_counts as (
-                select
-                    table_id as table_name,
-                    row_count
-                from `{{project_id}}.{{schema_id}}.__TABLES__`
-                ),
-                pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    trim(column_name, "_pk") as pk_sk
-                    from source
-                    where column_name like '%%pk%%'
-                ),
-                fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    trim(column_name, "_fk") as fk_sk
-                    from source
-                    where column_name like '%%fk%%'
-                )
-                select 
-                pk_table_name,
-                pk_column_name,
-                fk_table_name,
-                fk_column_name,
-                case when merge_counts_pk.row_count > merge_counts_fk.row_count
-                        then 'belongsTo'   
-                    when merge_counts_pk.row_count < merge_counts_fk.row_count
-                        then 'hasMany'
-                    when merge_counts_pk.row_count = merge_counts_fk.row_count
-                        then 'HasOne'
-                end as true_relationship
-                
-                from pks
-                inner join fks on pks.pk_sk = fks.fk_sk
-                left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-                left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-                '''
-
-                test_warehouse_schema =   """
-                with source_1 as (
-                    select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMNS`
-                    ),
-                source_2 as (
-                select * from `{0}.{2}.INFORMATION_SCHEMA.COLUMNS`
-                
-                ),
-                
-                source_3 as (
-                select * from `{0}.{3}.INFORMATION_SCHEMA.COLUMNS`
-                
-                ),
-                
-                unioned as (
-                select * from source_1
-                
-                union all
-                
-                select * from source_2
-                
-                union all
-                
-                select * from source_3
-                
-                )
-                select * from unioned
-                """.format(project_name,test_schemas[0],test_schemas[1],test_schemas[2])
-
-        elif warehouse_name == 'snowflake':
+    lookml_explore_schema = '''
+    with source as (
+    select 
+    *
+    from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
+    where table_name in 
+    {{ table_names |inclause }}
+    
+    ),
+    
+    {% for value in table_names_unqouted  %}
+    explore_table_row_count_{{ value | sqlsafe }} as (
+    select 
+    '{{ value | sqlsafe }}' as table_name,
+    count(*) as row_count
+    from "{{database}}"."{{schema_id}}"."{{ value | sqlsafe }}"
+    group by 1
+    
+    ),
+    
+    {% endfor %}
+    merge_counts as (
+    {% for value in table_names_unqouted  %}
+    select * from explore_table_row_count_{{ value | sqlsafe }}
+    {% if not loop.last %}union all{% endif %}
+    {% endfor %}
+    
+    ),
+    
+    pks as (
+        select 
+        table_name as pk_table_name,
+        column_name as pk_column_name,
+        rtrim(column_name, '_PK') as pk_sk
+        from source
+        where column_name ilike '%%pk%%'
+    ),
+    fks as (
+        select
+        table_name as fk_table_name,
+        column_name as fk_column_name,
+        rtrim(column_name, '_FK') as fk_sk
+        from source
+        where column_name ilike '%%fk%%'
+    ),
+    
+    joined as (
+    select 
+    {{ table_names [0] }} as parent_table_name,
+    pk_table_name,
+    pk_column_name,
+    fk_table_name,
+    fk_column_name,
+    merge_counts_pk.row_count as pk_row_count,
+    merge_counts_fk.row_count as fk_row_count,
+    merge_counts_parent.row_count as parent_row_count,
+    case when merge_counts_pk.row_count > merge_counts_fk.row_count
+            then 'many_to_one'   
+        when merge_counts_pk.row_count < merge_counts_fk.row_count
+            then 'one_to_many'
+        when merge_counts_pk.row_count = merge_counts_fk.row_count
+            then 'one_to_one'
+    end as true_relationship,
+    case when merge_counts_pk.row_count < merge_counts_parent.row_count
+        and merge_counts_fk.row_count < merge_counts_parent.row_count
+        or  merge_counts_pk.row_count != merge_counts_parent.row_count
+        and  merge_counts_fk.row_count != merge_counts_parent.row_count
+            then 'many_to_one'
+        when merge_counts_pk.row_count > merge_counts_parent.row_count
+            then 'one_to_many'
+        when merge_counts_fk.row_count > merge_counts_parent.row_count
+            then 'one_to_many'
+        when merge_counts_pk.row_count = merge_counts_parent.row_count
+        or merge_counts_fk.row_count = merge_counts_parent.row_count
+            then 'one_to_one'                
             
-            if value in lookml_config:
+    end as looker_relationship
+        
+        
+    
+    
+    from pks
+    join fks on pks.pk_sk = fks.fk_sk
+    left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
+    order by looker_relationship
+    
+    )
+    
+    select * from joined
+    
+    '''
 
-                schema_name =  config.schema_name
-                test_schemas = config.test_schemas
-                database = config.snowflake_database
+    cube_explore_schema = '''
+    with source as (
+    select 
+    *
+    from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+    where table_schema = '{1}'
+    ),
+    row_counts as (
+    select
+        table_name,
+        sum(row_count) as row_count
+    from "{0}"."INFORMATION_SCHEMA"."TABLES"
+    where table_schema = '{1}'
+    group by 1
+    ),
+    pks as (
+        select 
+        table_name as pk_table_name,
+        column_name as pk_column_name,
+        rtrim(column_name, '_PK') as pk_sk
+        from source
+        where column_name ilike '%pk%'
+    ),
+    fks as (
+        select
+        table_name as fk_table_name,
+        column_name as fk_column_name,
+        rtrim(column_name, '_FK') as fk_sk
+        from source
+        where column_name ilike '%fk%'
+    )
+    select 
+    pk_table_name,
+    pk_column_name,
+    fk_table_name,
+    fk_column_name,
+    case when merge_counts_pk.row_count > merge_counts_fk.row_count
+            then 'belongsTo'   
+        when merge_counts_pk.row_count < merge_counts_fk.row_count
+            then 'hasMany'
+        when merge_counts_pk.row_count = merge_counts_fk.row_count
+            then 'HasOne'
+    end as true_relationship
+    
+    from pks
+    left join fks on pks.pk_sk = fks.fk_sk
+    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    '''.format(database,schema_name)
 
-                warehouse_schema =   """
-                with source as (
-                    select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
-                    )
-                    select * from source
+    test_warehouse_schema =   """
+    with source_1 as (
+        select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
 
-                    where table_schema = '{1}'
-                """.format(database,schema_name)
+        where table_schema = '{1}'
 
-                dbml_reference_dict = """
-                with source as (
-                select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
-                where table_schema = '{1}'
+        ),
 
-                ),
-                    pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    rtrim(column_name, '_pk') as pk_sk
-                    from source
-                    where column_name like '%PK%'
-                    ),
-                    fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    rtrim(column_name, '_fk') as fk_sk
-                    from source
-                    where column_name like '%FK%'
-                    ),
-                    references as (
-                    select * from pks
-                    inner join fks on pks.pk_sk = fks.fk_sk
-                    )
-                    select 
-                    
+    source_2 as (
+        select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
 
-                    source.data_type,
-                    source.table_name,
-                    source.column_name,
-                    source.comment,
+        where table_schema = '{2}'
 
-                    case when pk_column_name is null
-                        then 'not_available'
-                    else pk_column_name
-                    end as pk_column_name,
-                    case when pk_table_name is null
-                        then 'not_available'
-                    else pk_table_name
-                    end as pk_table_name                   
-                    from source
-                    left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
-                
-                """.format(database,schema_name)
 
-                lookml_explore_schema = '''
-                with source as (
-                select 
-                *
-                from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-                where table_name in 
-                {{ table_names |inclause }}
-                
-                ),
-                
-                {% for value in table_names_unqouted  %}
-                explore_table_row_count_{{ value | sqlsafe }} as (
-                select 
-                '{{ value | sqlsafe }}' as table_name,
-                count(*) as row_count
-                from "{{database}}"."{{schema_id}}"."{{ value | sqlsafe }}"
-                group by 1
-                
-                ),
-                
-                {% endfor %}
-                merge_counts as (
-                {% for value in table_names_unqouted  %}
-                select * from explore_table_row_count_{{ value | sqlsafe }}
-                {% if not loop.last %}union all{% endif %}
-                {% endfor %}
-                
-                ),
-                
-                pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    rtrim(column_name, '_PK') as pk_sk
-                    from source
-                    where column_name ilike '%%pk%%'
-                ),
-                fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    rtrim(column_name, '_FK') as fk_sk
-                    from source
-                    where column_name ilike '%%fk%%'
-                ),
-                
-                joined as (
-                select 
-                {{ table_names [0] }} as parent_table_name,
-                pk_table_name,
-                pk_column_name,
-                fk_table_name,
-                fk_column_name,
-                merge_counts_pk.row_count as pk_row_count,
-                merge_counts_fk.row_count as fk_row_count,
-                merge_counts_parent.row_count as parent_row_count,
-                case when merge_counts_pk.row_count > merge_counts_fk.row_count
-                        then 'many_to_one'   
-                    when merge_counts_pk.row_count < merge_counts_fk.row_count
-                        then 'one_to_many'
-                    when merge_counts_pk.row_count = merge_counts_fk.row_count
-                        then 'one_to_one'
-                end as true_relationship,
-                case when merge_counts_pk.row_count < merge_counts_parent.row_count
-                    and merge_counts_fk.row_count < merge_counts_parent.row_count
-                    or  merge_counts_pk.row_count != merge_counts_parent.row_count
-                    and  merge_counts_fk.row_count != merge_counts_parent.row_count
-                        then 'many_to_one'
-                    when merge_counts_pk.row_count > merge_counts_parent.row_count
-                        then 'one_to_many'
-                    when merge_counts_fk.row_count > merge_counts_parent.row_count
-                        then 'one_to_many'
-                    when merge_counts_pk.row_count = merge_counts_parent.row_count
-                    or merge_counts_fk.row_count = merge_counts_parent.row_count
-                        then 'one_to_one'                
-                        
-                end as looker_relationship
-                    
-                    
-                
-                
-                from pks
-                join fks on pks.pk_sk = fks.fk_sk
-                left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-                left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-                left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
-                order by looker_relationship
-                
-                )
-                
-                select * from joined
-                
-                '''
+    ),
+    
+    source_3 as (
+    select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
 
-                cube_explore_schema = '''
-                with source as (
-                select 
-                *
-                from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
-                where table_schema = '{1}'
-                ),
-                row_counts as (
-                select
-                    table_name,
-                    sum(row_count) as row_count
-                from "{0}"."INFORMATION_SCHEMA"."TABLES"
-                where table_schema = '{1}'
-                group by 1
-                ),
-                pks as (
-                    select 
-                    table_name as pk_table_name,
-                    column_name as pk_column_name,
-                    rtrim(column_name, '_PK') as pk_sk
-                    from source
-                    where column_name ilike '%pk%'
-                ),
-                fks as (
-                    select
-                    table_name as fk_table_name,
-                    column_name as fk_column_name,
-                    rtrim(column_name, '_FK') as fk_sk
-                    from source
-                    where column_name ilike '%fk%'
-                )
-                select 
-                pk_table_name,
-                pk_column_name,
-                fk_table_name,
-                fk_column_name,
-                case when merge_counts_pk.row_count > merge_counts_fk.row_count
-                        then 'belongsTo'   
-                    when merge_counts_pk.row_count < merge_counts_fk.row_count
-                        then 'hasMany'
-                    when merge_counts_pk.row_count = merge_counts_fk.row_count
-                        then 'HasOne'
-                end as true_relationship
-                
-                from pks
-                left join fks on pks.pk_sk = fks.fk_sk
-                left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-                left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-                '''.format(database,schema_name)
-
-                test_warehouse_schema =   """
-                with source_1 as (
-                    select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
-
-                    where table_schema = '{1}'
-
-                    ),
-
-                source_2 as (
-                    select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
-
-                    where table_schema = '{2}'
-
-            
-                ),
-                
-                source_3 as (
-                select * from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
-
-                    where table_schema = '{3}'
-                
-                ),
-                
-                unioned as (
-                select * from source_1
-                
-                union all
-                
-                select * from source_2
-                
-                union all
-                
-                select * from source_3
-                
-                )
-                select * from unioned
-                """.format(database,test_schemas[0],test_schemas[1],test_schemas[2])
+        where table_schema = '{3}'
+    
+    ),
+    
+    unioned as (
+    select * from source_1
+    
+    union all
+    
+    select * from source_2
+    
+    union all
+    
+    select * from source_3
+    
+    )
+    select * from unioned
+    """.format(database,test_schemas[0],test_schemas[1],test_schemas[2])
 
 
 
-explores = (environment_project.get("explores"))
+##explores = (environment_project.get("explores"))
 
-dimensional_inference = (environment_project.get("dimensional_inference"))
+##dimensional_inference = (environment_project.get("dimensional_inference"))
 
 ## 
 
-explore_tables = []
+##explore_tables = []
 
-for key,value in explores.items():
+##for key,value in explores.items():
 
-    for key,value in value.items():
+    ##for key,value in value.items():
 
-        explore_tables.append(value)
+        ##explore_tables.append(value)
 
 ## reduce explore_tables from array to single list
         
-single_list_tables = [i[0] for i in explore_tables]
-
-
-flat_list = []
-for sublist in explore_tables:
-    for item in sublist:
-        flat_list.append(item)
-        
-final_list = []
-for x in flat_list:
-    final_list.append("'" + x + "'")
-    
-join_key_list = ['merge_counts_fk','merge_counts_pk']
-
-## add for snowflake
-
-for key,value in environment_project.items():
-
-    if key == 'profile':
-
-        if warehouse_name == 'big_query':
-
-            params = {
-                'project_id': project_name,
-                'schema_id': schema_name, 
-                'table_names': final_list,
-                'table_names_unqouted': flat_list,
-                'pk_fk_join_key_list': join_key_list
-
-            }
-
-        elif warehouse_name == 'snowflake':
-
-            params = {
-                'database': database,
-                'schema_id': schema_name, 
-                'table_names': final_list,
-                'table_names_unqouted': flat_list,
-                'pk_fk_join_key_list': join_key_list
-
-            }
-
-
-j = JinjaSql(param_style='pyformat')
-
-query, bind_params = j.prepare_query(lookml_explore_schema,params)
-
-cube_query, cube_bind_params = j.prepare_query(cube_explore_schema,params)
-
-
-isinstance(value, string_types)
-
-def quote_sql_string(value):
-    '''
-    If `value` is a string type, escapes single quotes in the string
-    and returns the string enclosed in single quotes.
-    '''
-    if isinstance(value, string_types):
-        new_value = str(value)
-        new_value = new_value.replace("'", "''")
-        return "'{}'".format(new_value)
-    return value
-
-def get_sql_from_template(query, bind_params):
-    if not bind_params:
-        return query
-    params = deepcopy(bind_params)
-    for key, val in params.items():
-        params[key] = quote_sql_string(val)
-    return query % params
-
-def apply_sql_template(template, parameters):
-    '''
-    Apply a JinjaSql template (string) substituting parameters (dict) and return
-    the final SQL.
-    '''
-    j = JinjaSql(param_style='pyformat')
-    query, bind_params = j.prepare_query(template, parameters)
-    return get_sql_from_template(query, bind_params)
-
-explore_sql = (query % bind_params)
-
-if warehouse_name =='big_query':
-
-    cube_explore_schema = (query % bind_params)
-
-elif warehouse_name == 'snowflake':
-    
-    cube_explore_schema = cube_explore_schema
+#single_list_tables = [i[0] for i in explore_tables]
+#
+#
+#flat_list = []
+#for sublist in explore_tables:
+#    for item in sublist:
+#        flat_list.append(item)
+#        
+#final_list = []
+#for x in flat_list:
+#    final_list.append("'" + x + "'")
+#    
+#join_key_list = ['merge_counts_fk','merge_counts_pk']
+#
+### add for snowflake
+#
+#for key,value in environment_project.items():
+#
+#    if key == 'profile':
+#
+#        if warehouse_name == 'big_query':
+#
+#            params = {
+#                'project_id': project_name,
+#                'schema_id': schema_name, 
+#                'table_names': final_list,
+#                'table_names_unqouted': flat_list,
+#                'pk_fk_join_key_list': join_key_list
+#
+#            }
+#
+#        elif warehouse_name == 'snowflake':
+#
+#            params = {
+#                'database': database,
+#                'schema_id': schema_name, 
+#                'table_names': final_list,
+#                'table_names_unqouted': flat_list,
+#                'pk_fk_join_key_list': join_key_list
+#
+#            }
+#
+#
+#j = JinjaSql(param_style='pyformat')
+#
+#query, bind_params = j.prepare_query(lookml_explore_schema,params)
+#
+#cube_query, cube_bind_params = j.prepare_query(cube_explore_schema,params)
+#
+#
+#isinstance(value, string_types)
+#
+#def quote_sql_string(value):
+#    '''
+#    If `value` is a string type, escapes single quotes in the string
+#    and returns the string enclosed in single quotes.
+#    '''
+#    if isinstance(value, string_types):
+#        new_value = str(value)
+#        new_value = new_value.replace("'", "''")
+#        return "'{}'".format(new_value)
+#    return value
+#
+#def get_sql_from_template(query, bind_params):
+#    if not bind_params:
+#        return query
+#    params = deepcopy(bind_params)
+#    for key, val in params.items():
+#        params[key] = quote_sql_string(val)
+#    return query % params
+#
+#def apply_sql_template(template, parameters):
+#    '''
+#    Apply a JinjaSql template (string) substituting parameters (dict) and return
+#    the final SQL.
+#    '''
+#    j = JinjaSql(param_style='pyformat')
+#    query, bind_params = j.prepare_query(template, parameters)
+#    return get_sql_from_template(query, bind_params)
+#
+#explore_sql = (query % bind_params)
+#
+#if warehouse_name =='big_query':
+#
+#    cube_explore_schema = (query % bind_params)
+#
+#elif warehouse_name == 'snowflake':
+#    
+#    cube_explore_schema = cube_explore_schema

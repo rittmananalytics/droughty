@@ -1,27 +1,23 @@
 from dataclasses import dataclass
-import typer
+import argparse
 
 import os
 import yaml
-
-app = typer.Typer()
 
 @dataclass
 class Common:
 
     profile_dir: str
 
-@app.callback()
-def profile_callback(ctx: typer.Context,
-                    profile_dir: str = typer.Option(...)
-                    ):
-    
-    print(f"Hello, my name is {profile_dir}")
+Common.profile_dir = "/Users/lewischarlesbaker/.droughty/profile.yaml"
 
-    ctx.obj = Common(profile_dir)
+profile_parser = argparse.ArgumentParser(description='Say hi.')
+profile_parser.add_argument('--profile-dir', type=str, help='the directory of the profile')
 
-    Common.profile_dir = f" {profile_dir}"
-
-   ## Common.profile_dir = "/Users/lewischarlesbaker/.droughty/profile.yaml"
-
-cli_profile_path = profile_callback()
+#def argument_profile(profile_dir):
+#
+#    profile_dir_test = profile_dir
+#
+#    return (profile_dir_test)
+#
+#Common.profile_dir = argument_profile()

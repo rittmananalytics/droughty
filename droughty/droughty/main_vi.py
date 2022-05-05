@@ -17,8 +17,7 @@ import argparse
 def some_function(profile_dir):
     """Some example funcion"""
     msg = profile_dir
-    #print(msg)
-    return (msg)
+    print(msg)
 
 
 

@@ -36,6 +36,8 @@ def assign_droughty_paths():
 
         IdentifyConfigVariables.profile_path = Common.profile_dir
 
+        IdentifyConfigVariables.path_source = 'local_vars'
+
         print ("Using option path")
 
         print (Common.profile_dir)
@@ -44,6 +46,8 @@ def assign_droughty_paths():
     else:
 
         path = os.path.expanduser('~')
+
+        IdentifyConfigVariables.path_source = 'local_vars'
 
         IdentifyConfigVariables.profile_pass = os.path.join(path,".droughty/profile.yaml")       
 

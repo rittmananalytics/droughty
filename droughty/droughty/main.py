@@ -14,24 +14,9 @@ from droughty.config_cli import profile_func #profile_parser#,argument_profile
 
 import argparse
 
-#class ArgParseProfileDir(object):
-#
-#  def __init__(self):
-#    self.path = args.profile_dir
-#
-#
-#  def retain_me(self):
-#    print (self.path)
-
-def some_function(profile_dir):
-    """Some example funcion"""
-    msg = profile_dir
-    #print(msg)
-    return (msg)
-
-
 
 def start():
+
     # All the logic of argparse goes in this function
 
     parser = argparse.ArgumentParser(description='Say hi.')
@@ -45,8 +30,6 @@ def start():
 
     parser_ahoy = sub_parsers.add_parser('lookml', help='lookml is cool sub-command')
     parser_ahoy.add_argument('--bar', type=int, help='bar is useful option')
-
-
 
 if __name__ == '__main__':
     start()

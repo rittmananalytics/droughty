@@ -9,13 +9,10 @@ class Common:
 
     profile_dir: str
 
-#Common.profile_dir = "/Users/lewischarlesbaker/.droughty/profile.yaml"
-
 def some_function_1(profile_dir):
     """Some example funcion"""
     msg = profile_dir
     print(msg + "function test")
-    #Common.profile_dir = profile_dir
 
 def profile_func():
 
@@ -28,15 +25,6 @@ def profile_func():
 
     Common.profile_dir = (args.profile_dir)
 
-    #Common.profile_dir = "/Users/lewischarlesbaker/.droughty/profile.yaml"
  
 profile_func()
 
-
-#def argument_profile(profile_dir):
-#
-#    profile_dir_test = profile_dir
-#
-#    return (profile_dir_test)
-#
-#Common.profile_dir = argument_profile()

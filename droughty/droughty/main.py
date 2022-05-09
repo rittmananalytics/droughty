@@ -21,13 +21,13 @@ def start():
 
     parser = argparse.ArgumentParser(description='Say hi.')
 
-    profile_func()
+    #profile_func()
     base()
 
     lookml = parser.add_subparsers(help='sub-command help')
 
-    parser_ahoy = lookml.add_parser('--lookml', type=str, help='lookml is cool sub-command')
-    parser_ahoy.add_argument('--bar', type=int, help='bar is useful option')
+#    parser_ahoy = lookml.add_parser('--lookml', type=str, help='lookml is cool sub-command')
+#    parser_ahoy.add_argument('--bar', type=int, help='bar is useful option')
 
 if __name__ == '__main__':
     start()

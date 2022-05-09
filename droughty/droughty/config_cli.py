@@ -21,7 +21,7 @@ def profile_func():
 
     args = profile_parser.parse_args()
 
-    some_function_1(args.profile_dir)
+    #some_function_1(args.profile_dir)
 
     Common.profile_dir = (args.profile_dir)
 

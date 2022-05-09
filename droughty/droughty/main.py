@@ -19,12 +19,12 @@ def start():
 
     # All the logic of argparse goes in this function
 
-    parser = argparse.ArgumentParser(description='Say hi.')
+    # parser = argparse.ArgumentParser(description='Say hi.')
 
     #profile_func()
     base()
 
-    lookml = parser.add_subparsers(help='sub-command help')
+    #lookml = parser.add_subparsers(help='sub-command help')
 
 #    parser_ahoy = lookml.add_parser('--lookml', type=str, help='lookml is cool sub-command')
 #    parser_ahoy.add_argument('--bar', type=int, help='bar is useful option')

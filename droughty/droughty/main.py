@@ -21,15 +21,40 @@ def start():
 
     parser = argparse.ArgumentParser(description='Say hi.')
 
-    parser.add_argument('--end', dest='end', default="!",
-                    help='sum the integers (default: find the max)')
     profile_func()
     base()
 
-    sub_parsers = parser.add_subparsers(help='sub-command help')
+    lookml = parser.add_subparsers(help='sub-command help')
 
-    parser_ahoy = sub_parsers.add_parser('lookml', help='lookml is cool sub-command')
+    parser_ahoy = lookml.add_parser('--lookml', type=str, help='lookml is cool sub-command')
     parser_ahoy.add_argument('--bar', type=int, help='bar is useful option')
 
 if __name__ == '__main__':
     start()
+
+
+# import argparse
+# parser = argparse.ArgumentParser()
+# subparser = parser.add_subparsers(dest='command')
+# login = subparser.add_parser('login')
+# register = subparser.add_parser('register')
+# 
+# login.add_argument('--username', type=str, required=True)
+# login.add_argument('--password', type=str, required=True)
+# 
+# register.add_argument('--firstname', type=str, required=True)
+# register.add_argument('--lastname', type=str, required=True)
+# register.add_argument('--username', type=str, required=True)
+# register.add_argument('--email', type=str, required=True)
+# register.add_argument('--password', type=str, required=True)
+# 
+# args = parser.parse_args()
+# 
+# if args.command == 'login':
+#   print('Logging in with username:', args.username,
+#   'and password:', args.password)
+# elif args.command == 'register':
+#   print('Creating username', args.username,
+#   'for new member', args.firstname, args.lastname,
+#   'with email:', args.email,
+#   'and password:', args.password)

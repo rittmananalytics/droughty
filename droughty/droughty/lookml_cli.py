@@ -8,7 +8,7 @@ from droughty.config import ExploresVariables
 
 dimensional_inference_status = ExploresVariables.dimensional_inference
 
-def base():
+def lookml_base():
 
     print("Generating lookml base layer")
 
@@ -20,7 +20,7 @@ def base():
 
         print("lookml base layer generated")
 
-def explore():
+def lookml_explore():
 
         if dimensional_inference_status == "enabled":
 
@@ -38,7 +38,7 @@ def explore():
 
 
 
-def measures():
+def lookml_measures():
 
     print("Generating measure layer")
 

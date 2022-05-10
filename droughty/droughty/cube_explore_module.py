@@ -15,7 +15,7 @@ import git
 
 import droughty.cube_parser.cube as cube
 
-from droughty.base_dict import base_dict
+from droughty.cube_base_dict import cube_base_dict
 from droughty.cube_explore_dict import cube_explore_dict
 from droughty.config import ProjectVariables
 
@@ -117,7 +117,7 @@ def get_all_values(nested_dictionary,explore_dictionary):
                 yield (closing_syntax)
 
         
-nested_dictionary = base_dict
+nested_dictionary = cube_base_dict
 explore_dictionary = cube_explore_dict
 
 get_all_values(nested_dictionary,explore_dictionary)

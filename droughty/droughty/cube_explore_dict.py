@@ -20,13 +20,12 @@ def get_cube_explore_dict():
 
     pd.options.mode.chained_assignment = None
 
-    credentials = ProjectVariables.service_account
-
-    project = ProjectVariables.project
-
     explore_sql = cube_explore_schema
 
     if ProjectVariables.warehouse == 'big_query':
+
+        credentials = ProjectVariables.service_account
+        project = ProjectVariables.project
 
         explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
 
@@ -38,52 +37,45 @@ def get_cube_explore_dict():
 
         CubeExploreDictVariables.distinct_duplicate_explore_rows = duplicate_explore_rows
 
-        df4 = {n: grp.loc[n].to_dict('index')
-            
-        for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']).groupby(level='pk_table_name')}
+    elif ProjectVariables.warehouse == 'snowflake': 
 
-        d2 = df4
+        url = URL(
 
-        return(d2)
+            account = ProjectVariables.account,
+            user =  ProjectVariables.user,
+            schema =  ProjectVariables.schema,
+            database =  ProjectVariables.database,
+            password =  ProjectVariables.password,
+            warehouse = ProjectVariables.snowflake_warehouse,
+            role =  ProjectVariables.role
+
+        )
+
+        engine = create_engine(url)
+
+        connection = engine.connect()
+
+        explore_df = pd.read_sql(explore_sql, connection)
+
+        explore_df.drop_duplicates(keep=False, inplace=True)
+
+        pk_table_name_df = explore_df[['pk_table_name']]
+
+        duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
+
+        CubeExploreDictVariables.distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
+
+        connection.close()
+        engine.dispose()
+
+    df4 = {n: grp.loc[n].to_dict('index')
+        
+    for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']).groupby(level='pk_table_name')}
+
+    d2 = df4
+
+    return(d2)
 
 cube_explore_dict = get_cube_explore_dict()
 
 
-#elif warehouse_name == 'snowflake': 
-#
-#    url = URL(
-#
-#        account = config.snowflake_account,
-#        user =  config.snowflake_user,
-#        schema =  config.snowflake_schema,
-#        database =  config.snowflake_database,
-#        password =  config.snowflake_password,
-#        warehouse= config.snowflake_warehouse,
-#        role =  config.snowflake_role
-#
-#    )
-#
-#    engine = create_engine(url)
-#
-#    connection = engine.connect()
-#
-#    explore_df = pd.read_sql(explore_sql, connection)
-#
-#    explore_df.drop_duplicates(keep=False, inplace=True)
-#
-#    explore_df_2 = explore_df[['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']]
-#
-#    pk_table_name_df = explore_df[['pk_table_name']]
-#
-#    duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
-#
-#    distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
-#
-#    df4 = {n: grp.loc[n].to_dict('index')
-#        
-#    for n, grp in explore_df.set_index(['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']).groupby(level='pk_table_name')}
-#
-#    d2 = df4
-#
-#    connection.close()
-#    engine.dispose()

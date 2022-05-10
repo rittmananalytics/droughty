@@ -18,13 +18,14 @@ def get_dbt_dict():
 
     pd.options.mode.chained_assignment = None
 
-    credentials = ProjectVariables.service_account
     warehouse = ProjectVariables.warehouse
-    project = ProjectVariables.project
 
     sql = warehouse_target.test_warehouse_schema
 
     if warehouse == 'big_query':
+
+        credentials = ProjectVariables.service_account
+        project = ProjectVariables.project
 
         df = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
@@ -38,42 +39,42 @@ def get_dbt_dict():
         df1['data_type'] = df1['data_type'].str.replace('STRING','string')
         df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
 
-        return (df1)
+    elif warehouse == 'snowflake': 
 
-# elif warehouse_name == 'snowflake': 
-# 
-#     url = URL(
-# 
-#         account = config.snowflake_account,
-#         user =  config.snowflake_user,
-#         schema =  config.snowflake_schema,
-#         database =  config.snowflake_database,
-#         password =  config.snowflake_password,
-#         warehouse= config.snowflake_warehouse,
-#         role =  config.snowflake_role
-# 
-#     )
-# 
-#     engine = create_engine(url)
-# 
-#     connection = engine.connect()
-# 
-#     query = warehouse_target.test_warehouse_schema
-# 
-#     df = pd.read_sql(query, connection)
-#     
-#     df['description'] = df['comment'].fillna('not available')
-# 
-#     df['column_name'] = df['column_name'].str.lower()
-#     df['table_name'] = df['table_name'].str.lower()
-#     df['description'] = df['description'].str.lower()
-#     
-#     df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
-# 
-#     df1 = df1[['table_name','column_name','data_type','description']]
-# 
-#     connection.close()
-#     engine.dispose()
+        url = URL(
+
+            account = ProjectVariables.account,
+            user =  ProjectVariables.user,
+            schema =  ProjectVariables.schema,
+            database =  ProjectVariables.database,
+            password =  ProjectVariables.password,
+            warehouse= ProjectVariables.snowflake_warehouse,
+            role =  ProjectVariables.role
+
+        )
+
+        engine = create_engine(url)
+
+        connection = engine.connect()
+
+        query = warehouse_target.test_warehouse_schema
+
+        df = pd.read_sql(query, connection)
+
+        df['description'] = df['comment'].fillna('not available')
+
+        df['column_name'] = df['column_name'].str.lower()
+        df['table_name'] = df['table_name'].str.lower()
+        df['description'] = df['description'].str.lower()
+
+        df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
+
+        df1 = df1[['table_name','column_name','data_type','description']]
+
+        connection.close()
+        engine.dispose()
+
+    return (df1)
 
 def recur_dictify(frame):
     if len(frame.columns) == 1:

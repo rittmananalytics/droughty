@@ -1,21 +1,16 @@
-"""Console script for droughty."""
-import time
-from tqdm import tqdm
+"""Console script for droughty lookml modules."""
 
 from droughty.lookml_module import output
-#from droughty.lookml_explore_module import explore_output
-#from droughty.lookml_measure_module import measure_output
+from droughty.lookml_explore_module import explore_output
+from droughty.lookml_measure_module import measure_output
 
 from droughty import warehouse_target
 
-##dimensional_inference_status = warehouse_target.dimensional_inference
-
-
-
+dimensional_inference_status = warehouse_target.dimensional_inference
 
 def base():
 
-    print(f"Generating lookml base layer")
+    print("Generating lookml base layer")
 
     try:
 
@@ -25,55 +20,37 @@ def base():
 
         print("lookml base layer generated")
 
+def explore():
 
-#@app.command()
-#
-#def explore():
-#
-#    typer.echo(f"Generating explore layer")
-#
-#    total = 0
-#    with typer.progressbar(range(100), label = "Processing") as progress:
-#        for value in progress:
-#            # Fake processing time
-#            time.sleep(0.01)
-#            total += 1
-#
-#
-#        if dimensional_inference_status == "enabled":
-#
-#            return explore_output()
-#
-#            typer.secho("lookml explore layer generated",fg=typer.colors.GREEN)
-#
-#
-#        else: 
-#
-#            raise Exception("Please enable dimensional inference")
-#
-#
-#@app.command()
-#
-#def measures():
-#
-#    typer.echo(f"Generating measure layer")
-#
-#    total = 0
-#    with typer.progressbar(range(100), label = "Processing") as progress:
-#        for value in progress:
-#            # Fake processing time
-#            time.sleep(0.01)
-#            total += 1
-#    try:
-#
-#        return measure_output()
-#
-#    finally:
-#
-#        typer.secho("lookml measure layer generated",fg=typer.colors.GREEN)
-#
-#@app.command()
-#
+        if dimensional_inference_status == "enabled":
+
+            try:
+
+                return explore_output()
+            
+            finally:
+
+                print("lookml explore layer generated")
+
+        else: 
+
+            raise Exception("Please enable dimensional inference")
+
+
+
+def measures():
+
+    print("Generating measure layer")
+
+    try:
+
+        return measure_output()
+
+    finally:
+
+        print("lookml measure layer generated")
+
+
 #def full_refresh():
 #
 #    for func in [base, explore, measures]:

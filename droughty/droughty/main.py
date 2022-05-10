@@ -8,8 +8,8 @@ from droughty.cube_cli import (
     explore,
     measures
 )
-from droughty.dbt_test_cli import schema_output
-from droughty.dbml_cli import dbml_output
+from droughty.dbt_test_cli import tests
+from droughty.dbml_cli import erd
 from droughty.config_cli import Common
 
 def start():
@@ -28,11 +28,11 @@ def start():
 
     elif Common.args_command == 'dbml':
 
-        dbml_output()
+        erd()
 
     elif Common.args_command == 'dbt':
 
-        schema_output()
+        tests()
 
     else:
 

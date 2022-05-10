@@ -2,7 +2,7 @@ from droughty.lookml_cli import base
 #from droughty import dbt_test_cli
 #from droughty import dbml_cli
 #from droughty import cube_cli
-from droughty.config_cli import profile_func #profile_parser#,argument_profile
+from droughty.config_cli import Common #profile_parser#,argument_profile
 
 ##app.add_typer(dbt_test_cli.app, name="dbt")
 ##app.add_typer(dbml_cli.app, name="dbml")
@@ -22,7 +22,16 @@ def start():
     # parser = argparse.ArgumentParser(description='Say hi.')
 
     #profile_func()
-    base()
+
+    if Common.args_command == 'lookml':
+
+        base()
+
+        print('I have a command')
+
+    else:
+
+        print('I have no command')
 
     #lookml = parser.add_subparsers(help='sub-command help')
 

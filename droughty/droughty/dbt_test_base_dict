@@ -50,40 +50,40 @@ if warehouse_name == 'big_query':
     df1['data_type'] = df1['data_type'].str.replace('STRING','string')
     df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
 
-elif warehouse_name == 'snowflake': 
-
-    url = URL(
-
-        account = config.snowflake_account,
-        user =  config.snowflake_user,
-        schema =  config.snowflake_schema,
-        database =  config.snowflake_database,
-        password =  config.snowflake_password,
-        warehouse= config.snowflake_warehouse,
-        role =  config.snowflake_role
-
-    )
-
-    engine = create_engine(url)
-
-    connection = engine.connect()
-
-    query = warehouse_target.test_warehouse_schema
-
-    df = pd.read_sql(query, connection)
-    
-    df['description'] = df['comment'].fillna('not available')
-
-    df['column_name'] = df['column_name'].str.lower()
-    df['table_name'] = df['table_name'].str.lower()
-    df['description'] = df['description'].str.lower()
-    
-    df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
-
-    df1 = df1[['table_name','column_name','data_type','description']]
-
-    connection.close()
-    engine.dispose()
+# elif warehouse_name == 'snowflake': 
+# 
+#     url = URL(
+# 
+#         account = config.snowflake_account,
+#         user =  config.snowflake_user,
+#         schema =  config.snowflake_schema,
+#         database =  config.snowflake_database,
+#         password =  config.snowflake_password,
+#         warehouse= config.snowflake_warehouse,
+#         role =  config.snowflake_role
+# 
+#     )
+# 
+#     engine = create_engine(url)
+# 
+#     connection = engine.connect()
+# 
+#     query = warehouse_target.test_warehouse_schema
+# 
+#     df = pd.read_sql(query, connection)
+#     
+#     df['description'] = df['comment'].fillna('not available')
+# 
+#     df['column_name'] = df['column_name'].str.lower()
+#     df['table_name'] = df['table_name'].str.lower()
+#     df['description'] = df['description'].str.lower()
+#     
+#     df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
+# 
+#     df1 = df1[['table_name','column_name','data_type','description']]
+# 
+#     connection.close()
+#     engine.dispose()
 
 def recur_dictify(frame):
     if len(frame.columns) == 1:

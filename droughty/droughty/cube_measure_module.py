@@ -16,8 +16,8 @@ import git
 
 import droughty.cube_parser.cube as cube
 
-from droughty.cube_base_dict import d1
-from droughty.config import schema_name
+from droughty.base_dict import base_dict
+from droughty.config import ProjectVariables
 
 def get_all_values(nested_dictionary):
 
@@ -27,7 +27,7 @@ def get_all_values(nested_dictionary):
 
 
             "cube": key+"_extended",
-            "sql": "select * from"+" "+schema_name+"."+key,
+            "sql": "select * from"+" "+ProjectVariables.schema+"."+key,
             "extends": key+",",
             "measures": '{'
  
@@ -81,7 +81,7 @@ def get_all_values(nested_dictionary):
         yield (closing_syntax)
                 
 
-nested_dictionary = d1
+nested_dictionary = base_dict
 
 get_all_values(nested_dictionary)
 

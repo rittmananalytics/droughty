@@ -4,9 +4,9 @@ from droughty.lookml_module import output
 from droughty.lookml_explore_module import explore_output
 from droughty.lookml_measure_module import measure_output
 
-from droughty import warehouse_target
+from droughty.config import ExploresVariables
 
-dimensional_inference_status = warehouse_target.dimensional_inference
+dimensional_inference_status = ExploresVariables.dimensional_inference
 
 def base():
 

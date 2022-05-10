@@ -16,34 +16,42 @@ import yaml
 from droughty.warehouse_target import warehouse_schema
 from droughty.config import ProjectVariables
 
-pd.options.mode.chained_assignment = None
+def get_base_dict():
 
-credentials = ProjectVariables.service_account
+    pd.options.mode.chained_assignment = None
 
-warehouse_name = ProjectVariables.warehouse
-lookml_project = ProjectVariables.project
+    credentials = ProjectVariables.service_account
+    warehouse = ProjectVariables.warehouse
+    project = ProjectVariables.project
 
-sql = warehouse_schema()
+    sql = warehouse_schema()
 
-if warehouse_name == 'big_query':
+    if warehouse == 'big_query':
 
-    # Run a Standard SQL query with the project set explicitly
-    project_id = lookml_project
-    df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
+        # Run a Standard SQL query with the project set explicitly
+        df = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
-    df['description'] = df['description'].fillna('not available')
+        df['description'] = df['description'].fillna('not available')
 
-    df1 = df[['table_name','column_name','data_type','description']]
+        df1 = df[['table_name','column_name','data_type','description']]
 
-    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
-    df1['data_type'] = df1['data_type'].str.replace('DATE','date')
-    df1['data_type'] = df1['data_type'].str.replace('INT64','number')
-    df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
-    df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
-    df1['data_type'] = df1['data_type'].str.replace('STRING','string')
-    df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
+        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
+        df1['data_type'] = df1['data_type'].str.replace('DATE','date')
+        df1['data_type'] = df1['data_type'].str.replace('INT64','number')
+        df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
+        df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
+        df1['data_type'] = df1['data_type'].str.replace('STRING','string')
+        df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
 
-    df2 = df1
+        df2 = {n: grp.loc[n].to_dict('index')
+            
+        for n, grp in df1.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
+
+        d1 = df2
+
+        return(d1)
+
+base_dict = get_base_dict()
 
 #elif warehouse_name == 'snowflake': 
 #
@@ -95,8 +103,3 @@ if warehouse_name == 'big_query':
 #    engine.dispose()
 
     
-df3 = {n: grp.loc[n].to_dict('index')
-    
-for n, grp in df2.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
-
-d1 = df3

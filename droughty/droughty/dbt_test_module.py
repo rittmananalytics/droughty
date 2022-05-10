@@ -10,7 +10,7 @@ import json
 import sys
 from itertools import chain
 
-from droughty.base_dict import base_dict
+from droughty.dbt_test_base_dict import dbt_test_dict
 from droughty.dbt_test_field_base import described_columns_list
 
 import sys
@@ -75,7 +75,7 @@ def get_all_values(nested_dictionary):
 
     return res
 
-nested_dictionary = base_dict
+nested_dictionary = dbt_test_dict
 
 get_all_values(nested_dictionary)
 

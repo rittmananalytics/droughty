@@ -16,7 +16,7 @@ import yaml
 from droughty.warehouse_target import warehouse_schema
 from droughty.config import ProjectVariables
 
-def get_base_dict():
+def get_lookml_base_dict():
 
     pd.options.mode.chained_assignment = None
 
@@ -51,7 +51,7 @@ def get_base_dict():
 
         return(d1)
 
-base_dict = get_base_dict()
+base_dict = get_lookml_base_dict()
 
 #elif warehouse_name == 'snowflake': 
 #

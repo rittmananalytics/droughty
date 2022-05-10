@@ -1,13 +1,13 @@
 """Console script for droughty dbml modules."""
 
 from droughty.dbml_module import dbml_output
-from droughty.dbml_base_dict import d1
+from droughty.dbml_base_dict import dbml_dict
 
 def erd():
 
     print("Generating dbml erd")
 
-    if d1 != False:
+    if dbml_dict != False:
 
         try:
 

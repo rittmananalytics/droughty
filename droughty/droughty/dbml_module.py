@@ -13,15 +13,15 @@ import sys
 import yaml
 import git
 
-from droughty.dbml_base_dict import d1
-from droughty.config import environment_profile
+from droughty.dbml_base_dict import dbml_dict
+from droughty.config import ProjectVariables
 
 try: 
 
     def get_all_values(nested_dictionary):
 
         
-        project = 'project'+' '+environment_profile
+        project = 'project'+' '+ProjectVariables.environment_profile
 
         yield (project)
 
@@ -77,7 +77,7 @@ except:
     print("I doesn't look like you have any primary or foreign keys declared")
             
 
-nested_dictionary = d1
+nested_dictionary = dbml_dict
 
 get_all_values(nested_dictionary)
 

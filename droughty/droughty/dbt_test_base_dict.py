@@ -1,4 +1,3 @@
-import lkml as looker
 from pprint import pprint
 from google.oauth2 import service_account
 import pandas_gbq
@@ -8,47 +7,38 @@ from sqlalchemy import create_engine
 from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
-import os
-import json
-import sys
 from itertools import chain
 
 from droughty import warehouse_target
-from droughty import config
+from droughty.config import ProjectVariables
 
 import sys
-import ruamel.yaml
-import git
 
-pd.options.mode.chained_assignment = None
+def get_dbt_dict():
 
-sql = warehouse_target.test_warehouse_schema
+    pd.options.mode.chained_assignment = None
 
-credentials = config.service_account
+    credentials = ProjectVariables.service_account
+    warehouse = ProjectVariables.warehouse
+    project = ProjectVariables.project
 
-warehouse_name = config.warehouse_name
-lookml_project = config.project_name
+    sql = warehouse_target.test_warehouse_schema
 
+    if warehouse == 'big_query':
 
+        df = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
-if warehouse_name == 'big_query':
+        df1 = df[['table_name','column_name','data_type']]
 
-    # Run a Standard SQL query using the environment's default project
-    df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
+        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
+        df1['data_type'] = df1['data_type'].str.replace('DATE','date')
+        df1['data_type'] = df1['data_type'].str.replace('INT64','number')
+        df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
+        df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
+        df1['data_type'] = df1['data_type'].str.replace('STRING','string')
+        df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
 
-    # Run a Standard SQL query with the project set explicitly
-    project_id = lookml_project
-    df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
-
-    df1 = df[['table_name','column_name','data_type']]
-
-    df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
-    df1['data_type'] = df1['data_type'].str.replace('DATE','date')
-    df1['data_type'] = df1['data_type'].str.replace('INT64','number')
-    df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
-    df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
-    df1['data_type'] = df1['data_type'].str.replace('STRING','string')
-    df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
+        return (df1)
 
 # elif warehouse_name == 'snowflake': 
 # 
@@ -95,4 +85,6 @@ def recur_dictify(frame):
 
 model_name = 'model'
 
-d1 = (recur_dictify(df1))
+retrieve_test_dict = get_dbt_dict()
+
+dbt_test_dict = (recur_dictify(retrieve_test_dict))

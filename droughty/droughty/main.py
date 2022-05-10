@@ -1,7 +1,7 @@
 from droughty.lookml_cli import (
-    base,
-    explore,
-    measures
+    lookml_base,
+    lookml_explore,
+    lookml_measures
 )
 from droughty.cube_cli import (
     base,
@@ -16,9 +16,9 @@ def start():
 
     if Common.args_command == 'lookml':
 
-        base()
-        explore()
-        measures()
+        lookml_base()
+        lookml_explore()
+        lookml_measures()
 
     elif Common.args_command == 'cube':
 

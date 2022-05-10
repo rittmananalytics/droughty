@@ -1,4 +1,3 @@
-import lkml as looker
 from pprint import pprint
 from google.oauth2 import service_account
 import pandas_gbq
@@ -8,35 +7,28 @@ from sqlalchemy import create_engine
 from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
-import os
-import json
-import sys
-import yaml
 
-from droughty import warehouse_target
-from droughty import config
 
-import git
+from droughty.warehouse_target import dbml_schema
+from droughty.config import ProjectVariables,ExploresVariables
 
-pd.options.mode.chained_assignment = None
+def get_dbml_dict():
 
-credentials = config.service_account
+    pd.options.mode.chained_assignment = None
 
-warehouse_name = config.warehouse_name
-lookml_project = config.project_name
+    credentials = ProjectVariables.service_account
+    warehouse = ProjectVariables.warehouse
+    project = ProjectVariables.project
 
-sql = warehouse_target.dbml_reference_dict
-dimensional_inference_status = warehouse_target.dimensional_inference
+    dimensional_inference_status = ExploresVariables.dimensional_inference
 
-if dimensional_inference_status == 'enabled':
+    #if dimensional_inference_status == 'enabled':
 
-    if warehouse_name == 'big_query':
+    if warehouse == 'big_query':
 
-        sql = warehouse_target.dbml_reference_dict
+        sql = dbml_schema()
 
-        # Run a Standard SQL query with the project set explicitly
-        project_id = lookml_project
-        df = pandas.read_gbq(sql, dialect='standard', project_id=lookml_project, credentials=credentials)
+        df = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
         df['description'] = df['description'].fillna('not available')
 
@@ -50,59 +42,63 @@ if dimensional_inference_status == 'enabled':
         df2['data_type'] = df2['data_type'].str.replace('STRING','varchar')
         df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
 
-    elif warehouse_name == 'snowflake': 
+        df3 = {n: grp.loc[n].to_dict('index')
+            
+        for n, grp in df2.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level='table_name')}
 
-        url = URL(
+        d1 = df3
 
-            account = config.snowflake_account,
-            user =  config.snowflake_user,
-            schema =  config.snowflake_schema,
-            database =  config.snowflake_database,
-            password =  config.snowflake_password,
-            warehouse= config.snowflake_warehouse,
-            role =  config.snowflake_role
+        return(d1)
 
-        )
 
-        engine = create_engine(url)
 
-        connection = engine.connect()
+dbml_dict = get_dbml_dict()
 
-        query = sql
+##        elif warehouse == 'snowflake': 
 
-        df = pd.read_sql(query, connection)
 
-        df.drop_duplicates(keep=False, inplace=True)
+#            url = URL(
+#
+#                account = config.snowflake_account,
+#                user =  config.snowflake_user,
+#                schema =  config.snowflake_schema,
+#                database =  config.snowflake_database,
+#                password =  config.snowflake_password,
+#                warehouse= config.snowflake_warehouse,
+#                role =  config.snowflake_role
+#
+#            )
+#
+#            engine = create_engine(url)
+#
+#            connection = engine.connect()
+#
+#            query = sql
+#
+#            df = pd.read_sql(query, connection)
+#
+#            df.drop_duplicates(keep=False, inplace=True)
+#
+#            df['description'] = df['comment'].fillna('not available')
+#
+#            df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
+#
+#            df2['table_name'] = df2['table_name'].str.lower()
+#            df2['column_name'] = df2['column_name'].str.lower()    
+#            df2['data_type'] = df2['data_type'].str.lower()
+#            df2['pk_table_name'] = df2['pk_table_name'].str.lower()
+#            df2['pk_column_name'] = df2['pk_column_name'].str.lower()
+#
+#            df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
+#            df2['data_type'] = df2['data_type'].str.replace('DATE','date')
+#            df2['data_type'] = df2['data_type'].str.replace('INT64','numeric')
+#            df2['data_type'] = df2['data_type'].str.replace('FLOAT64','numeric')
+#            df2['data_type'] = df2['data_type'].str.replace('NUMERIC','numeric')
+#            df2['data_type'] = df2['data_type'].str.replace('NUMBER','numeric')
+#            df2['data_type'] = df2['data_type'].str.replace('TEXT','varchar')
+#            df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
+#
+#            connection.close()
+#            engine.dispose()
 
-        df['description'] = df['comment'].fillna('not available')
 
-        df2 = df[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
-
-        df2['table_name'] = df2['table_name'].str.lower()
-        df2['column_name'] = df2['column_name'].str.lower()    
-        df2['data_type'] = df2['data_type'].str.lower()
-        df2['pk_table_name'] = df2['pk_table_name'].str.lower()
-        df2['pk_column_name'] = df2['pk_column_name'].str.lower()
-
-        df2['data_type'] = df2['data_type'].str.replace('TIMESTAMP','timestamp')
-        df2['data_type'] = df2['data_type'].str.replace('DATE','date')
-        df2['data_type'] = df2['data_type'].str.replace('INT64','numeric')
-        df2['data_type'] = df2['data_type'].str.replace('FLOAT64','numeric')
-        df2['data_type'] = df2['data_type'].str.replace('NUMERIC','numeric')
-        df2['data_type'] = df2['data_type'].str.replace('NUMBER','numeric')
-        df2['data_type'] = df2['data_type'].str.replace('TEXT','varchar')
-        df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
-
-        connection.close()
-        engine.dispose()
-
-        
-    df3 = {n: grp.loc[n].to_dict('index')
-        
-    for n, grp in df2.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level='table_name')}
-
-    d1 = df3
-
-else:
-
-    d1 = (False)

@@ -21,59 +21,81 @@ git_path = get_git_root(os.getcwd())
 
 
 ## profile vars
-
 @dataclass
 class IdentifyConfigVariables(Common):
     
     path_source: str
     profile_path: str
+    project_path: str
     full_path: str
 
 def assign_droughty_paths():
 
-    if Common.profile_dir != None:
+    try:
 
         IdentifyConfigVariables.profile_path = Common.profile_dir
 
         IdentifyConfigVariables.path_source = 'local_vars'
 
-        print ("Using option path")
+        print ("Using optional profile path")
 
         print (Common.profile_dir)
 
 
-    else:
+    except:
 
         path = os.path.expanduser('~')
-
-        print ('test me')
 
         IdentifyConfigVariables.path_source = 'local_vars'
 
         IdentifyConfigVariables.profile_pass = os.path.join(path,".droughty/profile.yaml")       
 
-        print ("Using default path")
+        print ("Using default profile path")
 
 paths = assign_droughty_paths()
 
 def load_droughty_profile():
 
-        with open(IdentifyConfigVariables.profile_path) as f:
+    IdentifyConfigVariables.project_path = Common.project_dir  
 
-            droughty_profile = yaml.load(f, Loader=yaml.FullLoader)
+    with open(IdentifyConfigVariables.profile_path) as f:
 
-        return droughty_profile
+        droughty_profile = yaml.load(f, Loader=yaml.FullLoader)
+
+    return droughty_profile
+
+def assign_droughty_project_paths():
+
+    try:
+
+        IdentifyConfigVariables.project_path = Common.project_dir  
+
+        IdentifyConfigVariables.path_source = 'local_vars'
+
+        print ("Using optional project path")
+
+        print (Common.project_dir)
+
+
+    except:
+
+        IdentifyConfigVariables.project_path = Common.project_dir  
+
+        filename = 'droughty_project.yaml'
+
+        droughty_project = os.path.join(git_path,filename)
+
+project_path = assign_droughty_project_paths()
+
 
 def load_droughty_project():
 
-    filename = 'droughty_project.yaml'
+    IdentifyConfigVariables.project_path = Common.project_dir  
 
-    droughty_project = os.path.join(git_path,filename)
-
-    with open(droughty_project) as f:
+    with open(IdentifyConfigVariables.project_path) as f:
         droughty_project = yaml.load(f, Loader=yaml.FullLoader)
 
-        return droughty_project
+    return droughty_project
     
 droughty_profile = load_droughty_profile()
 droughty_project = load_droughty_project()
@@ -170,3 +192,18 @@ def assign_explore_variables():
             ExploresVariables.join_key_list = ['merge_counts_fk','merge_counts_pk']
 
 explore_variables = assign_explore_variables()    
+
+@dataclass
+class DbtTestVariables:
+    
+    field_description_path: str
+    field_description_file_name: str
+
+def assign_dbt_test_variables():
+
+    DbtTestVariables.field_description_path = (droughty_project.get("field_description_path"))
+    DbtTestVariables.field_description_file_name = (droughty_project.get("field_description_file_name"))
+
+dbt_test_variables = assign_dbt_test_variables()
+
+

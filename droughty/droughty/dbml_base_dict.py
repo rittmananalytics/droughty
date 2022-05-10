@@ -87,10 +87,10 @@ def get_dbml_dict():
         df2['data_type'] = df2['data_type'].str.replace('TEXT','varchar')
         df2['data_type'] = df2['data_type'].str.replace('BOOL','boolean')
 
-    df2 = df2
+        connection.close()
+        engine.dispose()
 
-    connection.close()
-    engine.dispose()
+    df2 = df2
 
     df3 = {n: grp.loc[n].to_dict('index')
         

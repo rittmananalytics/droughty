@@ -3,6 +3,7 @@ profile: kaplan_poc
 dimensional_inference: enabled
 
 field_description_path: warehouse_docs
+field_description_file_name: field_descriptions.md
 
 explores:
 

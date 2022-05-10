@@ -14,7 +14,7 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_base_dict import d1
+from droughty.base_dict import base_dict
 
 
 def get_all_values(nested_dictionary):
@@ -146,7 +146,7 @@ def get_all_values(nested_dictionary):
         yield(syntax)
                 
 
-nested_dictionary = d1
+nested_dictionary = base_dict
 
 get_all_values(nested_dictionary)
 

@@ -14,8 +14,7 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_explore_dict import d2
-from droughty.lookml_explore_dict import distinct_duplicate_explore_rows
+from droughty.lookml_explore_dict import looker_explore_dict,ExploreDictVariables
 
 
 def get_all_values(nested_dictionary):
@@ -39,7 +38,7 @@ def get_all_values(nested_dictionary):
 
         for key1 in value.keys():  
 
-            if key1[0] == key1[0] and key1[0] not in distinct_duplicate_explore_rows:
+            if key1[0] == key1[0] and key1[0] not in ExploreDictVariables.distinct_duplicate_explore_rows:
 
                 join = {
 
@@ -56,7 +55,7 @@ def get_all_values(nested_dictionary):
                 yield(looker.dump(join))
 
 
-            elif key1[2] == key1[2] and key1[0] not in distinct_duplicate_explore_rows:
+            elif key1[2] == key1[2] and key1[0] not in ExploreDictVariables.distinct_duplicate_explore_rows:
 
                 join = {
 
@@ -73,7 +72,7 @@ def get_all_values(nested_dictionary):
                 yield(looker.dump(join))
 
 
-            if key1[0] in distinct_duplicate_explore_rows:
+            if key1[0] in ExploreDictVariables.distinct_duplicate_explore_rows:
 
 
                 join = {
@@ -100,7 +99,7 @@ def get_all_values(nested_dictionary):
 
 
 
-nested_dictionary = d2
+nested_dictionary = looker_explore_dict
 
 get_all_values(nested_dictionary)
 

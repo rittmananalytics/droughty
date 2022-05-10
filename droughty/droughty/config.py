@@ -1,7 +1,6 @@
 import os
 import yaml
 import git
-
 from cgi import test
 from dataclasses import dataclass
 from google.oauth2 import service_account
@@ -117,4 +116,57 @@ def assign_project_variables():
                         ProjectVariables.service_account_path,
                     )
 
-project_variables = assign_project_variables()                
+project_variables = assign_project_variables()    
+
+@dataclass
+class ExploresVariables:
+
+    explore_tables: str
+    dimensional_inference: str
+    single_list_tables: str
+    flat_list: str 
+    final_list: str
+    join_key_list: str
+
+def assign_explore_variables():
+
+    for key,value in droughty_project.items():
+
+        if key == 'profile':
+
+            explores = (droughty_project.get("explores"))
+
+            ExploresVariables.explore_tables = (droughty_project.get("explores"))
+
+            ExploresVariables.dimensional_inference = (droughty_project.get("dimensional_inference")) 
+
+            explore_tables = []
+
+            for key,value in explores.items():
+
+                for key,value in value.items():
+
+                    explore_tables.append(value)
+
+            single_list_tables = [i[0] for i in explore_tables]
+
+            ExploresVariables.single_list_tables = single_list_tables
+
+            flat_list = []
+
+            for sublist in explore_tables:
+                for item in sublist:
+                    flat_list.append(item)
+
+            ExploresVariables.flat_list = flat_list
+
+            final_list = []
+
+            for x in flat_list:
+                final_list.append("'" + x + "'")
+
+            ExploresVariables.final_list = final_list
+
+            ExploresVariables.join_key_list = ['merge_counts_fk','merge_counts_pk']
+
+explore_variables = assign_explore_variables()    

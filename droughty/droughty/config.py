@@ -114,6 +114,10 @@ class ProjectVariables:
     role: str
     password: str
     database: str
+    account: str
+    user: str
+    snowflake_warehouse: str
+    database: str
         
 def assign_project_variables():
 
@@ -124,19 +128,35 @@ def assign_project_variables():
             if value in droughty_profile:
                 
                 ProjectVariables.environment_profile = droughty_project['profile']
+                ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']                    
+                ProjectVariables.test_schemas = droughty_profile[value]['test_schemas']
+                ProjectVariables.schema = droughty_profile[value]['schema_name']
 
                 if IdentifyConfigVariables.path_source == 'local_vars':
 
-                    ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']
-                    ProjectVariables.schema = droughty_profile[value]['schema_name']
-                    ProjectVariables.test_schemas = droughty_profile[value]['test_schemas']
-                    
-                    ProjectVariables.project = droughty_profile[value]['project_name']
+                    # BigQuery
 
-                    ProjectVariables.service_account_path = droughty_profile[value]['key_file']
-                    ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
-                        ProjectVariables.service_account_path,
-                    )
+                    if ProjectVariables.warehouse == 'big_query':
+                    
+                        ProjectVariables.project = droughty_profile[value]['project_name']
+
+                        ProjectVariables.service_account_path = droughty_profile[value]['key_file']
+                        ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
+                            ProjectVariables.service_account_path,
+                        )
+
+                    # Snowflake
+
+                    if ProjectVariables.warehouse == 'snowflake':
+                    
+                        ProjectVariables.account = droughty_profile[value]['account']
+                        ProjectVariables.user = droughty_profile[value]['user']
+                        ProjectVariables.snowflake_warehouse = droughty_profile[value]['warehouse']
+                        ProjectVariables.database = droughty_profile[value]['database']
+                        ProjectVariables.password = droughty_profile[value]['password']
+                        ProjectVariables.role = droughty_profile[value]['role']
+
+
 
 project_variables = assign_project_variables()    
 

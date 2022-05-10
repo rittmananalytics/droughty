@@ -11,14 +11,22 @@ from droughty.cube_cli import (
 from droughty.dbt_test_cli import tests
 from droughty.dbml_cli import erd
 from droughty.config_cli import Common
+from droughty.config import ExploresVariables
 
 def start():
 
     if Common.args_command == 'lookml':
 
-        lookml_base()
-        lookml_explore()
-        lookml_measures()
+        if ExploresVariables.dimensional_inference == 'enabled':
+
+            lookml_base()
+            lookml_explore()
+            lookml_measures()
+
+        elif ExploresVariables.dimensional_inference != 'disabled':
+
+            lookml_base()
+            lookml_measures()
 
     elif Common.args_command == 'cube':
 

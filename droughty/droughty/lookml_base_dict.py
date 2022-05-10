@@ -87,11 +87,11 @@ def get_base_dict():
         df1['data_type'] = df1['data_type'].str.replace('VARIANT','string')   
         df1['data_type'] = df1['data_type'].str.replace('BOOLEAN','yesno')
 
+        connection.close()
+        engine.dispose()
+
 
     df2 = df1
-
-    connection.close()
-    engine.dispose()
 
     df2 = {n: grp.loc[n].to_dict('index')
         

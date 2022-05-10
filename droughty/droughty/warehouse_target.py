@@ -85,8 +85,6 @@ def dbml_schema():
         
         """.format(ProjectVariables.project,ProjectVariables.schema)
 
-        return dbml_query
-
     if ProjectVariables.warehouse == 'snowflake':   
 
         dbml_query = """
@@ -135,6 +133,9 @@ def dbml_schema():
             left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
         
         """.format(ProjectVariables.database,ProjectVariables.schema)
+
+    return dbml_query
+
 
     # looker explore warehouse query
 
@@ -224,31 +225,17 @@ if ProjectVariables.warehouse == 'snowflake':
     with source as (
     select 
     *
-    from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_name in 
-    {{ table_names |inclause }}
-    
+    from "{0}"."INFORMATION_SCHEMA"."COLUMNS"
+    where table_schema = '{1}'
     ),
-    
-    {% for value in table_names_unqouted  %}
-    explore_table_row_count_{{ value | sqlsafe }} as (
-    select 
-    '{{ value | sqlsafe }}' as table_name,
-    count(*) as row_count
-    from "{{database}}"."{{schema_id}}"."{{ value | sqlsafe }}"
+    row_counts as (
+    select
+        table_name,
+        sum(row_count) as row_count
+    from "{0}"."INFORMATION_SCHEMA"."TABLES"
+    where table_schema = '{1}'
     group by 1
-    
     ),
-    
-    {% endfor %}
-    merge_counts as (
-    {% for value in table_names_unqouted  %}
-    select * from explore_table_row_count_{{ value | sqlsafe }}
-    {% if not loop.last %}union all{% endif %}
-    {% endfor %}
-    
-    ),
-    
     pks as (
         select 
         table_name as pk_table_name,
@@ -264,55 +251,26 @@ if ProjectVariables.warehouse == 'snowflake':
         rtrim(column_name, '_FK') as fk_sk
         from source
         where column_name ilike '%%fk%%'
-    ),
-    
-    joined as (
-    select 
-    {{ table_names [0] }} as parent_table_name,
+    )
+    select
+    pk_table_name as parent_table_name,
     pk_table_name,
     pk_column_name,
     fk_table_name,
     fk_column_name,
-    merge_counts_pk.row_count as pk_row_count,
-    merge_counts_fk.row_count as fk_row_count,
-    merge_counts_parent.row_count as parent_row_count,
     case when merge_counts_pk.row_count > merge_counts_fk.row_count
-            then 'many_to_one'   
+            then 'belongsTo'   
         when merge_counts_pk.row_count < merge_counts_fk.row_count
-            then 'one_to_many'
+            then 'hasMany'
         when merge_counts_pk.row_count = merge_counts_fk.row_count
-            then 'one_to_one'
-    end as true_relationship,
-    case when merge_counts_pk.row_count < merge_counts_parent.row_count
-        and merge_counts_fk.row_count < merge_counts_parent.row_count
-        or  merge_counts_pk.row_count != merge_counts_parent.row_count
-        and  merge_counts_fk.row_count != merge_counts_parent.row_count
-            then 'many_to_one'
-        when merge_counts_pk.row_count > merge_counts_parent.row_count
-            then 'one_to_many'
-        when merge_counts_fk.row_count > merge_counts_parent.row_count
-            then 'one_to_many'
-        when merge_counts_pk.row_count = merge_counts_parent.row_count
-        or merge_counts_fk.row_count = merge_counts_parent.row_count
-            then 'one_to_one'                
-            
+            then 'HasOne'
     end as looker_relationship
-        
-        
-    
     
     from pks
-    join fks on pks.pk_sk = fks.fk_sk
-    left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-    left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-    left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
-    order by looker_relationship
-    
-    )
-    
-    select * from joined
-    
-    '''
+    left join fks on pks.pk_sk = fks.fk_sk
+    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    '''.format(ProjectVariables.database,ProjectVariables.schema)
 
 if ProjectVariables.warehouse == 'big_query':   
 

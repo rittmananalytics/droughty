@@ -1,17 +1,21 @@
-profile: snowflake_demo
+profile: snowflake_demo_olivier
 
 dimensional_inference: enabled
 
 field_description_path: warehouse_docs
+field_description_file_name: field_descriptions.md
 
-
+test_schemas:
+    - DBT_ODUPUIS_QA
+    - DBT_ODUPUIS_STAGING
+    - DBT_ODUPUIS_INTEGRATION
 
 explores:
 
   sales_explore:
       parent_table: 
-        - ITEM
+        - actors_dim
       dimensions: 
-        - REASON
+        - events_fct
       facts:
-        - STORE
+        - narratives_fct

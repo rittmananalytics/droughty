@@ -59,6 +59,8 @@ def get_looker_explore_dict():
         duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
 
         distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
+        
+        ExploreDictVariables.distinct_duplicate_explore_rows = distinct_duplicate_explore_rows
 
         connection.close()
         engine.dispose()

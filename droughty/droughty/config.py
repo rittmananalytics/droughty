@@ -31,22 +31,27 @@ class IdentifyConfigVariables(Common):
 
 def assign_droughty_paths():
 
+    if Common.env_vars == None:
+
+        IdentifyConfigVariables.path_source = 'local_vars'
+
+    elif Common.env_vars == 'enabled':
+
+        IdentifyConfigVariables.path_source = 'env_vars'
+
+        print ("Using environment variables")
+
     try:
 
         IdentifyConfigVariables.profile_path = Common.profile_dir
-
-        IdentifyConfigVariables.path_source = 'local_vars'
 
         print ("Using optional profile path")
 
         print (Common.profile_dir)
 
-
     except:
 
         path = os.path.expanduser('~')
-
-        IdentifyConfigVariables.path_source = 'local_vars'
 
         IdentifyConfigVariables.profile_pass = os.path.join(path,".droughty/profile.yaml")       
 
@@ -133,12 +138,14 @@ def assign_project_variables():
         if key == 'profile':
 
             if value in droughty_profile:
-                
-                ProjectVariables.environment_profile = droughty_project['profile']
-                ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']                    
-                ProjectVariables.schema = droughty_profile[value]['schema_name']
+
+                # local vars
 
                 if IdentifyConfigVariables.path_source == 'local_vars':
+                
+                    ProjectVariables.environment_profile = droughty_project['profile']
+                    ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']                    
+                    ProjectVariables.schema = droughty_profile[value]['schema_name']
 
                     # BigQuery
 
@@ -153,7 +160,7 @@ def assign_project_variables():
 
                     # Snowflake
 
-                    if ProjectVariables.warehouse == 'snowflake':
+                    elif ProjectVariables.warehouse == 'snowflake':
                     
                         ProjectVariables.account = droughty_profile[value]['account']
                         ProjectVariables.user = droughty_profile[value]['user']
@@ -161,6 +168,40 @@ def assign_project_variables():
                         ProjectVariables.database = droughty_profile[value]['database']
                         ProjectVariables.password = droughty_profile[value]['password']
                         ProjectVariables.role = droughty_profile[value]['role']
+
+                # environment vars
+
+                elif IdentifyConfigVariables.path_source == 'env_vars':
+
+                    ProjectVariables.environment_profile = os.environ.get(droughty_project['profile'])
+                    ProjectVariables.warehouse =  os.environ.get(droughty_profile[value]['warehouse_name'])
+                    ProjectVariables.schema = os.environ.get(droughty_profile[value]['schema_name'])
+
+                    # BigQuery
+
+                    if ProjectVariables.warehouse == 'big_query':
+                    
+                        ProjectVariables.project = os.environ.get(droughty_profile[value]['project_name'])
+
+                        ProjectVariables.service_account_path = os.environ.get(droughty_profile[value]['key_file'])
+                        ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
+                            ProjectVariables.service_account_path,
+                        )
+
+                    # Snowflake
+
+                    elif ProjectVariables.warehouse == 'snowflake':
+                    
+                        ProjectVariables.account = os.environ.get(droughty_profile[value]['account'])
+                        ProjectVariables.user = os.environ.get(droughty_profile[value]['user'])
+                        ProjectVariables.snowflake_warehouse = os.environ.get(droughty_profile[value]['warehouse'])
+                        ProjectVariables.database = os.environ.get(droughty_profile[value]['database'])
+                        ProjectVariables.password = os.environ.get(droughty_profile[value]['password'])
+                        ProjectVariables.role = os.environ.get(droughty_profile[value]['role'])
+
+            else:
+
+                raise Exception ("It looks like there no match between the project name within the droughty_project and your profile file.")
 
 project_variables = assign_project_variables()    
 
@@ -236,15 +277,15 @@ class DbtTestVariables:
 
 def assign_dbt_test_variables():
 
-        DbtTestVariables.field_description_path = (droughty_project.get("field_description_path"))
-        DbtTestVariables.field_description_file_name = (droughty_project.get("field_description_file_name"))
+    DbtTestVariables.field_description_path = (droughty_project.get("field_description_path"))
+    DbtTestVariables.field_description_file_name = (droughty_project.get("field_description_file_name"))
 
-        if DbtTestVariables.field_description_path == None:
+    if DbtTestVariables.field_description_path == None:
 
-            raise Exception ("You need to define the dbt field descriptions path within the droughty_project file.")
+        raise Exception ("You need to define the dbt field descriptions path within the droughty_project file.")
 
-        if DbtTestVariables.field_description_file_name == None:
+    if DbtTestVariables.field_description_file_name == None:
 
-            raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
+        raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
 
 dbt_test_variables = assign_dbt_test_variables()

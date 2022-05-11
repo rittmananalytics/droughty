@@ -10,8 +10,14 @@ import pandas
 
 from droughty import warehouse_target
 from droughty.warehouse_target import warehouse_schema
-from droughty.config import ProjectVariables
-
+from droughty.config import (
+    ProjectVariables,
+    get_snowflake_connector_url
+)
+from droughty.droughty_data_prep import (
+    wrangle_bigquery_cube_dataframes,
+    wrangle_snowflake_cube_dataframes
+)
 class CubeBaseDictVariables():
 
     distinct_duplicate_explore_rows: str
@@ -30,26 +36,11 @@ def get_cube_base_dict():
         credentials = ProjectVariables.service_account
         project = ProjectVariables.project
 
+        dataframe = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
-        df = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
-
-        df['description'] = df['description'].fillna('not available')
-
-        df1 = df[['table_name','column_name','data_type','description']]
-
-        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','time')
-        df1['data_type'] = df1['data_type'].str.replace('DATE','time')
-        df1['data_type'] = df1['data_type'].str.replace('INT64','number')
-        df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
-        df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
-        df1['data_type'] = df1['data_type'].str.replace('STRING','string')
-        df1['data_type'] = df1['data_type'].str.replace('BOOL','boolean')
-
-        df2 = df1
+        wrangled_dataframe = wrangle_bigquery_cube_dataframes(dataframe)
 
         explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
-
-        #explore_df_2 = explore_df[['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']]
 
         pk_table_name_df = explore_df[['pk_table_name']]
 
@@ -61,61 +52,32 @@ def get_cube_base_dict():
 
     elif warehouse == 'snowflake': 
 
-        url = URL(
-
-            account = ProjectVariables.account,
-            user =  ProjectVariables.user,
-            schema =  ProjectVariables.schema,
-            database =  ProjectVariables.database,
-            password =  ProjectVariables.password,
-            warehouse = ProjectVariables.snowflake_warehouse,
-            role =  ProjectVariables.role
-
-        )
-
-        engine = create_engine(url)
+        engine = create_engine(get_snowflake_connector_url())
 
         connection = engine.connect()
 
-        df = pd.read_sql(sql, connection)
-        
-        df['description'] = df['comment'].fillna('not available')
+        dataframe = pd.read_sql(sql, connection)
 
-        df1 = df[['table_name','column_name','data_type','description']]
+        wrangled_dataframe = wrangle_snowflake_cube_dataframes(dataframe)
 
-        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','time')
-        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_TZ','time')
-        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP_NTZ','time')
-        df1['data_type'] = df1['data_type'].str.replace('DATE','time')
-        df1['data_type'] = df1['data_type'].str.replace('INT64','number')
-        df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
-        df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
-        df1['data_type'] = df1['data_type'].str.replace('NUMBER','number')
-        df1['data_type'] = df1['data_type'].str.replace('FLOAT','number')
-        df1['data_type'] = df1['data_type'].str.replace('TEXT','string')
-        df1['data_type'] = df1['data_type'].str.replace('VARIANT','string')   
-        df1['data_type'] = df1['data_type'].str.replace('BOOLEAN','boolean')
+        explore_df = pd.read_sql(explore_sql, connection)
 
-        df['column_name'] = df['column_name'].str.lower()
-        df['table_name'] = df['table_name'].str.lower()
-        df['description'] = df['description'].str.lower()
+        pk_table_name_df = explore_df[['pk_table_name']]
 
-        df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
+        duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
 
-        df1 = df1[['table_name','column_name','data_type','description']]
+        distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
 
-        df2 = df1
-
+        CubeBaseDictVariables.distinct_duplicate_explore_rows = distinct_duplicate_explore_rows
+    
         connection.close()
         engine.dispose()
 
-    df3 = {n: grp.loc[n].to_dict('index')
+    wrangled_dataframe = {n: grp.loc[n].to_dict('index')
         
-    for n, grp in df2.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
+    for n, grp in wrangled_dataframe.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
 
-    d1 = df3
-
-    return(d1)
+    return(wrangled_dataframe)
 
 cube_base_dict = get_cube_base_dict()
 

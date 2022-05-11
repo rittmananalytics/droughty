@@ -8,8 +8,10 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty.config import ProjectVariables
-
+from droughty.config import (
+    ProjectVariables,
+    get_snowflake_connector_url
+)
 class CubeExploreDictVariables():
 
     duplicate_explore_rows: str
@@ -29,8 +31,6 @@ def get_cube_explore_dict():
 
         explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
 
-        #explore_df_2 = explore_df[['pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','true_relationship']]
-
         pk_table_name_df = explore_df[['pk_table_name']]
 
         duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
@@ -39,19 +39,7 @@ def get_cube_explore_dict():
 
     elif ProjectVariables.warehouse == 'snowflake': 
 
-        url = URL(
-
-            account = ProjectVariables.account,
-            user =  ProjectVariables.user,
-            schema =  ProjectVariables.schema,
-            database =  ProjectVariables.database,
-            password =  ProjectVariables.password,
-            warehouse = ProjectVariables.snowflake_warehouse,
-            role =  ProjectVariables.role
-
-        )
-
-        engine = create_engine(url)
+        engine = create_engine(get_snowflake_connector_url())
 
         connection = engine.connect()
 

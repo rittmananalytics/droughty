@@ -1,585 +1,1389 @@
 include: "/lookml/base/_base.layer.lkml"
-view: +budgets_sales {
-measure: count_of_budget_pk {
-  type: count_distinct
-  sql: ${TABLE}.budget_pk ;;
+view: +call_center {
+measure: sum_of_cc_call_center_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cc_call_center_sk ;;
   description: "not available"
 }
-measure: sum_of_budget_amt {
+measure: sum_of_cc_closed_date_sk {
   type: sum_distinct
-  sql: ${TABLE}.budget_amt ;;
+  sql: ${TABLE}.cc_closed_date_sk ;;
   description: "not available"
 }
-}
-view: +core_agents {
-measure: count_of_agent_pk {
-  type: count_distinct
-  sql: ${TABLE}.agent_pk ;;
-  description: "The key and link to an agent"
-}
-measure: sum_of_agent_natural_key {
+measure: sum_of_cc_company {
   type: sum_distinct
-  sql: ${TABLE}.agent_natural_key ;;
-  description: "The key and link to an agent from a record"
+  sql: ${TABLE}.cc_company ;;
+  description: "not available"
 }
-measure: sum_of_country_natural_key {
+measure: sum_of_cc_division {
   type: sum_distinct
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country from a record"
+  sql: ${TABLE}.cc_division ;;
+  description: "not available"
 }
-}
-view: +core_countries {
-measure: count_of_country_pk {
-  type: count_distinct
-  sql: ${TABLE}.country_pk ;;
-  description: "The key and link to a country"
-}
-measure: sum_of_country_natural_key {
+measure: sum_of_cc_employees {
   type: sum_distinct
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country"
+  sql: ${TABLE}.cc_employees ;;
+  description: "not available"
 }
-}
-view: +core_country_mapping {
-measure: count_of_country_mapping_pk {
-  type: count_distinct
-  sql: ${TABLE}.country_mapping_pk ;;
-  description: "The key to link countries to other records"
-}
-measure: sum_of_country_natural_key {
+measure: sum_of_cc_gmt_offset {
   type: sum_distinct
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country"
+  sql: ${TABLE}.cc_gmt_offset ;;
+  description: "not available"
 }
-}
-view: +core_institutions {
-measure: count_of_institution_pk {
-  type: count_distinct
-  sql: ${TABLE}.institution_pk ;;
-  description: "The key and link to an institution"
-}
-measure: sum_of_institution_natural_key {
+measure: sum_of_cc_mkt_id {
   type: sum_distinct
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key and link to an institution"
+  sql: ${TABLE}.cc_mkt_id ;;
+  description: "not available"
 }
-measure: sum_of_country_natural_key {
+measure: sum_of_cc_open_date_sk {
   type: sum_distinct
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country"
+  sql: ${TABLE}.cc_open_date_sk ;;
+  description: "not available"
 }
-}
-view: +core_program_intakes {
-measure: count_of_program_intake_pk {
-  type: count_distinct
-  sql: ${TABLE}.program_intake_pk ;;
-  description: "The key to link a record to a program intake"
-}
-measure: sum_of_program_intake_natural_key {
+measure: sum_of_cc_sq_ft {
   type: sum_distinct
-  sql: ${TABLE}.program_intake_natural_key ;;
-  description: "The key to link a record to a program intake"
+  sql: ${TABLE}.cc_sq_ft ;;
+  description: "not available"
 }
-measure: sum_of_program_natural_key {
+measure: sum_of_cc_tax_percentage {
   type: sum_distinct
-  sql: ${TABLE}.program_natural_key ;;
-  description: "The key to link a record to a program"
-}
-measure: sum_of_program_fee {
-  type: sum_distinct
-  sql: ${TABLE}.program_fee ;;
-  description: "Cost of a program"
-}
-measure: sum_of_intake_quota_exists {
-  type: sum_distinct
-  sql: ${TABLE}.intake_quota_exists ;;
-  description: "Confirms if there's a quota on the intake"
-}
-}
-view: +core_programs {
-measure: count_of_program_pk {
-  type: count_distinct
-  sql: ${TABLE}.program_pk ;;
-  description: "The key to link to a certain program"
-}
-measure: sum_of_program_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.program_natural_key ;;
-  description: "The key to link to a certain program"
-}
-measure: sum_of_institution_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link to a certain institution"
-}
-}
-view: +core_scholarship_reason_owners {
-measure: count_of_scholarship_reason_owner_pk {
-  type: count_distinct
-  sql: ${TABLE}.scholarship_reason_owner_pk ;;
-  description: "The key to link the core_scholarship_reasons_owner record to another record"
-}
-}
-view: +core_scholarship_reasons {
-measure: count_of_scholarship_reason_pk {
-  type: count_distinct
-  sql: ${TABLE}.scholarship_reason_pk ;;
-  description: "The key to link the scholarship reason to another record"
-}
-}
-view: +core_sponsors {
-measure: count_of_sponsor_pk {
-  type: count_distinct
-  sql: ${TABLE}.sponsor_pk ;;
-  description: "The key to link a sponsor to a certain record"
-}
-measure: sum_of_sponsor_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.sponsor_natural_key ;;
-  description: "The key to link a sponsor to a certain record"
-}
-measure: sum_of_country_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key to link a country to a certain record"
-}
-}
-view: +core_subjects {
-measure: count_of_program_subject_pk {
-  type: count_distinct
-  sql: ${TABLE}.program_subject_pk ;;
-  description: "The key to link the program's subject to a record"
-}
-measure: sum_of_program_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.program_natural_key ;;
-  description: "The key to link a program to a record"
-}
-}
-view: +core_user_mapping {
-measure: count_of_user_mapping_pk {
-  type: count_distinct
-  sql: ${TABLE}.user_mapping_pk ;;
+  sql: ${TABLE}.cc_tax_percentage ;;
   description: "not available"
 }
 }
-view: +core_users {
-measure: count_of_user_pk {
-  type: count_distinct
-  sql: ${TABLE}.user_pk ;;
-  description: "The key to link an user to a record"
-}
-}
-view: +product_progression_plans {
-measure: count_of_progression_plan_pk {
-  type: count_distinct
-  sql: ${TABLE}.progression_plan_pk ;;
-  description: "The key to link a record to a progression plan"
-}
-measure: sum_of_institution_natural_key {
+view: +catalog_page {
+measure: sum_of_cp_catalog_number {
   type: sum_distinct
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
-}
-measure: sum_of_progression_plan_program_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.progression_plan_program_natural_key ;;
-  description: "The key to link a record to a progression plan's program"
-}
-measure: sum_of_version_number {
-  type: sum_distinct
-  sql: ${TABLE}.version_number ;;
-  description: "The progression plan's version number"
-}
-}
-view: +product_progression_plans_history {
-measure: count_of_study_plan_history_pk {
-  type: count_distinct
-  sql: ${TABLE}.study_plan_history_pk ;;
-  description: "The key to link a record to the study plan history record"
-}
-measure: count_of_progression_plan_pk {
-  type: count_distinct
-  sql: ${TABLE}.progression_plan_pk ;;
-  description: "The key to link a record to a progression plan"
-}
-measure: sum_of_institution_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
-}
-measure: sum_of_progression_plan_program_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.progression_plan_program_natural_key ;;
-  description: "The key to link a record to a progression plan's program"
-}
-measure: sum_of_progression_plan_version_number {
-  type: sum_distinct
-  sql: ${TABLE}.progression_plan_version_number ;;
+  sql: ${TABLE}.cp_catalog_number ;;
   description: "not available"
 }
-measure: sum_of_progression_plan_index {
+measure: sum_of_cp_catalog_page_number {
   type: sum_distinct
-  sql: ${TABLE}.progression_plan_index ;;
-  description: "The index for the progression plan historical records to help organise"
-}
-}
-view: +product_study_plans {
-measure: count_of_study_plan_pk {
-  type: count_distinct
-  sql: ${TABLE}.study_plan_pk ;;
-  description: "The key to link a record to a study plan"
-}
-measure: sum_of_study_plan_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.study_plan_natural_key ;;
-  description: "The key to link a record to a study plan"
-}
-measure: sum_of_institution_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
-}
-measure: sum_of_study_plan_program_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.study_plan_program_natural_key ;;
-  description: "The key to link a record to a study plan's program"
-}
-measure: sum_of_version_number {
-  type: sum_distinct
-  sql: ${TABLE}.version_number ;;
-  description: "The study plan's version number"
-}
-}
-view: +product_study_plans_history {
-measure: count_of_study_plan_history_pk {
-  type: count_distinct
-  sql: ${TABLE}.study_plan_history_pk ;;
-  description: "The key to link a record to the study plan history record"
-}
-measure: sum_of_study_plan_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.study_plan_natural_key ;;
-  description: "The key to link a record to a study plan"
-}
-measure: sum_of_institution_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
-}
-measure: sum_of_study_plan_program_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.study_plan_program_natural_key ;;
-  description: "The key to link a record to a study plan's program"
-}
-measure: sum_of_study_plan_version_number {
-  type: sum_distinct
-  sql: ${TABLE}.study_plan_version_number ;;
+  sql: ${TABLE}.cp_catalog_page_number ;;
   description: "not available"
 }
-measure: sum_of_study_plan_index {
+measure: sum_of_cp_catalog_page_sk {
   type: sum_distinct
-  sql: ${TABLE}.study_plan_index ;;
-  description: "The index for the study plan historical records to help organise"
-}
-}
-view: +sales_application_agent_bridge {
-measure: count_of_application_agent_pk {
-  type: count_distinct
-  sql: ${TABLE}.application_agent_pk ;;
-  description: "Unique id to link an agent with an application"
-}
-}
-view: +sales_application_history {
-measure: count_of_application_history_pk {
-  type: count_distinct
-  sql: ${TABLE}.application_history_pk ;;
+  sql: ${TABLE}.cp_catalog_page_sk ;;
   description: "not available"
 }
-measure: sum_of_study_plan_version_number {
+measure: sum_of_cp_end_date_sk {
   type: sum_distinct
-  sql: ${TABLE}.study_plan_version_number ;;
-  description: "The number to indicate what type of study plan the application is following"
-}
-measure: sum_of_applications {
-  type: sum_distinct
-  sql: ${TABLE}.applications ;;
-  description: "Full list/count of applications"
-}
-measure: sum_of_offers {
-  type: sum_distinct
-  sql: ${TABLE}.offers ;;
-  description: "Full list/count of offers"
-}
-measure: sum_of_deposits {
-  type: sum_distinct
-  sql: ${TABLE}.deposits ;;
-  description: "Full list/count of deposits"
-}
-measure: sum_of_enrolled {
-  type: sum_distinct
-  sql: ${TABLE}.enrolled ;;
-  description: "Full list/count of enrolled"
-}
-measure: sum_of_lost {
-  type: sum_distinct
-  sql: ${TABLE}.lost ;;
-  description: "Full list/count of lost records"
-}
-measure: sum_of_change_count {
-  type: sum_distinct
-  sql: ${TABLE}.change_count ;;
-  description: "Counts the amount of changes to the applicant (Such as switched program and intake etc)"
-}
-}
-view: +sales_applications {
-measure: count_of_application_pk {
-  type: count_distinct
-  sql: ${TABLE}.application_pk ;;
-  description: "Unique id for an application. Keep in mind that a student may have multiple applications"
-}
-measure: sum_of_application_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.application_natural_key ;;
+  sql: ${TABLE}.cp_end_date_sk ;;
   description: "not available"
 }
-measure: sum_of_sponsor_natural_key {
+measure: sum_of_cp_start_date_sk {
   type: sum_distinct
-  sql: ${TABLE}.sponsor_natural_key ;;
-  description: "The key to indicate and link the record to the sponsor"
-}
-measure: sum_of_class_application_id {
-  type: sum_distinct
-  sql: ${TABLE}.class_application_id ;;
-  description: "Confirm the id for the class"
-}
-measure: sum_of_weighting {
-  type: sum_distinct
-  sql: ${TABLE}.weighting ;;
-  description: "The percentage of offers per student (all offers add up too one)"
-}
-measure: sum_of_weighting_non_deferred {
-  type: sum_distinct
-  sql: ${TABLE}.weighting_non_deferred ;;
-  description: "The percentage of offers per student excluding deferred (all offers add up too one)"
-}
-}
-view: +sales_applications_history {
-measure: count_of_application_history_pk {
-  type: count_distinct
-  sql: ${TABLE}.application_history_pk ;;
-  description: "not available"
-}
-measure: sum_of_application_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.application_natural_key ;;
-  description: "not available"
-}
-measure: sum_of_sponsor_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.sponsor_natural_key ;;
-  description: "not available"
-}
-measure: sum_of_class_application_id {
-  type: sum_distinct
-  sql: ${TABLE}.class_application_id ;;
-  description: "not available"
-}
-measure: sum_of_application_index {
-  type: sum_distinct
-  sql: ${TABLE}.application_index ;;
-  description: "The index format of the row of applications"
-}
-measure: sum_of_application_status_duration_seconds {
-  type: sum_distinct
-  sql: ${TABLE}.application_status_duration_seconds ;;
-  description: "The time the application was kept on each status"
-}
-measure: sum_of_application_weight {
-  type: sum_distinct
-  sql: ${TABLE}.application_weight ;;
+  sql: ${TABLE}.cp_start_date_sk ;;
   description: "not available"
 }
 }
-view: +sales_applications_quota {
-measure: count_of_application_quota_pk {
-  type: count_distinct
-  sql: ${TABLE}.application_quota_pk ;;
+view: +catalog_returns {
+measure: sum_of_cr_call_center_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_call_center_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_catalog_page_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_catalog_page_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_fee {
+  type: sum_distinct
+  sql: ${TABLE}.cr_fee ;;
+  description: "not available"
+}
+measure: sum_of_cr_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_net_loss {
+  type: sum_distinct
+  sql: ${TABLE}.cr_net_loss ;;
+  description: "not available"
+}
+measure: sum_of_cr_order_number {
+  type: sum_distinct
+  sql: ${TABLE}.cr_order_number ;;
+  description: "not available"
+}
+measure: sum_of_cr_reason_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_reason_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_refunded_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_refunded_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_refunded_cash {
+  type: sum_distinct
+  sql: ${TABLE}.cr_refunded_cash ;;
+  description: "not available"
+}
+measure: sum_of_cr_refunded_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_refunded_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_refunded_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_refunded_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_refunded_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_refunded_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_return_amount {
+  type: sum_distinct
+  sql: ${TABLE}.cr_return_amount ;;
+  description: "not available"
+}
+measure: sum_of_cr_return_amt_inc_tax {
+  type: sum_distinct
+  sql: ${TABLE}.cr_return_amt_inc_tax ;;
+  description: "not available"
+}
+measure: sum_of_cr_return_quantity {
+  type: sum_distinct
+  sql: ${TABLE}.cr_return_quantity ;;
+  description: "not available"
+}
+measure: sum_of_cr_return_ship_cost {
+  type: sum_distinct
+  sql: ${TABLE}.cr_return_ship_cost ;;
+  description: "not available"
+}
+measure: sum_of_cr_return_tax {
+  type: sum_distinct
+  sql: ${TABLE}.cr_return_tax ;;
+  description: "not available"
+}
+measure: sum_of_cr_returned_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_returned_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_returned_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_returned_time_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_returning_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_returning_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_returning_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_returning_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_returning_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_returning_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_returning_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_returning_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_reversed_charge {
+  type: sum_distinct
+  sql: ${TABLE}.cr_reversed_charge ;;
+  description: "not available"
+}
+measure: sum_of_cr_ship_mode_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_ship_mode_sk ;;
+  description: "not available"
+}
+measure: sum_of_cr_store_credit {
+  type: sum_distinct
+  sql: ${TABLE}.cr_store_credit ;;
+  description: "not available"
+}
+measure: sum_of_cr_warehouse_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cr_warehouse_sk ;;
   description: "not available"
 }
 }
-view: +sales_applications_summary {
-measure: count_of_application_summary_pk {
-  type: count_distinct
-  sql: ${TABLE}.application_summary_pk ;;
+view: +catalog_sales {
+measure: sum_of_cs_bill_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_bill_addr_sk ;;
   description: "not available"
 }
-measure: sum_of_sales_applications_application_count {
+measure: sum_of_cs_bill_cdemo_sk {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_application_count ;;
-  description: "The weighted count of applications. In other words, the number of students who have applied including offers, deposits, and enrollments."
-}
-measure: sum_of_sales_applications_unweighted_offer_count {
-  type: sum_distinct
-  sql: ${TABLE}.sales_applications_unweighted_offer_count ;;
+  sql: ${TABLE}.cs_bill_cdemo_sk ;;
   description: "not available"
 }
-measure: sum_of_sales_applications_application_offer_count {
+measure: sum_of_cs_bill_customer_sk {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_application_offer_count ;;
-  description: "The weighted count of applications in offer state. In other words, the number of students who have received an offer but not yet made a deposit."
-}
-measure: sum_of_sales_applications_unconverted_application_count {
-  type: sum_distinct
-  sql: ${TABLE}.sales_applications_unconverted_application_count ;;
-  description: "The weighted count of applications in application state. In other words, the number of students who have applied but not yet received an offer."
-}
-measure: sum_of_sales_applications_application_count_non_deferred {
-  type: sum_distinct
-  sql: ${TABLE}.sales_applications_application_count_non_deferred ;;
+  sql: ${TABLE}.cs_bill_customer_sk ;;
   description: "not available"
 }
-measure: sum_of_sales_applications_application_offer_count_non_deferred {
+measure: sum_of_cs_bill_hdemo_sk {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_application_offer_count_non_deferred ;;
+  sql: ${TABLE}.cs_bill_hdemo_sk ;;
   description: "not available"
 }
-measure: sum_of_sales_applications_unconverted_application_count_non_deferred {
+measure: sum_of_cs_call_center_sk {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_unconverted_application_count_non_deferred ;;
+  sql: ${TABLE}.cs_call_center_sk ;;
   description: "not available"
 }
-measure: sum_of_sales_applications_application_deposit_count {
+measure: sum_of_cs_catalog_page_sk {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_application_deposit_count ;;
-  description: "The number of applications that have converted to deposits."
+  sql: ${TABLE}.cs_catalog_page_sk ;;
+  description: "not available"
 }
-measure: sum_of_sales_applications_application_enrolled_count {
+measure: sum_of_cs_coupon_amt {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_application_enrolled_count ;;
-  description: "The number of applications that have converted to enrolled students."
+  sql: ${TABLE}.cs_coupon_amt ;;
+  description: "not available"
 }
-measure: sum_of_sales_applications_enrollments_and_deposit_count {
+measure: sum_of_cs_ext_discount_amt {
   type: sum_distinct
-  sql: ${TABLE}.sales_applications_enrollments_and_deposit_count ;;
+  sql: ${TABLE}.cs_ext_discount_amt ;;
+  description: "not available"
+}
+measure: sum_of_cs_ext_list_price {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ext_list_price ;;
+  description: "not available"
+}
+measure: sum_of_cs_ext_sales_price {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ext_sales_price ;;
+  description: "not available"
+}
+measure: sum_of_cs_ext_ship_cost {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ext_ship_cost ;;
+  description: "not available"
+}
+measure: sum_of_cs_ext_tax {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ext_tax ;;
+  description: "not available"
+}
+measure: sum_of_cs_ext_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ext_wholesale_cost ;;
+  description: "not available"
+}
+measure: sum_of_cs_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_list_price {
+  type: sum_distinct
+  sql: ${TABLE}.cs_list_price ;;
+  description: "not available"
+}
+measure: sum_of_cs_net_paid {
+  type: sum_distinct
+  sql: ${TABLE}.cs_net_paid ;;
+  description: "not available"
+}
+measure: sum_of_cs_net_paid_inc_ship {
+  type: sum_distinct
+  sql: ${TABLE}.cs_net_paid_inc_ship ;;
+  description: "not available"
+}
+measure: sum_of_cs_net_paid_inc_ship_tax {
+  type: sum_distinct
+  sql: ${TABLE}.cs_net_paid_inc_ship_tax ;;
+  description: "not available"
+}
+measure: sum_of_cs_net_paid_inc_tax {
+  type: sum_distinct
+  sql: ${TABLE}.cs_net_paid_inc_tax ;;
+  description: "not available"
+}
+measure: sum_of_cs_net_profit {
+  type: sum_distinct
+  sql: ${TABLE}.cs_net_profit ;;
+  description: "not available"
+}
+measure: sum_of_cs_order_number {
+  type: sum_distinct
+  sql: ${TABLE}.cs_order_number ;;
+  description: "not available"
+}
+measure: sum_of_cs_promo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_promo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_quantity {
+  type: sum_distinct
+  sql: ${TABLE}.cs_quantity ;;
+  description: "not available"
+}
+measure: sum_of_cs_sales_price {
+  type: sum_distinct
+  sql: ${TABLE}.cs_sales_price ;;
+  description: "not available"
+}
+measure: sum_of_cs_ship_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ship_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_ship_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ship_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_ship_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ship_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_ship_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ship_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_ship_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ship_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_ship_mode_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_ship_mode_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_sold_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_sold_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_sold_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_sold_time_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_warehouse_sk {
+  type: sum_distinct
+  sql: ${TABLE}.cs_warehouse_sk ;;
+  description: "not available"
+}
+measure: sum_of_cs_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.cs_wholesale_cost ;;
   description: "not available"
 }
 }
-view: +sales_new_programs {
-measure: count_of_program_launch_pk {
-  type: count_distinct
-  sql: ${TABLE}.program_launch_pk ;;
-  description: ""
-}
-}
-view: +sales_priority_programs {
-measure: count_of_priority_program_pk {
-  type: count_distinct
-  sql: ${TABLE}.priority_program_pk ;;
-  description: "not available"
-}
-}
-view: +sales_quota_allocations {
-measure: count_of_quota_allocation_pk {
-  type: count_distinct
-  sql: ${TABLE}.quota_allocation_pk ;;
-  description: "not available"
-}
-measure: sum_of_quota_year {
+view: +customer {
+measure: sum_of_c_birth_day {
   type: sum_distinct
-  sql: ${TABLE}.quota_year ;;
+  sql: ${TABLE}.c_birth_day ;;
   description: "not available"
 }
-measure: sum_of_deposits_amt {
+measure: sum_of_c_birth_month {
   type: sum_distinct
-  sql: ${TABLE}.deposits_amt ;;
+  sql: ${TABLE}.c_birth_month ;;
   description: "not available"
 }
-measure: sum_of_cas_enrolment_amt {
+measure: sum_of_c_birth_year {
   type: sum_distinct
-  sql: ${TABLE}.cas_enrolment_amt ;;
+  sql: ${TABLE}.c_birth_year ;;
   description: "not available"
 }
-measure: sum_of_progression_amt {
+measure: sum_of_c_current_addr_sk {
   type: sum_distinct
-  sql: ${TABLE}.progression_amt ;;
+  sql: ${TABLE}.c_current_addr_sk ;;
   description: "not available"
 }
-}
-view: +sales_scholarships {
-measure: count_of_scholarships_pk {
-  type: count_distinct
-  sql: ${TABLE}.scholarships_pk ;;
+measure: sum_of_c_current_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.c_current_cdemo_sk ;;
   description: "not available"
 }
-measure: sum_of_student_ledger_sop_line_item_actual_amount {
+measure: sum_of_c_current_hdemo_sk {
   type: sum_distinct
-  sql: ${TABLE}.student_ledger_sop_line_item_actual_amount ;;
-  description: "The amount of the course after the scholarship has been given"
-}
-}
-view: +sales_student {
-measure: count_of_student_pk {
-  type: count_distinct
-  sql: ${TABLE}.student_pk ;;
-  description: "The key to link to/indicate a certain student"
-}
-measure: sum_of_country_natural_key {
-  type: sum_distinct
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key to indicate the country linked to the student"
-}
-}
-view: +scholarship_budgets {
-measure: count_of_scholarship_budgets_pk {
-  type: count_distinct
-  sql: ${TABLE}.scholarship_budgets_pk ;;
-  description: "The key to link to the scholarship budget records"
-}
-measure: sum_of_budget_amt {
-  type: sum_distinct
-  sql: ${TABLE}.budget_amt ;;
-  description: "The amount of budget"
-}
-}
-view: +scholarship_targets {
-measure: count_of_scholarship_targets_pk {
-  type: count_distinct
-  sql: ${TABLE}.scholarship_targets_pk ;;
+  sql: ${TABLE}.c_current_hdemo_sk ;;
   description: "not available"
 }
-measure: sum_of_target_amt {
+measure: sum_of_c_customer_sk {
   type: sum_distinct
-  sql: ${TABLE}.target_amt ;;
+  sql: ${TABLE}.c_customer_sk ;;
   description: "not available"
 }
-measure: sum_of_budget_amt {
+measure: sum_of_c_first_sales_date_sk {
   type: sum_distinct
-  sql: ${TABLE}.budget_amt ;;
+  sql: ${TABLE}.c_first_sales_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_c_first_shipto_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.c_first_shipto_date_sk ;;
   description: "not available"
 }
 }
-view: +targets_institutions {
-measure: count_of_institution_target_pk {
-  type: count_distinct
-  sql: ${TABLE}.institution_target_pk ;;
+view: +customer_address {
+measure: sum_of_ca_address_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ca_address_sk ;;
   description: "not available"
 }
-measure: sum_of_target_amt {
+measure: sum_of_ca_gmt_offset {
   type: sum_distinct
-  sql: ${TABLE}.target_amt ;;
+  sql: ${TABLE}.ca_gmt_offset ;;
   description: "not available"
 }
 }
-view: +targets_sales_regions {
-measure: count_of_sales_region_target_pk {
-  type: count_distinct
-  sql: ${TABLE}.sales_region_target_pk ;;
-  description: "The key to link to the target sales region"
-}
-measure: sum_of_target_amt {
+view: +customer_demographics {
+measure: sum_of_cd_demo_sk {
   type: sum_distinct
-  sql: ${TABLE}.target_amt ;;
-  description: "The target amount of enrolments"
+  sql: ${TABLE}.cd_demo_sk ;;
+  description: "not available"
+}
+measure: sum_of_cd_dep_college_count {
+  type: sum_distinct
+  sql: ${TABLE}.cd_dep_college_count ;;
+  description: "not available"
+}
+measure: sum_of_cd_dep_count {
+  type: sum_distinct
+  sql: ${TABLE}.cd_dep_count ;;
+  description: "not available"
+}
+measure: sum_of_cd_dep_employed_count {
+  type: sum_distinct
+  sql: ${TABLE}.cd_dep_employed_count ;;
+  description: "not available"
+}
+measure: sum_of_cd_purchase_estimate {
+  type: sum_distinct
+  sql: ${TABLE}.cd_purchase_estimate ;;
+  description: "not available"
+}
+}
+view: +date_dim {
+measure: sum_of_d_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.d_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_d_dom {
+  type: sum_distinct
+  sql: ${TABLE}.d_dom ;;
+  description: "not available"
+}
+measure: sum_of_d_dow {
+  type: sum_distinct
+  sql: ${TABLE}.d_dow ;;
+  description: "not available"
+}
+measure: sum_of_d_first_dom {
+  type: sum_distinct
+  sql: ${TABLE}.d_first_dom ;;
+  description: "not available"
+}
+measure: sum_of_d_fy_quarter_seq {
+  type: sum_distinct
+  sql: ${TABLE}.d_fy_quarter_seq ;;
+  description: "not available"
+}
+measure: sum_of_d_fy_week_seq {
+  type: sum_distinct
+  sql: ${TABLE}.d_fy_week_seq ;;
+  description: "not available"
+}
+measure: sum_of_d_fy_year {
+  type: sum_distinct
+  sql: ${TABLE}.d_fy_year ;;
+  description: "not available"
+}
+measure: sum_of_d_last_dom {
+  type: sum_distinct
+  sql: ${TABLE}.d_last_dom ;;
+  description: "not available"
+}
+measure: sum_of_d_month_seq {
+  type: sum_distinct
+  sql: ${TABLE}.d_month_seq ;;
+  description: "not available"
+}
+measure: sum_of_d_moy {
+  type: sum_distinct
+  sql: ${TABLE}.d_moy ;;
+  description: "not available"
+}
+measure: sum_of_d_qoy {
+  type: sum_distinct
+  sql: ${TABLE}.d_qoy ;;
+  description: "not available"
+}
+measure: sum_of_d_quarter_seq {
+  type: sum_distinct
+  sql: ${TABLE}.d_quarter_seq ;;
+  description: "not available"
+}
+measure: sum_of_d_same_day_lq {
+  type: sum_distinct
+  sql: ${TABLE}.d_same_day_lq ;;
+  description: "not available"
+}
+measure: sum_of_d_same_day_ly {
+  type: sum_distinct
+  sql: ${TABLE}.d_same_day_ly ;;
+  description: "not available"
+}
+measure: sum_of_d_week_seq {
+  type: sum_distinct
+  sql: ${TABLE}.d_week_seq ;;
+  description: "not available"
+}
+measure: sum_of_d_year {
+  type: sum_distinct
+  sql: ${TABLE}.d_year ;;
+  description: "not available"
+}
+}
+view: +household_demographics {
+measure: sum_of_hd_demo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.hd_demo_sk ;;
+  description: "not available"
+}
+measure: sum_of_hd_dep_count {
+  type: sum_distinct
+  sql: ${TABLE}.hd_dep_count ;;
+  description: "not available"
+}
+measure: sum_of_hd_income_band_sk {
+  type: sum_distinct
+  sql: ${TABLE}.hd_income_band_sk ;;
+  description: "not available"
+}
+measure: sum_of_hd_vehicle_count {
+  type: sum_distinct
+  sql: ${TABLE}.hd_vehicle_count ;;
+  description: "not available"
+}
+}
+view: +income_band {
+measure: sum_of_ib_income_band_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ib_income_band_sk ;;
+  description: "not available"
+}
+measure: sum_of_ib_lower_bound {
+  type: sum_distinct
+  sql: ${TABLE}.ib_lower_bound ;;
+  description: "not available"
+}
+measure: sum_of_ib_upper_bound {
+  type: sum_distinct
+  sql: ${TABLE}.ib_upper_bound ;;
+  description: "not available"
+}
+}
+view: +inventory {
+measure: sum_of_inv_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.inv_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_inv_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.inv_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_inv_quantity_on_hand {
+  type: sum_distinct
+  sql: ${TABLE}.inv_quantity_on_hand ;;
+  description: "not available"
+}
+measure: sum_of_inv_warehouse_sk {
+  type: sum_distinct
+  sql: ${TABLE}.inv_warehouse_sk ;;
+  description: "not available"
+}
+}
+view: +item {
+measure: sum_of_i_brand_id {
+  type: sum_distinct
+  sql: ${TABLE}.i_brand_id ;;
+  description: "not available"
+}
+measure: sum_of_i_category_id {
+  type: sum_distinct
+  sql: ${TABLE}.i_category_id ;;
+  description: "not available"
+}
+measure: sum_of_i_class_id {
+  type: sum_distinct
+  sql: ${TABLE}.i_class_id ;;
+  description: "not available"
+}
+measure: sum_of_i_current_price {
+  type: sum_distinct
+  sql: ${TABLE}.i_current_price ;;
+  description: "not available"
+}
+measure: sum_of_i_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.i_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_i_manager_id {
+  type: sum_distinct
+  sql: ${TABLE}.i_manager_id ;;
+  description: "not available"
+}
+measure: sum_of_i_manufact_id {
+  type: sum_distinct
+  sql: ${TABLE}.i_manufact_id ;;
+  description: "not available"
+}
+measure: sum_of_i_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.i_wholesale_cost ;;
+  description: "not available"
+}
+}
+view: +promotion {
+measure: sum_of_p_cost {
+  type: sum_distinct
+  sql: ${TABLE}.p_cost ;;
+  description: "not available"
+}
+measure: sum_of_p_end_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.p_end_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_p_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.p_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_p_promo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.p_promo_sk ;;
+  description: "not available"
+}
+measure: sum_of_p_response_target {
+  type: sum_distinct
+  sql: ${TABLE}.p_response_target ;;
+  description: "not available"
+}
+measure: sum_of_p_start_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.p_start_date_sk ;;
+  description: "not available"
+}
+}
+view: +reason {
+measure: sum_of_r_reason_sk {
+  type: sum_distinct
+  sql: ${TABLE}.r_reason_sk ;;
+  description: "not available"
+}
+}
+view: +ship_mode {
+measure: sum_of_sm_ship_mode_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sm_ship_mode_sk ;;
+  description: "not available"
+}
+}
+view: +store {
+measure: sum_of_s_closed_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.s_closed_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_s_company_id {
+  type: sum_distinct
+  sql: ${TABLE}.s_company_id ;;
+  description: "not available"
+}
+measure: sum_of_s_division_id {
+  type: sum_distinct
+  sql: ${TABLE}.s_division_id ;;
+  description: "not available"
+}
+measure: sum_of_s_floor_space {
+  type: sum_distinct
+  sql: ${TABLE}.s_floor_space ;;
+  description: "not available"
+}
+measure: sum_of_s_gmt_offset {
+  type: sum_distinct
+  sql: ${TABLE}.s_gmt_offset ;;
+  description: "not available"
+}
+measure: sum_of_s_market_id {
+  type: sum_distinct
+  sql: ${TABLE}.s_market_id ;;
+  description: "not available"
+}
+measure: sum_of_s_number_employees {
+  type: sum_distinct
+  sql: ${TABLE}.s_number_employees ;;
+  description: "not available"
+}
+measure: sum_of_s_store_sk {
+  type: sum_distinct
+  sql: ${TABLE}.s_store_sk ;;
+  description: "not available"
+}
+measure: sum_of_s_tax_precentage {
+  type: sum_distinct
+  sql: ${TABLE}.s_tax_precentage ;;
+  description: "not available"
+}
+}
+view: +store_returns {
+measure: sum_of_sr_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_fee {
+  type: sum_distinct
+  sql: ${TABLE}.sr_fee ;;
+  description: "not available"
+}
+measure: sum_of_sr_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_net_loss {
+  type: sum_distinct
+  sql: ${TABLE}.sr_net_loss ;;
+  description: "not available"
+}
+measure: sum_of_sr_reason_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_reason_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_refunded_cash {
+  type: sum_distinct
+  sql: ${TABLE}.sr_refunded_cash ;;
+  description: "not available"
+}
+measure: sum_of_sr_return_amt {
+  type: sum_distinct
+  sql: ${TABLE}.sr_return_amt ;;
+  description: "not available"
+}
+measure: sum_of_sr_return_amt_inc_tax {
+  type: sum_distinct
+  sql: ${TABLE}.sr_return_amt_inc_tax ;;
+  description: "not available"
+}
+measure: sum_of_sr_return_quantity {
+  type: sum_distinct
+  sql: ${TABLE}.sr_return_quantity ;;
+  description: "not available"
+}
+measure: sum_of_sr_return_ship_cost {
+  type: sum_distinct
+  sql: ${TABLE}.sr_return_ship_cost ;;
+  description: "not available"
+}
+measure: sum_of_sr_return_tax {
+  type: sum_distinct
+  sql: ${TABLE}.sr_return_tax ;;
+  description: "not available"
+}
+measure: sum_of_sr_return_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_return_time_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_returned_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_returned_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_reversed_charge {
+  type: sum_distinct
+  sql: ${TABLE}.sr_reversed_charge ;;
+  description: "not available"
+}
+measure: sum_of_sr_store_credit {
+  type: sum_distinct
+  sql: ${TABLE}.sr_store_credit ;;
+  description: "not available"
+}
+measure: sum_of_sr_store_sk {
+  type: sum_distinct
+  sql: ${TABLE}.sr_store_sk ;;
+  description: "not available"
+}
+measure: sum_of_sr_ticket_number {
+  type: sum_distinct
+  sql: ${TABLE}.sr_ticket_number ;;
+  description: "not available"
+}
+}
+view: +store_sales {
+measure: sum_of_ss_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_coupon_amt {
+  type: sum_distinct
+  sql: ${TABLE}.ss_coupon_amt ;;
+  description: "not available"
+}
+measure: sum_of_ss_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_ext_discount_amt {
+  type: sum_distinct
+  sql: ${TABLE}.ss_ext_discount_amt ;;
+  description: "not available"
+}
+measure: sum_of_ss_ext_list_price {
+  type: sum_distinct
+  sql: ${TABLE}.ss_ext_list_price ;;
+  description: "not available"
+}
+measure: sum_of_ss_ext_sales_price {
+  type: sum_distinct
+  sql: ${TABLE}.ss_ext_sales_price ;;
+  description: "not available"
+}
+measure: sum_of_ss_ext_tax {
+  type: sum_distinct
+  sql: ${TABLE}.ss_ext_tax ;;
+  description: "not available"
+}
+measure: sum_of_ss_ext_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.ss_ext_wholesale_cost ;;
+  description: "not available"
+}
+measure: sum_of_ss_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_list_price {
+  type: sum_distinct
+  sql: ${TABLE}.ss_list_price ;;
+  description: "not available"
+}
+measure: sum_of_ss_net_paid {
+  type: sum_distinct
+  sql: ${TABLE}.ss_net_paid ;;
+  description: "not available"
+}
+measure: sum_of_ss_net_paid_inc_tax {
+  type: sum_distinct
+  sql: ${TABLE}.ss_net_paid_inc_tax ;;
+  description: "not available"
+}
+measure: sum_of_ss_net_profit {
+  type: sum_distinct
+  sql: ${TABLE}.ss_net_profit ;;
+  description: "not available"
+}
+measure: sum_of_ss_promo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_promo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_quantity {
+  type: sum_distinct
+  sql: ${TABLE}.ss_quantity ;;
+  description: "not available"
+}
+measure: sum_of_ss_sales_price {
+  type: sum_distinct
+  sql: ${TABLE}.ss_sales_price ;;
+  description: "not available"
+}
+measure: sum_of_ss_sold_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_sold_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_sold_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_sold_time_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_store_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ss_store_sk ;;
+  description: "not available"
+}
+measure: sum_of_ss_ticket_number {
+  type: sum_distinct
+  sql: ${TABLE}.ss_ticket_number ;;
+  description: "not available"
+}
+measure: sum_of_ss_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.ss_wholesale_cost ;;
+  description: "not available"
+}
+}
+view: +time_dim {
+measure: sum_of_t_hour {
+  type: sum_distinct
+  sql: ${TABLE}.t_hour ;;
+  description: "not available"
+}
+measure: sum_of_t_minute {
+  type: sum_distinct
+  sql: ${TABLE}.t_minute ;;
+  description: "not available"
+}
+measure: sum_of_t_second {
+  type: sum_distinct
+  sql: ${TABLE}.t_second ;;
+  description: "not available"
+}
+measure: sum_of_t_time {
+  type: sum_distinct
+  sql: ${TABLE}.t_time ;;
+  description: "not available"
+}
+measure: sum_of_t_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.t_time_sk ;;
+  description: "not available"
+}
+}
+view: +warehouse {
+measure: sum_of_w_gmt_offset {
+  type: sum_distinct
+  sql: ${TABLE}.w_gmt_offset ;;
+  description: "not available"
+}
+measure: sum_of_w_warehouse_sk {
+  type: sum_distinct
+  sql: ${TABLE}.w_warehouse_sk ;;
+  description: "not available"
+}
+measure: sum_of_w_warehouse_sq_ft {
+  type: sum_distinct
+  sql: ${TABLE}.w_warehouse_sq_ft ;;
+  description: "not available"
+}
+}
+view: +web_page {
+measure: sum_of_wp_access_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wp_access_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_wp_char_count {
+  type: sum_distinct
+  sql: ${TABLE}.wp_char_count ;;
+  description: "not available"
+}
+measure: sum_of_wp_creation_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wp_creation_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_wp_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wp_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_wp_image_count {
+  type: sum_distinct
+  sql: ${TABLE}.wp_image_count ;;
+  description: "not available"
+}
+measure: sum_of_wp_link_count {
+  type: sum_distinct
+  sql: ${TABLE}.wp_link_count ;;
+  description: "not available"
+}
+measure: sum_of_wp_max_ad_count {
+  type: sum_distinct
+  sql: ${TABLE}.wp_max_ad_count ;;
+  description: "not available"
+}
+measure: sum_of_wp_web_page_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wp_web_page_sk ;;
+  description: "not available"
+}
+}
+view: +web_returns {
+measure: sum_of_wr_account_credit {
+  type: sum_distinct
+  sql: ${TABLE}.wr_account_credit ;;
+  description: "not available"
+}
+measure: sum_of_wr_fee {
+  type: sum_distinct
+  sql: ${TABLE}.wr_fee ;;
+  description: "not available"
+}
+measure: sum_of_wr_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_net_loss {
+  type: sum_distinct
+  sql: ${TABLE}.wr_net_loss ;;
+  description: "not available"
+}
+measure: sum_of_wr_order_number {
+  type: sum_distinct
+  sql: ${TABLE}.wr_order_number ;;
+  description: "not available"
+}
+measure: sum_of_wr_reason_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_reason_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_refunded_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_refunded_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_refunded_cash {
+  type: sum_distinct
+  sql: ${TABLE}.wr_refunded_cash ;;
+  description: "not available"
+}
+measure: sum_of_wr_refunded_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_refunded_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_refunded_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_refunded_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_refunded_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_refunded_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_return_amt {
+  type: sum_distinct
+  sql: ${TABLE}.wr_return_amt ;;
+  description: "not available"
+}
+measure: sum_of_wr_return_amt_inc_tax {
+  type: sum_distinct
+  sql: ${TABLE}.wr_return_amt_inc_tax ;;
+  description: "not available"
+}
+measure: sum_of_wr_return_quantity {
+  type: sum_distinct
+  sql: ${TABLE}.wr_return_quantity ;;
+  description: "not available"
+}
+measure: sum_of_wr_return_ship_cost {
+  type: sum_distinct
+  sql: ${TABLE}.wr_return_ship_cost ;;
+  description: "not available"
+}
+measure: sum_of_wr_return_tax {
+  type: sum_distinct
+  sql: ${TABLE}.wr_return_tax ;;
+  description: "not available"
+}
+measure: sum_of_wr_returned_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_returned_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_returned_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_returned_time_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_returning_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_returning_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_returning_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_returning_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_returning_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_returning_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_returning_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_returning_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_wr_reversed_charge {
+  type: sum_distinct
+  sql: ${TABLE}.wr_reversed_charge ;;
+  description: "not available"
+}
+measure: sum_of_wr_web_page_sk {
+  type: sum_distinct
+  sql: ${TABLE}.wr_web_page_sk ;;
+  description: "not available"
+}
+}
+view: +web_sales {
+measure: sum_of_ws_bill_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_bill_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_bill_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_bill_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_bill_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_bill_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_bill_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_bill_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_coupon_amt {
+  type: sum_distinct
+  sql: ${TABLE}.ws_coupon_amt ;;
+  description: "not available"
+}
+measure: sum_of_ws_ext_discount_amt {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ext_discount_amt ;;
+  description: "not available"
+}
+measure: sum_of_ws_ext_list_price {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ext_list_price ;;
+  description: "not available"
+}
+measure: sum_of_ws_ext_sales_price {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ext_sales_price ;;
+  description: "not available"
+}
+measure: sum_of_ws_ext_ship_cost {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ext_ship_cost ;;
+  description: "not available"
+}
+measure: sum_of_ws_ext_tax {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ext_tax ;;
+  description: "not available"
+}
+measure: sum_of_ws_ext_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ext_wholesale_cost ;;
+  description: "not available"
+}
+measure: sum_of_ws_item_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_item_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_list_price {
+  type: sum_distinct
+  sql: ${TABLE}.ws_list_price ;;
+  description: "not available"
+}
+measure: sum_of_ws_net_paid {
+  type: sum_distinct
+  sql: ${TABLE}.ws_net_paid ;;
+  description: "not available"
+}
+measure: sum_of_ws_net_paid_inc_ship {
+  type: sum_distinct
+  sql: ${TABLE}.ws_net_paid_inc_ship ;;
+  description: "not available"
+}
+measure: sum_of_ws_net_paid_inc_ship_tax {
+  type: sum_distinct
+  sql: ${TABLE}.ws_net_paid_inc_ship_tax ;;
+  description: "not available"
+}
+measure: sum_of_ws_net_paid_inc_tax {
+  type: sum_distinct
+  sql: ${TABLE}.ws_net_paid_inc_tax ;;
+  description: "not available"
+}
+measure: sum_of_ws_net_profit {
+  type: sum_distinct
+  sql: ${TABLE}.ws_net_profit ;;
+  description: "not available"
+}
+measure: sum_of_ws_order_number {
+  type: sum_distinct
+  sql: ${TABLE}.ws_order_number ;;
+  description: "not available"
+}
+measure: sum_of_ws_promo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_promo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_quantity {
+  type: sum_distinct
+  sql: ${TABLE}.ws_quantity ;;
+  description: "not available"
+}
+measure: sum_of_ws_sales_price {
+  type: sum_distinct
+  sql: ${TABLE}.ws_sales_price ;;
+  description: "not available"
+}
+measure: sum_of_ws_ship_addr_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ship_addr_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_ship_cdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ship_cdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_ship_customer_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ship_customer_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_ship_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ship_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_ship_hdemo_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ship_hdemo_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_ship_mode_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_ship_mode_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_sold_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_sold_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_sold_time_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_sold_time_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_warehouse_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_warehouse_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_web_page_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_web_page_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_web_site_sk {
+  type: sum_distinct
+  sql: ${TABLE}.ws_web_site_sk ;;
+  description: "not available"
+}
+measure: sum_of_ws_wholesale_cost {
+  type: sum_distinct
+  sql: ${TABLE}.ws_wholesale_cost ;;
+  description: "not available"
+}
+}
+view: +web_site {
+measure: sum_of_web_close_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.web_close_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_web_company_id {
+  type: sum_distinct
+  sql: ${TABLE}.web_company_id ;;
+  description: "not available"
+}
+measure: sum_of_web_gmt_offset {
+  type: sum_distinct
+  sql: ${TABLE}.web_gmt_offset ;;
+  description: "not available"
+}
+measure: sum_of_web_mkt_id {
+  type: sum_distinct
+  sql: ${TABLE}.web_mkt_id ;;
+  description: "not available"
+}
+measure: sum_of_web_open_date_sk {
+  type: sum_distinct
+  sql: ${TABLE}.web_open_date_sk ;;
+  description: "not available"
+}
+measure: sum_of_web_site_sk {
+  type: sum_distinct
+  sql: ${TABLE}.web_site_sk ;;
+  description: "not available"
+}
+measure: sum_of_web_tax_percentage {
+  type: sum_distinct
+  sql: ${TABLE}.web_tax_percentage ;;
+  description: "not available"
 }
 }

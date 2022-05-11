@@ -7,7 +7,10 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty.config import ProjectVariables
+from droughty.config import (
+    ProjectVariables,
+    get_snowflake_connector_url
+)
 class ExploreDictVariables():
 
     distinct_duplicate_explore_rows: str
@@ -37,19 +40,7 @@ def get_looker_explore_dict():
 
     elif ProjectVariables.warehouse == 'snowflake': 
 
-        url = URL(
-
-            account = ProjectVariables.account,
-            user =  ProjectVariables.user,
-            schema =  ProjectVariables.schema,
-            database =  ProjectVariables.database,
-            password =  ProjectVariables.password,
-            warehouse= ProjectVariables.snowflake_warehouse,
-            role =  ProjectVariables.role
-
-        )
-
-        engine = create_engine(url)
+        engine = create_engine(get_snowflake_connector_url())
 
         connection = engine.connect()
 

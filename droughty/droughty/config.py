@@ -4,6 +4,7 @@ import git
 from cgi import test
 from dataclasses import dataclass
 from google.oauth2 import service_account
+from snowflake.sqlalchemy import URL
 
 from droughty.config_cli import Common
 
@@ -289,3 +290,19 @@ def assign_dbt_test_variables():
         raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
 
 dbt_test_variables = assign_dbt_test_variables()
+
+def get_snowflake_connector_url():
+
+    url = URL(
+
+    account = ProjectVariables.account,
+    user =  ProjectVariables.user,
+    schema =  ProjectVariables.schema,
+    database =  ProjectVariables.database,
+    password =  ProjectVariables.password,
+    warehouse = ProjectVariables.snowflake_warehouse,
+    role =  ProjectVariables.role
+
+    )
+
+    return (url)

@@ -10,8 +10,14 @@ import pandas
 from itertools import chain
 
 from droughty import warehouse_target
-from droughty.config import ProjectVariables
-
+from droughty.config import (
+    ProjectVariables,
+    get_snowflake_connector_url
+)
+from droughty.droughty_data_prep import (
+    wrangle_bigquery_dbt_test_dataframes,
+    wrangle_snowflake_dbt_test_dataframes
+)
 import sys
 
 def get_dbt_dict():
@@ -27,54 +33,26 @@ def get_dbt_dict():
         credentials = ProjectVariables.service_account
         project = ProjectVariables.project
 
-        df = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
+        dataframe = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
-        df1 = df[['table_name','column_name','data_type']]
-
-        df1['data_type'] = df1['data_type'].str.replace('TIMESTAMP','timestamp')
-        df1['data_type'] = df1['data_type'].str.replace('DATE','date')
-        df1['data_type'] = df1['data_type'].str.replace('INT64','number')
-        df1['data_type'] = df1['data_type'].str.replace('FLOAT64','number')
-        df1['data_type'] = df1['data_type'].str.replace('NUMERIC','number')
-        df1['data_type'] = df1['data_type'].str.replace('STRING','string')
-        df1['data_type'] = df1['data_type'].str.replace('BOOL','yesno')
+        wrangled_dataframe = wrangle_bigquery_dbt_test_dataframes(dataframe)
 
     elif warehouse == 'snowflake': 
 
-        url = URL(
-
-            account = ProjectVariables.account,
-            user =  ProjectVariables.user,
-            schema =  ProjectVariables.schema,
-            database =  ProjectVariables.database,
-            password =  ProjectVariables.password,
-            warehouse= ProjectVariables.snowflake_warehouse,
-            role =  ProjectVariables.role
-
-        )
-
-        engine = create_engine(url)
+        engine = create_engine(get_snowflake_connector_url())
 
         connection = engine.connect()
 
         query = warehouse_target.test_warehouse_schema
 
-        df = pd.read_sql(query, connection)
+        dataframe = pd.read_sql(query, connection)
 
-        df['description'] = df['comment'].fillna('not available')
-
-        df['column_name'] = df['column_name'].str.lower()
-        df['table_name'] = df['table_name'].str.lower()
-        df['description'] = df['description'].str.lower()
-
-        df1 = df.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
-
-        df1 = df1[['table_name','column_name','data_type','description']]
+        wrangled_dataframe = wrangle_snowflake_dbt_test_dataframes(dataframe)
 
         connection.close()
         engine.dispose()
 
-    return (df1)
+    return(wrangled_dataframe)
 
 def recur_dictify(frame):
     if len(frame.columns) == 1:

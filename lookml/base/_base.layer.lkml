@@ -1,2694 +1,2535 @@
-explore: budgets_sales
+explore: call_center
 { hidden: yes }
-explore: core_agents
+explore: catalog_page
 { hidden: yes }
-explore: core_countries
+explore: catalog_returns
 { hidden: yes }
-explore: core_country_mapping
+explore: catalog_sales
 { hidden: yes }
-explore: core_institutions
+explore: customer
 { hidden: yes }
-explore: core_program_intakes
+explore: customer_address
 { hidden: yes }
-explore: core_programs
+explore: customer_demographics
 { hidden: yes }
-explore: core_scholarship_reason_owners
+explore: date_dim
 { hidden: yes }
-explore: core_scholarship_reasons
+explore: household_demographics
 { hidden: yes }
-explore: core_sponsors
+explore: income_band
 { hidden: yes }
-explore: core_subjects
+explore: inventory
 { hidden: yes }
-explore: core_user_mapping
+explore: item
 { hidden: yes }
-explore: core_users
+explore: promotion
 { hidden: yes }
-explore: product_progression_plans
+explore: reason
 { hidden: yes }
-explore: product_progression_plans_history
+explore: ship_mode
 { hidden: yes }
-explore: product_study_plans
+explore: store
 { hidden: yes }
-explore: product_study_plans_history
+explore: store_returns
 { hidden: yes }
-explore: sales_application_agent_bridge
+explore: store_sales
 { hidden: yes }
-explore: sales_application_history
+explore: time_dim
 { hidden: yes }
-explore: sales_applications
+explore: warehouse
 { hidden: yes }
-explore: sales_applications_history
+explore: web_page
 { hidden: yes }
-explore: sales_applications_quota
+explore: web_returns
 { hidden: yes }
-explore: sales_applications_summary
+explore: web_sales
 { hidden: yes }
-explore: sales_new_programs
+explore: web_site
 { hidden: yes }
-explore: sales_priority_programs
-{ hidden: yes }
-explore: sales_quota_allocations
-{ hidden: yes }
-explore: sales_scholarships
-{ hidden: yes }
-explore: sales_student
-{ hidden: yes }
-explore: scholarship_budgets
-{ hidden: yes }
-explore: scholarship_targets
-{ hidden: yes }
-explore: targets_institutions
-{ hidden: yes }
-explore: targets_sales_regions
-{ hidden: yes }
-view: budgets_sales {
-sql_table_name: budgets_sales ;;
-dimension: budget_pk {
-  primary_key: yes
-  hidden: yes
+view: call_center {
+sql_table_name: call_center ;;
+dimension: cc_call_center_id {
   type: string
-  sql: ${TABLE}.budget_pk ;;
+  sql: ${TABLE}.cc_call_center_id ;;
   description: "not available"
 }
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "not available"
-}
-dimension: budget_group {
-  type: string
-  sql: ${TABLE}.budget_group ;;
-  description: "not available"
-}
-dimension: budget_name {
-  type: string
-  sql: ${TABLE}.budget_name ;;
-  description: "not available"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "not available"
-}
-dimension: institution_name {
-  type: string
-  sql: ${TABLE}.institution_name ;;
-  description: "not available"
-}
-dimension: entry_type_code {
-  type: string
-  sql: ${TABLE}.entry_type_code ;;
-  description: "not available"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "not available"
-}
-dimension: budget_amt {
+dimension: cc_call_center_sk {
   hidden: yes 
   type: number
-  sql: ${TABLE}.budget_amt ;;
+  sql: ${TABLE}.cc_call_center_sk ;;
   description: "not available"
 }
-}
-view: core_agents {
-sql_table_name: core_agents ;;
-dimension: agent_pk {
-  primary_key: yes
-  hidden: yes
+dimension: cc_city {
   type: string
-  sql: ${TABLE}.agent_pk ;;
-  description: "The key and link to an agent"
-}
-dimension: country_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.country_fk ;;
-  description: "The key and link to a country"
-}
-dimension: agent_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.agent_natural_key ;;
-  description: "The key and link to an agent from a record"
-}
-dimension: agent_salesforce_business_key {
-  type: string
-  sql: ${TABLE}.agent_salesforce_business_key ;;
-  description: "The key and link to an agent based salesforce record"
-}
-dimension: country_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country from a record"
-}
-dimension: name {
-  type: string
-  sql: ${TABLE}.name ;;
-  description: "The name of the agent"
-}
-dimension: group {
-  type: string
-  sql: ${TABLE}.group ;;
-  description: "The agent group which the agent belongs too"
-}
-dimension: status {
-  type: string
-  sql: ${TABLE}.status ;;
-  description: "The status of the agent"
-}
-dimension: sales_channel {
-  type: string
-  sql: ${TABLE}.sales_channel ;;
-  description: "The sales channel which the agent belongs to"
-}
-dimension: uk_based_agent {
-  type: yesno
-  sql: ${TABLE}.uk_based_agent ;;
-  description: "Confirms if the agent is UK based"
-}
-}
-view: core_countries {
-sql_table_name: core_countries ;;
-dimension: country_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.country_pk ;;
-  description: "The key and link to a country"
-}
-dimension: country_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country"
-}
-dimension: country {
-  type: string
-  sql: ${TABLE}.country ;;
-  description: "The name of the country"
-}
-dimension: country_iso_key {
-  type: string
-  sql: ${TABLE}.country_iso_key ;;
-  description: "An abbreviation for the names of countries (United States Of America = USA, etc)"
-}
-dimension: salesforce_country_key {
-  type: string
-  sql: ${TABLE}.salesforce_country_key ;;
-  description: "The key and link to the salesforce country record"
-}
-dimension: country_nationality {
-  type: string
-  sql: ${TABLE}.country_nationality ;;
-  description: "The nationality for the country"
-}
-dimension: country_is_sanctioned {
-  type: yesno
-  sql: ${TABLE}.country_is_sanctioned ;;
-  description: "Confirms if the country is sanctioned"
-}
-}
-view: core_country_mapping {
-sql_table_name: core_country_mapping ;;
-dimension: country_mapping_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.country_mapping_pk ;;
-  description: "The key to link countries to other records"
-}
-dimension: country_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.country_fk ;;
-  description: "The key and link to a country"
-}
-dimension: nationality_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.nationality_fk ;;
-  description: "The key and link to a countries nationality"
-}
-dimension: country_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country"
-}
-dimension: sales_region {
-  type: string
-  sql: ${TABLE}.sales_region ;;
+  sql: ${TABLE}.cc_city ;;
   description: "not available"
 }
-dimension: sales_region_group {
+dimension: cc_class {
   type: string
-  sql: ${TABLE}.sales_region_group ;;
+  sql: ${TABLE}.cc_class ;;
   description: "not available"
 }
-dimension: schols_region {
-  type: string
-  sql: ${TABLE}.schols_region ;;
-  description: "The region of the scholarship system"
-}
-dimension_group: valid_from {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.valid_from ;;
-  description: "Date the record is valid from"
-}
-dimension_group: valid_to {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.valid_to ;;
-  description: "Date the record is valid to"
-}
-}
-view: core_institutions {
-sql_table_name: core_institutions ;;
-dimension: institution_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.institution_pk ;;
-  description: "The key and link to an institution"
-}
-dimension: country_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.country_fk ;;
-  description: "The key and link to a country"
-}
-dimension: institution_natural_key {
+dimension: cc_closed_date_sk {
   hidden: yes 
   type: number
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key and link to an institution"
+  sql: ${TABLE}.cc_closed_date_sk ;;
+  description: "not available"
 }
-dimension: country_natural_key {
+dimension: cc_company {
   hidden: yes 
   type: number
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key and link to a country"
+  sql: ${TABLE}.cc_company ;;
+  description: "not available"
 }
-dimension: institution_type {
+dimension: cc_company_name {
   type: string
-  sql: ${TABLE}.institution_type ;;
-  description: "The type of institution (college or university)"
+  sql: ${TABLE}.cc_company_name ;;
+  description: "not available"
 }
-dimension: institution_code {
+dimension: cc_country {
   type: string
-  sql: ${TABLE}.institution_code ;;
-  description: "The code to indicate what type of institution it is"
+  sql: ${TABLE}.cc_country ;;
+  description: "not available"
 }
-dimension: institution_name {
+dimension: cc_county {
   type: string
-  sql: ${TABLE}.institution_name ;;
-  description: "The name of the institution"
+  sql: ${TABLE}.cc_county ;;
+  description: "not available"
 }
-dimension: institution_group {
-  type: string
-  sql: ${TABLE}.institution_group ;;
-  description: "The institution group the institution belongs to"
-}
-}
-view: core_program_intakes {
-sql_table_name: core_program_intakes ;;
-dimension: program_intake_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.program_intake_pk ;;
-  description: "The key to link a record to a program intake"
-}
-dimension: program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_fk ;;
-  description: "The key to link a record to a program"
-}
-dimension: program_intake_natural_key {
+dimension: cc_division {
   hidden: yes 
   type: number
-  sql: ${TABLE}.program_intake_natural_key ;;
-  description: "The key to link a record to a program intake"
+  sql: ${TABLE}.cc_division ;;
+  description: "not available"
 }
-dimension: program_natural_key {
+dimension: cc_division_name {
+  type: string
+  sql: ${TABLE}.cc_division_name ;;
+  description: "not available"
+}
+dimension: cc_employees {
   hidden: yes 
   type: number
-  sql: ${TABLE}.program_natural_key ;;
-  description: "The key to link a record to a program"
+  sql: ${TABLE}.cc_employees ;;
+  description: "not available"
 }
-dimension: program_fee {
+dimension: cc_gmt_offset {
   hidden: yes 
   type: number
-  sql: ${TABLE}.program_fee ;;
-  description: "Cost of a program"
+  sql: ${TABLE}.cc_gmt_offset ;;
+  description: "not available"
 }
-dimension_group: intake {
+dimension: cc_hours {
+  type: string
+  sql: ${TABLE}.cc_hours ;;
+  description: "not available"
+}
+dimension: cc_manager {
+  type: string
+  sql: ${TABLE}.cc_manager ;;
+  description: "not available"
+}
+dimension: cc_market_manager {
+  type: string
+  sql: ${TABLE}.cc_market_manager ;;
+  description: "not available"
+}
+dimension: cc_mkt_class {
+  type: string
+  sql: ${TABLE}.cc_mkt_class ;;
+  description: "not available"
+}
+dimension: cc_mkt_desc {
+  type: string
+  sql: ${TABLE}.cc_mkt_desc ;;
+  description: "not available"
+}
+dimension: cc_mkt_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cc_mkt_id ;;
+  description: "not available"
+}
+dimension: cc_name {
+  type: string
+  sql: ${TABLE}.cc_name ;;
+  description: "not available"
+}
+dimension: cc_open_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cc_open_date_sk ;;
+  description: "not available"
+}
+dimension_group: cc_rec_end_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.intake ;;
-  description: "The date of the start of intake"
-}
-dimension: intake_season {
-  type: string
-  sql: ${TABLE}.intake_season ;;
-  description: "The season which the intake starts"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "The season and year which the intake starts"
-}
-dimension: intake_academic_year {
-  type: string
-  sql: ${TABLE}.intake_academic_year ;;
+  sql: ${TABLE}.cc_rec_end_date ;;
   description: "not available"
 }
-dimension: status {
-  type: string
-  sql: ${TABLE}.status ;;
-  description: "The status of the application process"
-}
-dimension: intake_quota_exists {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.intake_quota_exists ;;
-  description: "Confirms if there's a quota on the intake"
-}
-dimension_group: enrolment_start {
+dimension_group: cc_rec_start_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.enrolment_start ;;
-  description: "The enrolment start date for a program"
+  sql: ${TABLE}.cc_rec_start_date ;;
+  description: "not available"
 }
-dimension_group: enrolment_end {
+dimension: cc_sq_ft {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cc_sq_ft ;;
+  description: "not available"
+}
+dimension: cc_state {
+  type: string
+  sql: ${TABLE}.cc_state ;;
+  description: "not available"
+}
+dimension: cc_street_name {
+  type: string
+  sql: ${TABLE}.cc_street_name ;;
+  description: "not available"
+}
+dimension: cc_street_number {
+  type: string
+  sql: ${TABLE}.cc_street_number ;;
+  description: "not available"
+}
+dimension: cc_street_type {
+  type: string
+  sql: ${TABLE}.cc_street_type ;;
+  description: "not available"
+}
+dimension: cc_suite_number {
+  type: string
+  sql: ${TABLE}.cc_suite_number ;;
+  description: "not available"
+}
+dimension: cc_tax_percentage {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cc_tax_percentage ;;
+  description: "not available"
+}
+dimension: cc_zip {
+  type: string
+  sql: ${TABLE}.cc_zip ;;
+  description: "not available"
+}
+}
+view: catalog_page {
+sql_table_name: catalog_page ;;
+dimension: cp_catalog_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cp_catalog_number ;;
+  description: "not available"
+}
+dimension: cp_catalog_page_id {
+  type: string
+  sql: ${TABLE}.cp_catalog_page_id ;;
+  description: "not available"
+}
+dimension: cp_catalog_page_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cp_catalog_page_number ;;
+  description: "not available"
+}
+dimension: cp_catalog_page_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cp_catalog_page_sk ;;
+  description: "not available"
+}
+dimension: cp_department {
+  type: string
+  sql: ${TABLE}.cp_department ;;
+  description: "not available"
+}
+dimension: cp_description {
+  type: string
+  sql: ${TABLE}.cp_description ;;
+  description: "not available"
+}
+dimension: cp_end_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cp_end_date_sk ;;
+  description: "not available"
+}
+dimension: cp_start_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cp_start_date_sk ;;
+  description: "not available"
+}
+dimension: cp_type {
+  type: string
+  sql: ${TABLE}.cp_type ;;
+  description: "not available"
+}
+}
+view: catalog_returns {
+sql_table_name: catalog_returns ;;
+dimension: cr_call_center_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_call_center_sk ;;
+  description: "not available"
+}
+dimension: cr_catalog_page_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_catalog_page_sk ;;
+  description: "not available"
+}
+dimension: cr_fee {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_fee ;;
+  description: "not available"
+}
+dimension: cr_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_item_sk ;;
+  description: "not available"
+}
+dimension: cr_net_loss {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_net_loss ;;
+  description: "not available"
+}
+dimension: cr_order_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_order_number ;;
+  description: "not available"
+}
+dimension: cr_reason_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_reason_sk ;;
+  description: "not available"
+}
+dimension: cr_refunded_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_refunded_addr_sk ;;
+  description: "not available"
+}
+dimension: cr_refunded_cash {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_refunded_cash ;;
+  description: "not available"
+}
+dimension: cr_refunded_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_refunded_cdemo_sk ;;
+  description: "not available"
+}
+dimension: cr_refunded_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_refunded_customer_sk ;;
+  description: "not available"
+}
+dimension: cr_refunded_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_refunded_hdemo_sk ;;
+  description: "not available"
+}
+dimension: cr_return_amount {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_return_amount ;;
+  description: "not available"
+}
+dimension: cr_return_amt_inc_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_return_amt_inc_tax ;;
+  description: "not available"
+}
+dimension: cr_return_quantity {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_return_quantity ;;
+  description: "not available"
+}
+dimension: cr_return_ship_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_return_ship_cost ;;
+  description: "not available"
+}
+dimension: cr_return_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_return_tax ;;
+  description: "not available"
+}
+dimension: cr_returned_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_returned_date_sk ;;
+  description: "not available"
+}
+dimension: cr_returned_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_returned_time_sk ;;
+  description: "not available"
+}
+dimension: cr_returning_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_returning_addr_sk ;;
+  description: "not available"
+}
+dimension: cr_returning_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_returning_cdemo_sk ;;
+  description: "not available"
+}
+dimension: cr_returning_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_returning_customer_sk ;;
+  description: "not available"
+}
+dimension: cr_returning_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_returning_hdemo_sk ;;
+  description: "not available"
+}
+dimension: cr_reversed_charge {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_reversed_charge ;;
+  description: "not available"
+}
+dimension: cr_ship_mode_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_ship_mode_sk ;;
+  description: "not available"
+}
+dimension: cr_store_credit {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_store_credit ;;
+  description: "not available"
+}
+dimension: cr_warehouse_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cr_warehouse_sk ;;
+  description: "not available"
+}
+}
+view: catalog_sales {
+sql_table_name: catalog_sales ;;
+dimension: cs_bill_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_bill_addr_sk ;;
+  description: "not available"
+}
+dimension: cs_bill_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_bill_cdemo_sk ;;
+  description: "not available"
+}
+dimension: cs_bill_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_bill_customer_sk ;;
+  description: "not available"
+}
+dimension: cs_bill_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_bill_hdemo_sk ;;
+  description: "not available"
+}
+dimension: cs_call_center_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_call_center_sk ;;
+  description: "not available"
+}
+dimension: cs_catalog_page_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_catalog_page_sk ;;
+  description: "not available"
+}
+dimension: cs_coupon_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_coupon_amt ;;
+  description: "not available"
+}
+dimension: cs_ext_discount_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ext_discount_amt ;;
+  description: "not available"
+}
+dimension: cs_ext_list_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ext_list_price ;;
+  description: "not available"
+}
+dimension: cs_ext_sales_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ext_sales_price ;;
+  description: "not available"
+}
+dimension: cs_ext_ship_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ext_ship_cost ;;
+  description: "not available"
+}
+dimension: cs_ext_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ext_tax ;;
+  description: "not available"
+}
+dimension: cs_ext_wholesale_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ext_wholesale_cost ;;
+  description: "not available"
+}
+dimension: cs_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_item_sk ;;
+  description: "not available"
+}
+dimension: cs_list_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_list_price ;;
+  description: "not available"
+}
+dimension: cs_net_paid {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_net_paid ;;
+  description: "not available"
+}
+dimension: cs_net_paid_inc_ship {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_net_paid_inc_ship ;;
+  description: "not available"
+}
+dimension: cs_net_paid_inc_ship_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_net_paid_inc_ship_tax ;;
+  description: "not available"
+}
+dimension: cs_net_paid_inc_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_net_paid_inc_tax ;;
+  description: "not available"
+}
+dimension: cs_net_profit {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_net_profit ;;
+  description: "not available"
+}
+dimension: cs_order_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_order_number ;;
+  description: "not available"
+}
+dimension: cs_promo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_promo_sk ;;
+  description: "not available"
+}
+dimension: cs_quantity {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_quantity ;;
+  description: "not available"
+}
+dimension: cs_sales_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_sales_price ;;
+  description: "not available"
+}
+dimension: cs_ship_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ship_addr_sk ;;
+  description: "not available"
+}
+dimension: cs_ship_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ship_cdemo_sk ;;
+  description: "not available"
+}
+dimension: cs_ship_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ship_customer_sk ;;
+  description: "not available"
+}
+dimension: cs_ship_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ship_date_sk ;;
+  description: "not available"
+}
+dimension: cs_ship_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ship_hdemo_sk ;;
+  description: "not available"
+}
+dimension: cs_ship_mode_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_ship_mode_sk ;;
+  description: "not available"
+}
+dimension: cs_sold_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_sold_date_sk ;;
+  description: "not available"
+}
+dimension: cs_sold_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_sold_time_sk ;;
+  description: "not available"
+}
+dimension: cs_warehouse_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_warehouse_sk ;;
+  description: "not available"
+}
+dimension: cs_wholesale_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cs_wholesale_cost ;;
+  description: "not available"
+}
+}
+view: customer {
+sql_table_name: customer ;;
+dimension: c_birth_country {
+  type: string
+  sql: ${TABLE}.c_birth_country ;;
+  description: "not available"
+}
+dimension: c_birth_day {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_birth_day ;;
+  description: "not available"
+}
+dimension: c_birth_month {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_birth_month ;;
+  description: "not available"
+}
+dimension: c_birth_year {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_birth_year ;;
+  description: "not available"
+}
+dimension: c_current_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_current_addr_sk ;;
+  description: "not available"
+}
+dimension: c_current_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_current_cdemo_sk ;;
+  description: "not available"
+}
+dimension: c_current_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_current_hdemo_sk ;;
+  description: "not available"
+}
+dimension: c_customer_id {
+  type: string
+  sql: ${TABLE}.c_customer_id ;;
+  description: "not available"
+}
+dimension: c_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_customer_sk ;;
+  description: "not available"
+}
+dimension: c_email_address {
+  type: string
+  sql: ${TABLE}.c_email_address ;;
+  description: "not available"
+}
+dimension: c_first_name {
+  type: string
+  sql: ${TABLE}.c_first_name ;;
+  description: "not available"
+}
+dimension: c_first_sales_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_first_sales_date_sk ;;
+  description: "not available"
+}
+dimension: c_first_shipto_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.c_first_shipto_date_sk ;;
+  description: "not available"
+}
+dimension: c_last_name {
+  type: string
+  sql: ${TABLE}.c_last_name ;;
+  description: "not available"
+}
+dimension: c_last_review_date {
+  type: string
+  sql: ${TABLE}.c_last_review_date ;;
+  description: "not available"
+}
+dimension: c_login {
+  type: string
+  sql: ${TABLE}.c_login ;;
+  description: "not available"
+}
+dimension: c_preferred_cust_flag {
+  type: string
+  sql: ${TABLE}.c_preferred_cust_flag ;;
+  description: "not available"
+}
+dimension: c_salutation {
+  type: string
+  sql: ${TABLE}.c_salutation ;;
+  description: "not available"
+}
+}
+view: customer_address {
+sql_table_name: customer_address ;;
+dimension: ca_address_id {
+  type: string
+  sql: ${TABLE}.ca_address_id ;;
+  description: "not available"
+}
+dimension: ca_address_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ca_address_sk ;;
+  description: "not available"
+}
+dimension: ca_city {
+  type: string
+  sql: ${TABLE}.ca_city ;;
+  description: "not available"
+}
+dimension: ca_country {
+  type: string
+  sql: ${TABLE}.ca_country ;;
+  description: "not available"
+}
+dimension: ca_county {
+  type: string
+  sql: ${TABLE}.ca_county ;;
+  description: "not available"
+}
+dimension: ca_gmt_offset {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ca_gmt_offset ;;
+  description: "not available"
+}
+dimension: ca_location_type {
+  type: string
+  sql: ${TABLE}.ca_location_type ;;
+  description: "not available"
+}
+dimension: ca_state {
+  type: string
+  sql: ${TABLE}.ca_state ;;
+  description: "not available"
+}
+dimension: ca_street_name {
+  type: string
+  sql: ${TABLE}.ca_street_name ;;
+  description: "not available"
+}
+dimension: ca_street_number {
+  type: string
+  sql: ${TABLE}.ca_street_number ;;
+  description: "not available"
+}
+dimension: ca_street_type {
+  type: string
+  sql: ${TABLE}.ca_street_type ;;
+  description: "not available"
+}
+dimension: ca_suite_number {
+  type: string
+  sql: ${TABLE}.ca_suite_number ;;
+  description: "not available"
+}
+dimension: ca_zip {
+  type: string
+  sql: ${TABLE}.ca_zip ;;
+  description: "not available"
+}
+}
+view: customer_demographics {
+sql_table_name: customer_demographics ;;
+dimension: cd_credit_rating {
+  type: string
+  sql: ${TABLE}.cd_credit_rating ;;
+  description: "not available"
+}
+dimension: cd_demo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cd_demo_sk ;;
+  description: "not available"
+}
+dimension: cd_dep_college_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cd_dep_college_count ;;
+  description: "not available"
+}
+dimension: cd_dep_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cd_dep_count ;;
+  description: "not available"
+}
+dimension: cd_dep_employed_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cd_dep_employed_count ;;
+  description: "not available"
+}
+dimension: cd_education_status {
+  type: string
+  sql: ${TABLE}.cd_education_status ;;
+  description: "not available"
+}
+dimension: cd_gender {
+  type: string
+  sql: ${TABLE}.cd_gender ;;
+  description: "not available"
+}
+dimension: cd_marital_status {
+  type: string
+  sql: ${TABLE}.cd_marital_status ;;
+  description: "not available"
+}
+dimension: cd_purchase_estimate {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.cd_purchase_estimate ;;
+  description: "not available"
+}
+}
+view: date_dim {
+sql_table_name: date_dim ;;
+dimension: d_current_day {
+  type: string
+  sql: ${TABLE}.d_current_day ;;
+  description: "not available"
+}
+dimension: d_current_month {
+  type: string
+  sql: ${TABLE}.d_current_month ;;
+  description: "not available"
+}
+dimension: d_current_quarter {
+  type: string
+  sql: ${TABLE}.d_current_quarter ;;
+  description: "not available"
+}
+dimension: d_current_week {
+  type: string
+  sql: ${TABLE}.d_current_week ;;
+  description: "not available"
+}
+dimension: d_current_year {
+  type: string
+  sql: ${TABLE}.d_current_year ;;
+  description: "not available"
+}
+dimension_group: d_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.enrolment_end ;;
-  description: "The enrolment end date for a program"
+  sql: ${TABLE}.d_date ;;
+  description: "not available"
 }
-dimension_group: teaching_start {
+dimension: d_date_id {
+  type: string
+  sql: ${TABLE}.d_date_id ;;
+  description: "not available"
+}
+dimension: d_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_date_sk ;;
+  description: "not available"
+}
+dimension: d_day_name {
+  type: string
+  sql: ${TABLE}.d_day_name ;;
+  description: "not available"
+}
+dimension: d_dom {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_dom ;;
+  description: "not available"
+}
+dimension: d_dow {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_dow ;;
+  description: "not available"
+}
+dimension: d_first_dom {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_first_dom ;;
+  description: "not available"
+}
+dimension: d_following_holiday {
+  type: string
+  sql: ${TABLE}.d_following_holiday ;;
+  description: "not available"
+}
+dimension: d_fy_quarter_seq {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_fy_quarter_seq ;;
+  description: "not available"
+}
+dimension: d_fy_week_seq {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_fy_week_seq ;;
+  description: "not available"
+}
+dimension: d_fy_year {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_fy_year ;;
+  description: "not available"
+}
+dimension: d_holiday {
+  type: string
+  sql: ${TABLE}.d_holiday ;;
+  description: "not available"
+}
+dimension: d_last_dom {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_last_dom ;;
+  description: "not available"
+}
+dimension: d_month_seq {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_month_seq ;;
+  description: "not available"
+}
+dimension: d_moy {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_moy ;;
+  description: "not available"
+}
+dimension: d_qoy {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_qoy ;;
+  description: "not available"
+}
+dimension: d_quarter_name {
+  type: string
+  sql: ${TABLE}.d_quarter_name ;;
+  description: "not available"
+}
+dimension: d_quarter_seq {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_quarter_seq ;;
+  description: "not available"
+}
+dimension: d_same_day_lq {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_same_day_lq ;;
+  description: "not available"
+}
+dimension: d_same_day_ly {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_same_day_ly ;;
+  description: "not available"
+}
+dimension: d_week_seq {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_week_seq ;;
+  description: "not available"
+}
+dimension: d_weekend {
+  type: string
+  sql: ${TABLE}.d_weekend ;;
+  description: "not available"
+}
+dimension: d_year {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.d_year ;;
+  description: "not available"
+}
+}
+view: household_demographics {
+sql_table_name: household_demographics ;;
+dimension: hd_buy_potential {
+  type: string
+  sql: ${TABLE}.hd_buy_potential ;;
+  description: "not available"
+}
+dimension: hd_demo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.hd_demo_sk ;;
+  description: "not available"
+}
+dimension: hd_dep_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.hd_dep_count ;;
+  description: "not available"
+}
+dimension: hd_income_band_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.hd_income_band_sk ;;
+  description: "not available"
+}
+dimension: hd_vehicle_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.hd_vehicle_count ;;
+  description: "not available"
+}
+}
+view: income_band {
+sql_table_name: income_band ;;
+dimension: ib_income_band_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ib_income_band_sk ;;
+  description: "not available"
+}
+dimension: ib_lower_bound {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ib_lower_bound ;;
+  description: "not available"
+}
+dimension: ib_upper_bound {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ib_upper_bound ;;
+  description: "not available"
+}
+}
+view: inventory {
+sql_table_name: inventory ;;
+dimension: inv_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.inv_date_sk ;;
+  description: "not available"
+}
+dimension: inv_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.inv_item_sk ;;
+  description: "not available"
+}
+dimension: inv_quantity_on_hand {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.inv_quantity_on_hand ;;
+  description: "not available"
+}
+dimension: inv_warehouse_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.inv_warehouse_sk ;;
+  description: "not available"
+}
+}
+view: item {
+sql_table_name: item ;;
+dimension: i_brand {
+  type: string
+  sql: ${TABLE}.i_brand ;;
+  description: "not available"
+}
+dimension: i_brand_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_brand_id ;;
+  description: "not available"
+}
+dimension: i_category {
+  type: string
+  sql: ${TABLE}.i_category ;;
+  description: "not available"
+}
+dimension: i_category_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_category_id ;;
+  description: "not available"
+}
+dimension: i_class {
+  type: string
+  sql: ${TABLE}.i_class ;;
+  description: "not available"
+}
+dimension: i_class_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_class_id ;;
+  description: "not available"
+}
+dimension: i_color {
+  type: string
+  sql: ${TABLE}.i_color ;;
+  description: "not available"
+}
+dimension: i_container {
+  type: string
+  sql: ${TABLE}.i_container ;;
+  description: "not available"
+}
+dimension: i_current_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_current_price ;;
+  description: "not available"
+}
+dimension: i_formulation {
+  type: string
+  sql: ${TABLE}.i_formulation ;;
+  description: "not available"
+}
+dimension: i_item_desc {
+  type: string
+  sql: ${TABLE}.i_item_desc ;;
+  description: "not available"
+}
+dimension: i_item_id {
+  type: string
+  sql: ${TABLE}.i_item_id ;;
+  description: "not available"
+}
+dimension: i_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_item_sk ;;
+  description: "not available"
+}
+dimension: i_manager_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_manager_id ;;
+  description: "not available"
+}
+dimension: i_manufact {
+  type: string
+  sql: ${TABLE}.i_manufact ;;
+  description: "not available"
+}
+dimension: i_manufact_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.i_manufact_id ;;
+  description: "not available"
+}
+dimension: i_product_name {
+  type: string
+  sql: ${TABLE}.i_product_name ;;
+  description: "not available"
+}
+dimension_group: i_rec_end_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.teaching_start ;;
-  description: "The teaching start date for a program"
+  sql: ${TABLE}.i_rec_end_date ;;
+  description: "not available"
 }
-dimension_group: teaching_end {
+dimension_group: i_rec_start_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.teaching_end ;;
-  description: "The teaching end date for a program"
-}
-}
-view: core_programs {
-sql_table_name: core_programs ;;
-dimension: program_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.program_pk ;;
-  description: "The key to link to a certain program"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The key to link to a certain institution"
-}
-dimension: program_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.program_natural_key ;;
-  description: "The key to link to a certain program"
-}
-dimension: institution_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link to a certain institution"
-}
-dimension: program_code {
-  type: string
-  sql: ${TABLE}.program_code ;;
-  description: "The code to link to a certain program"
-}
-dimension: name {
-  type: string
-  sql: ${TABLE}.name ;;
-  description: "The name of the program"
-}
-dimension: level {
-  type: string
-  sql: ${TABLE}.level ;;
+  sql: ${TABLE}.i_rec_start_date ;;
   description: "not available"
 }
-dimension: status {
+dimension: i_size {
   type: string
-  sql: ${TABLE}.status ;;
-  description: "The status of the program (active or inactive)"
-}
-dimension: type {
-  type: string
-  sql: ${TABLE}.type ;;
-  description: "The type of program (foundation, pre-masters etc)"
-}
-dimension: university_unit_faculty {
-  type: string
-  sql: ${TABLE}.university_unit_faculty ;;
-  description: "The university's faculty which would be targeted at with the program record"
-}
-dimension: university_unit_school {
-  type: string
-  sql: ${TABLE}.university_unit_school ;;
-  description: "The university's school which would be targeted at with the program record"
-}
-dimension: university_unit_department {
-  type: string
-  sql: ${TABLE}.university_unit_department ;;
-  description: "The university's department which would be targeted at with the program record"
-}
-dimension: university_unit_college {
-  type: string
-  sql: ${TABLE}.university_unit_college ;;
-  description: "The university's college which would be targeted at with the program record"
-}
-dimension: university_unit_institute {
-  type: string
-  sql: ${TABLE}.university_unit_institute ;;
-  description: "The university's institute which would be targeted at with the program record"
-}
-dimension: university_unit_division {
-  type: string
-  sql: ${TABLE}.university_unit_division ;;
-  description: "The university's division which would be targeted at with the program record"
-}
-dimension: entry_level {
-  type: string
-  sql: ${TABLE}.entry_level ;;
-  description: "Confirms the type of entry level required for the program (graduate, undergraduate, etc)"
-}
-dimension: award_type {
-  type: string
-  sql: ${TABLE}.award_type ;;
-  description: "Confirms the award type to be recieved by the program"
-}
-dimension: award_title {
-  type: string
-  sql: ${TABLE}.award_title ;;
-  description: "The name of the award"
-}
-dimension: award_code {
-  type: string
-  sql: ${TABLE}.award_code ;;
-  description: "The code to link to the award"
-}
-dimension: duration_length {
-  type: string
-  sql: ${TABLE}.duration_length ;;
-  description: "The length of the program"
-}
-dimension: entry_type_code {
-  type: string
-  sql: ${TABLE}.entry_type_code ;;
-  description: "The code to link to the program's entry type/level"
-}
-}
-view: core_scholarship_reason_owners {
-sql_table_name: core_scholarship_reason_owners ;;
-dimension: scholarship_reason_owner_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.scholarship_reason_owner_pk ;;
-  description: "The key to link the core_scholarship_reasons_owner record to another record"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "The sales region group which the record will be placed under"
-}
-dimension: budget_pot {
-  type: string
-  sql: ${TABLE}.budget_pot ;;
-  description: "Budget details"
-}
-dimension: budget_owner {
-  type: string
-  sql: ${TABLE}.budget_owner ;;
-  description: "The owner of the budget"
-}
-}
-view: core_scholarship_reasons {
-sql_table_name: core_scholarship_reasons ;;
-dimension: scholarship_reason_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.scholarship_reason_pk ;;
-  description: "The key to link the scholarship reason to another record"
-}
-dimension: scholarship_reason {
-  type: string
-  sql: ${TABLE}.scholarship_reason ;;
-  description: "The reason behind the scholarship being given"
-}
-dimension: budget_pot {
-  type: string
-  sql: ${TABLE}.budget_pot ;;
-  description: "Budget details"
-}
-}
-view: core_sponsors {
-sql_table_name: core_sponsors ;;
-dimension: sponsor_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.sponsor_pk ;;
-  description: "The key to link a sponsor to a certain record"
-}
-dimension: country_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.country_fk ;;
-  description: "The key to link a country to a certain record"
-}
-dimension: sponsor_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sponsor_natural_key ;;
-  description: "The key to link a sponsor to a certain record"
-}
-dimension: sponsor_salesforce_business_key {
-  type: string
-  sql: ${TABLE}.sponsor_salesforce_business_key ;;
-  description: "The key to link a record to a sponsor salesforce business records"
-}
-dimension: country_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key to link a country to a certain record"
-}
-dimension: name {
-  type: string
-  sql: ${TABLE}.name ;;
-  description: "The name of the sponsor"
-}
-dimension: group {
-  type: string
-  sql: ${TABLE}.group ;;
-  description: "The group which the sponsor belongs to"
-}
-dimension: status {
-  type: string
-  sql: ${TABLE}.status ;;
-  description: "The status of the sponsor (active, suspended, etc)"
-}
-dimension: uk_sponsor {
-  type: yesno
-  sql: ${TABLE}.uk_sponsor ;;
-  description: "Confirms if the sponsor is based in the UK"
-}
-}
-view: core_subjects {
-sql_table_name: core_subjects ;;
-dimension: program_subject_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.program_subject_pk ;;
-  description: "The key to link the program's subject to a record"
-}
-dimension: program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_fk ;;
-  description: "The key to link a program to a record"
-}
-dimension: program_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.program_natural_key ;;
-  description: "The key to link a program to a record"
-}
-dimension: subject {
-  type: string
-  sql: ${TABLE}.subject ;;
-  description: "The name of the subject which the program will be on"
-}
-dimension: subject_group {
-  type: string
-  sql: ${TABLE}.subject_group ;;
-  description: "The group which the subject will be based under"
-}
-}
-view: core_user_mapping {
-sql_table_name: core_user_mapping ;;
-dimension: user_mapping_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.user_mapping_pk ;;
+  sql: ${TABLE}.i_size ;;
   description: "not available"
 }
-dimension: user_fk {
-  hidden: yes 
+dimension: i_units {
   type: string
-  sql: ${TABLE}.user_fk ;;
-  description: "The key to link an user to a record"
+  sql: ${TABLE}.i_units ;;
+  description: "not available"
 }
-dimension: user_natural_key {
-  type: string
-  sql: ${TABLE}.user_natural_key ;;
-  description: "The key to link an user to a record"
-}
-dimension: sales_region {
-  type: string
-  sql: ${TABLE}.sales_region ;;
-  description: "The sales region which the user is based"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "The sales region group which the user is based under"
-}
-dimension_group: valid_from {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.valid_from ;;
-  description: "The date which the user record is valid from"
-}
-dimension_group: valid_to {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.valid_to ;;
-  description: "The date which the user record is valid to"
-}
-}
-view: core_users {
-sql_table_name: core_users ;;
-dimension: user_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.user_pk ;;
-  description: "The key to link an user to a record"
-}
-dimension: user_natural_key {
-  type: string
-  sql: ${TABLE}.user_natural_key ;;
-  description: "The key to link an user to a record"
-}
-dimension: name {
-  type: string
-  sql: ${TABLE}.name ;;
-  description: "The name of the applicant/user"
-}
-dimension: sales_region {
-  type: string
-  sql: ${TABLE}.sales_region ;;
-  description: "The sales region which the user is based"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "The sales region group which the user is based under"
-}
-}
-view: product_progression_plans {
-sql_table_name: product_progression_plans ;;
-dimension: progression_plan_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.progression_plan_pk ;;
-  description: "The key to link a record to a progression plan"
-}
-dimension: progression_plan_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.progression_plan_fk ;;
-  description: "The key to link a record to a progression plan"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "The key to link a record to an application"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The key to link a record to an institution"
-}
-dimension: progression_plan_program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.progression_plan_program_intake_fk ;;
-  description: "The key to link a record to a progression plan's program intake"
-}
-dimension: progression_plan_program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.progression_plan_program_fk ;;
-  description: "The key to link a record to a progression plan's program"
-}
-dimension: institution_natural_key {
+dimension: i_wholesale_cost {
   hidden: yes 
   type: number
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
+  sql: ${TABLE}.i_wholesale_cost ;;
+  description: "not available"
 }
-dimension: progression_plan_program_natural_key {
+}
+view: promotion {
+sql_table_name: promotion ;;
+dimension: p_channel_catalog {
+  type: string
+  sql: ${TABLE}.p_channel_catalog ;;
+  description: "not available"
+}
+dimension: p_channel_demo {
+  type: string
+  sql: ${TABLE}.p_channel_demo ;;
+  description: "not available"
+}
+dimension: p_channel_details {
+  type: string
+  sql: ${TABLE}.p_channel_details ;;
+  description: "not available"
+}
+dimension: p_channel_dmail {
+  type: string
+  sql: ${TABLE}.p_channel_dmail ;;
+  description: "not available"
+}
+dimension: p_channel_email {
+  type: string
+  sql: ${TABLE}.p_channel_email ;;
+  description: "not available"
+}
+dimension: p_channel_event {
+  type: string
+  sql: ${TABLE}.p_channel_event ;;
+  description: "not available"
+}
+dimension: p_channel_press {
+  type: string
+  sql: ${TABLE}.p_channel_press ;;
+  description: "not available"
+}
+dimension: p_channel_radio {
+  type: string
+  sql: ${TABLE}.p_channel_radio ;;
+  description: "not available"
+}
+dimension: p_channel_tv {
+  type: string
+  sql: ${TABLE}.p_channel_tv ;;
+  description: "not available"
+}
+dimension: p_cost {
   hidden: yes 
   type: number
-  sql: ${TABLE}.progression_plan_program_natural_key ;;
-  description: "The key to link a record to a progression plan's program"
+  sql: ${TABLE}.p_cost ;;
+  description: "not available"
 }
-dimension: version_number {
+dimension: p_discount_active {
+  type: string
+  sql: ${TABLE}.p_discount_active ;;
+  description: "not available"
+}
+dimension: p_end_date_sk {
   hidden: yes 
   type: number
-  sql: ${TABLE}.version_number ;;
-  description: "The progression plan's version number"
+  sql: ${TABLE}.p_end_date_sk ;;
+  description: "not available"
 }
-dimension: entry_type_code {
+dimension: p_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.p_item_sk ;;
+  description: "not available"
+}
+dimension: p_promo_id {
   type: string
-  sql: ${TABLE}.entry_type_code ;;
-  description: "The code to indicate how the applicant had entry to the progression plan"
+  sql: ${TABLE}.p_promo_id ;;
+  description: "not available"
 }
-dimension: degree_code {
+dimension: p_promo_name {
   type: string
-  sql: ${TABLE}.degree_code ;;
-  description: "The code to indicate the degree from the progression plan"
+  sql: ${TABLE}.p_promo_name ;;
+  description: "not available"
 }
-dimension: degree_name {
+dimension: p_promo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.p_promo_sk ;;
+  description: "not available"
+}
+dimension: p_purpose {
   type: string
-  sql: ${TABLE}.degree_name ;;
-  description: "The name of the degree recieved by the progression plan"
+  sql: ${TABLE}.p_purpose ;;
+  description: "not available"
 }
-dimension: degree_entry_level {
+dimension: p_response_target {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.p_response_target ;;
+  description: "not available"
+}
+dimension: p_start_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.p_start_date_sk ;;
+  description: "not available"
+}
+}
+view: reason {
+sql_table_name: reason ;;
+dimension: r_reason_desc {
   type: string
-  sql: ${TABLE}.degree_entry_level ;;
-  description: "The level of entry needed to access the degree (undergraduate, graduate, etc)"
+  sql: ${TABLE}.r_reason_desc ;;
+  description: "not available"
 }
-dimension: is_primary_progression {
+dimension: r_reason_id {
   type: string
-  sql: ${TABLE}.is_primary_progression ;;
-  description: "Confirms if the progression path is a primary progression path"
+  sql: ${TABLE}.r_reason_id ;;
+  description: "not available"
 }
-dimension_group: university_intake_date {
+dimension: r_reason_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.r_reason_sk ;;
+  description: "not available"
+}
+}
+view: ship_mode {
+sql_table_name: ship_mode ;;
+dimension: sm_carrier {
+  type: string
+  sql: ${TABLE}.sm_carrier ;;
+  description: "not available"
+}
+dimension: sm_code {
+  type: string
+  sql: ${TABLE}.sm_code ;;
+  description: "not available"
+}
+dimension: sm_contract {
+  type: string
+  sql: ${TABLE}.sm_contract ;;
+  description: "not available"
+}
+dimension: sm_ship_mode_id {
+  type: string
+  sql: ${TABLE}.sm_ship_mode_id ;;
+  description: "not available"
+}
+dimension: sm_ship_mode_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sm_ship_mode_sk ;;
+  description: "not available"
+}
+dimension: sm_type {
+  type: string
+  sql: ${TABLE}.sm_type ;;
+  description: "not available"
+}
+}
+view: store {
+sql_table_name: store ;;
+dimension: s_city {
+  type: string
+  sql: ${TABLE}.s_city ;;
+  description: "not available"
+}
+dimension: s_closed_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_closed_date_sk ;;
+  description: "not available"
+}
+dimension: s_company_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_company_id ;;
+  description: "not available"
+}
+dimension: s_company_name {
+  type: string
+  sql: ${TABLE}.s_company_name ;;
+  description: "not available"
+}
+dimension: s_country {
+  type: string
+  sql: ${TABLE}.s_country ;;
+  description: "not available"
+}
+dimension: s_county {
+  type: string
+  sql: ${TABLE}.s_county ;;
+  description: "not available"
+}
+dimension: s_division_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_division_id ;;
+  description: "not available"
+}
+dimension: s_division_name {
+  type: string
+  sql: ${TABLE}.s_division_name ;;
+  description: "not available"
+}
+dimension: s_floor_space {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_floor_space ;;
+  description: "not available"
+}
+dimension: s_geography_class {
+  type: string
+  sql: ${TABLE}.s_geography_class ;;
+  description: "not available"
+}
+dimension: s_gmt_offset {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_gmt_offset ;;
+  description: "not available"
+}
+dimension: s_hours {
+  type: string
+  sql: ${TABLE}.s_hours ;;
+  description: "not available"
+}
+dimension: s_manager {
+  type: string
+  sql: ${TABLE}.s_manager ;;
+  description: "not available"
+}
+dimension: s_market_desc {
+  type: string
+  sql: ${TABLE}.s_market_desc ;;
+  description: "not available"
+}
+dimension: s_market_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_market_id ;;
+  description: "not available"
+}
+dimension: s_market_manager {
+  type: string
+  sql: ${TABLE}.s_market_manager ;;
+  description: "not available"
+}
+dimension: s_number_employees {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_number_employees ;;
+  description: "not available"
+}
+dimension_group: s_rec_end_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.university_intake_date ;;
-  description: "The intake date for the start of the progression plan at the university"
+  sql: ${TABLE}.s_rec_end_date ;;
+  description: "not available"
 }
-dimension: university_intake_season {
-  type: string
-  sql: ${TABLE}.university_intake_season ;;
-  description: ""
-}
-dimension_group: university_enrolment {
+dimension_group: s_rec_start_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.university_enrolment ;;
-  description: "The date of enrolment for the university course"
+  sql: ${TABLE}.s_rec_start_date ;;
+  description: "not available"
 }
-dimension_group: degree_teaching_end {
+dimension: s_state {
+  type: string
+  sql: ${TABLE}.s_state ;;
+  description: "not available"
+}
+dimension: s_store_id {
+  type: string
+  sql: ${TABLE}.s_store_id ;;
+  description: "not available"
+}
+dimension: s_store_name {
+  type: string
+  sql: ${TABLE}.s_store_name ;;
+  description: "not available"
+}
+dimension: s_store_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_store_sk ;;
+  description: "not available"
+}
+dimension: s_street_name {
+  type: string
+  sql: ${TABLE}.s_street_name ;;
+  description: "not available"
+}
+dimension: s_street_number {
+  type: string
+  sql: ${TABLE}.s_street_number ;;
+  description: "not available"
+}
+dimension: s_street_type {
+  type: string
+  sql: ${TABLE}.s_street_type ;;
+  description: "not available"
+}
+dimension: s_suite_number {
+  type: string
+  sql: ${TABLE}.s_suite_number ;;
+  description: "not available"
+}
+dimension: s_tax_precentage {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.s_tax_precentage ;;
+  description: "not available"
+}
+dimension: s_zip {
+  type: string
+  sql: ${TABLE}.s_zip ;;
+  description: "not available"
+}
+}
+view: store_returns {
+sql_table_name: store_returns ;;
+dimension: sr_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_addr_sk ;;
+  description: "not available"
+}
+dimension: sr_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_cdemo_sk ;;
+  description: "not available"
+}
+dimension: sr_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_customer_sk ;;
+  description: "not available"
+}
+dimension: sr_fee {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_fee ;;
+  description: "not available"
+}
+dimension: sr_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_hdemo_sk ;;
+  description: "not available"
+}
+dimension: sr_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_item_sk ;;
+  description: "not available"
+}
+dimension: sr_net_loss {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_net_loss ;;
+  description: "not available"
+}
+dimension: sr_reason_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_reason_sk ;;
+  description: "not available"
+}
+dimension: sr_refunded_cash {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_refunded_cash ;;
+  description: "not available"
+}
+dimension: sr_return_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_return_amt ;;
+  description: "not available"
+}
+dimension: sr_return_amt_inc_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_return_amt_inc_tax ;;
+  description: "not available"
+}
+dimension: sr_return_quantity {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_return_quantity ;;
+  description: "not available"
+}
+dimension: sr_return_ship_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_return_ship_cost ;;
+  description: "not available"
+}
+dimension: sr_return_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_return_tax ;;
+  description: "not available"
+}
+dimension: sr_return_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_return_time_sk ;;
+  description: "not available"
+}
+dimension: sr_returned_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_returned_date_sk ;;
+  description: "not available"
+}
+dimension: sr_reversed_charge {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_reversed_charge ;;
+  description: "not available"
+}
+dimension: sr_store_credit {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_store_credit ;;
+  description: "not available"
+}
+dimension: sr_store_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_store_sk ;;
+  description: "not available"
+}
+dimension: sr_ticket_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.sr_ticket_number ;;
+  description: "not available"
+}
+}
+view: store_sales {
+sql_table_name: store_sales ;;
+dimension: ss_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_addr_sk ;;
+  description: "not available"
+}
+dimension: ss_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_cdemo_sk ;;
+  description: "not available"
+}
+dimension: ss_coupon_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_coupon_amt ;;
+  description: "not available"
+}
+dimension: ss_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_customer_sk ;;
+  description: "not available"
+}
+dimension: ss_ext_discount_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_ext_discount_amt ;;
+  description: "not available"
+}
+dimension: ss_ext_list_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_ext_list_price ;;
+  description: "not available"
+}
+dimension: ss_ext_sales_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_ext_sales_price ;;
+  description: "not available"
+}
+dimension: ss_ext_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_ext_tax ;;
+  description: "not available"
+}
+dimension: ss_ext_wholesale_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_ext_wholesale_cost ;;
+  description: "not available"
+}
+dimension: ss_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_hdemo_sk ;;
+  description: "not available"
+}
+dimension: ss_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_item_sk ;;
+  description: "not available"
+}
+dimension: ss_list_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_list_price ;;
+  description: "not available"
+}
+dimension: ss_net_paid {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_net_paid ;;
+  description: "not available"
+}
+dimension: ss_net_paid_inc_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_net_paid_inc_tax ;;
+  description: "not available"
+}
+dimension: ss_net_profit {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_net_profit ;;
+  description: "not available"
+}
+dimension: ss_promo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_promo_sk ;;
+  description: "not available"
+}
+dimension: ss_quantity {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_quantity ;;
+  description: "not available"
+}
+dimension: ss_sales_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_sales_price ;;
+  description: "not available"
+}
+dimension: ss_sold_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_sold_date_sk ;;
+  description: "not available"
+}
+dimension: ss_sold_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_sold_time_sk ;;
+  description: "not available"
+}
+dimension: ss_store_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_store_sk ;;
+  description: "not available"
+}
+dimension: ss_ticket_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_ticket_number ;;
+  description: "not available"
+}
+dimension: ss_wholesale_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ss_wholesale_cost ;;
+  description: "not available"
+}
+}
+view: time_dim {
+sql_table_name: time_dim ;;
+dimension: t_am_pm {
+  type: string
+  sql: ${TABLE}.t_am_pm ;;
+  description: "not available"
+}
+dimension: t_hour {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.t_hour ;;
+  description: "not available"
+}
+dimension: t_meal_time {
+  type: string
+  sql: ${TABLE}.t_meal_time ;;
+  description: "not available"
+}
+dimension: t_minute {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.t_minute ;;
+  description: "not available"
+}
+dimension: t_second {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.t_second ;;
+  description: "not available"
+}
+dimension: t_shift {
+  type: string
+  sql: ${TABLE}.t_shift ;;
+  description: "not available"
+}
+dimension: t_sub_shift {
+  type: string
+  sql: ${TABLE}.t_sub_shift ;;
+  description: "not available"
+}
+dimension: t_time {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.t_time ;;
+  description: "not available"
+}
+dimension: t_time_id {
+  type: string
+  sql: ${TABLE}.t_time_id ;;
+  description: "not available"
+}
+dimension: t_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.t_time_sk ;;
+  description: "not available"
+}
+}
+view: warehouse {
+sql_table_name: warehouse ;;
+dimension: w_city {
+  type: string
+  sql: ${TABLE}.w_city ;;
+  description: "not available"
+}
+dimension: w_country {
+  type: string
+  sql: ${TABLE}.w_country ;;
+  description: "not available"
+}
+dimension: w_county {
+  type: string
+  sql: ${TABLE}.w_county ;;
+  description: "not available"
+}
+dimension: w_gmt_offset {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.w_gmt_offset ;;
+  description: "not available"
+}
+dimension: w_state {
+  type: string
+  sql: ${TABLE}.w_state ;;
+  description: "not available"
+}
+dimension: w_street_name {
+  type: string
+  sql: ${TABLE}.w_street_name ;;
+  description: "not available"
+}
+dimension: w_street_number {
+  type: string
+  sql: ${TABLE}.w_street_number ;;
+  description: "not available"
+}
+dimension: w_street_type {
+  type: string
+  sql: ${TABLE}.w_street_type ;;
+  description: "not available"
+}
+dimension: w_suite_number {
+  type: string
+  sql: ${TABLE}.w_suite_number ;;
+  description: "not available"
+}
+dimension: w_warehouse_id {
+  type: string
+  sql: ${TABLE}.w_warehouse_id ;;
+  description: "not available"
+}
+dimension: w_warehouse_name {
+  type: string
+  sql: ${TABLE}.w_warehouse_name ;;
+  description: "not available"
+}
+dimension: w_warehouse_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.w_warehouse_sk ;;
+  description: "not available"
+}
+dimension: w_warehouse_sq_ft {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.w_warehouse_sq_ft ;;
+  description: "not available"
+}
+dimension: w_zip {
+  type: string
+  sql: ${TABLE}.w_zip ;;
+  description: "not available"
+}
+}
+view: web_page {
+sql_table_name: web_page ;;
+dimension: wp_access_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_access_date_sk ;;
+  description: "not available"
+}
+dimension: wp_autogen_flag {
+  type: string
+  sql: ${TABLE}.wp_autogen_flag ;;
+  description: "not available"
+}
+dimension: wp_char_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_char_count ;;
+  description: "not available"
+}
+dimension: wp_creation_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_creation_date_sk ;;
+  description: "not available"
+}
+dimension: wp_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_customer_sk ;;
+  description: "not available"
+}
+dimension: wp_image_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_image_count ;;
+  description: "not available"
+}
+dimension: wp_link_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_link_count ;;
+  description: "not available"
+}
+dimension: wp_max_ad_count {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_max_ad_count ;;
+  description: "not available"
+}
+dimension_group: wp_rec_end_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.degree_teaching_end ;;
-  description: "The end date of teaching for the university course"
+  sql: ${TABLE}.wp_rec_end_date ;;
+  description: "not available"
 }
-dimension_group: degree_start {
+dimension_group: wp_rec_start_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.degree_start ;;
-  description: "The start date for the university course"
+  sql: ${TABLE}.wp_rec_start_date ;;
+  description: "not available"
 }
-dimension_group: degree_end {
+dimension: wp_type {
+  type: string
+  sql: ${TABLE}.wp_type ;;
+  description: "not available"
+}
+dimension: wp_url {
+  type: string
+  sql: ${TABLE}.wp_url ;;
+  description: "not available"
+}
+dimension: wp_web_page_id {
+  type: string
+  sql: ${TABLE}.wp_web_page_id ;;
+  description: "not available"
+}
+dimension: wp_web_page_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wp_web_page_sk ;;
+  description: "not available"
+}
+}
+view: web_returns {
+sql_table_name: web_returns ;;
+dimension: wr_account_credit {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_account_credit ;;
+  description: "not available"
+}
+dimension: wr_fee {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_fee ;;
+  description: "not available"
+}
+dimension: wr_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_item_sk ;;
+  description: "not available"
+}
+dimension: wr_net_loss {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_net_loss ;;
+  description: "not available"
+}
+dimension: wr_order_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_order_number ;;
+  description: "not available"
+}
+dimension: wr_reason_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_reason_sk ;;
+  description: "not available"
+}
+dimension: wr_refunded_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_refunded_addr_sk ;;
+  description: "not available"
+}
+dimension: wr_refunded_cash {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_refunded_cash ;;
+  description: "not available"
+}
+dimension: wr_refunded_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_refunded_cdemo_sk ;;
+  description: "not available"
+}
+dimension: wr_refunded_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_refunded_customer_sk ;;
+  description: "not available"
+}
+dimension: wr_refunded_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_refunded_hdemo_sk ;;
+  description: "not available"
+}
+dimension: wr_return_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_return_amt ;;
+  description: "not available"
+}
+dimension: wr_return_amt_inc_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_return_amt_inc_tax ;;
+  description: "not available"
+}
+dimension: wr_return_quantity {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_return_quantity ;;
+  description: "not available"
+}
+dimension: wr_return_ship_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_return_ship_cost ;;
+  description: "not available"
+}
+dimension: wr_return_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_return_tax ;;
+  description: "not available"
+}
+dimension: wr_returned_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_returned_date_sk ;;
+  description: "not available"
+}
+dimension: wr_returned_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_returned_time_sk ;;
+  description: "not available"
+}
+dimension: wr_returning_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_returning_addr_sk ;;
+  description: "not available"
+}
+dimension: wr_returning_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_returning_cdemo_sk ;;
+  description: "not available"
+}
+dimension: wr_returning_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_returning_customer_sk ;;
+  description: "not available"
+}
+dimension: wr_returning_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_returning_hdemo_sk ;;
+  description: "not available"
+}
+dimension: wr_reversed_charge {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_reversed_charge ;;
+  description: "not available"
+}
+dimension: wr_web_page_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.wr_web_page_sk ;;
+  description: "not available"
+}
+}
+view: web_sales {
+sql_table_name: web_sales ;;
+dimension: ws_bill_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_bill_addr_sk ;;
+  description: "not available"
+}
+dimension: ws_bill_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_bill_cdemo_sk ;;
+  description: "not available"
+}
+dimension: ws_bill_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_bill_customer_sk ;;
+  description: "not available"
+}
+dimension: ws_bill_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_bill_hdemo_sk ;;
+  description: "not available"
+}
+dimension: ws_coupon_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_coupon_amt ;;
+  description: "not available"
+}
+dimension: ws_ext_discount_amt {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ext_discount_amt ;;
+  description: "not available"
+}
+dimension: ws_ext_list_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ext_list_price ;;
+  description: "not available"
+}
+dimension: ws_ext_sales_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ext_sales_price ;;
+  description: "not available"
+}
+dimension: ws_ext_ship_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ext_ship_cost ;;
+  description: "not available"
+}
+dimension: ws_ext_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ext_tax ;;
+  description: "not available"
+}
+dimension: ws_ext_wholesale_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ext_wholesale_cost ;;
+  description: "not available"
+}
+dimension: ws_item_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_item_sk ;;
+  description: "not available"
+}
+dimension: ws_list_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_list_price ;;
+  description: "not available"
+}
+dimension: ws_net_paid {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_net_paid ;;
+  description: "not available"
+}
+dimension: ws_net_paid_inc_ship {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_net_paid_inc_ship ;;
+  description: "not available"
+}
+dimension: ws_net_paid_inc_ship_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_net_paid_inc_ship_tax ;;
+  description: "not available"
+}
+dimension: ws_net_paid_inc_tax {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_net_paid_inc_tax ;;
+  description: "not available"
+}
+dimension: ws_net_profit {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_net_profit ;;
+  description: "not available"
+}
+dimension: ws_order_number {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_order_number ;;
+  description: "not available"
+}
+dimension: ws_promo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_promo_sk ;;
+  description: "not available"
+}
+dimension: ws_quantity {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_quantity ;;
+  description: "not available"
+}
+dimension: ws_sales_price {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_sales_price ;;
+  description: "not available"
+}
+dimension: ws_ship_addr_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ship_addr_sk ;;
+  description: "not available"
+}
+dimension: ws_ship_cdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ship_cdemo_sk ;;
+  description: "not available"
+}
+dimension: ws_ship_customer_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ship_customer_sk ;;
+  description: "not available"
+}
+dimension: ws_ship_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ship_date_sk ;;
+  description: "not available"
+}
+dimension: ws_ship_hdemo_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ship_hdemo_sk ;;
+  description: "not available"
+}
+dimension: ws_ship_mode_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_ship_mode_sk ;;
+  description: "not available"
+}
+dimension: ws_sold_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_sold_date_sk ;;
+  description: "not available"
+}
+dimension: ws_sold_time_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_sold_time_sk ;;
+  description: "not available"
+}
+dimension: ws_warehouse_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_warehouse_sk ;;
+  description: "not available"
+}
+dimension: ws_web_page_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_web_page_sk ;;
+  description: "not available"
+}
+dimension: ws_web_site_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_web_site_sk ;;
+  description: "not available"
+}
+dimension: ws_wholesale_cost {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.ws_wholesale_cost ;;
+  description: "not available"
+}
+}
+view: web_site {
+sql_table_name: web_site ;;
+dimension: web_city {
+  type: string
+  sql: ${TABLE}.web_city ;;
+  description: "not available"
+}
+dimension: web_class {
+  type: string
+  sql: ${TABLE}.web_class ;;
+  description: "not available"
+}
+dimension: web_close_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.web_close_date_sk ;;
+  description: "not available"
+}
+dimension: web_company_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.web_company_id ;;
+  description: "not available"
+}
+dimension: web_company_name {
+  type: string
+  sql: ${TABLE}.web_company_name ;;
+  description: "not available"
+}
+dimension: web_country {
+  type: string
+  sql: ${TABLE}.web_country ;;
+  description: "not available"
+}
+dimension: web_county {
+  type: string
+  sql: ${TABLE}.web_county ;;
+  description: "not available"
+}
+dimension: web_gmt_offset {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.web_gmt_offset ;;
+  description: "not available"
+}
+dimension: web_manager {
+  type: string
+  sql: ${TABLE}.web_manager ;;
+  description: "not available"
+}
+dimension: web_market_manager {
+  type: string
+  sql: ${TABLE}.web_market_manager ;;
+  description: "not available"
+}
+dimension: web_mkt_class {
+  type: string
+  sql: ${TABLE}.web_mkt_class ;;
+  description: "not available"
+}
+dimension: web_mkt_desc {
+  type: string
+  sql: ${TABLE}.web_mkt_desc ;;
+  description: "not available"
+}
+dimension: web_mkt_id {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.web_mkt_id ;;
+  description: "not available"
+}
+dimension: web_name {
+  type: string
+  sql: ${TABLE}.web_name ;;
+  description: "not available"
+}
+dimension: web_open_date_sk {
+  hidden: yes 
+  type: number
+  sql: ${TABLE}.web_open_date_sk ;;
+  description: "not available"
+}
+dimension_group: web_rec_end_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.degree_end ;;
-  description: "The end date for the university course"
+  sql: ${TABLE}.web_rec_end_date ;;
+  description: "not available"
 }
-dimension_group: degree_teaching_start {
+dimension_group: web_rec_start_date {
   timeframes: [raw,date,week,month,quarter,year]
   type: time
   datatype: date
-  sql: ${TABLE}.degree_teaching_start ;;
-  description: "The start date of teaching for the university course"
+  sql: ${TABLE}.web_rec_start_date ;;
+  description: "not available"
 }
-dimension_group: created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_at ;;
-  description: "The created at date for the progression plan"
-}
-dimension_group: modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.modified_at ;;
-  description: "The last date the progression plan was modified at"
-}
-}
-view: product_progression_plans_history {
-sql_table_name: product_progression_plans_history ;;
-dimension: study_plan_history_pk {
-  primary_key: yes
-  hidden: yes
+dimension: web_site_id {
   type: string
-  sql: ${TABLE}.study_plan_history_pk ;;
-  description: "The key to link a record to the study plan history record"
+  sql: ${TABLE}.web_site_id ;;
+  description: "not available"
 }
-dimension: progression_plan_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.progression_plan_pk ;;
-  description: "The key to link a record to a progression plan"
-}
-dimension: progression_plan_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.progression_plan_fk ;;
-  description: "The key to link a record to a progression plan"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "The key to link a record to an application"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The key to link a record to an institution"
-}
-dimension: progression_plan_program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.progression_plan_program_intake_fk ;;
-  description: "The key to link a record to a progression plan's program intake"
-}
-dimension: progression_plan_program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.progression_plan_program_fk ;;
-  description: "The key to link a record to a progression plan's program"
-}
-dimension: institution_natural_key {
+dimension: web_site_sk {
   hidden: yes 
   type: number
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
+  sql: ${TABLE}.web_site_sk ;;
+  description: "not available"
 }
-dimension: progression_plan_program_natural_key {
+dimension: web_state {
+  type: string
+  sql: ${TABLE}.web_state ;;
+  description: "not available"
+}
+dimension: web_street_name {
+  type: string
+  sql: ${TABLE}.web_street_name ;;
+  description: "not available"
+}
+dimension: web_street_number {
+  type: string
+  sql: ${TABLE}.web_street_number ;;
+  description: "not available"
+}
+dimension: web_street_type {
+  type: string
+  sql: ${TABLE}.web_street_type ;;
+  description: "not available"
+}
+dimension: web_suite_number {
+  type: string
+  sql: ${TABLE}.web_suite_number ;;
+  description: "not available"
+}
+dimension: web_tax_percentage {
   hidden: yes 
   type: number
-  sql: ${TABLE}.progression_plan_program_natural_key ;;
-  description: "The key to link a record to a progression plan's program"
-}
-dimension: progression_plan_version_number {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.progression_plan_version_number ;;
-  description: "not available"
-}
-dimension: progression_plan_track_entry_type_code {
-  type: string
-  sql: ${TABLE}.progression_plan_track_entry_type_code ;;
-  description: "not available"
-}
-dimension: progression_plan_program_code {
-  type: string
-  sql: ${TABLE}.progression_plan_program_code ;;
-  description: "not available"
-}
-dimension: progression_plan_program_name {
-  type: string
-  sql: ${TABLE}.progression_plan_program_name ;;
-  description: "not available"
-}
-dimension: progression_plan_entry_level {
-  type: string
-  sql: ${TABLE}.progression_plan_entry_level ;;
-  description: "not available"
-}
-dimension: is_primary_progression {
-  type: string
-  sql: ${TABLE}.is_primary_progression ;;
-  description: "Confirms if the progression path is a primary progression path"
-}
-dimension_group: progression_plan_intake_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.progression_plan_intake_date ;;
-  description: "not available"
-}
-dimension: progression_plan_intake_season {
-  type: string
-  sql: ${TABLE}.progression_plan_intake_season ;;
-  description: "not available"
-}
-dimension_group: enrolment_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.enrolment_date ;;
-  description: "not available"
-}
-dimension_group: progression_plan_teaching_end_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.progression_plan_teaching_end_date ;;
-  description: "not available"
-}
-dimension_group: progression_plan_program_start_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.progression_plan_program_start_date ;;
-  description: "not available"
-}
-dimension_group: progression_plan_program_end_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.progression_plan_program_end_date ;;
-  description: "not available"
-}
-dimension_group: progression_plan_teaching_start_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.progression_plan_teaching_start_date ;;
-  description: "not available"
-}
-dimension_group: progression_plan_created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.progression_plan_created_at ;;
-  description: "not available"
-}
-dimension_group: progression_plan_modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.progression_plan_modified_at ;;
-  description: "not available"
-}
-dimension_group: progression_plan_valid_from {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.progression_plan_valid_from ;;
-  description: "When the progression plan was valid from"
-}
-dimension_group: progression_plan_valid_to {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.progression_plan_valid_to ;;
-  description: "When the progression plan was valid to"
-}
-dimension: progression_plan_index {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.progression_plan_index ;;
-  description: "The index for the progression plan historical records to help organise"
-}
-dimension: is_current_progression_plan_record {
-  type: yesno
-  sql: ${TABLE}.is_current_progression_plan_record ;;
-  description: "Confirms if the historical progression plan record is also a current one"
-}
-}
-view: product_study_plans {
-sql_table_name: product_study_plans ;;
-dimension: study_plan_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.study_plan_pk ;;
-  description: "The key to link a record to a study plan"
-}
-dimension: study_plan_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_fk ;;
-  description: "The key to link a record to a study plan"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "The key to link a record to an application"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The key to link a record to an institution"
-}
-dimension: study_plan_program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_program_intake_fk ;;
-  description: "The key to link a record to a study plan's program intake"
-}
-dimension: study_plan_program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_program_fk ;;
-  description: "The key to link a record to a study plan's program"
-}
-dimension: study_plan_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_natural_key ;;
-  description: "The key to link a record to a study plan"
-}
-dimension: institution_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
-}
-dimension: study_plan_program_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_program_natural_key ;;
-  description: "The key to link a record to a study plan's program"
-}
-dimension: version_number {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.version_number ;;
-  description: "The study plan's version number"
-}
-dimension: entry_type_code {
-  type: string
-  sql: ${TABLE}.entry_type_code ;;
-  description: "The code to indicate how the applicant had entry to the study plan"
-}
-dimension: course_code {
-  type: string
-  sql: ${TABLE}.course_code ;;
-  description: "The code to link a record to the course"
-}
-dimension: course_name {
-  type: string
-  sql: ${TABLE}.course_name ;;
-  description: "The name of the study plan course"
-}
-dimension_group: intake_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.intake_date ;;
-  description: "The intake date for the study plan"
-}
-dimension: intake_season {
-  type: string
-  sql: ${TABLE}.intake_season ;;
-  description: "The intake season for the study plan"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "The year and season of the intake for the study plan"
-}
-dimension: intake_academic_year {
-  type: string
-  sql: ${TABLE}.intake_academic_year ;;
-  description: "The academic year which the intake will be based in"
-}
-dimension: entry_level {
-  type: string
-  sql: ${TABLE}.entry_level ;;
-  description: "The entry level required for the study plan course (undergraduate, graduate, etc)"
-}
-dimension_group: enrolment {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.enrolment ;;
-  description: "The enrolment date of the study plan"
-}
-dimension_group: course_start {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.course_start ;;
-  description: "The course start date for the study plan"
-}
-dimension_group: course_end {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.course_end ;;
-  description: "The course end date for the study plan"
-}
-dimension_group: teaching_end {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.teaching_end ;;
-  description: "The teaching end date for the study plan course"
-}
-dimension_group: teaching_start {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.teaching_start ;;
-  description: "The teaching start date for the study plan course"
-}
-dimension_group: created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_at ;;
-  description: "When the study plan was created"
-}
-dimension_group: modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.modified_at ;;
-  description: "When the study plan was last modified at"
-}
-dimension: is_current_version {
-  type: yesno
-  sql: ${TABLE}.is_current_version ;;
-  description: "not available"
-}
-dimension: has_deferred {
-  type: yesno
-  sql: ${TABLE}.has_deferred ;;
-  description: "not available"
-}
-dimension: is_deferred {
-  type: yesno
-  sql: ${TABLE}.is_deferred ;;
-  description: "not available"
-}
-}
-view: product_study_plans_history {
-sql_table_name: product_study_plans_history ;;
-dimension: study_plan_history_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.study_plan_history_pk ;;
-  description: "The key to link a record to the study plan history record"
-}
-dimension: pathway_sk {
-  type: string
-  sql: ${TABLE}.pathway_sk ;;
-  description: "The surrogate key to link to the record"
-}
-dimension: study_plan_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_fk ;;
-  description: "The key to link a record to a study plan"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "The key to link a record to an application"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The key to link a record to an institution"
-}
-dimension: study_plan_program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_program_intake_fk ;;
-  description: "The key to link a record to a study plan's program intake"
-}
-dimension: study_plan_program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_program_fk ;;
-  description: "The key to link a record to a study plan's program"
-}
-dimension: study_plan_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_natural_key ;;
-  description: "The key to link a record to a study plan"
-}
-dimension: institution_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.institution_natural_key ;;
-  description: "The key to link a record to an institution"
-}
-dimension: study_plan_program_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_program_natural_key ;;
-  description: "The key to link a record to a study plan's program"
-}
-dimension: study_plan_version_number {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_version_number ;;
-  description: "not available"
-}
-dimension: study_plan_track_entry_type_code {
-  type: string
-  sql: ${TABLE}.study_plan_track_entry_type_code ;;
-  description: "not available"
-}
-dimension: study_plan_program_code {
-  type: string
-  sql: ${TABLE}.study_plan_program_code ;;
-  description: "not available"
-}
-dimension: study_plan_program_name {
-  type: string
-  sql: ${TABLE}.study_plan_program_name ;;
-  description: "not available"
-}
-dimension_group: study_plan_intake_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.study_plan_intake_date ;;
-  description: "not available"
-}
-dimension: study_plan_intake_season {
-  type: string
-  sql: ${TABLE}.study_plan_intake_season ;;
-  description: "not available"
-}
-dimension: study_plan_program_entry_level {
-  type: string
-  sql: ${TABLE}.study_plan_program_entry_level ;;
-  description: "not available"
-}
-dimension_group: enrolment_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.enrolment_date ;;
-  description: "not available"
-}
-dimension_group: study_plan_program_start_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.study_plan_program_start_date ;;
-  description: "not available"
-}
-dimension_group: study_plan_program_end_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.study_plan_program_end_date ;;
-  description: "not available"
-}
-dimension_group: study_plan_teaching_end_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.study_plan_teaching_end_date ;;
-  description: "not available"
-}
-dimension_group: study_plan_teaching_start_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.study_plan_teaching_start_date ;;
-  description: "not available"
-}
-dimension_group: study_plan_created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.study_plan_created_at ;;
-  description: "not available"
-}
-dimension_group: study_plan_modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.study_plan_modified_at ;;
-  description: "not available"
-}
-dimension_group: study_plan_valid_from {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.study_plan_valid_from ;;
-  description: "When the study plan was valid from"
-}
-dimension_group: study_plan_valid_to {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.study_plan_valid_to ;;
-  description: "When the study plan was valid to"
-}
-dimension: study_plan_index {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_index ;;
-  description: "The index for the study plan historical records to help organise"
-}
-dimension: is_current_study_plan_record {
-  type: yesno
-  sql: ${TABLE}.is_current_study_plan_record ;;
-  description: "Confirms if the historical study plan record is also a current one"
-}
-dimension: has_deferred {
-  type: string
-  sql: ${TABLE}.has_deferred ;;
-  description: "Confirms if the student has deferred from the study plan"
-}
-}
-view: sales_application_agent_bridge {
-sql_table_name: sales_application_agent_bridge ;;
-dimension: application_agent_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.application_agent_pk ;;
-  description: "Unique id to link an agent with an application"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "Id used to link records to application records"
-}
-dimension: agent_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.agent_fk ;;
-  description: "Id used to link records to agent records"
-}
-dimension: is_main_agent {
-  type: yesno
-  sql: ${TABLE}.is_main_agent ;;
-  description: "not available"
-}
-}
-view: sales_application_history {
-sql_table_name: sales_application_history ;;
-dimension: application_history_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.application_history_pk ;;
-  description: "not available"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "Id used to link records to application records"
-}
-dimension: program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_fk ;;
-  description: "The key to indicate the related program/course"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The key to indicate the related institution"
-}
-dimension: program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_intake_fk ;;
-  description: "The key that relates to the program intake"
-}
-dimension: student_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.student_fk ;;
-  description: "not available"
-}
-dimension: sales_manager_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sales_manager_fk ;;
-  description: "not available"
-}
-dimension: application_owner_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_owner_fk ;;
-  description: "not available"
-}
-dimension: cas_team_owner_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.cas_team_owner_fk ;;
-  description: "not available"
-}
-dimension: sponsor_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sponsor_fk ;;
-  description: "not available"
-}
-dimension_group: valid_from {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.valid_from ;;
-  description: "The start date of the application"
-}
-dimension_group: valid_to {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.valid_to ;;
-  description: "The end date of the application"
-}
-dimension: status {
-  type: string
-  sql: ${TABLE}.status ;;
-  description: "not available"
-}
-dimension: status_group {
-  type: string
-  sql: ${TABLE}.status_group ;;
-  description: "not available"
-}
-dimension: study_plan_version_number {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.study_plan_version_number ;;
-  description: "The number to indicate what type of study plan the application is following"
-}
-dimension: program_code {
-  type: string
-  sql: ${TABLE}.program_code ;;
-  description: "not available"
-}
-dimension: program_name {
-  type: string
-  sql: ${TABLE}.program_name ;;
-  description: "The name of the program/course"
-}
-dimension_group: intake {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.intake ;;
-  description: "not available"
-}
-dimension: salesforce_opportunity_natural_key {
-  type: string
-  sql: ${TABLE}.salesforce_opportunity_natural_key ;;
-  description: "not available"
-}
-dimension_group: created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_at ;;
-  description: "not available"
-}
-dimension_group: modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.modified_at ;;
-  description: "not available"
-}
-dimension: applications {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.applications ;;
-  description: "Full list/count of applications"
-}
-dimension: offers {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.offers ;;
-  description: "Full list/count of offers"
-}
-dimension: deposits {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.deposits ;;
-  description: "Full list/count of deposits"
-}
-dimension: enrolled {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.enrolled ;;
-  description: "Full list/count of enrolled"
-}
-dimension: lost {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.lost ;;
-  description: "Full list/count of lost records"
-}
-dimension: change_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.change_count ;;
-  description: "Counts the amount of changes to the applicant (Such as switched program and intake etc)"
-}
-dimension: change {
-  type: string
-  sql: ${TABLE}.change ;;
-  description: "Gives a description of the change to the applicant"
-}
-dimension: has_deferred {
-  type: string
-  sql: ${TABLE}.has_deferred ;;
-  description: "Has the applicant deferred"
-}
-}
-view: sales_applications {
-sql_table_name: sales_applications ;;
-dimension: study_plan_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_fk ;;
-  description: "not available"
-}
-dimension: application_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.application_pk ;;
-  description: "Unique id for an application. Keep in mind that a student may have multiple applications"
-}
-dimension: student_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.student_fk ;;
-  description: "The student that applied"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "The college or university where the student will start studies"
-}
-dimension: sales_manager_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sales_manager_fk ;;
-  description: "The sales manager which is in charge of the sales based applications"
-}
-dimension: application_owner_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_owner_fk ;;
-  description: "The owner/user of the application"
-}
-dimension: cas_team_owner_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.cas_team_owner_fk ;;
-  description: "Key to determine the cas team owner"
-}
-dimension: sponsor_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sponsor_fk ;;
-  description: "not available"
-}
-dimension: application_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.application_natural_key ;;
-  description: "not available"
-}
-dimension: student_natural_key {
-  type: string
-  sql: ${TABLE}.student_natural_key ;;
-  description: "The key to indicate the student"
-}
-dimension: sales_manager_natural_key {
-  type: string
-  sql: ${TABLE}.sales_manager_natural_key ;;
-  description: "The key to indicate the sales manager"
-}
-dimension: application_owner_natural_key {
-  type: string
-  sql: ${TABLE}.application_owner_natural_key ;;
-  description: "The key to indicate the application owner"
-}
-dimension: cas_team_owner_natural_key {
-  type: string
-  sql: ${TABLE}.cas_team_owner_natural_key ;;
-  description: "Key to determine the cas team owner"
-}
-dimension: salesforce_opportunity_natural_key {
-  type: string
-  sql: ${TABLE}.salesforce_opportunity_natural_key ;;
-  description: "The key to indicate and link to the salesforce opportunity id"
-}
-dimension: sponsor_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sponsor_natural_key ;;
-  description: "The key to indicate and link the record to the sponsor"
-}
-dimension_group: created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_at ;;
-  description: "The date the application was created"
-}
-dimension_group: modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.modified_at ;;
-  description: "The date the application was last modified at"
-}
-dimension_group: status_update {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.status_update ;;
-  description: "not available"
-}
-dimension_group: intake_date {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.intake_date ;;
-  description: "The date where the application/student will start the course"
-}
-dimension: payment_status {
-  type: string
-  sql: ${TABLE}.payment_status ;;
-  description: "The status of the payment process for the application"
-}
-dimension: immigration_category {
-  type: string
-  sql: ${TABLE}.immigration_category ;;
-  description: "The status of immigration the applicant will be in"
-}
-dimension: learning_mode {
-  type: string
-  sql: ${TABLE}.learning_mode ;;
-  description: "The way the student will be studying (on campus, digital learning, etc)"
-}
-dimension: returning_student {
-  type: string
-  sql: ${TABLE}.returning_student ;;
-  description: "Confirms if the applicant is a returning student"
-}
-dimension: accommodation_required {
-  type: string
-  sql: ${TABLE}.accommodation_required ;;
-  description: "Confirms if accommodation is required for the applicant"
-}
-dimension: sponsor_reference {
-  type: string
-  sql: ${TABLE}.sponsor_reference ;;
-  description: "not available"
-}
-dimension: is_offer_letter_issued {
-  type: yesno
-  sql: ${TABLE}.is_offer_letter_issued ;;
-  description: "Has the offer letter been issued?"
-}
-dimension: is_acceptance_form_issued {
-  type: yesno
-  sql: ${TABLE}.is_acceptance_form_issued ;;
-  description: "Has the acceptance form been issued?"
-}
-dimension: is_visa_needed {
-  type: yesno
-  sql: ${TABLE}.is_visa_needed ;;
-  description: "Is a visa needed for applicant"
-}
-dimension: is_application_submitted {
-  type: yesno
-  sql: ${TABLE}.is_application_submitted ;;
-  description: "Has the application been submitted?"
-}
-dimension: is_application_completed {
-  type: yesno
-  sql: ${TABLE}.is_application_completed ;;
-  description: "Is the application completed?"
-}
-dimension: is_confirmation_required {
-  type: yesno
-  sql: ${TABLE}.is_confirmation_required ;;
-  description: "Is confirmation required from any parties for the application"
-}
-dimension: has_second_agent {
-  type: yesno
-  sql: ${TABLE}.has_second_agent ;;
-  description: "Has their been any involment from a second agent for the application"
-}
-dimension: has_deferred {
-  type: string
-  sql: ${TABLE}.has_deferred ;;
-  description: "Has the applicant deferred?"
-}
-dimension: class_application_id {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.class_application_id ;;
-  description: "Confirm the id for the class"
-}
-dimension: status {
-  type: string
-  sql: ${TABLE}.status ;;
-  description: "The current status of the application, a mix of numeric code and text description"
-}
-dimension: status_group {
-  type: string
-  sql: ${TABLE}.status_group ;;
-  description: "Like application status but grouped into 5 codes"
-}
-dimension: is_deferred {
-  type: yesno
-  sql: ${TABLE}.is_deferred ;;
-  description: "not available"
-}
-dimension: weighting {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.weighting ;;
-  description: "The percentage of offers per student (all offers add up too one)"
-}
-dimension: weighting_non_deferred {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.weighting_non_deferred ;;
-  description: "The percentage of offers per student excluding deferred (all offers add up too one)"
-}
-}
-view: sales_applications_history {
-sql_table_name: sales_applications_history ;;
-dimension: application_history_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.application_history_pk ;;
-  description: "not available"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "not available"
-}
-dimension: student_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.student_fk ;;
-  description: "not available"
-}
-dimension: sales_manager_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sales_manager_fk ;;
-  description: "not available"
-}
-dimension: application_owner_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_owner_fk ;;
-  description: "not available"
-}
-dimension: cas_team_owner_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.cas_team_owner_fk ;;
-  description: "not available"
-}
-dimension: sponsor_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sponsor_fk ;;
-  description: "not available"
-}
-dimension: application_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.application_natural_key ;;
-  description: "not available"
-}
-dimension: student_natural_key {
-  type: string
-  sql: ${TABLE}.student_natural_key ;;
-  description: "not available"
-}
-dimension: sales_manager_natural_key {
-  type: string
-  sql: ${TABLE}.sales_manager_natural_key ;;
-  description: "not available"
-}
-dimension: application_owner_natural_key {
-  type: string
-  sql: ${TABLE}.application_owner_natural_key ;;
-  description: "not available"
-}
-dimension: cas_team_owner_natural_key {
-  type: string
-  sql: ${TABLE}.cas_team_owner_natural_key ;;
-  description: "not available"
-}
-dimension: salesforce_opportunity_natural_key {
-  type: string
-  sql: ${TABLE}.salesforce_opportunity_natural_key ;;
-  description: "not available"
-}
-dimension: sponsor_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sponsor_natural_key ;;
-  description: "not available"
-}
-dimension_group: created_ts {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_ts ;;
-  description: "not available"
-}
-dimension_group: modified_ts {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.modified_ts ;;
-  description: "not available"
-}
-dimension_group: application_status_log_created_ts {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.application_status_log_created_ts ;;
-  description: "not available"
-}
-dimension: application_status {
-  type: string
-  sql: ${TABLE}.application_status ;;
-  description: "not available"
-}
-dimension: application_status_group {
-  type: string
-  sql: ${TABLE}.application_status_group ;;
-  description: "not available"
-}
-dimension: payment_status {
-  type: string
-  sql: ${TABLE}.payment_status ;;
-  description: "not available"
-}
-dimension: immigration_category {
-  type: string
-  sql: ${TABLE}.immigration_category ;;
-  description: "not available"
-}
-dimension: learning_mode {
-  type: string
-  sql: ${TABLE}.learning_mode ;;
-  description: "not available"
-}
-dimension: returning_student {
-  type: string
-  sql: ${TABLE}.returning_student ;;
-  description: "not available"
-}
-dimension: accommodation_required {
-  type: string
-  sql: ${TABLE}.accommodation_required ;;
-  description: "not available"
-}
-dimension: sponsor_reference {
-  type: string
-  sql: ${TABLE}.sponsor_reference ;;
-  description: "not available"
-}
-dimension: is_offer_letter_issued {
-  type: yesno
-  sql: ${TABLE}.is_offer_letter_issued ;;
-  description: "not available"
-}
-dimension: is_acceptance_form_issued {
-  type: yesno
-  sql: ${TABLE}.is_acceptance_form_issued ;;
-  description: "not available"
-}
-dimension: is_visa_needed {
-  type: yesno
-  sql: ${TABLE}.is_visa_needed ;;
-  description: "not available"
-}
-dimension: is_application_submitted {
-  type: yesno
-  sql: ${TABLE}.is_application_submitted ;;
-  description: "not available"
-}
-dimension: is_application_completed {
-  type: yesno
-  sql: ${TABLE}.is_application_completed ;;
-  description: "not available"
-}
-dimension: is_confirmation_required {
-  type: yesno
-  sql: ${TABLE}.is_confirmation_required ;;
-  description: "not available"
-}
-dimension: has_second_agent {
-  type: yesno
-  sql: ${TABLE}.has_second_agent ;;
+  sql: ${TABLE}.web_tax_percentage ;;
   description: "not available"
 }
-dimension: class_application_id {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.class_application_id ;;
-  description: "not available"
-}
-dimension: old_title {
-  type: string
-  sql: ${TABLE}.old_title ;;
-  description: "Displays the previous application status before changing in the new title"
-}
-dimension: new_title {
-  type: string
-  sql: ${TABLE}.new_title ;;
-  description: "Displays the new application status from changing from the old title"
-}
-dimension_group: application_valid_from {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.application_valid_from ;;
-  description: "Date application is valid from"
-}
-dimension_group: application_valid_to {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.application_valid_to ;;
-  description: "Date application is valid to"
-}
-dimension: application_index {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.application_index ;;
-  description: "The index format of the row of applications"
-}
-dimension: is_current_application_record {
-  type: yesno
-  sql: ${TABLE}.is_current_application_record ;;
-  description: "Is the application a current or past record"
-}
-dimension: application_status_duration_seconds {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.application_status_duration_seconds ;;
-  description: "The time the application was kept on each status"
-}
-dimension: application_weight {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.application_weight ;;
-  description: "not available"
-}
-}
-view: sales_applications_quota {
-sql_table_name: sales_applications_quota ;;
-dimension: application_quota_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.application_quota_pk ;;
-  description: "not available"
-}
-dimension: quota_allocation_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.quota_allocation_fk ;;
-  description: "not available"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "not available"
-}
-dimension: degree_name {
-  type: string
-  sql: ${TABLE}.degree_name ;;
-  description: "not available"
-}
-dimension: application_status_group {
-  type: string
-  sql: ${TABLE}.application_status_group ;;
-  description: "not available"
-}
-}
-view: sales_applications_summary {
-sql_table_name: sales_applications_summary ;;
-dimension: application_summary_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.application_summary_pk ;;
-  description: "not available"
-}
-dimension: sales_applications_application_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_application_count ;;
-  description: "The weighted count of applications. In other words, the number of students who have applied including offers, deposits, and enrollments."
-}
-dimension: sales_applications_unweighted_offer_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_unweighted_offer_count ;;
-  description: "not available"
-}
-dimension: sales_applications_application_offer_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_application_offer_count ;;
-  description: "The weighted count of applications in offer state. In other words, the number of students who have received an offer but not yet made a deposit."
-}
-dimension: sales_applications_unconverted_application_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_unconverted_application_count ;;
-  description: "The weighted count of applications in application state. In other words, the number of students who have applied but not yet received an offer."
-}
-dimension: sales_applications_application_count_non_deferred {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_application_count_non_deferred ;;
-  description: "not available"
-}
-dimension: sales_applications_application_offer_count_non_deferred {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_application_offer_count_non_deferred ;;
-  description: "not available"
-}
-dimension: sales_applications_unconverted_application_count_non_deferred {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_unconverted_application_count_non_deferred ;;
-  description: "not available"
-}
-dimension: sales_applications_application_deposit_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_application_deposit_count ;;
-  description: "The number of applications that have converted to deposits."
-}
-dimension: sales_applications_application_enrolled_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_application_enrolled_count ;;
-  description: "The number of applications that have converted to enrolled students."
-}
-dimension: sales_applications_enrollments_and_deposit_count {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.sales_applications_enrollments_and_deposit_count ;;
-  description: "not available"
-}
-}
-view: sales_new_programs {
-sql_table_name: sales_new_programs ;;
-dimension: program_launch_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.program_launch_pk ;;
-  description: ""
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "not available"
-}
-dimension: program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_fk ;;
-  description: "not available"
-}
-dimension: program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_intake_fk ;;
-  description: "not available"
-}
-dimension: launch_name {
-  type: string
-  sql: ${TABLE}.launch_name ;;
-  description: "Name of the new program"
-}
-dimension_group: launch {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.launch ;;
-  description: "Date of launch"
-}
-dimension_group: launch_expiry {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.launch_expiry ;;
-  description: "Expiry date of launch"
-}
-dimension: institution_name {
-  type: string
-  sql: ${TABLE}.institution_name ;;
-  description: "Name of institution"
-}
-dimension: program_code {
-  type: string
-  sql: ${TABLE}.program_code ;;
-  description: "Code to link to program"
-}
-dimension: program_name {
-  type: string
-  sql: ${TABLE}.program_name ;;
-  description: "Name of program/course"
-}
-dimension: program_type {
-  type: string
-  sql: ${TABLE}.program_type ;;
-  description: "Type of program/course"
-}
-dimension: award_name {
-  type: string
-  sql: ${TABLE}.award_name ;;
-  description: "Name of the award"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "Season and year of intake for the applicant"
-}
-}
-view: sales_priority_programs {
-sql_table_name: sales_priority_programs ;;
-dimension: priority_program_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.priority_program_pk ;;
-  description: "not available"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "not available"
-}
-dimension: program_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_fk ;;
-  description: "not available"
-}
-dimension: program_intake_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.program_intake_fk ;;
-  description: "not available"
-}
-dimension: priority_reason {
-  type: string
-  sql: ${TABLE}.priority_reason ;;
-  description: "not available"
-}
-dimension: institution_name {
-  type: string
-  sql: ${TABLE}.institution_name ;;
-  description: "not available"
-}
-dimension: program_code {
-  type: string
-  sql: ${TABLE}.program_code ;;
-  description: "not available"
-}
-dimension: program_name {
-  type: string
-  sql: ${TABLE}.program_name ;;
-  description: "not available"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "not available"
-}
-}
-view: sales_quota_allocations {
-sql_table_name: sales_quota_allocations ;;
-dimension: quota_allocation_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.quota_allocation_pk ;;
-  description: "not available"
-}
-dimension: university_code {
-  type: string
-  sql: ${TABLE}.university_code ;;
-  description: "not available"
-}
-dimension: university_name {
-  type: string
-  sql: ${TABLE}.university_name ;;
-  description: "not available"
-}
-dimension: college_code {
-  type: string
-  sql: ${TABLE}.college_code ;;
-  description: "not available"
-}
-dimension: degree_concat {
-  type: string
-  sql: ${TABLE}.degree_concat ;;
-  description: "not available"
-}
-dimension: quota_group {
-  type: string
-  sql: ${TABLE}.quota_group ;;
-  description: "not available"
-}
-dimension: nationaility_criteria {
-  type: string
-  sql: ${TABLE}.nationaility_criteria ;;
-  description: "not available"
-}
-dimension: sponsor_criteria {
-  type: string
-  sql: ${TABLE}.sponsor_criteria ;;
-  description: "not available"
-}
-dimension: agent_region_criteria {
-  type: string
-  sql: ${TABLE}.agent_region_criteria ;;
-  description: "not available"
-}
-dimension: program_criteria {
-  type: string
-  sql: ${TABLE}.program_criteria ;;
-  description: "not available"
-}
-dimension: quota_year {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.quota_year ;;
-  description: "not available"
-}
-dimension: deposits_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.deposits_amt ;;
-  description: "not available"
-}
-dimension: cas_enrolment_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.cas_enrolment_amt ;;
-  description: "not available"
-}
-dimension: progression_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.progression_amt ;;
-  description: "not available"
-}
-dimension_group: limited {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.limited ;;
-  description: "not available"
-}
-dimension_group: closed {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.closed ;;
-  description: "not available"
-}
-}
-view: sales_scholarships {
-sql_table_name: sales_scholarships ;;
-dimension: scholarships_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.scholarships_pk ;;
-  description: "not available"
-}
-dimension: study_plan_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.study_plan_fk ;;
-  description: "The key to relate to the type of study plan"
-}
-dimension: application_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.application_fk ;;
-  description: "The key to relate to a certain application"
-}
-dimension: scholarship_reason {
-  type: string
-  sql: ${TABLE}.scholarship_reason ;;
-  description: "Reason behind why the scholarship was given"
-}
-dimension: scholarship_note {
-  type: string
-  sql: ${TABLE}.scholarship_note ;;
-  description: "Any additional information about the scholarship record"
-}
-dimension: student_ledger_currency_code {
-  type: string
-  sql: ${TABLE}.student_ledger_currency_code ;;
-  description: "Code to indicate what currency the applicant is using"
-}
-dimension: student_ledger_sop_line_item_actual_amount {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.student_ledger_sop_line_item_actual_amount ;;
-  description: "The amount of the course after the scholarship has been given"
-}
-dimension: budget_pot {
-  type: string
-  sql: ${TABLE}.budget_pot ;;
-  description: "Budget details"
-}
-dimension_group: created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_at ;;
-  description: "not available"
-}
-dimension: application_status_group {
-  type: string
-  sql: ${TABLE}.application_status_group ;;
-  description: "Status/point of progress group of an application"
-}
-}
-view: sales_student {
-sql_table_name: sales_student ;;
-dimension: student_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.student_pk ;;
-  description: "The key to link to/indicate a certain student"
-}
-dimension: country_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.country_fk ;;
-  description: "The country of residence of the student (when recruited)"
-}
-dimension: nationality_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.nationality_fk ;;
-  description: "The nationality of the student"
-}
-dimension: student_natural_key {
-  type: string
-  sql: ${TABLE}.student_natural_key ;;
-  description: "The key to indicate and link to a student"
-}
-dimension: kss_student_id {
-  type: string
-  sql: ${TABLE}.kss_student_id ;;
-  description: "The kss format id to indicate and link to a student"
-}
-dimension: class_student_id {
-  type: string
-  sql: ${TABLE}.class_student_id ;;
-  description: "The id to determine the student's class"
-}
-dimension: student_salesforce_natural_key {
-  type: string
-  sql: ${TABLE}.student_salesforce_natural_key ;;
-  description: "The unique id of the student in Salesforce."
-}
-dimension: name {
-  type: string
-  sql: ${TABLE}.name ;;
-  description: "The student's name"
-}
-dimension: gender {
-  type: string
-  sql: ${TABLE}.gender ;;
-  description: "The student's gender"
-}
-dimension: country_iso_key {
-  type: string
-  sql: ${TABLE}.country_iso_key ;;
-  description: "An abbreviation for the names of countries linked to the student nationality (United States Of America = USA, etc)"
-}
-dimension: country_natural_key {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.country_natural_key ;;
-  description: "The key to indicate the country linked to the student"
-}
-dimension: source {
-  type: string
-  sql: ${TABLE}.source ;;
-  description: "This how the student was introduced to Kaplan. Similar to recruitment channel but for student instead of application."
-}
-dimension: nationality {
+dimension: web_zip {
   type: string
-  sql: ${TABLE}.nationality ;;
-  description: "The nationality of the student"
-}
-dimension_group: dob {
-  timeframes: [raw,date,week,month,quarter,year]
-  type: time
-  datatype: date
-  sql: ${TABLE}.dob ;;
-  description: "The student's date of birth."
-}
-dimension_group: created_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.created_at ;;
-  description: "The date when the student record was created"
-}
-dimension_group: modified_at {
-  timeframes: [time,raw,date,week,month,quarter,year]
-  type: time
-  datatype: timestamp
-  sql: ${TABLE}.modified_at ;;
-  description: "The last date when the student record was modified"
-}
-}
-view: scholarship_budgets {
-sql_table_name: scholarship_budgets ;;
-dimension: scholarship_budgets_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.scholarship_budgets_pk ;;
-  description: "The key to link to the scholarship budget records"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "Season and year of when the student will start"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "The region group of where the applicant is based (before studying)"
-}
-dimension: schols_region {
-  type: string
-  sql: ${TABLE}.schols_region ;;
-  description: "The scholarship region of the budget record"
-}
-dimension: budget_pot {
-  type: string
-  sql: ${TABLE}.budget_pot ;;
-  description: "Budget details"
-}
-dimension: budget_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.budget_amt ;;
-  description: "The amount of budget"
-}
-dimension: budget_owner {
-  type: string
-  sql: ${TABLE}.budget_owner ;;
-  description: "not available"
-}
-}
-view: scholarship_targets {
-sql_table_name: scholarship_targets ;;
-dimension: scholarship_targets_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.scholarship_targets_pk ;;
-  description: "not available"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "not available"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "not available"
-}
-dimension: schols_region {
-  type: string
-  sql: ${TABLE}.schols_region ;;
-  description: "not available"
-}
-dimension: target_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.target_amt ;;
+  sql: ${TABLE}.web_zip ;;
   description: "not available"
-}
-dimension: budget_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.budget_amt ;;
-  description: "not available"
-}
-}
-view: targets_institutions {
-sql_table_name: targets_institutions ;;
-dimension: institution_target_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.institution_target_pk ;;
-  description: "not available"
-}
-dimension: institution_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.institution_fk ;;
-  description: "not available"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "not available"
-}
-dimension: institution_name {
-  type: string
-  sql: ${TABLE}.institution_name ;;
-  description: "not available"
-}
-dimension: target_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.target_amt ;;
-  description: "not available"
-}
-}
-view: targets_sales_regions {
-sql_table_name: targets_sales_regions ;;
-dimension: sales_region_target_pk {
-  primary_key: yes
-  hidden: yes
-  type: string
-  sql: ${TABLE}.sales_region_target_pk ;;
-  description: "The key to link to the target sales region"
-}
-dimension: sales_region_target_country_fk {
-  hidden: yes 
-  type: string
-  sql: ${TABLE}.sales_region_target_country_fk ;;
-  description: "The key to link to the target sales region country"
-}
-dimension: intake_name {
-  type: string
-  sql: ${TABLE}.intake_name ;;
-  description: "The target season and year for when the student begins"
-}
-dimension: country_name {
-  type: string
-  sql: ${TABLE}.country_name ;;
-  description: "The target country where the student will start studying"
-}
-dimension: sales_region {
-  type: string
-  sql: ${TABLE}.sales_region ;;
-  description: "The target sales region where the student will start studying"
-}
-dimension: sales_region_group {
-  type: string
-  sql: ${TABLE}.sales_region_group ;;
-  description: "The target sales region group where the student will start studying"
-}
-dimension: sales_channel {
-  type: string
-  sql: ${TABLE}.sales_channel ;;
-  description: "The target sales channel the student when through (agent, online, etc)"
-}
-dimension: target_amt {
-  hidden: yes 
-  type: number
-  sql: ${TABLE}.target_amt ;;
-  description: "The target amount of enrolments"
 }
 }

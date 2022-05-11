@@ -1,2 +1,4921 @@
 version: 2
 models:
+  - name: audit_dbt_last_results
+    columns:
+      - name: diff_from_previous_load_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: execution_time
+        tests:
+          - dbt_utils.at_least_one
+      - name: load_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: max_load_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: object
+        tests:
+          - dbt_utils.at_least_one
+      - name: pct_diff_from_previous_load_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: previous_load_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: row_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+  - name: budgets_sales
+    columns:
+      - name: budget_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pk
+        tests:
+          - not_null
+          - unique
+      - name: entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_agents
+    columns:
+      - name: agent_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_pk
+        tests:
+          - not_null
+          - unique
+      - name: agent_salesforce_business_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_fk
+        tests:
+          - not_null
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: group
+        tests:
+          - dbt_utils.at_least_one
+      - name: name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_channel
+        tests:
+          - dbt_utils.at_least_one
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: uk_based_agent
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_countries
+    columns:
+      - name: country
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_is_sanctioned
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_pk
+        tests:
+          - not_null
+          - unique
+      - name: salesforce_country_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_country_mapping
+    columns:
+      - name: country_fk
+        tests:
+          - not_null
+      - name: country_mapping_pk
+        tests:
+          - not_null
+          - unique
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_fk
+        tests:
+          - not_null
+      - name: sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: core_institutions
+    columns:
+      - name: country_fk
+        tests:
+          - not_null
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_pk
+        tests:
+          - not_null
+          - unique
+      - name: institution_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_program_intakes
+    columns:
+      - name: enrolment_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: enrolment_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_quota_exists
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fk
+        tests:
+          - not_null
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_pk
+        tests:
+          - not_null
+          - unique
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: teaching_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: teaching_start
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_programs
+    columns:
+      - name: award_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: duration_length
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: level
+        tests:
+          - dbt_utils.at_least_one
+      - name: name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_pk
+        tests:
+          - not_null
+          - unique
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: type
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_unit_college
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_unit_department
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_unit_division
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_unit_faculty
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_unit_institute
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_unit_school
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_scholarship_reason_owners
+    columns:
+      - name: budget_owner
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason_owner_pk
+        tests:
+          - not_null
+          - unique
+  - name: core_scholarship_reasons
+    columns:
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason_pk
+        tests:
+          - not_null
+          - unique
+  - name: core_sponsors
+    columns:
+      - name: country_fk
+        tests:
+          - not_null
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: group
+        tests:
+          - dbt_utils.at_least_one
+      - name: name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_pk
+        tests:
+          - not_null
+          - unique
+      - name: sponsor_salesforce_business_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: uk_sponsor
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_subjects
+    columns:
+      - name: program_fk
+        tests:
+          - not_null
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_subject_pk
+        tests:
+          - not_null
+          - unique
+      - name: subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: core_user_mapping
+    columns:
+      - name: sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_fk
+        tests:
+          - not_null
+      - name: user_mapping_pk
+        tests:
+          - not_null
+          - unique
+      - name: user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: core_users
+    columns:
+      - name: name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_pk
+        tests:
+          - not_null
+          - unique
+  - name: dq_duplicate_studyplan_versions
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_fk
+        tests:
+          - not_null
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_pk
+        tests:
+          - not_null
+          - unique
+      - name: cas_team_owner_fk
+        tests:
+          - not_null
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_fk
+        tests:
+          - not_null
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_fk
+        tests:
+          - not_null
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_update
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fk
+        tests:
+          - not_null
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_fk
+        tests:
+          - not_null
+      - name: weighting
+        tests:
+          - dbt_utils.at_least_one
+      - name: weighting_non_deferred
+        tests:
+          - dbt_utils.at_least_one
+  - name: int__study_plan
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_application_agents
+    columns:
+      - name: agent_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_partner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_main_agent
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_application_history
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: applications
+        tests:
+          - dbt_utils.at_least_one
+      - name: change
+        tests:
+          - dbt_utils.at_least_one
+      - name: change_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: deposits
+        tests:
+          - dbt_utils.at_least_one
+      - name: enrolled
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: lost
+        tests:
+          - dbt_utils.at_least_one
+      - name: offers
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: reporting_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: reporting_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: int_application_quota
+    columns:
+      - name: agent_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: allow_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: allow_nationaility
+        tests:
+          - dbt_utils.at_least_one
+      - name: allow_program
+        tests:
+          - dbt_utils.at_least_one
+      - name: allow_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: college_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_applications
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_applications_history
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: application_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_application_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: new_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: old_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_applications_history_i
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: application_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_application_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: new_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: old_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_applications_status_history
+    columns:
+      - name: accommodation_required_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_reason_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: application_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_application_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: new_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: old_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_change_history
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: reporting_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: reporting_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: int_core_agents
+    columns:
+      - name: agent_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_sales_channel
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_salesforce_business_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: agent_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: uk_based_agent
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_countries
+    columns:
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_sanctioned
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_country_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_country_mapping
+    columns:
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: int_core_institutions
+    columns:
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_program_intakes
+    columns:
+      - name: academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_quota_exists
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_enrolment_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_enrolment_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_programs
+    columns:
+      - name: award_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: duration
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: instituiton_unit_college
+        tests:
+          - dbt_utils.at_least_one
+      - name: instituiton_unit_department
+        tests:
+          - dbt_utils.at_least_one
+      - name: instituiton_unit_division
+        tests:
+          - dbt_utils.at_least_one
+      - name: instituiton_unit_faculty
+        tests:
+          - dbt_utils.at_least_one
+      - name: instituiton_unit_institute
+        tests:
+          - dbt_utils.at_least_one
+      - name: instituiton_unit_school
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_scholarship_reason_owners
+    columns:
+      - name: budget_owner
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_scholarship_reasons
+    columns:
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_scholarships
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: college_booking_item_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_currency_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_actual_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_sponsors
+    columns:
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_salesforce_business_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: uk_sponsor
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_subjects
+    columns:
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_subject_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core_user_mapping
+    columns:
+      - name: sales_region_group_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: int_core_users
+    columns:
+      - name: user_fullname
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_institution_targets
+    columns:
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_intake_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_new_programs
+    columns:
+      - name: award_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_expiry_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: new_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_pathways
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_version
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: track_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_pathways__history
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: version_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_pathways_history
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: track_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_pathways_i
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_priority_programs
+    columns:
+      - name: award_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: course_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_row
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_progression_plan
+    columns:
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_progression_plans
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_progression_plans_history
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_progression_plan_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: progression_plan_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: progression_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_progression_study
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_quota_allocations
+    columns:
+      - name: agent_region_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_enrolment_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: college_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_concat
+        tests:
+          - dbt_utils.at_least_one
+      - name: deposits_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationaility_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_quota_items
+    columns:
+      - name: college_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_sales_budgets
+    columns:
+      - name: budget_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: row
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_budgets
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_sales_region_targets
+    columns:
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_channel
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_scholarship_budgets
+    columns:
+      - name: budget_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_owner
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_scholarship_targets
+    columns:
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_target
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_scholarships
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_note
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_currency_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_actual_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_students
+    columns:
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_class_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_dob
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fullname
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_gender
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_kss_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_salesforce_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_source
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_study_plan
+    columns:
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_study_plan_history
+    columns:
+      - name: academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: int_study_plans
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_version
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: track_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_study_plans_history
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_study_plan_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: study_plan_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: track_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: product_progression_plans
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_teaching_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_teaching_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_fk
+        tests:
+          - not_null
+      - name: progression_plan_pk
+        tests:
+          - not_null
+          - unique
+      - name: progression_plan_program_fk
+        tests:
+          - not_null
+      - name: progression_plan_program_intake_fk
+        tests:
+          - not_null
+      - name: progression_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_enrolment
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: product_progression_plans_history
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_progression_plan_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_fk
+        tests:
+          - not_null
+      - name: progression_plan_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_pk
+        tests:
+          - not_null
+          - unique
+      - name: progression_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_fk
+        tests:
+          - not_null
+      - name: progression_plan_program_intake_fk
+        tests:
+          - not_null
+      - name: progression_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_plan_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: progression_plan_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: progression_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_history_pk
+        tests:
+          - not_null
+          - unique
+  - name: product_study_plans
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: course_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: course_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: course_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: course_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: enrolment
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_version
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_fk
+        tests:
+          - not_null
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_pk
+        tests:
+          - not_null
+          - unique
+      - name: study_plan_program_fk
+        tests:
+          - not_null
+      - name: study_plan_program_intake_fk
+        tests:
+          - not_null
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: teaching_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: teaching_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: product_study_plans_history
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_study_plan_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: pathway_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_fk
+        tests:
+          - not_null
+      - name: study_plan_history_pk
+        tests:
+          - not_null
+          - unique
+      - name: study_plan_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_fk
+        tests:
+          - not_null
+      - name: study_plan_program_intake_fk
+        tests:
+          - not_null
+      - name: study_plan_program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: study_plan_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_application_agent_bridge
+    columns:
+      - name: agent_fk
+        tests:
+          - not_null
+      - name: application_agent_pk
+        tests:
+          - not_null
+          - unique
+      - name: application_fk
+        tests:
+          - not_null
+      - name: is_main_agent
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_application_history
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: application_history_pk
+        tests:
+          - not_null
+          - unique
+      - name: application_owner_fk
+        tests:
+          - not_null
+      - name: applications
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_team_owner_fk
+        tests:
+          - not_null
+      - name: change
+        tests:
+          - dbt_utils.at_least_one
+      - name: change_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: deposits
+        tests:
+          - dbt_utils.at_least_one
+      - name: enrolled
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: intake
+        tests:
+          - dbt_utils.at_least_one
+      - name: lost
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: offers
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fk
+        tests:
+          - not_null
+      - name: program_intake_fk
+        tests:
+          - not_null
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_fk
+        tests:
+          - not_null
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_fk
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fk
+        tests:
+          - not_null
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: sales_application_summary
+    columns:
+      - name: application_pk
+        tests:
+          - not_null
+          - unique
+      - name: sales_applications_fact_application_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_fact_application_deposit_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_fact_application_enrolled_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_fact_application_offer_count
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_applications
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_fk
+        tests:
+          - not_null
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_pk
+        tests:
+          - not_null
+          - unique
+      - name: cas_team_owner_fk
+        tests:
+          - not_null
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_fk
+        tests:
+          - not_null
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_fk
+        tests:
+          - not_null
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: status
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_update
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fk
+        tests:
+          - not_null
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_fk
+        tests:
+          - not_null
+      - name: weighting
+        tests:
+          - dbt_utils.at_least_one
+      - name: weighting_non_deferred
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_applications_fact
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_fk
+        tests:
+          - not_null
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_pk
+        tests:
+          - not_null
+          - unique
+      - name: application_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_weight
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_team_owner_fk
+        tests:
+          - not_null
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_fk
+        tests:
+          - not_null
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_fk
+        tests:
+          - not_null
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fk
+        tests:
+          - not_null
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_applications_history
+    columns:
+      - name: accommodation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_fk
+        tests:
+          - not_null
+      - name: application_history_pk
+        tests:
+          - not_null
+          - unique
+      - name: application_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_fk
+        tests:
+          - not_null
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: application_valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: application_weight
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_team_owner_fk
+        tests:
+          - not_null
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: class_application_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_current_application_record
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: new_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: old_title
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_fk
+        tests:
+          - not_null
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_fk
+        tests:
+          - not_null
+      - name: sponsor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fk
+        tests:
+          - not_null
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_applications_quota
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: application_quota_pk
+        tests:
+          - not_null
+          - unique
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_allocation_fk
+        tests:
+          - not_null
+  - name: sales_applications_summary
+    columns:
+      - name: application_summary_pk
+        tests:
+          - not_null
+          - unique
+      - name: sales_applications_application_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_application_count_non_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_application_deposit_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_application_enrolled_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_application_offer_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_application_offer_count_non_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_enrollments_and_deposit_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_unconverted_application_count
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_unconverted_application_count_non_deferred
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_applications_unweighted_offer_count
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_new_programs
+    columns:
+      - name: award_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_expiry
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fk
+        tests:
+          - not_null
+      - name: program_intake_fk
+        tests:
+          - not_null
+      - name: program_launch_pk
+        tests:
+          - not_null
+          - unique
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_priority_programs
+    columns:
+      - name: award_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_program_pk
+        tests:
+          - not_null
+          - unique
+      - name: priority_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fk
+        tests:
+          - not_null
+      - name: program_intake_fk
+        tests:
+          - not_null
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_quota_allocations
+    columns:
+      - name: agent_region_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_enrolment_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: college_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_concat
+        tests:
+          - dbt_utils.at_least_one
+      - name: deposits_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationaility_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_allocation_pk
+        tests:
+          - not_null
+          - unique
+      - name: quota_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: sponsor_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: sales_scholarships
+    columns:
+      - name: application_fk
+        tests:
+          - not_null
+      - name: application_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_note
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarships_pk
+        tests:
+          - not_null
+          - unique
+      - name: student_ledger_currency_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_actual_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_fk
+        tests:
+          - not_null
+  - name: sales_student
+    columns:
+      - name: class_student_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_fk
+        tests:
+          - not_null
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: dob
+        tests:
+          - dbt_utils.at_least_one
+      - name: gender
+        tests:
+          - dbt_utils.at_least_one
+      - name: kss_student_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: name
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_fk
+        tests:
+          - not_null
+      - name: source
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_pk
+        tests:
+          - not_null
+          - unique
+      - name: student_salesforce_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: scholarship_budgets
+    columns:
+      - name: budget_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_owner
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_budgets_pk
+        tests:
+          - not_null
+          - unique
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+  - name: scholarship_targets
+    columns:
+      - name: budget_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_targets_pk
+        tests:
+          - not_null
+          - unique
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_application_partners
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_partner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_partner_reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: business_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: counsellor_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_main_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: liaison_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: partner_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_application_status_logs
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_log_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: new_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: old_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: reason_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_reference
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_applications
+    columns:
+      - name: accommodation_required_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: application_status_reason_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: cas_team_owner_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: has_second_agent
+        tests:
+          - dbt_utils.at_least_one
+      - name: immigration_category_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_acceptance_form_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_completed
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_application_submitted
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_confirmation_required
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_offer_letter_issued
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_visa_needed
+        tests:
+          - dbt_utils.at_least_one
+      - name: learning_mode_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: payment_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: returning_student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_manager_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_opportunity_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_awards
+    columns:
+      - name: award_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: award_type_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_businesses
+    columns:
+      - name: business_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: business_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: business_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: business_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_business_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_catalogue_pick_list_items
+    columns:
+      - name: description
+        tests:
+          - dbt_utils.at_least_one
+      - name: pick_list_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: pick_list_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_college_booking_item
+    columns:
+      - name: college_booking_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_configurations
+    columns:
+      - name: config_value
+        tests:
+          - dbt_utils.at_least_one
+      - name: configuration_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_countries
+    columns:
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: country_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: is_sanctioned
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: salesforce_country_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_institution_unit
+    columns:
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_name_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_institution_unit_details
+    columns:
+      - name: institution_unit_detail_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_type_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_institutions
+    columns:
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_short_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_modules
+    columns:
+      - name: module_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: module_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: module_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_nationalities
+    columns:
+      - name: nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_program_activity_types
+    columns:
+      - name: program_activity_type_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_activity_type_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_program_dates
+    columns:
+      - name: activity_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_date_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: start_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_program_intake
+    columns:
+      - name: currency_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_quota_exists
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: season_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_program_subject_area
+    columns:
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_subject_area_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_program_subjects
+    columns:
+      - name: program_subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_programs
+    columns:
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_unit_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_award_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_duration_length
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_duration_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_entry_level_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_level_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_type_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_status
+    columns:
+      - name: parent_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: reference
+        tests:
+          - dbt_utils.at_least_one
+      - name: reporting_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: reporting_status_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: title
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_student_ledger_sop_header
+    columns:
+      - name: student_ledger_currency_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_header_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_student_ledger_sop_line_item
+    columns:
+      - name: student_ledger_sop_line_item_actual_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_status
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_students
+    columns:
+      - name: country_iso_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: nationality_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_class_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_dob
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_fullname
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_gender
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_kss_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_salesforce_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_source
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: enrolment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_booking_item
+    columns:
+      - name: created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_note
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_header_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: student_ledger_sop_line_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_booking_item
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_booking_item_category_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_booking_item_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_booking_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_pick_list_items
+    columns:
+      - name: pick_list_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_pick_list_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_pick_list_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_program_dates
+    columns:
+      - name: program_activity_type_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_date_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_program_intake
+    columns:
+      - name: academic_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_programs
+    columns:
+      - name: institution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_entry_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_term
+    columns:
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_teaching_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_term_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_tracks
+    columns:
+      - name: is_primary_progression
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_track_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: track_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_version
+    columns:
+      - name: created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plan_versions
+    columns:
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: modified_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_enrolment_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: version_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_study_plans
+    columns:
+      - name: application_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: enrolment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_modified_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: study_plan_version_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_studyplan_program_intake
+    columns:
+      - name: intake_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_season
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_intake_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_subject
+    columns:
+      - name: subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_subject_area
+    columns:
+      - name: subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_kss_users
+    columns:
+      - name: user_fullname
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_countries
+    columns:
+      - name: country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: stg_map_institution_groups
+    columns:
+      - name: institution_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_institution_targets
+    columns:
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_intake_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_institution_targets_2
+    columns:
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_intake_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_new_programs
+    columns:
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_expiry_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: launch_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_priority_programs
+    columns:
+      - name: award_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: course_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: priority_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: program_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_quota_allocations
+    columns:
+      - name: cas_enrolment_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: college_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: comments
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_concat
+        tests:
+          - dbt_utils.at_least_one
+      - name: deposits_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: program
+        tests:
+          - dbt_utils.at_least_one
+      - name: progression_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_quota_items
+    columns:
+      - name: college_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: degree_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: exclude_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_agent_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_nationality
+        tests:
+          - dbt_utils.at_least_one
+      - name: include_sponsor
+        tests:
+          - dbt_utils.at_least_one
+      - name: program
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: quota_year
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: university_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_sales_budgets
+    columns:
+      - name: budget_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: entry_type_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_budgets
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_sales_region_targets
+    columns:
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_channel
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_sales_region_targets_2
+    columns:
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_channel
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_scholarship_budgets
+    columns:
+      - name: budget_pot_1
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_10
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_2
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_3
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_4
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_5
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_6
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_7
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_8
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_9
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: schols_region
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_scholarship_budgets_pots
+    columns:
+      - name: budget_pot_1
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_10
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_2
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_3
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_4
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_5
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_6
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_7
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_8
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot_9
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_scholarship_reason_owners
+    columns:
+      - name: budget_owner
+        tests:
+          - dbt_utils.at_least_one
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_scholarship_reasons
+    columns:
+      - name: budget_pot
+        tests:
+          - dbt_utils.at_least_one
+      - name: scholarship_reason
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_status_reasons
+    columns:
+      - name: status_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: team
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_subject_groups
+    columns:
+      - name: subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: subject_group
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_uk_based_agents
+    columns:
+      - name: agent_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_uk_sponsors
+    columns:
+      - name: sponsor_name
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_map_user_sales_regions
+    columns:
+      - name: sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: user_fullname
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: targets_institutions
+    columns:
+      - name: institution_fk
+        tests:
+          - not_null
+      - name: institution_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: institution_target_pk
+        tests:
+          - not_null
+          - unique
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one
+  - name: targets_sales_regions
+    columns:
+      - name: country_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: intake_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_channel
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_group
+        tests:
+          - dbt_utils.at_least_one
+      - name: sales_region_target_country_fk
+        tests:
+          - not_null
+      - name: sales_region_target_pk
+        tests:
+          - not_null
+          - unique
+      - name: target_amt
+        tests:
+          - dbt_utils.at_least_one

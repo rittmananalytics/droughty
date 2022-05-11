@@ -301,7 +301,7 @@ if ProjectVariables.warehouse == 'big_query':
     
     )
     select * from unioned
-    """.format(ProjectVariables.project,ProjectVariables.test_schemas[0],ProjectVariables.test_schemas[1],ProjectVariables.test_schemas[2])
+    """.format(ProjectVariables.project,ExploresVariables.test_schemas[0],ExploresVariables.test_schemas[1],ExploresVariables.test_schemas[2])
 
 if ProjectVariables.warehouse == 'snowflake':   
 
@@ -341,7 +341,7 @@ if ProjectVariables.warehouse == 'snowflake':
     
     )
     select * from unioned
-    """.format(ProjectVariables.database,ProjectVariables.test_schemas[0],ProjectVariables.test_schemas[1],ProjectVariables.test_schemas[2])
+    """.format(ProjectVariables.database,ExploresVariables.test_schemas[0],ExploresVariables.test_schemas[1],ExploresVariables.test_schemas[2])
 
 if ProjectVariables.warehouse == 'big_query':   
 

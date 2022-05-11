@@ -117,7 +117,6 @@ class ProjectVariables:
     project: str
     warehouse: str
     schema: str
-    test_schemas: str
 
     role: str
     password: str
@@ -137,7 +136,6 @@ def assign_project_variables():
                 
                 ProjectVariables.environment_profile = droughty_project['profile']
                 ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']                    
-                ProjectVariables.test_schemas = droughty_profile[value]['test_schemas']
                 ProjectVariables.schema = droughty_profile[value]['schema_name']
 
                 if IdentifyConfigVariables.path_source == 'local_vars':
@@ -175,6 +173,7 @@ class ExploresVariables:
     flat_list: str 
     final_list: str
     join_key_list: str
+    test_schemas: str
 
 def assign_explore_variables():
 
@@ -187,6 +186,8 @@ def assign_explore_variables():
             ExploresVariables.explore_tables = (droughty_project.get("explores"))
 
             ExploresVariables.dimensional_inference = (droughty_project.get("dimensional_inference")) 
+
+            ExploresVariables.test_schemas = (droughty_project.get("test_schemas")) 
 
             explore_tables = []
 
@@ -220,6 +221,10 @@ def assign_explore_variables():
     if ExploresVariables.dimensional_inference == None:
 
         raise Exception ("You need to specify if dimensional inference is enabled or not within the droughty_project file.")
+
+    if ExploresVariables.test_schemas == None:
+
+        raise Exception ("You need to specify your target warehouse schemas/datasets for dbt tests to generate against within the droughty_project file.")
 
 explore_variables = assign_explore_variables()    
 

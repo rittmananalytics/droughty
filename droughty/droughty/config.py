@@ -52,6 +52,10 @@ def assign_droughty_paths():
 
         print ("Using default profile path")
 
+    if IdentifyConfigVariables.profile_path == None:
+
+        raise Exception ("It looks like you don't have a profile file or you have directly specified the incorrect directory")  
+
 paths = assign_droughty_paths()
 
 def load_droughty_profile():
@@ -84,6 +88,10 @@ def assign_droughty_project_paths():
         filename = 'droughty_project.yaml'
 
         droughty_project = os.path.join(git_path,filename)
+
+    if IdentifyConfigVariables.project_path == None:
+
+        raise Exception ("It looks like you don't have a droughty_project file or you have directly specified the incorrect directory")  
 
 project_path = assign_droughty_project_paths()
 
@@ -156,8 +164,6 @@ def assign_project_variables():
                         ProjectVariables.password = droughty_profile[value]['password']
                         ProjectVariables.role = droughty_profile[value]['role']
 
-
-
 project_variables = assign_project_variables()    
 
 @dataclass
@@ -211,6 +217,10 @@ def assign_explore_variables():
 
             ExploresVariables.join_key_list = ['merge_counts_fk','merge_counts_pk']
 
+    if ExploresVariables.dimensional_inference == None:
+
+        raise Exception ("You need to specify if dimensional inference is enabled or not within the droughty_project file.")
+
 explore_variables = assign_explore_variables()    
 
 @dataclass
@@ -221,9 +231,15 @@ class DbtTestVariables:
 
 def assign_dbt_test_variables():
 
-    DbtTestVariables.field_description_path = (droughty_project.get("field_description_path"))
-    DbtTestVariables.field_description_file_name = (droughty_project.get("field_description_file_name"))
+        DbtTestVariables.field_description_path = (droughty_project.get("field_description_path"))
+        DbtTestVariables.field_description_file_name = (droughty_project.get("field_description_file_name"))
+
+        if DbtTestVariables.field_description_path == None:
+
+            raise Exception ("You need to define the dbt field descriptions path within the droughty_project file.")
+
+        if DbtTestVariables.field_description_file_name == None:
+
+            raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
 
 dbt_test_variables = assign_dbt_test_variables()
-
-

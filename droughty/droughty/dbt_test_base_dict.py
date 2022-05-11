@@ -7,7 +7,6 @@ from sqlalchemy import create_engine
 from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
-from itertools import chain
 
 from droughty import warehouse_target
 from droughty.config import (
@@ -18,7 +17,6 @@ from droughty.droughty_data_prep import (
     wrangle_bigquery_dbt_test_dataframes,
     wrangle_snowflake_dbt_test_dataframes
 )
-import sys
 
 def get_dbt_dict():
 

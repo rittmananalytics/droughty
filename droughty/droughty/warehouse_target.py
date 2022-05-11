@@ -222,6 +222,7 @@ if ProjectVariables.warehouse == 'big_query':
 if ProjectVariables.warehouse == 'snowflake':   
 
     lookml_explore_schema = '''
+
     with source as (
     select 
     *
@@ -252,18 +253,18 @@ if ProjectVariables.warehouse == 'snowflake':
         from source
         where column_name ilike '%%fk%%'
     )
-    select
-    pk_table_name as parent_table_name,
+    select 
+
     pk_table_name,
     pk_column_name,
     fk_table_name,
     fk_column_name,
     case when merge_counts_pk.row_count > merge_counts_fk.row_count
-            then 'belongsTo'   
+            then 'many_to_one'   
         when merge_counts_pk.row_count < merge_counts_fk.row_count
-            then 'hasMany'
+            then 'one_to_many'
         when merge_counts_pk.row_count = merge_counts_fk.row_count
-            then 'HasOne'
+            then 'one_to_one'
     end as looker_relationship
     
     from pks
@@ -272,37 +273,32 @@ if ProjectVariables.warehouse == 'snowflake':
     left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''.format(ProjectVariables.database,ProjectVariables.schema)
 
-if ProjectVariables.warehouse == 'big_query':   
+if ProjectVariables.warehouse == 'big_query':
 
-    test_warehouse_schema =   """
-    with source_1 as (
-        select * from `{0}.{1}.INFORMATION_SCHEMA.COLUMNS`
-        ),
-    source_2 as (
-    select * from `{0}.{2}.INFORMATION_SCHEMA.COLUMNS`
-    
+
+    test_warehouse_schema = '''
+
+    {% for value in test_schemas %}
+
+    {% if loop.first %} with source_{{ value | sqlsafe }} as ( {% endif %}
+    {% if not loop.first %} source_{{ value | sqlsafe }} as ( {% endif %}
+
+    select * from `{{project_id}}.{{value | sqlsafe}}.INFORMATION_SCHEMA.COLUMNS`
+
     ),
-    
-    source_3 as (
-    select * from `{0}.{3}.INFORMATION_SCHEMA.COLUMNS`
-    
-    ),
-    
+
+    {% endfor %}
+
     unioned as (
-    select * from source_1
-    
-    union all
-    
-    select * from source_2
-    
-    union all
-    
-    select * from source_3
-    
+    {% for value in test_schemas  %}
+    select * from source_{{ value | sqlsafe }}
+    {% if not loop.last %}union all{% endif %}
+    {% endfor %}
     )
     select * from unioned
-    """.format(ProjectVariables.project,ExploresVariables.test_schemas[0],ExploresVariables.test_schemas[1],ExploresVariables.test_schemas[2])
 
+    '''
+    
 if ProjectVariables.warehouse == 'snowflake':   
 
     test_warehouse_schema =   """
@@ -451,7 +447,8 @@ if ProjectVariables.warehouse == 'big_query':
         'schema_id': ProjectVariables.schema, 
         'table_names': ExploresVariables.final_list,
         'table_names_unqouted': ExploresVariables.flat_list,
-        'pk_fk_join_key_list': ExploresVariables.join_key_list
+        'pk_fk_join_key_list': ExploresVariables.join_key_list,
+        'test_schemas': ExploresVariables.test_schemas
 
     }
 
@@ -462,16 +459,18 @@ elif ProjectVariables.warehouse == 'snowflake':
         'schema_id': ProjectVariables.schema, 
         'table_names': ExploresVariables.final_list,
         'table_names_unqouted': ExploresVariables.flat_list,
-        'pk_fk_join_key_list': ExploresVariables.join_key_list
+        'pk_fk_join_key_list': ExploresVariables.join_key_list,
+        'test_schemas': ExploresVariables.test_schemas
 
     }
-
 
 j = JinjaSql(param_style='pyformat')
 
 query, bind_params = j.prepare_query(lookml_explore_schema,params)
 
 cube_query, cube_bind_params = j.prepare_query(cube_explore_schema,params)
+
+dbt_query, dbt_bind_params = j.prepare_query(test_warehouse_schema,params)
 
 def quote_sql_string(value):
     '''
@@ -503,6 +502,8 @@ def apply_sql_template(template, parameters):
 
 explore_sql = (query % bind_params)
 
+dbt_test_sql = (dbt_query % bind_params)
+
 if ProjectVariables.warehouse =='big_query':
 
     cube_explore_schema = (query % bind_params)
@@ -510,3 +511,5 @@ if ProjectVariables.warehouse =='big_query':
 elif ProjectVariables.warehouse == 'snowflake':
     
     cube_explore_schema = cube_explore_schema
+
+print(dbt_test_sql)

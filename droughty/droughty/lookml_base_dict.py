@@ -7,7 +7,7 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty.warehouse_target import warehouse_schema
+from droughty.warehouse_target import create_base_sql
 from droughty.config import (
     ProjectVariables,
     get_snowflake_connector_url
@@ -23,7 +23,7 @@ def get_base_dict():
 
     warehouse = ProjectVariables.warehouse
 
-    sql = warehouse_schema()
+    sql = create_base_sql()
 
     if warehouse == 'big_query':
 

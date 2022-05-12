@@ -8,8 +8,10 @@ import pandas as pd
 import pandas
 
 
-from droughty import warehouse_target
-from droughty.warehouse_target import warehouse_schema
+from droughty.warehouse_target import (
+    create_cube_explore_sql,
+    create_base_sql
+)
 from droughty.config import (
     ProjectVariables,
     get_snowflake_connector_url
@@ -28,8 +30,8 @@ def get_cube_base_dict():
 
     warehouse = ProjectVariables.warehouse
 
-    sql = warehouse_schema()
-    explore_sql = warehouse_target.explore_sql
+    sql = create_base_sql()
+    explore_sql = create_cube_explore_sql()
 
     if warehouse == 'big_query':
 

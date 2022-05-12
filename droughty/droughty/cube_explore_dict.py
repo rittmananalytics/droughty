@@ -18,11 +18,11 @@ class CubeExploreDictVariables():
 
 def get_cube_explore_dict():
 
-    from droughty.warehouse_target import cube_explore_schema
+    from droughty.warehouse_target import create_cube_explore_sql
 
     pd.options.mode.chained_assignment = None
 
-    explore_sql = cube_explore_schema
+    explore_sql = create_cube_explore_sql()
 
     if ProjectVariables.warehouse == 'big_query':
 

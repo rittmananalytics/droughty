@@ -8,10 +8,10 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty import warehouse_target
+from droughty.warehouse_target import create_dbt_test_sql
 from droughty.config import (
     ProjectVariables,
-    get_snowflake_connector_url
+    get_snowflake_connector_url,
 )
 from droughty.droughty_data_prep import (
     wrangle_bigquery_dbt_test_dataframes,
@@ -24,7 +24,7 @@ def get_dbt_dict():
 
     warehouse = ProjectVariables.warehouse
 
-    sql = warehouse_target.test_warehouse_schema
+    sql = create_dbt_test_sql()
 
     if warehouse == 'big_query':
 

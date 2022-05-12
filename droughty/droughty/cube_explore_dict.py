@@ -1,4 +1,3 @@
-from pprint import pprint
 from google.oauth2 import service_account
 import pandas_gbq
 from contextlib import redirect_stdout
@@ -67,7 +66,4 @@ def get_cube_explore_dict():
     return(d2)
 
 cube_explore_dict = get_cube_explore_dict()
-
-print (cube_explore_dict)
-
 

@@ -1,4 +1,3 @@
-from pprint import pprint
 from google.oauth2 import service_account
 import pandas_gbq
 from contextlib import redirect_stdout

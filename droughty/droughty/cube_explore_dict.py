@@ -45,7 +45,7 @@ def get_cube_explore_dict():
 
         explore_df = pd.read_sql(explore_sql, connection)
 
-        explore_df.drop_duplicates(keep=False, inplace=True)
+        ##explore_df.drop_duplicates(keep=False, inplace=True)
 
         pk_table_name_df = explore_df[['pk_table_name']]
 
@@ -65,5 +65,7 @@ def get_cube_explore_dict():
     return(d2)
 
 cube_explore_dict = get_cube_explore_dict()
+
+print (cube_explore_dict)
 
 

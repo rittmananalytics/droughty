@@ -12,10 +12,9 @@ test_schemas:
 
 explores:
 
-  sales_explore:
-      parent_table: 
-        - actors_dim
-      dimensions: 
-        - events_fct
-      facts:
-        - narratives_fct
+  parent_table: 
+    - actors_dim
+  dimensions: 
+    - events_fct
+  facts:
+    - narratives_fct

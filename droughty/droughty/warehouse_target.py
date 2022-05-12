@@ -146,29 +146,18 @@ if ProjectVariables.warehouse == 'big_query':
     select 
     *
     from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-    where table_name in 
-    {{ table_names |inclause }}
     ),
-    {% for value in table_names_unqouted  %}
-    explore_table_row_count_{{ value | sqlsafe }} as (
-    select 
-    '{{ value | sqlsafe }}' as table_name,
-    count(*) as row_count
-    from `{{project_id}}.{{schema_id}}.{{ value | sqlsafe }}`
-    group by 1
-    ),
-    {% endfor %}
-    merge_counts as (
-    {% for value in table_names_unqouted  %}
-    select * from explore_table_row_count_{{ value | sqlsafe }}
-    {% if not loop.last %}union all{% endif %}
-    {% endfor %}
+    row_counts as (
+    select
+        table_id as table_name,
+        row_count
+    from `{{project_id}}.{{schema_id}}.__TABLES__`
     ),
     pks as (
         select 
         table_name as pk_table_name,
         column_name as pk_column_name,
-        trim(column_name, "_pk") as pk_sk,
+        trim(column_name, "_pk") as pk_sk
         from source
         where column_name like '%%pk%%'
     ),
@@ -176,47 +165,28 @@ if ProjectVariables.warehouse == 'big_query':
         select
         table_name as fk_table_name,
         column_name as fk_column_name,
-        trim(column_name, "_fk") as fk_sk,
+        trim(column_name, "_fk") as fk_sk
         from source
         where column_name like '%%fk%%'
     )
     select 
-    {{ table_names [0] }} as parent_table_name,
+    {{parent_table_name}} as parent_table_name,
     pk_table_name,
     pk_column_name,
     fk_table_name,
     fk_column_name,
-    merge_counts_pk.row_count as pk_row_count,
-    merge_counts_fk.row_count as fk_row_count,
-    merge_counts_parent.row_count as parent_row_count,
     case when merge_counts_pk.row_count > merge_counts_fk.row_count
-            then 'many_to_one'   
+            then 'belongsTo'   
         when merge_counts_pk.row_count < merge_counts_fk.row_count
-            then 'one_to_many'
+            then 'hasMany'
         when merge_counts_pk.row_count = merge_counts_fk.row_count
-            then 'one_to_one'
-    end as true_relationship,
-    case when merge_counts_pk.row_count < merge_counts_parent.row_count
-        and merge_counts_fk.row_count < merge_counts_parent.row_count
-        or  merge_counts_pk.row_count != merge_counts_parent.row_count
-        and  merge_counts_fk.row_count != merge_counts_parent.row_count
-            then 'many_to_one'
-        when merge_counts_pk.row_count > merge_counts_parent.row_count
-            then 'one_to_many'
-        when merge_counts_fk.row_count > merge_counts_parent.row_count
-            then 'one_to_many'
-        when merge_counts_pk.row_count = merge_counts_parent.row_count
-        or merge_counts_fk.row_count = merge_counts_parent.row_count
-            then 'one_to_one'                
-            
-    end as looker_relationship,
+            then 'HasOne'
+    end as looker_relationship
     
     from pks
     inner join fks on pks.pk_sk = fks.fk_sk
-    left join merge_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-    left join merge_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-    left join merge_counts as merge_counts_parent on merge_counts_parent.table_name = {{ table_names[0] }}
-    order by looker_relationship
+    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''
 
 if ProjectVariables.warehouse == 'snowflake':   
@@ -255,6 +225,7 @@ if ProjectVariables.warehouse == 'snowflake':
     )
     select 
 
+    '{2}' as parent_table_name,
     pk_table_name,
     pk_column_name,
     fk_table_name,
@@ -271,7 +242,7 @@ if ProjectVariables.warehouse == 'snowflake':
     left join fks on pks.pk_sk = fks.fk_sk
     left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
     left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
-    '''.format(ProjectVariables.database,ProjectVariables.schema)
+    '''.format(ProjectVariables.database,ProjectVariables.schema,ExploresVariables.parent_table_name)
 
 if ProjectVariables.warehouse == 'big_query':
 
@@ -448,7 +419,9 @@ if ProjectVariables.warehouse == 'big_query':
         'table_names': ExploresVariables.final_list,
         'table_names_unqouted': ExploresVariables.flat_list,
         'pk_fk_join_key_list': ExploresVariables.join_key_list,
-        'test_schemas': ExploresVariables.test_schemas
+        'test_schemas': ExploresVariables.test_schemas,
+        'parent_table_name': ExploresVariables.parent_table_name
+
 
     }
 
@@ -460,13 +433,15 @@ elif ProjectVariables.warehouse == 'snowflake':
         'table_names': ExploresVariables.final_list,
         'table_names_unqouted': ExploresVariables.flat_list,
         'pk_fk_join_key_list': ExploresVariables.join_key_list,
-        'test_schemas': ExploresVariables.test_schemas
+        'test_schemas': ExploresVariables.test_schemas,
+        'parent_table_name': ExploresVariables.parent_table_name
 
     }
 
 j = JinjaSql(param_style='pyformat')
 
-query, bind_params = j.prepare_query(lookml_explore_schema,params)
+#query, bind_params = j.prepare_query(lookml_explore_schema,params)
+query, bind_params = j.prepare_query(test_warehouse_schema,params)
 
 cube_query, cube_bind_params = j.prepare_query(cube_explore_schema,params)
 

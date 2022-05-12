@@ -9,7 +9,8 @@ import pandas
 
 from droughty.config import (
     ProjectVariables,
-    get_snowflake_connector_url
+    get_snowflake_connector_url,
+    ExploresVariables
 )
 class ExploreDictVariables():
 
@@ -46,7 +47,7 @@ def get_looker_explore_dict():
 
         explore_df = pd.read_sql(explore_sql, connection)
 
-        explore_df.drop_duplicates(keep=False, inplace=True)
+        #explore_df.drop_duplicates(keep=False, inplace=True)
 
         explore_df['parent_table_name'] = explore_df['parent_table_name'].str.lower()
         explore_df['pk_table_name'] = explore_df['pk_table_name'].str.lower()
@@ -59,7 +60,7 @@ def get_looker_explore_dict():
         duplicate_explore_rows = pk_table_name_df[pk_table_name_df.duplicated(['pk_table_name'])]
 
         distinct_duplicate_explore_rows = duplicate_explore_rows['pk_table_name'].drop_duplicates().to_list()
-        
+
         ExploreDictVariables.distinct_duplicate_explore_rows = distinct_duplicate_explore_rows
 
         connection.close()
@@ -70,6 +71,10 @@ def get_looker_explore_dict():
     for n, grp in explore_df.set_index(['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']).groupby(level='parent_table_name')}
 
     d2 = df4
+
+    print(ExploresVariables.parent_table_name)
+
+    print(d2)
 
     return (d2)
 

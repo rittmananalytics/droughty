@@ -41,6 +41,9 @@ def wrangle_snowflake_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('VARIANT','string')   
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','yesno')
 
+    dataframe = dataframe.apply(lambda col: col.str.lower())
+
+
     return (dataframe)
 
 def wrangle_bigquery_dbt_test_dataframes(dataframe):
@@ -68,6 +71,8 @@ def wrangle_snowflake_dbt_test_dataframes(dataframe):
     dataframe = dataframe.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 
     dataframe = dataframe[['table_name','column_name','data_type','description']]
+
+    dataframe = dataframe.apply(lambda col: col.str.lower())
 
     return (dataframe)
 
@@ -115,6 +120,8 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('VARIANT','varchar')   
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','boolean')
 
+    dataframe = dataframe.apply(lambda col: col.str.lower())
+
     return (dataframe)
 
 def wrangle_bigquery_cube_dataframes(dataframe):
@@ -152,9 +159,7 @@ def wrangle_snowflake_cube_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('VARIANT','string')   
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','boolean')
 
-    dataframe['column_name'] = dataframe['column_name'].str.lower()
-    dataframe['table_name'] = dataframe['table_name'].str.lower()
-    dataframe['description'] = dataframe['description'].str.lower()
+    dataframe = dataframe.apply(lambda col: col.str.lower())
 
     dataframe = dataframe.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 

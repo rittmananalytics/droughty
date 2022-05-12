@@ -49,11 +49,7 @@ def get_looker_explore_dict():
 
         explore_df.drop_duplicates(keep=False, inplace=True)
 
-        explore_df['parent_table_name'] = explore_df['parent_table_name'].str.lower()
-        explore_df['pk_table_name'] = explore_df['pk_table_name'].str.lower()
-        explore_df['pk_column_name'] = explore_df['pk_column_name'].str.lower()
-        explore_df['fk_table_name'] = explore_df['fk_table_name'].str.lower()
-        explore_df['fk_column_name'] = explore_df['fk_column_name'].str.lower()
+        explore_df = explore_df.apply(lambda col: col.str.lower())
 
         pk_table_name_df = explore_df[['pk_table_name']]
 

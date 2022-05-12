@@ -82,4 +82,3 @@ def get_cube_base_dict():
     return(wrangled_dataframe)
 
 cube_base_dict = get_cube_base_dict()
-

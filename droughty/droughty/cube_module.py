@@ -87,8 +87,6 @@ def get_all_values(nested_dictionary,explore_dictionary):
 nested_dictionary = cube_base_dict
 explore_dictionary = looker_explore_dict
 
-get_all_values(nested_dictionary,explore_dictionary)
-
 def get_git_root(path):
 
         git_repo = git.Repo(path, search_parent_directories=True)

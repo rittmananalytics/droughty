@@ -44,7 +44,17 @@ def start():
 
     else:
 
-        pass
+        lookml_base()
+        lookml_explore()
+        lookml_measures()
+        lookml_base()
+        lookml_measures()
+        base()
+        explore()
+        measures()
+        erd()
+        tests()
+
 
 if __name__ == '__main__':
     start()

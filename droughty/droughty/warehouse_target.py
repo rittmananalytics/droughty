@@ -188,14 +188,14 @@ if ProjectVariables.warehouse == 'snowflake':
     select 
     *
     from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_schema = '{{schema}}'
+    where table_schema = '{{schema_id}}'
     ),
     row_counts as (
     select
         table_name,
         sum(row_count) as row_count
     from "{{database}}"."INFORMATION_SCHEMA"."TABLES"
-    where table_schema = '{{schema}}'
+    where table_schema = '{{schema_id}}'
     group by 1
     ),
     pks as (
@@ -230,9 +230,9 @@ if ProjectVariables.warehouse == 'snowflake':
     end as looker_relationship
     
     from pks
-    left join fks on pks.pk_sk = fks.fk_sk
-    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    inner join fks on pks.pk_sk = fks.fk_sk
+    inner join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    inner join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''
 
 if ProjectVariables.warehouse == 'big_query':
@@ -343,15 +343,15 @@ if ProjectVariables.warehouse == 'snowflake':
     with source as (
     select 
     *
-    from "DISCURSUS_DW"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_schema = 'DBT_ODUPUIS'
+    from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
+    where table_schema = '{{schema_id}}'
     ),
     row_counts as (
     select
         table_name,
         sum(row_count) as row_count
-    from "DISCURSUS_DW"."INFORMATION_SCHEMA"."TABLES"
-    where table_schema = 'DBT_ODUPUIS'
+    from "{{database}}"."INFORMATION_SCHEMA"."TABLES"
+    where table_schema = '{{schema_id}}'
     group by 1
     ),
     pks as (
@@ -454,6 +454,8 @@ def create_lookml_explore_sql():
     explore_sql = (query % bind_params)
 
     return explore_sql
+
+print (create_lookml_explore_sql())
 
 def create_cube_explore_sql():
 

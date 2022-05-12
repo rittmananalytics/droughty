@@ -41,9 +41,7 @@ def get_dbt_dict():
 
         connection = engine.connect()
 
-        query = warehouse_target.test_warehouse_schema
-
-        dataframe = pd.read_sql(query, connection)
+        dataframe = pd.read_sql(sql, connection)
 
         wrangled_dataframe = wrangle_snowflake_dbt_test_dataframes(dataframe)
 

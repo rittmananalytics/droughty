@@ -18,72 +18,72 @@ from droughty.config import ProjectVariables,ExploresVariables
 
 if ProjectVariables.warehouse == 'big_query':
     
-    warehouse_schema =   """
+    warehouse_schema =   '''
     with source as (
         select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
         )
         select * from source
-    """
+    '''
 
 elif ProjectVariables.warehouse == 'snowflake':
 
-    warehouse_schema =   """
+    warehouse_schema =   '''
     with source as (
         select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
         )
         select * from source
 
         where table_schema = '{{schema_id}}'
-    """
+    '''
 # dbml warehouse query
 
 if ProjectVariables.warehouse == 'big_query':   
 
-    dbml_query = """
+    dbml_query = '''
     with source as (
     select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
     ),
-        pks as (
-        select 
-        table_name as pk_table_name,
-        column_name as pk_column_name,
-        trim(column_name, "_pk") as pk_sk,
-        from source
-        where column_name like '%pk%'
-        ),
-        fks as (
-        select
-        table_name as fk_table_name,
-        column_name as fk_column_name,
-        trim(column_name, "_fk") as fk_sk,
-        from source
-        where column_name like '%fk%'
-        ),
-        references as (
-        select * from pks
-        inner join fks on pks.pk_sk = fks.fk_sk
-        )
-        select 
-        
-        *except (pk_column_name,pk_table_name),
-        case when pk_column_name is null
-            then 'not_available'
-        else pk_column_name
-        end as pk_column_name,
-        case when pk_table_name is null
-            then 'not_available'
-        else pk_table_name
-        end as pk_table_name                   
-        from source
-        left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
+    pks as (
+    select 
+    table_name as pk_table_name,
+    column_name as pk_column_name,
+    trim(column_name, "_pk") as pk_sk,
+    from source
+    where column_name like '%%pk%%'
+    ),
+    fks as (
+    select
+    table_name as fk_table_name,
+    column_name as fk_column_name,
+    trim(column_name, "_fk") as fk_sk,
+    from source
+    where column_name like '%%fk%%'
+    ),
+    references as (
+    select * from pks
+    inner join fks on pks.pk_sk = fks.fk_sk
+    )
+    select 
     
-    """
+    *except (pk_column_name,pk_table_name),
+    case when pk_column_name is null
+        then 'not_available'
+    else pk_column_name
+    end as pk_column_name,
+    case when pk_table_name is null
+        then 'not_available'
+    else pk_table_name
+    end as pk_table_name                   
+    from source
+    left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
+    
+    '''
 
 if ProjectVariables.warehouse == 'snowflake':   
 
-    dbml_query = """
+    dbml_query = '''
     with source as (
-    select * from "{{project_id}}"."INFORMATION_SCHEMA"."COLUMNS"
+    select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
     where table_schema = '{{schema_id}}'
 
     ),
@@ -93,7 +93,7 @@ if ProjectVariables.warehouse == 'snowflake':
     column_name as pk_column_name,
     rtrim(column_name, '_pk') as pk_sk
     from source
-    where column_name like '%PK%'
+    where column_name like '%%PK%%'
     ),
     fks as (
     select
@@ -101,7 +101,7 @@ if ProjectVariables.warehouse == 'snowflake':
     column_name as fk_column_name,
     rtrim(column_name, '_fk') as fk_sk
     from source
-    where column_name like '%FK%'
+    where column_name like '%%FK%%'
     ),
     references as (
     select * from pks
@@ -126,7 +126,7 @@ if ProjectVariables.warehouse == 'snowflake':
     from source
     left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
     
-    """
+    '''
 
 # looker explore warehouse query
 
@@ -270,9 +270,9 @@ if ProjectVariables.warehouse == 'snowflake':
     {% if loop.first %} with source_{{ value | sqlsafe }} as ( {% endif %}
     {% if not loop.first %} source_{{ value | sqlsafe }} as ( {% endif %}
 
-    select * from `{{database}}.INFORMATION_SCHEMA.COLUMNS`
+    select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
 
-    where table_schema = {{value}}
+    where table_schema = '{{value}}'
 
     ),
 
@@ -343,15 +343,15 @@ if ProjectVariables.warehouse == 'snowflake':
     with source as (
     select 
     *
-    from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_schema = '{{schema_id}}'
+    from "DISCURSUS_DW"."INFORMATION_SCHEMA"."COLUMNS"
+    where table_schema = 'DBT_ODUPUIS'
     ),
     row_counts as (
     select
         table_name,
         sum(row_count) as row_count
-    from "{{database}}"."INFORMATION_SCHEMA"."TABLES"
-    where table_schema = '{{schema_id}}'
+    from "DISCURSUS_DW"."INFORMATION_SCHEMA"."TABLES"
+    where table_schema = 'DBT_ODUPUIS'
     group by 1
     ),
     pks as (
@@ -360,7 +360,7 @@ if ProjectVariables.warehouse == 'snowflake':
         column_name as pk_column_name,
         rtrim(column_name, '_PK') as pk_sk
         from source
-        where column_name ilike '%pk%'
+        where column_name ilike '%%pk%%'
     ),
     fks as (
         select
@@ -368,7 +368,7 @@ if ProjectVariables.warehouse == 'snowflake':
         column_name as fk_column_name,
         rtrim(column_name, '_FK') as fk_sk
         from source
-        where column_name ilike '%fk%'
+        where column_name ilike '%%fk%%'
     )
     select 
     pk_table_name,
@@ -475,16 +475,6 @@ def create_dbt_test_sql():
 
     return dbt_test_sql
 
-def create_dbml_sql():
-
-    j = JinjaSql(param_style='pyformat')
-
-    query, bind_params = j.prepare_query(dbml_query,params)
-
-    dbml_sql = (query % bind_params)
-
-    return dbml_sql
-
 def create_base_sql():
 
     j = JinjaSql(param_style='pyformat')
@@ -494,3 +484,13 @@ def create_base_sql():
     base_sql = (query % bind_params)
 
     return base_sql
+
+def create_dbml_sql():
+
+    j = JinjaSql(param_style='pyformat')
+
+    query, bind_params = j.prepare_query(dbml_query,params)
+
+    dbml_sql = (query % bind_params)
+
+    return dbml_sql

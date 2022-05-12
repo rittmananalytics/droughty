@@ -455,8 +455,6 @@ def create_lookml_explore_sql():
 
     return explore_sql
 
-print (create_lookml_explore_sql())
-
 def create_cube_explore_sql():
 
     j = JinjaSql(param_style='pyformat')

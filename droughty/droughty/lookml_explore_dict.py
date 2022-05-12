@@ -47,8 +47,6 @@ def get_looker_explore_dict():
 
         explore_df = pd.read_sql(explore_sql, connection)
 
-        print (explore_df)
-
         explore_df.drop_duplicates(keep=False, inplace=True)
 
         explore_df['parent_table_name'] = explore_df['parent_table_name'].str.lower()
@@ -73,8 +71,6 @@ def get_looker_explore_dict():
     for n, grp in explore_df.set_index(['parent_table_name','pk_table_name', 'pk_column_name','fk_table_name','fk_column_name','looker_relationship']).groupby(level='parent_table_name')}
 
     d2 = df4
-
-    print(d2)
 
     return (d2)
 

@@ -8,7 +8,7 @@ import pandas as pd
 import pandas
 
 
-from droughty.warehouse_target import dbml_schema
+from droughty.warehouse_target import create_dbml_sql
 from droughty.config import (
     ProjectVariables,
     get_snowflake_connector_url
@@ -24,7 +24,7 @@ def get_dbml_dict():
 
     warehouse = ProjectVariables.warehouse
 
-    sql = dbml_schema()
+    sql = create_dbml_sql()
 
     if warehouse == 'big_query':
 

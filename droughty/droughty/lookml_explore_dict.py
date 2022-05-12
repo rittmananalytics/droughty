@@ -18,11 +18,11 @@ class ExploreDictVariables():
 
 def get_looker_explore_dict():
 
-    from droughty.warehouse_target import explore_sql
+    from droughty.warehouse_target import create_lookml_explore_sql
 
     pd.options.mode.chained_assignment = None
 
-    explore_sql = explore_sql
+    explore_sql = create_lookml_explore_sql()
 
     if ProjectVariables.warehouse == 'big_query':
 

@@ -384,9 +384,9 @@ if ProjectVariables.warehouse == 'snowflake':
     end as true_relationship
     
     from pks
-    left join fks on pks.pk_sk = fks.fk_sk
-    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
-    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+    inner join fks on pks.pk_sk = fks.fk_sk
+    inner join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
+    inner join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''
 
 if ProjectVariables.warehouse == 'big_query':

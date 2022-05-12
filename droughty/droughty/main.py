@@ -47,8 +47,6 @@ def start():
         lookml_base()
         lookml_explore()
         lookml_measures()
-        lookml_base()
-        lookml_measures()
         base()
         explore()
         measures()

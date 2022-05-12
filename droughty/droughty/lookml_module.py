@@ -142,8 +142,7 @@ def get_all_values(nested_dictionary):
             syntax = "}"
 
 
-        yield(syntax)
-                
+        yield(syntax)         
 
 nested_dictionary = base_dict
 

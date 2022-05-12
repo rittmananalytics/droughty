@@ -44,7 +44,7 @@ def get_all_values(nested_dictionary):
 
                     "joins": [
                         {
-                        "sql_on": "${"+key1[0]+"."+key1[3]+"}"+" = "+"${"+key1[2]+"."+key1[1]+"}",
+                        "sql_on": "${"+str(key1[0])+"."+str(key1[3])+"}"+" = "+"${"+str(key1[2])+"."+str(key1[1])+"}",
                         "relationship": key1[4],
                         "name": key1[0]
                         }

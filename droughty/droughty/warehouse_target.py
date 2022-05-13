@@ -389,32 +389,53 @@ if ProjectVariables.warehouse == 'snowflake':
     inner join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''
 
-if ProjectVariables.warehouse == 'big_query':
+if ExploresVariables.dimensional_inference == 'enabled':
 
-    params = {
-        'project_id': ProjectVariables.project,
-        'schema_id': ProjectVariables.schema, 
-        'table_names': ExploresVariables.final_list,
-        'table_names_unqouted': ExploresVariables.flat_list,
-        'pk_fk_join_key_list': ExploresVariables.join_key_list,
-        'test_schemas': ExploresVariables.test_schemas,
-        'parent_table_name': ExploresVariables.parent_table_name
+    if ProjectVariables.warehouse == 'big_query':
+
+        params = {
+            'project_id': ProjectVariables.project,
+            'schema_id': ProjectVariables.schema, 
+            'table_names': ExploresVariables.final_list,
+            'table_names_unqouted': ExploresVariables.flat_list,
+            'pk_fk_join_key_list': ExploresVariables.join_key_list,
+            'test_schemas': ExploresVariables.test_schemas,
+            'parent_table_name': ExploresVariables.parent_table_name
 
 
-    }
+        }
 
-elif ProjectVariables.warehouse == 'snowflake':
+    if ProjectVariables.warehouse == 'snowflake':
 
-    params = {
-        'database': ProjectVariables.database,
-        'schema_id': ProjectVariables.schema, 
-        'table_names': ExploresVariables.final_list,
-        'table_names_unqouted': ExploresVariables.flat_list,
-        'pk_fk_join_key_list': ExploresVariables.join_key_list,
-        'test_schemas': ExploresVariables.test_schemas,
-        'parent_table_name': ExploresVariables.parent_table_name
+        params = {
+            'project_id': ProjectVariables.database,
+            'schema_id': ProjectVariables.schema, 
+            'table_names': ExploresVariables.final_list,
+            'table_names_unqouted': ExploresVariables.flat_list,
+            'pk_fk_join_key_list': ExploresVariables.join_key_list,
+            'test_schemas': ExploresVariables.test_schemas,
+            'parent_table_name': ExploresVariables.parent_table_name
 
-    }
+
+        }
+
+elif ExploresVariables.dimensional_inference == 'disabled':
+
+    if ProjectVariables.warehouse == 'big_query':
+
+        params = {
+            'project_id': ProjectVariables.project,
+            'schema_id': ProjectVariables.schema, 
+            'test_schemas': ExploresVariables.test_schemas,
+        }
+
+    if ProjectVariables.warehouse == 'snowflake':
+
+        params = {
+            'database': ProjectVariables.database,
+            'schema_id': ProjectVariables.schema, 
+            'test_schemas': ExploresVariables.test_schemas,
+        }
 
 def quote_sql_string(value):
     '''

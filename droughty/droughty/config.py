@@ -231,52 +231,73 @@ def assign_explore_variables():
 
             ExploresVariables.dimensional_inference = (droughty_project.get("dimensional_inference")) 
 
-            ExploresVariables.test_schemas = (droughty_project.get("test_schemas")) 
+            ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
 
-#            ExploresVariables.parent_table_name = (droughty_project.get("explores").get("parent_table")) 
+            try:
 
-            parent_table_path = "explores.parent_table"
-            actual = glom.glom(droughty_project, parent_table_path)
-            ExploresVariables.parent_table_name = ''.join(actual)
+                ExploresVariables.parent_table_name = (droughty_project.get("explores").get("parent_table"))
 
-            explore_tables = []
+            except:
 
-            for key,value in explores.items():
+                pass
 
-                explore_tables.append(value)
+            #parent_table_path = "explores.parent_table"
+            #actual = glom.glom(droughty_project, parent_table_path)
+            #ExploresVariables.parent_table_name = ''.join(actual)
 
-            single_list_tables = [i[0] for i in explore_tables]
+            try:
 
-            ExploresVariables.single_list_tables = single_list_tables
+                explore_tables = []
 
-            flat_list = []
+                for key,value in explores.items():
 
-            for sublist in explore_tables:
-                for item in sublist:
-                    flat_list.append(item)
+                    explore_tables.append(value)
 
-            ExploresVariables.flat_list = flat_list
+                single_list_tables = [i[0] for i in explore_tables]
 
-            final_list = []
+                ExploresVariables.single_list_tables = single_list_tables
 
-            for x in flat_list:
-                final_list.append("'" + x + "'")
+                flat_list = []
 
-            ExploresVariables.final_list = final_list
+                for sublist in explore_tables:
+                    for item in sublist:
+                        flat_list.append(item)
 
-            ExploresVariables.join_key_list = ['merge_counts_fk','merge_counts_pk']
+                ExploresVariables.flat_list = flat_list
+
+                final_list = []
+
+                for x in flat_list:
+                    final_list.append("'" + x + "'")
+
+                ExploresVariables.final_list = final_list
+
+                ExploresVariables.join_key_list = ['merge_counts_fk','merge_counts_pk']
+
+            except: 
+
+                pass
 
     if ExploresVariables.dimensional_inference == None:
 
         raise Exception ("You need to specify if dimensional inference is enabled or not within the droughty_project file.")
 
+    if ExploresVariables.dimensional_inference == "enabled" and ExploresVariables.explore_tables == None:
+
+        raise Exception ("You have enabled dimensional inference but haven't specified an explore within the droughty_project file.")
+
     if ExploresVariables.test_schemas == None:
 
         raise Exception ("You need to specify your target warehouse schemas/datasets for dbt tests to generate against within the droughty_project file.")
 
-    if ExploresVariables.parent_table_name == None:
+    try: 
+        
+        if ExploresVariables.parent_table_name == None and ExploresVariables.explore_tables != None:
 
-        raise Exception ("You need to specify your parent table within the droughty_project file.")
+            raise Exception ("You need to specify your parent table within the droughty_project file.")
+    except:
+
+        pass
 
 explore_variables = assign_explore_variables()    
 

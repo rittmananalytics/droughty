@@ -80,7 +80,7 @@ def wrangle_bigquery_dbml_dataframes(dataframe):
 
     dataframe['description'] = dataframe['description'].fillna('not available')
 
-    dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
+    dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name','primary_key','schema']]
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
@@ -99,12 +99,6 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
     dataframe['description'] = dataframe['comment'].fillna('not available')
 
     dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
-
-    dataframe['table_name'] = dataframe['table_name'].str.lower()
-    dataframe['column_name'] = dataframe['column_name'].str.lower()    
-    dataframe['data_type'] = dataframe['data_type'].str.lower()
-    dataframe['pk_table_name'] = dataframe['pk_table_name'].str.lower()
-    dataframe['pk_column_name'] = dataframe['pk_column_name'].str.lower()
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP_TZ','timestamp')

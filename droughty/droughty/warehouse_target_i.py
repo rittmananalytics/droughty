@@ -37,16 +37,16 @@ elif ProjectVariables.warehouse == 'snowflake':
     '''
 # dbml warehouse query
 
-if ProjectVariables.warehouse == 'big_query':   
+if ProjectVariables.warehouse == 'big_query':
 
     dbml_query = '''
 
     {% for value in dbml_schemas %}
 
-    {% if loop.first %} with {{ value | sqlsafe }}_source as ( {% endif %}
-    {% if not loop.first %} {{ value | sqlsafe }}_source as ( {% endif %}
+    {% if loop.first %} with source_{{ value | sqlsafe }} as ( {% endif %}
+    {% if not loop.first %} source_{{ value | sqlsafe }} as ( {% endif %}
 
-    select * from `{{project_id}}.{{value | sqlsafe}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+    select * from `{{project_id}}.{{value | sqlsafe}}.INFORMATION_SCHEMA.COLUMNS`
 
     ),
     {{value | sqlsafe}}_pks as (
@@ -67,15 +67,11 @@ if ProjectVariables.warehouse == 'big_query':
     ),
     {{value | sqlsafe}}_references as (
     select * from {{value | sqlsafe}}_pks
-    inner join {{value | sqlsafe}}_fks on {{value | sqlsafe}}_pks.pk_sk = {{value | sqlsafe}}_fks.fk_sk
+    inner join fks on pks.pk_sk = fks.fk_sk
     ),
     {{value | sqlsafe}}_joined as (
     select 
-    data_type,
-    table_name,
-    column_name,
-    {{value | sqlsafe}}_source.description,
-
+    *except (pk_column_name,pk_table_name),
     case when pk_column_name is null
         then 'not_available'
     else pk_column_name
@@ -85,7 +81,7 @@ if ProjectVariables.warehouse == 'big_query':
     else pk_table_name
     end as pk_table_name                   
     from {{value | sqlsafe}}_source
-    left join {{value | sqlsafe}}_references on {{value | sqlsafe}}_source.column_name = {{value | sqlsafe}}_references.fk_column_name and {{value | sqlsafe}}_references.fk_table_name = {{value | sqlsafe}}_source.table_name
+    left join {{value | sqlsafe}}_references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
     ),
     {% endfor %}
 
@@ -95,16 +91,7 @@ if ProjectVariables.warehouse == 'big_query':
     {% if not loop.last %}union all{% endif %}
     {% endfor %}
     )
-    select
-
-    data_type,
-    table_name,
-    column_name,
-    description,
-    pk_column_name,
-    pk_table_name
-    
-    from unioned
+    select * from unioned
  
     '''
 
@@ -212,6 +199,7 @@ if ProjectVariables.warehouse == 'big_query':
 if ProjectVariables.warehouse == 'snowflake':   
 
     lookml_explore_schema = '''
+
     with source as (
     select 
     *
@@ -243,6 +231,7 @@ if ProjectVariables.warehouse == 'snowflake':
         where column_name ilike '%%fk%%'
     )
     select 
+
     '{{parent_table_name}}' as parent_table_name,
     pk_table_name,
     pk_column_name,
@@ -261,6 +250,7 @@ if ProjectVariables.warehouse == 'snowflake':
     inner join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
     inner join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''
+
 if ProjectVariables.warehouse == 'big_query':
 
 
@@ -426,7 +416,7 @@ if ExploresVariables.dimensional_inference == 'enabled':
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
             'test_schemas': ExploresVariables.test_schemas,
-            'dbml_schemas': ExploresVariables.dbml_schemas,
+            #'dbml_schemas' : ExploresVariables.dbml_schemas,
             'parent_table_name': ExploresVariables.parent_table_name
 
         }
@@ -434,13 +424,13 @@ if ExploresVariables.dimensional_inference == 'enabled':
     if ProjectVariables.warehouse == 'snowflake':
 
         params = {
-            'database': ProjectVariables.database,
+            'project_id': ProjectVariables.database,
             'schema_id': ProjectVariables.schema, 
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
             'test_schemas': ExploresVariables.test_schemas,
-            'dbml_schemas': ExploresVariables.dbml_schemas,
+            #'dbml_schemas' : ExploresVariables.dbml_schemas,
             'parent_table_name': ExploresVariables.parent_table_name
 
         }
@@ -462,8 +452,6 @@ elif ExploresVariables.dimensional_inference == 'disabled':
             'schema_id': ProjectVariables.schema, 
             'test_schemas': ExploresVariables.test_schemas,
         }
-
-print(params)
 
 def quote_sql_string(value):
     '''

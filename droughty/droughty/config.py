@@ -217,6 +217,7 @@ class ExploresVariables:
     final_list: str
     join_key_list: str
     test_schemas: str
+    dbml_schemas: str
     parent_table_name: str
 
 def assign_explore_variables():
@@ -233,9 +234,13 @@ def assign_explore_variables():
 
             ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
 
+            ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
+
             try:
 
-                ExploresVariables.parent_table_name = (droughty_project.get("explores").get("parent_table"))
+                parent_table_path = "explores.parent_table"
+                actual = glom.glom(droughty_project, parent_table_path)
+                ExploresVariables.parent_table_name = ''.join(actual)
 
             except:
 
@@ -290,6 +295,10 @@ def assign_explore_variables():
 
         raise Exception ("You need to specify your target warehouse schemas/datasets for dbt tests to generate against within the droughty_project file.")
 
+    if ExploresVariables.dbml_schemas == None:
+
+        raise Exception ("You need to specify your target warehouse schemas/datasets for dbml erd's to generate against within the droughty_project file.")
+        
     try: 
         
         if ExploresVariables.parent_table_name == None and ExploresVariables.explore_tables != None:

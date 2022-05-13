@@ -23,7 +23,7 @@ def start():
             lookml_explore()
             lookml_measures()
 
-        elif ExploresVariables.dimensional_inference != 'disabled':
+        elif ExploresVariables.dimensional_inference != 'enabled':
 
             lookml_base()
             lookml_measures()

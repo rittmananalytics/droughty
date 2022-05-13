@@ -52,7 +52,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
                                 "dimension": {
                                 "sql": key[0],
                                 "type": key[1],
-                                "name": key[0]
+                                "name": key[0],
+                                "description": key[2]
 
                                 }
 

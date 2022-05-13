@@ -10,6 +10,11 @@ test_schemas:
     - DBT_ODUPUIS_STAGING
     - DBT_ODUPUIS_INTEGRATION
 
+dbml_schemas:
+    - DBT_ODUPUIS_QA
+    - DBT_ODUPUIS_STAGING
+    - DBT_ODUPUIS_INTEGRATION
+
 explores:
 
   parent_table: 

@@ -15,27 +15,40 @@ import git
 from droughty.dbml_base_dict import dbml_dict
 from droughty.config import (
     ProjectVariables,
-    ExploresVariables
+    ExploresVariables,
+    get_git_root
 )
 
-try:
+try: 
 
     def get_all_values(nested_dictionary):
 
+        rel_path = "db_docs"
+
+        path = os.path.join(get_git_root(os.getcwd()), rel_path)
+
+        filename = 'example.dbml'
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        sys.stdout = open(os.path.join(path, filename), 'w')
+
+        ## create dbml
         
         project = 'project'+' '+ProjectVariables.environment_profile
 
-        yield (project)
+        print (project)
 
         project_params = "{ database_type"+":"+" 'bigquery' }"
 
-        yield (project_params)
+        print (project_params)
     
         for key,value in nested_dictionary.items():
 
-            explore = "table"+" "+key+"      {"
+            explore = "table"+" "+key[1]+"      {"
                     
-            yield(explore)
+            print(explore)
 
             for key,value in value.items():
 
@@ -43,25 +56,25 @@ try:
 
                     dimension = key[0]+" "+key[1]
 
-                    yield(dimension)
+                    print(dimension)
 
                 elif "pk" in key[0]:
 
                     dimension = key[0]+" "+key[1]+" [pk]"
 
-                    yield(dimension)   
+                    print(dimension)   
 
                 elif "fk" in key[0] and "not_available" not in key[3]:
 
                     dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
 
-                    yield(dimension)
+                    print(dimension)
 
                 elif "fk" in key[0] and "not_available" in key[3]:
 
                     dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
 
-                    yield(dimension)
+                    print(dimension)
 
                 else:   
 
@@ -71,45 +84,16 @@ try:
 
                 syntax = "}"
 
-            yield(syntax)
+            print(syntax)
+
 
 
 except:
 
     print("I doesn't look like you have any primary or foreign keys declared")
             
-
 nested_dictionary = dbml_dict
 
-get_all_values(nested_dictionary)
-
-def get_git_root(path):
-
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return (git_root)
- 
-git_def_path = get_git_root(os.getcwd())
-
 def dbml_output():
-    
-    git_path = git_def_path
 
-    rel_path = "db_docs"
-
-    path = os.path.join(git_path, rel_path)
-
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-    for x in ExploresVariables.dbml_schemas:
-        
-        filename = x+'.dbml'
-
-        with open(os.path.join(path, filename), 'w') as file:
-
-            with redirect_stdout(file):
-
-                    for value in get_all_values(nested_dictionary):
-
-                        print(value)
+    get_all_values(nested_dictionary)

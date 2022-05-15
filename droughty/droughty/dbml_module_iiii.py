@@ -46,48 +46,17 @@ try:
 
             for key,value in nested_dictionary.items():
 
-                if key[0] == schema:
+                explore = "table"+" "+key[1]+"      {"
+                        
+                print(explore)
 
-                    explore = "table"+" "+key[1]+"      {"
-                            
-                    print(explore)
+                for key,value in value.items():
 
-                    for key,value in value.items():
+                    if "pk" not in key[0] and "fk" not in key[0]:
 
-                        if "pk" not in key[0] and "fk" not in key[0]:
+                        dimension = key[0]+" "+key[1]
 
-                            dimension = key[0]+" "+key[1]
-
-                            print(dimension)
-
-                        elif "pk" in key[0]:
-
-                            dimension = key[0]+" "+key[1]+" [pk]"
-
-                            print(dimension)   
-
-                        elif "fk" in key[0] and "not_available" not in key[3]:
-
-                            dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
-
-                            print(dimension)
-
-                        elif "fk" in key[0] and "not_available" in key[3]:
-
-                            dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
-
-                            print(dimension)
-
-                        else:   
-
-                            pass
-
-                    for key,value in nested_dictionary.items():
-
-                        syntax = "}"
-
-                    print(syntax)
-
+                        print(dimension)
 except:
 
     print("I doesn't look like you have any primary or foreign keys declared")

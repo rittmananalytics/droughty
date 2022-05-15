@@ -13,15 +13,12 @@ import yaml
 import git
 
 from droughty.dbml_base_dict import dbml_dict
-from droughty.config import (
-    ProjectVariables,
-    ExploresVariables,
-    get_git_root
-)
+from droughty.config import ProjectVariables
 
-try:
+try: 
 
     def get_all_values(nested_dictionary):
+
         
         project = 'project'+' '+ProjectVariables.environment_profile
 
@@ -33,7 +30,7 @@ try:
     
         for key,value in nested_dictionary.items():
 
-            explore = "table"+" "+key[1]+"      {"
+            explore = "table"+" "+key+"      {"
                     
             yield(explore)
 
@@ -73,29 +70,6 @@ try:
 
             yield(syntax)
 
-        git_def_path = get_git_root(os.getcwd())
-
-        git_path = git_def_path
-
-        rel_path = "db_docs"
-
-        path = os.path.join(git_path, rel_path)
-
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        for x in ExploresVariables.dbml_schemas:
-            
-            filename = x+'.dbml'
-
-            with open(os.path.join(path, filename), 'w') as file:
-
-                with redirect_stdout(file):
-
-                        for key,value in nested_dictionary.items:
-
-                            print(value)
-
 
 except:
 
@@ -106,6 +80,31 @@ nested_dictionary = dbml_dict
 
 get_all_values(nested_dictionary)
 
-def dbml_output():
+def get_git_root(path):
 
-     get_all_values(nested_dictionary)
+        git_repo = git.Repo(path, search_parent_directories=True)
+        git_root = git_repo.git.rev_parse("--show-toplevel")
+        return (git_root)
+ 
+git_def_path = get_git_root(os.getcwd())
+
+def dbml_output():
+    
+    git_path = git_def_path
+
+    rel_path = "db_docs"
+
+    path = os.path.join(git_path, rel_path)
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+        
+    filename = 'example.dbml'
+
+    with open(os.path.join(path, filename), 'w') as file:
+
+        with redirect_stdout(file):
+
+                for value in get_all_values(nested_dictionary):
+
+                    print(value)

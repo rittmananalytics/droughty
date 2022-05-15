@@ -76,7 +76,7 @@ if ProjectVariables.warehouse == 'big_query':
     column_name,
     {{value | sqlsafe}}_source.description,
     "{{value | sqlsafe}}_source"||table_name||column_name as primary_key,
-    "{{value | sqlsafe}}_source" as schema,
+    "{{value | sqlsafe}}" as schema,
 
     case when pk_column_name is null
         then 'not_available'

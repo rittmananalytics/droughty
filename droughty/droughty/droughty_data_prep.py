@@ -80,7 +80,7 @@ def wrangle_bigquery_dbml_dataframes(dataframe):
 
     dataframe['description'] = dataframe['description'].fillna('not available')
 
-    dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name','primary_key','schema']]
+    dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name','schema']]
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')

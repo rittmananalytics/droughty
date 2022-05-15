@@ -6,14 +6,14 @@ field_description_path: warehouse_docs
 field_description_file_name: field_descriptions.md
 
 test_schemas:
-    - DBT_ODUPUIS_QA
-    - DBT_ODUPUIS_STAGING
-    - DBT_ODUPUIS_INTEGRATION
+    - dbt_odupuis_qa
+    - dbt_odupuis_staging
+    - dbt_odupuis_integration
 
 dbml_schemas:
-    - DBT_ODUPUIS_QA
-    - DBT_ODUPUIS_STAGING
-    - DBT_ODUPUIS_INTEGRATION
+    - dbt_odupuis_qa
+    - dbt_odupuis_staging
+    - dbt_odupuis_integration
 
 explores:
 

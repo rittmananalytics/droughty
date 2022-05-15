@@ -20,10 +20,6 @@ def wrangle_snowflake_dataframes(dataframe):
 
     dataframe['description'] = dataframe['comment'].fillna('not available')
 
-    dataframe['column_name'] = dataframe['column_name'].str.lower()
-    dataframe['table_name'] = dataframe['table_name'].str.lower()
-    dataframe['description'] = dataframe['description'].str.lower()
-
     dataframe = dataframe.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 
     dataframe = dataframe[['table_name','column_name','data_type','description']]
@@ -63,10 +59,6 @@ def wrangle_bigquery_dbt_test_dataframes(dataframe):
 def wrangle_snowflake_dbt_test_dataframes(dataframe):
 
     dataframe['description'] = dataframe['comment'].fillna('not available')
-
-    dataframe['column_name'] = dataframe['column_name'].str.lower()
-    dataframe['table_name'] = dataframe['table_name'].str.lower()
-    dataframe['description'] = dataframe['description'].str.lower()
     
     dataframe = dataframe.groupby(['table_name', 'column_name','data_type','description']).size().reset_index().rename(columns={0:'count'})
 
@@ -98,7 +90,7 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
 
     dataframe['description'] = dataframe['comment'].fillna('not available')
 
-    dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name']]
+    dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name','schema']]
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP_TZ','timestamp')

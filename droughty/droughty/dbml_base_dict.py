@@ -49,48 +49,11 @@ def get_dbml_dict():
 
     print(wrangled_dataframe)
 
-    df2 = wrangled_dataframe.drop_duplicates(keep=False)
-
     wrangled_dataframe = {n: grp.loc[n].to_dict('index')
         
     for n, grp in wrangled_dataframe.set_index(['schema','table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level=['schema','table_name'])}
 
     return(wrangled_dataframe)
-
-#    df2 = df2.groupby(['schema']) \
-#    .apply(lambda x: x.set_index(['table_name']) \
-#    .to_dict(orient='index')) \
-#    .to_dict()
-
-    # df2 = df2.groupby(by=["schema", "table_name"]) \ semi-functional
-    #     .agg(lambda col: pd.DataFrame(data=col) \ semi-functional
-    #         #.rename(columns={"schema": "table_name"})) \ semi-functional
-    #     .reset_index() \ semi-functional
-    #     .to_dict(orient="index")) semi-functional
-
-    #df2 = df2.groupby(["schema","table_name"])[['column_name','data_type','description','pk_table_name','pk_column_name']] \
-        #.apply(lambda x: x.set_index("schema") \
-        #.to_dict(orient="index")) \
-        #.to_dict()
-
-    # working but only with two values
-    # df2 = df2.groupby('schema') \
-    # .apply(lambda a: dict(a.groupby('table_name') \
-    # .apply(lambda x: dict(zip(x['column_name'],x['data_type'])))
-    # ))
-    # df2 = df2.to_dict()
-
-    #.apply(lambda x: dict(zip(x['column_name'], x ['data_type'], x ['description'], x ['pk_table_name'], x ['pk_column_name'])))))
-
-    print(df2)
-
-    return(df2)
-
-#    wrangled_dataframe = {n: grp.loc[n].to_dict('index')
-#        
-#    for n, grp in wrangled_dataframe.set_index(['table_name', 'column_name','data_type','description','pk_table_name','pk_column_name','schema']).groupby(level=['table_name'])}
-#
-#    return(wrangled_dataframe)
 
 dbml_dict = get_dbml_dict()
 

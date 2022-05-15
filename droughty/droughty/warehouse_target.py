@@ -115,38 +115,44 @@ if ProjectVariables.warehouse == 'big_query':
 if ProjectVariables.warehouse == 'snowflake':   
 
     dbml_query = '''
-    with source as (
+
+    {% for value in dbml_schemas %}
+
+    {% if loop.first %} with {{ value | sqlsafe }}_source as ( {% endif %}
+    {% if not loop.first %} {{ value | sqlsafe }}_source as ( {% endif %}
+    
     select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
     where table_schema = '{{schema_id}}'
 
     ),
-    pks as (
+    {{value | sqlsafe}}_pks as (
     select 
     table_name as pk_table_name,
     column_name as pk_column_name,
     rtrim(column_name, '_pk') as pk_sk
-    from source
+    from {{value | sqlsafe}}_source
     where column_name like '%%PK%%'
     ),
-    fks as (
+    {{value | sqlsafe}}_fks as (
     select
     table_name as fk_table_name,
     column_name as fk_column_name,
     rtrim(column_name, '_fk') as fk_sk
-    from source
+    from {{value | sqlsafe}}_source
     where column_name like '%%FK%%'
     ),
-    references as (
-    select * from pks
-    inner join fks on pks.pk_sk = fks.fk_sk
-    )
+    {{value | sqlsafe}}_references as (
+    select * from {{value | sqlsafe}}_pks
+    inner join {{value | sqlsafe}}_fks on {{value | sqlsafe}}_pks.pk_sk = {{value | sqlsafe}}_fks.fk_sk
+    ),
+    {{value | sqlsafe}}_joined as (
     select 
-    
-
-    source.data_type,
-    source.table_name,
-    source.column_name,
-    source.comment,
+    data_type,
+    table_name,
+    column_name,
+    comment,
+    '{{value | sqlsafe}}_source'||table_name||column_name as primary_key,
+    '{{value | sqlsafe}}' as schema,
 
     case when pk_column_name is null
         then 'not_available'
@@ -156,9 +162,30 @@ if ProjectVariables.warehouse == 'snowflake':
         then 'not_available'
     else pk_table_name
     end as pk_table_name                   
-    from source
-    left join references on source.column_name = references.fk_column_name and references.fk_table_name = source.table_name
+    from {{value | sqlsafe}}_source
+    left join {{value | sqlsafe}}_references on {{value | sqlsafe}}_source.column_name = {{value | sqlsafe}}_references.fk_column_name and {{value | sqlsafe}}_references.fk_table_name = {{value | sqlsafe}}_source.table_name
+    ),
+    {% endfor %}
+
+    unioned as (
+    {% for value in dbml_schemas  %}
+    select * from {{value | sqlsafe}}_joined
+    {% if not loop.last %}union all{% endif %}
+    {% endfor %}
+    )
+
+    select
+
+    primary_key,
+    schema,
+    data_type,
+    table_name,
+    column_name,
+    comment,
+    pk_column_name,
+    pk_table_name
     
+    from unioned
     '''
 
 # looker explore warehouse query

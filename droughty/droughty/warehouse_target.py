@@ -122,7 +122,7 @@ if ProjectVariables.warehouse == 'snowflake':
     {% if not loop.first %} {{ value | sqlsafe }}_source as ( {% endif %}
     
     select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_schema = '{{schema_id}}'
+    where table_schema = upper('{{value}}')
 
     ),
     {{value | sqlsafe}}_pks as (

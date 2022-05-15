@@ -1,48 +1,84 @@
 project snowflake_demo_olivier
-table actors_dim      {
-actor_type_code varchar
-actor_name varchar
-actor_code varchar
-actor_pk varchar [pk]
-actor_type_name varchar
-actor_geo_country_code varchar
+table stg__gdelt__enhanced_mentions      {
+page_name varchar
+page_description varchar
+source_file_date date
+mention_url varchar
+page_title varchar
+file_name varchar
+keywords varchar
 }
-table events_fct      {
-action_geo_full_name varchar
-action_geo_latitude numeric
-action_geo_country_name varchar
-protest_fk varchar // [ref: - not_available.not_available]
-action_geo_country_code varchar
-event_ts date
-action_geo_longitude numeric
-event_pk varchar [pk]
-}
-table narratives_fct      {
-narrative_pk varchar [pk]
-actor_fk varchar // [ref: - not_available.not_available]
-event_fk varchar // [ref: - not_available.not_available]
-narrative varchar
-}
-table observations_fct      {
-observation_page_description varchar
+table stg__gdelt__events      {
+actor1_ethnic_code varchar
+actor2_type3_code varchar
+avg_tone numeric
 published_date date
-observation_type varchar
-observation_page_title varchar
-observer_fk varchar // [ref: - not_available.not_available]
-observation_pk varchar [pk]
-observation_url varchar
-observation_keywords varchar
-event_fk varchar // [ref: - not_available.not_available]
+actor2_code varchar
+actor2_religion1_code varchar
+action_geo_full_name varchar
+actor1_code varchar
+actor1_geo_longitude numeric
+actor2_geo_adm1_code varchar
+actor2_geo_country_code varchar
+actor2_geo_type numeric
+actor2_type2_code varchar
+actor1_geo_feature_id varchar
+source_url varchar
+actor1_geo_type numeric
+actor1_religion2_code varchar
+actor2_geo_full_name varchar
+num_mentions numeric
+actor2_name varchar
+gdelt_event_natural_key numeric
+mention_url varchar
+action_geo_adm2_code varchar
+action_geo_feature_id varchar
+actor1_geo_full_name varchar
+actor2_geo_adm2_code varchar
+quad_class numeric
+actor2_geo_feature_id varchar
+creation_ts timestamp_ntz
+goldstein_scale numeric
+published_date_fraction_date numeric
+actor1_name varchar
+action_geo_longitude numeric
+actor1_type1_code varchar
+actor2_ethnic_code varchar
+actor1_country_code varchar
+published_date_year numeric
+action_geo_country_code varchar
+action_geo_latitude numeric
+actor1_geo_adm1_code varchar
+actor1_geo_latitude numeric
+actor2_geo_longitude numeric
+event_base_code varchar
+is_root_event numeric
+num_sources numeric
+actor1_type3_code varchar
+event_code varchar
+action_geo_adm1_code varchar
+action_geo_type numeric
+actor1_geo_adm2_code varchar
+actor1_known_group_code varchar
+actor1_type2_code varchar
+actor2_religion2_code varchar
+num_articles numeric
+published_date_my numeric
+actor1_geo_country_code varchar
+actor1_religion1_code varchar
+actor2_type1_code varchar
+event_root_code varchar
+actor2_country_code varchar
+actor2_geo_latitude numeric
+actor2_known_group_code varchar
 }
-table observers_dim      {
-observer_domain varchar
-observer_pk varchar [pk]
-}
-table protests_dim      {
-protest_pk varchar [pk]
-page_description_regex varchar
-published_date_start date
-protest_name varchar
-published_date_end date
-countries varchar
+table stg__gdelt__ml_enriched_mentions      {
+page_title varchar
+mention_url varchar
+page_name varchar
+file_name varchar
+source_file_date date
+keywords varchar
+page_description varchar
+is_relevant boolean
 }

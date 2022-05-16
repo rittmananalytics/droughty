@@ -58,13 +58,7 @@ try:
 
                     for key,value in value.items():
 
-                        if "pk" not in key[0] and "fk" not in key[0]:
-
-                            dimension = key[0]+" "+key[1]
-
-                            print(dimension)
-
-                        elif "pk" in key[0]:
+                        if "pk" in key[0]:
 
                             dimension = key[0]+" "+key[1]+" [pk]"
 
@@ -81,6 +75,13 @@ try:
                             dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
 
                             print(dimension)
+
+                        elif "pk" not in key[0] and "fk" not in key[0]:
+
+                            dimension = key[0]+" "+key[1]
+
+                            print(dimension)
+
 
                         else:   
 

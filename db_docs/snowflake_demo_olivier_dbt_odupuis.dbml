@@ -1,22 +1,22 @@
 project snowflake_demo_olivier
 { database_type: 'snowflake' }
 table actors_dim      {
-actor_type_code varchar
-actor_name varchar
-actor_code varchar
 actor_pk varchar [pk]
-actor_type_name varchar
 actor_geo_country_code varchar
+actor_type_name varchar
+actor_name varchar
+actor_type_code varchar
+actor_code varchar
 }
 table events_fct      {
-action_geo_full_name varchar
-action_geo_latitude numeric
-action_geo_country_name varchar
+event_pk varchar [pk]
 protest_fk varchar [ref: - protests_dim.protest_pk]
 action_geo_country_code varchar
-event_ts date
-event_pk varchar [pk]
+action_geo_country_name varchar
+action_geo_full_name varchar
 action_geo_longitude numeric
+action_geo_latitude numeric
+event_ts date
 }
 table narratives_fct      {
 narrative_pk varchar [pk]
@@ -25,25 +25,25 @@ event_fk varchar [ref: - events_fct.event_pk]
 narrative varchar
 }
 table observations_fct      {
+observation_pk varchar [pk]
+observer_fk varchar [ref: - observers_dim.observer_pk]
+event_fk varchar [ref: - events_fct.event_pk]
+observation_page_title varchar
+observation_keywords varchar
+observation_url varchar
+observation_type varchar
 observation_page_description varchar
 published_date date
-observation_page_title varchar
-observation_type varchar
-observer_fk varchar [ref: - observers_dim.observer_pk]
-observation_url varchar
-observation_pk varchar [pk]
-observation_keywords varchar
-event_fk varchar [ref: - events_fct.event_pk]
 }
 table observers_dim      {
-observer_domain varchar
 observer_pk varchar [pk]
+observer_domain varchar
 }
 table protests_dim      {
 protest_pk varchar [pk]
-page_description_regex varchar
 protest_name varchar
+page_description_regex varchar
+countries varchar
 published_date_end date
 published_date_start date
-countries varchar
 }

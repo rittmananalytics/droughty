@@ -130,9 +130,7 @@ def wrangle_snowflake_cube_dataframes(dataframe):
 
     dataframe = dataframe[['table_name','column_name','data_type','description']]
 
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','time')
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP_TZ','time')
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP_NTZ','time')
+    dataframe['data_type'] = dataframe['data_type'].replace({'TIMESTAMP':'timestamp','TIMESTAMP_TZ':'timestamp','TIMESTAMP_NTZ':'timestamp'})
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','time')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')

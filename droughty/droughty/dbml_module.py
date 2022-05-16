@@ -44,6 +44,10 @@ try:
 
             print (project)
 
+            project_params = "{ database_type"+":"+" '"+ProjectVariables.warehouse+"' }"
+
+            print (project_params)
+
             for key,value in nested_dictionary.items():
 
                 if key[0] == schema:

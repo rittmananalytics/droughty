@@ -1,0 +1,85 @@
+project snowflake_demo_olivier
+{ database_type: 'snowflake' }
+table stg__gdelt__enhanced_mentions      {
+keywords varchar
+page_title varchar
+mention_url varchar
+page_name varchar
+file_name varchar
+page_description varchar
+source_file_date date
+}
+table stg__gdelt__events      {
+actor1_geo_country_code varchar
+actor1_type3_code varchar
+actor2_code varchar
+actor2_type2_code varchar
+is_root_event numeric
+num_mentions numeric
+actor1_name varchar
+published_date_my numeric
+actor2_ethnic_code varchar
+actor1_geo_longitude numeric
+actor2_type1_code varchar
+creation_ts timestamp_ntz
+event_base_code varchar
+source_url varchar
+action_geo_adm2_code varchar
+actor2_geo_adm1_code varchar
+event_code varchar
+actor1_known_group_code varchar
+actor2_geo_latitude numeric
+goldstein_scale numeric
+actor1_geo_adm1_code varchar
+actor2_geo_feature_id varchar
+actor2_type3_code varchar
+gdelt_event_natural_key numeric
+quad_class numeric
+actor2_religion1_code varchar
+action_geo_adm1_code varchar
+action_geo_full_name varchar
+actor2_country_code varchar
+event_root_code varchar
+action_geo_type numeric
+actor2_religion2_code varchar
+num_sources numeric
+actor1_religion1_code varchar
+action_geo_country_code varchar
+actor1_geo_full_name varchar
+actor1_type2_code varchar
+actor2_geo_country_code varchar
+actor1_geo_feature_id varchar
+actor1_type1_code varchar
+mention_url varchar
+actor2_name varchar
+published_date_year numeric
+action_geo_latitude numeric
+actor1_code varchar
+actor1_country_code varchar
+actor1_geo_adm2_code varchar
+actor1_geo_type numeric
+actor1_religion2_code varchar
+actor2_geo_adm2_code varchar
+actor1_ethnic_code varchar
+actor1_geo_latitude numeric
+published_date_fraction_date numeric
+published_date date
+action_geo_feature_id varchar
+actor2_geo_longitude numeric
+actor2_geo_type numeric
+actor2_geo_full_name varchar
+actor2_known_group_code varchar
+avg_tone numeric
+num_articles numeric
+action_geo_longitude numeric
+}
+table stg__gdelt__ml_enriched_mentions      {
+source_file_date date
+keywords varchar
+is_relevant boolean
+mention_url varchar
+file_name varchar
+page_name varchar
+page_description varchar
+page_title varchar
+}

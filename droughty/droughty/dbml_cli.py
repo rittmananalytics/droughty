@@ -7,16 +7,10 @@ def erd():
 
     print("Generating dbml erd")
 
-    if dbml_dict != False:
+    try:
 
-        try:
+        return dbml_output()
 
-            return dbml_output()
+    finally:
 
-        finally:
-
-            print("dbml erd generated")
-
-    else: 
-
-        raise Exception("It doesn't look like you have declared any primary or foreign keys")
+        print("dbml erd generated")

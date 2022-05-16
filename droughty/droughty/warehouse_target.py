@@ -129,7 +129,7 @@ if ProjectVariables.warehouse == 'snowflake':
     select 
     table_name as pk_table_name,
     column_name as pk_column_name,
-    rtrim(column_name, '_pk') as pk_sk
+    rtrim(column_name, '_PK') as pk_sk
     from {{value | sqlsafe}}_source
     where column_name like '%%PK%%'
     ),
@@ -137,7 +137,7 @@ if ProjectVariables.warehouse == 'snowflake':
     select
     table_name as fk_table_name,
     column_name as fk_column_name,
-    rtrim(column_name, '_fk') as fk_sk
+    rtrim(column_name, '_FK') as fk_sk
     from {{value | sqlsafe}}_source
     where column_name like '%%FK%%'
     ),

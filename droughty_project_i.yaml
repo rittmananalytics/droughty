@@ -6,9 +6,9 @@ field_description_path: warehouse_docs
 field_description_file_name: field_descriptions.md
 
 test_schemas:
-    - DBT_ODUPUIS_QA
-    - DBT_ODUPUIS_STAGING
-    - DBT_ODUPUIS_INTEGRATION
+    - analytics_qa
+    - analytics_staging
+    - analytics_integration
 
 dbml_schemas:
     - analytics_qa

@@ -34,7 +34,6 @@ def get_dbml_dict():
         wrangled_dataframe = wrangle_bigquery_dbml_dataframes(dataframe)
 
 
-
     elif warehouse == 'snowflake': 
 
         engine = create_engine(get_snowflake_connector_url())
@@ -47,8 +46,6 @@ def get_dbml_dict():
         connection.close()
         engine.dispose()
 
-    print(wrangled_dataframe)
-
     wrangled_dataframe = {n: grp.loc[n].to_dict('index')
         
     for n, grp in wrangled_dataframe.set_index(['schema','table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level=['schema','table_name'])}
@@ -56,5 +53,3 @@ def get_dbml_dict():
     return(wrangled_dataframe)
 
 dbml_dict = get_dbml_dict()
-
-print (dbml_dict)

@@ -34,7 +34,7 @@ try:
 
         for schema in ExploresVariables.dbml_schemas:
     
-            filename = schema+'.dbml'
+            filename = ProjectVariables.environment_profile+'_'+schema+'.dbml'
 
             sys.stdout = open(os.path.join(path, filename), 'w')
 

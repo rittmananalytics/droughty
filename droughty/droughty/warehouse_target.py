@@ -33,7 +33,7 @@ elif ProjectVariables.warehouse == 'snowflake':
         )
         select * from source
 
-        where table_schema = '{{schema_id}}'
+        where table_schema = upper('{{schema_id}}')
     '''
 # dbml warehouse query
 
@@ -247,14 +247,14 @@ if ProjectVariables.warehouse == 'snowflake':
     select 
     *
     from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_schema = '{{schema_id}}'
+    where table_schema = upper('{{schema_id}}')
     ),
     row_counts as (
     select
         table_name,
         sum(row_count) as row_count
     from "{{database}}"."INFORMATION_SCHEMA"."TABLES"
-    where table_schema = '{{schema_id}}'
+    where table_schema = upper('{{schema_id}}')
     group by 1
     ),
     pks as (
@@ -329,7 +329,7 @@ if ProjectVariables.warehouse == 'snowflake':
 
     select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
 
-    where table_schema = '{{value}}'
+    where table_schema = upper('{{value}}')
 
     ),
 
@@ -401,14 +401,14 @@ if ProjectVariables.warehouse == 'snowflake':
     select 
     *
     from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
-    where table_schema = '{{schema_id}}'
+    where table_schema = upper('{{schema_id}}')
     ),
     row_counts as (
     select
         table_name,
         sum(row_count) as row_count
     from "{{database}}"."INFORMATION_SCHEMA"."TABLES"
-    where table_schema = '{{schema_id}}'
+    where table_schema = upper('{{schema_id}}')
     group by 1
     ),
     pks as (
@@ -494,8 +494,6 @@ elif ExploresVariables.dimensional_inference == 'disabled':
             'test_schemas': ExploresVariables.test_schemas,
         }
 
-print(params)
-
 def quote_sql_string(value):
     '''
     If `value` is a string type, escapes single quotes in the string
@@ -574,5 +572,3 @@ def create_dbml_sql():
     dbml_sql = (query % bind_params)
 
     return dbml_sql
-
-print (create_dbml_sql())

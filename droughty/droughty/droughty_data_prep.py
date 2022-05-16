@@ -41,30 +41,6 @@ def wrangle_snowflake_dataframes(dataframe):
 
     dataframe = dataframe.apply(lambda col: col.str.lower())
 
-                             ##.str.strip().str[-3] == '_pk', '1'
-                             #np.where(dataframe['column_name'].str.strip().str[-3] == '_fk', '2',
-                             #np.where(dataframe['data_type'] == "string",'3',
-                             #np.where(dataframe['data_type'] == "number",'4',
-                             #np.where(dataframe['data_type'] == "yesno",'5',
-                             #np.where(dataframe['data_type'] == "date",'6',
-                             #np.where(dataframe['data_type'] == "timestamp",'7',
-                         #)
-                         #)))))
-
-    conditions = [
-        (dataframe['column_name'].str.strip().str[-3] == '_pk'),
-        (dataframe['column_name'].str.strip().str[-3] == '_fk'),
-
-        ]
-
-    # create a list of the values we want to assign for each condition
-    values = ['1', '2']
-
-    # create a new column and use np.select to assign values to it using our lists as arguments
-    dataframe['index'] = np.select(conditions, values)
-
-    dataframe = dataframe.sort_values('index')
-
     return (dataframe)
 
 def wrangle_bigquery_dbt_test_dataframes(dataframe):
@@ -117,10 +93,7 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
 
     dataframe = dataframe[['table_name','column_name','data_type','description','pk_table_name','pk_column_name','schema']]
 
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP_TZ','timestamp')
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP_NTZ','timestamp')
-    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
+    dataframe['data_type'] = dataframe['data_type'].replace({'TIMESTAMP':'timestamp','TIMESTAMP_TZ':'timestamp','TIMESTAMP_NTZ':'timestamp'})
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','numeric')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','numeric')
@@ -132,6 +105,25 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','boolean')
 
     dataframe = dataframe.apply(lambda col: col.str.lower())
+
+    conditions = [
+        (dataframe['column_name'].str.endswith('_pk')),
+        (dataframe['column_name'].str.endswith('_fk')),
+        (dataframe['column_name'].str.strip().str[-3] != '_fk') & (dataframe['column_name'].str.strip().str[-3] != '_pk') & (dataframe['data_type'] == 'varchar'),       
+        (dataframe['data_type'] == 'numeric'),
+        (dataframe['data_type'] == 'boolean'),
+        (dataframe['data_type'] == 'date'),
+        (dataframe['data_type'] == 'timestamp'),
+
+        ]
+
+    # create a list of the values we want to assign for each condition
+    values = ['1', '2','3','4','5','6','7']
+
+    # create a new column and use np.select to assign values to it using our lists as arguments
+    dataframe['index'] = np.select(conditions, values)
+
+    dataframe = dataframe.sort_values('index')
 
     return (dataframe)
 

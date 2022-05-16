@@ -1,5 +1,9 @@
 """Helper functions for droughty data prep."""
 
+from unicodedata import category
+import pandas as pd
+import numpy as np
+
 def wrangle_bigquery_dataframes(dataframe):
 
     dataframe['description'] = dataframe['description'].fillna('not available')
@@ -37,6 +41,29 @@ def wrangle_snowflake_dataframes(dataframe):
 
     dataframe = dataframe.apply(lambda col: col.str.lower())
 
+                             ##.str.strip().str[-3] == '_pk', '1'
+                             #np.where(dataframe['column_name'].str.strip().str[-3] == '_fk', '2',
+                             #np.where(dataframe['data_type'] == "string",'3',
+                             #np.where(dataframe['data_type'] == "number",'4',
+                             #np.where(dataframe['data_type'] == "yesno",'5',
+                             #np.where(dataframe['data_type'] == "date",'6',
+                             #np.where(dataframe['data_type'] == "timestamp",'7',
+                         #)
+                         #)))))
+
+    conditions = [
+        (dataframe['column_name'].str.strip().str[-3] == '_pk'),
+        (dataframe['column_name'].str.strip().str[-3] == '_fk'),
+
+        ]
+
+    # create a list of the values we want to assign for each condition
+    values = ['1', '2']
+
+    # create a new column and use np.select to assign values to it using our lists as arguments
+    dataframe['index'] = np.select(conditions, values)
+
+    dataframe = dataframe.sort_values('index')
 
     return (dataframe)
 

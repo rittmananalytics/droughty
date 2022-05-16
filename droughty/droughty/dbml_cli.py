@@ -11,6 +11,8 @@ def erd():
 
         return dbml_output()
 
+        print("dbml erd generated")
+        
     finally:
 
-        print("dbml erd generated")
+       pass

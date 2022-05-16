@@ -14,6 +14,7 @@ dbml_schemas:
     - analytics_qa
     - analytics_staging
     - analytics_integration
+    - dbt_odupuis
 
 explores:
 

@@ -83,6 +83,28 @@ def wrangle_bigquery_dbml_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('STRING','varchar')
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOL','boolean')
 
+    dataframe = dataframe.apply(lambda col: col.str.lower())
+
+    conditions = [
+        (dataframe['column_name'].str.endswith('_pk')),
+        (dataframe['column_name'].str.endswith('_fk')),
+        (dataframe['column_name'].str.contains('natural_key')),
+        (dataframe['column_name'].str.strip().str[-3] != '_fk') & (dataframe['column_name'].str.strip().str[-3] != '_pk') & (dataframe['data_type'] == 'varchar'),      
+        (dataframe['data_type'] == 'numeric'),
+        (dataframe['data_type'] == 'boolean'),
+        (dataframe['data_type'] == 'date'),
+        (dataframe['data_type'] == 'timestamp'),
+
+        ]
+
+    # create a list of the values we want to assign for each condition
+    values = ['1', '2','3','4','5','6','7','8']
+
+    # create a new column and use np.select to assign values to it using our lists as arguments
+    dataframe['index'] = np.select(conditions, values)
+
+    dataframe = dataframe.sort_values('index')
+
     return (dataframe)
 
 def wrangle_snowflake_dbml_dataframes(dataframe):
@@ -109,6 +131,7 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
     conditions = [
         (dataframe['column_name'].str.endswith('_pk')),
         (dataframe['column_name'].str.endswith('_fk')),
+        (dataframe['column_name'].str.contains('natural_key')),
         (dataframe['column_name'].str.strip().str[-3] != '_fk') & (dataframe['column_name'].str.strip().str[-3] != '_pk') & (dataframe['data_type'] == 'varchar'),       
         (dataframe['data_type'] == 'numeric'),
         (dataframe['data_type'] == 'boolean'),
@@ -118,7 +141,7 @@ def wrangle_snowflake_dbml_dataframes(dataframe):
         ]
 
     # create a list of the values we want to assign for each condition
-    values = ['1', '2','3','4','5','6','7']
+    values = ['1','2','3','4','5','6','7','8']
 
     # create a new column and use np.select to assign values to it using our lists as arguments
     dataframe['index'] = np.select(conditions, values)

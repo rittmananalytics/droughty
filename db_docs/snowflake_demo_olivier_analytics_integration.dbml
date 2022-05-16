@@ -1,2 +1,0 @@
-project snowflake_demo_olivier
-{ database_type: 'snowflake' }

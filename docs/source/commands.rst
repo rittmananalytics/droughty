@@ -13,15 +13,15 @@ in your terminal.
 
 This will output a file within the root of your active git repo as follows::
 
-    /base/_basic.layer.lkml
+    /lookml/base...
 
 This file will contain explores and measures based on the multiple layers in your warehouse, defined by the targets within your profile.yaml file. It assigns dimension datatypes, descriptions (if available). It also assigns pk's, hides pk(s) and fk's by default.
 
-**dbt-test**
+**dbt**
 
 run::
 
-    droughty dbt-test
+    droughty dbt
 
 Generates standard schema tests, currently coverage is::
 
@@ -55,3 +55,25 @@ It will output the dbml model into the follow dir::
      /db_docs/....
 
 As with lookml, this assigns data types and also identifies pk, fk references and assigns them
+
+**cube**
+
+Generates cube based on the analytics layer within your warehouse, run::
+
+    droughty cube
+
+It will output the cube models into the follow dir::
+
+     /schema/....
+
+As with lookml, this assigns data types and also identifies pk, fk references and assigns them
+
+**arguments**
+
+  - --profiles-dir 
+    - This allows you to specify the profile directory if you don't want to use the default
+  - --project-dir 
+    - This allows you to specify the project directory if you don't want to use the default
+  - --env-vars (enabled)
+    - This allows you to enable the use of environment variables 
+  

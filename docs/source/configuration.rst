@@ -5,9 +5,35 @@ Setting up droughty to run is pretty easy. It depends on two files, a drought_pr
 
 **droughty_project.yaml set-up**
 
-To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. At the moment, the only requirement is to define a project name, for example::
+To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. Find an drought_project.yaml file below::
 
-   profile: example_project
+  profile: example_project
+
+  dimensional_inference: enabled
+
+  field_description_path: warehouse_docs
+  field_description_file_name: field_descriptions.md
+
+  explores:
+
+    parent_table: 
+      - actors_dim
+    dimensions: 
+      - events_fct
+    facts:
+      - narratives_fct
+
+  test_schemas:
+
+    - example_dev_staging
+    - example_dev_integration
+    - example_analytics_dev
+
+  dbml_schemas:
+
+    - example_dev_staging
+    - example_dev_integration
+    - example_analytics_dev
 
 Create this file in the root of your git repo.
 
@@ -45,14 +71,6 @@ profile example::
       user: 
 
       warehouse_name: big_query
-
-      test_schemas:
-
-        - example_dev_staging
-
-        - example_dev_integration
-
-        - example_analytics_dev
 
 --------------
 

@@ -27,7 +27,7 @@ Droughty outputs a base.layer which contains dimensions from the analytics layer
 
 **Warehousing approaches**
 
-Droughty outputs lookml, dbml and dbt schemas based on an dataset/schema warehouse structure. It depends on their being a separate dataset/schema for the staging, integration and the warehouse/analytics layer. This is pretty easy to achieve with these dbt_project.yml configs::
+Droughty outputs lookml, dbml and dbt schemas based on an dataset/schema warehouse structure. It depends on a separate dataset/schema for the staging, integration and the warehouse/analytics layer. This is pretty easy to achieve with these dbt_project.yml configs::
 
     models:
     +persist_docs:

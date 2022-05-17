@@ -42,13 +42,13 @@
 </div>
 <p>in your terminal.</p>
 <p>This will output a file within the root of your active git repo as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">_basic</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">lkml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">lookml</span><span class="o">/</span><span class="n">base</span><span class="o">...</span>
 </pre></div>
 </div>
 <p>This file will contain explores and measures based on the multiple layers in your warehouse, defined by the targets within your profile.yaml file. It assigns dimension datatypes, descriptions (if available). It also assigns pk’s, hides pk(s) and fk’s by default.</p>
-<p><strong>dbt-test</strong></p>
+<p><strong>dbt</strong></p>
 <p>run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">dbt</span><span class="o">-</span><span class="n">test</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">dbt</span>
 </pre></div>
 </div>
 <p>Generates standard schema tests, currently coverage is:</p>
@@ -81,6 +81,27 @@
 </pre></div>
 </div>
 <p>As with lookml, this assigns data types and also identifies pk, fk references and assigns them</p>
+<p><strong>cube</strong></p>
+<p>Generates cube based on the analytics layer within your warehouse, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">cube</span>
+</pre></div>
+</div>
+<p>It will output the cube models into the follow dir:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">schema</span><span class="o">/....</span>
+</pre></div>
+</div>
+<p>As with lookml, this assigns data types and also identifies pk, fk references and assigns them</p>
+<p><strong>arguments</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>–profiles-dir
+- This allows you to specify the profile directory if you don’t want to use the default</p></li>
+<li><p>–project-dir
+- This allows you to specify the project directory if you don’t want to use the default</p></li>
+<li><p>–env-vars (enabled)
+- This allows you to enable the use of environment variables</p></li>
+</ul>
+</div></blockquote>
 </section>
 
 
@@ -142,7 +163,7 @@
       &copy;2022, lewis baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

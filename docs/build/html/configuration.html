@@ -37,11 +37,38 @@
 <h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
 <p>Setting up droughty to run is pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
 <p><strong>droughty_project.yaml set-up</strong></p>
-<p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. At the moment, the only requirement is to define a project name, for example:</p>
+<p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. Find an drought_project.yaml file below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span><span class="p">:</span> <span class="n">example_project</span>
+
+<span class="n">dimensional_inference</span><span class="p">:</span> <span class="n">enabled</span>
+
+<span class="n">field_description_path</span><span class="p">:</span> <span class="n">warehouse_docs</span>
+<span class="n">field_description_file_name</span><span class="p">:</span> <span class="n">field_descriptions</span><span class="o">.</span><span class="n">md</span>
+
+<span class="n">explores</span><span class="p">:</span>
+
+  <span class="n">parent_table</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">actors_dim</span>
+  <span class="n">dimensions</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">events_fct</span>
+  <span class="n">facts</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">narratives_fct</span>
+
+<span class="n">test_schemas</span><span class="p">:</span>
+
+  <span class="o">-</span> <span class="n">example_dev_staging</span>
+  <span class="o">-</span> <span class="n">example_dev_integration</span>
+  <span class="o">-</span> <span class="n">example_analytics_dev</span>
+
+<span class="n">dbml_schemas</span><span class="p">:</span>
+
+  <span class="o">-</span> <span class="n">example_dev_staging</span>
+  <span class="o">-</span> <span class="n">example_dev_integration</span>
+  <span class="o">-</span> <span class="n">example_analytics_dev</span>
 </pre></div>
 </div>
-<p>Create this file in the root of your git repo</p>
+<p>Create this file in the root of your git repo.</p>
+<p><strong>It’s important that the profile name with the drought_project.yaml aligns with the paired entry within your profile.yaml.</strong></p>
 <hr class="docutils" />
 <p><strong>profile.yaml set-up</strong></p>
 <p>A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions.</p>
@@ -68,14 +95,6 @@
   <span class="n">user</span><span class="p">:</span>
 
   <span class="n">warehouse_name</span><span class="p">:</span> <span class="n">big_query</span>
-
-  <span class="n">test_schemas</span><span class="p">:</span>
-
-    <span class="o">-</span> <span class="n">example_dev_staging</span>
-
-    <span class="o">-</span> <span class="n">example_dev_integration</span>
-
-    <span class="o">-</span> <span class="n">example_analytics_dev</span>
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -144,7 +163,7 @@
       &copy;2022, lewis baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

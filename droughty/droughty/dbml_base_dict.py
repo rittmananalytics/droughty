@@ -46,8 +46,6 @@ def get_dbml_dict():
         connection.close()
         engine.dispose()
 
-    print (wrangled_dataframe)
-
     wrangled_dataframe = {n: grp.loc[n].to_dict('index')
         
     for n, grp in wrangled_dataframe.set_index(['schema','table_name', 'column_name','data_type','description','pk_table_name','pk_column_name']).groupby(level=['schema','table_name'])}

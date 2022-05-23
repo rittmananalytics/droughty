@@ -119,20 +119,20 @@ droughty_project = load_droughty_project()
 @dataclass
 class ProjectVariables:
     
-    environment_profile: str
-    service_account_path: str
-    service_account: str
-    project: str
-    warehouse: str
-    schema: str
+    environment_profile: str.lower
+    service_account_path: str.lower
+    service_account: str.lower
+    project: str.lower
+    warehouse: str.lower
+    schema: str.lower
 
-    role: str
-    password: str
-    database: str
-    account: str
-    user: str
-    snowflake_warehouse: str
-    database: str
+    role: str.lower
+    password: str.lower
+    database: str.lower
+    account: str.lower
+    user: str.lower
+    snowflake_warehouse: str.lower
+    database: str.lower
         
 def assign_project_variables():
 
@@ -211,15 +211,15 @@ project_variables = assign_project_variables()
 @dataclass
 class ExploresVariables:
 
-    explore_tables: str
-    dimensional_inference: str
-    single_list_tables: str
-    flat_list: str 
-    final_list: str
-    join_key_list: str
-    test_schemas: str
-    dbml_schemas: str
-    parent_table_name: str
+    explore_tables: str.lower
+    dimensional_inference: str.lower
+    single_list_tables: str.lower
+    flat_list: str .lower
+    final_list: str.lower
+    join_key_list: str.lower
+    test_schemas: str.lower
+    dbml_schemas: str.lower
+    parent_table_name: str.lower
 
 def assign_explore_variables():
 

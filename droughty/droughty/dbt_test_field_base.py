@@ -3,9 +3,9 @@ import markdown
 import os
 import yaml
 
-from droughty.config import DbtTestVariables,git_path
+from droughty.config import DbtTestVariables,IdentifyConfigVariables
 
-droughty_project = os.path.join(git_path,DbtTestVariables.field_description_path,DbtTestVariables.field_description_file_name)
+droughty_project = os.path.join(IdentifyConfigVariables.git_path,DbtTestVariables.field_description_path,DbtTestVariables.field_description_file_name)
 
 with open(droughty_project) as f:
     htmlmarkdown=markdown.markdown( f.read() )

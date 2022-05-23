@@ -11,17 +11,6 @@ from droughty.config_cli import Common
 
 path = os.path.expanduser('~')
 
-def get_git_root(path):
-    
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return (git_root)
-    
-##def return_git_path():
-    
-git_path = get_git_root(os.getcwd())
-
-
 ## profile vars
 @dataclass
 class IdentifyConfigVariables(Common):
@@ -30,6 +19,7 @@ class IdentifyConfigVariables(Common):
     profile_path: str
     project_path: str
     full_path: str
+    git_path: str
 
 def assign_droughty_paths():
 
@@ -43,7 +33,11 @@ def assign_droughty_paths():
 
         print ("Using environment variables")
 
-    try:
+    else:
+
+        pass
+
+    if Common.profile_dir != None:
 
         IdentifyConfigVariables.profile_path = Common.profile_dir
 
@@ -51,23 +45,31 @@ def assign_droughty_paths():
 
         print (Common.profile_dir)
 
-    except:
+    elif Common.profile_dir == None:
 
         path = os.path.expanduser('~')
 
-        IdentifyConfigVariables.profile_pass = os.path.join(path,".droughty/profile.yaml")       
+        IdentifyConfigVariables.profile_path = os.path.join(path,".droughty/profile.yaml")       
 
         print ("Using default profile path")
 
-    if IdentifyConfigVariables.profile_path == None:
+    elif IdentifyConfigVariables.profile_path == None:
 
         raise Exception ("It looks like you don't have a profile file or you have directly specified the incorrect directory")  
 
-paths = assign_droughty_paths()
+
+assign_droughty_paths()
+
+def get_git_root(path):
+    
+        git_repo = git.Repo(path, search_parent_directories=True)
+        git_root = git_repo.git.rev_parse("--show-toplevel")
+        return (git_root)
+
+IdentifyConfigVariables.git_path = get_git_root(os.getcwd())
+
 
 def load_droughty_profile():
-
-    IdentifyConfigVariables.project_path = Common.project_dir  
 
     with open(IdentifyConfigVariables.profile_path) as f:
 
@@ -77,7 +79,7 @@ def load_droughty_profile():
 
 def assign_droughty_project_paths():
 
-    try:
+    if Common.project_dir != None:
 
         IdentifyConfigVariables.project_path = Common.project_dir  
 
@@ -88,24 +90,23 @@ def assign_droughty_project_paths():
         print (Common.project_dir)
 
 
-    except:
+    elif Common.project_dir == None:
 
-        IdentifyConfigVariables.project_path = Common.project_dir  
+        path = get_git_root(os.getcwd())
 
-        filename = 'droughty_project.yaml'
+        IdentifyConfigVariables.project_path = os.path.join(path,"droughty_project.yaml")       
 
-        droughty_project = os.path.join(git_path,filename)
+        print ("Using default project path")
 
-    if IdentifyConfigVariables.project_path == None:
+    else:
 
         raise Exception ("It looks like you don't have a droughty_project file or you have directly specified the incorrect directory")  
 
-project_path = assign_droughty_project_paths()
+
+assign_droughty_project_paths()
 
 
 def load_droughty_project():
-
-    IdentifyConfigVariables.project_path = Common.project_dir  
 
     with open(IdentifyConfigVariables.project_path) as f:
         droughty_project = yaml.load(f, Loader=yaml.FullLoader)

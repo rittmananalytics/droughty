@@ -13,12 +13,13 @@ import yaml
 import git
 
 import droughty.cube_parser.cube as cube
-
 from droughty.cube_base_dict import cube_base_dict
-
 from droughty.lookml_explore_dict import looker_explore_dict
-
-from droughty.config import ProjectVariables
+from droughty.config import (
+    ProjectVariables,
+    ExploresVariables,
+    IdentifyConfigVariables
+)
     
 def get_all_values(nested_dictionary,explore_dictionary):
         
@@ -87,21 +88,19 @@ def get_all_values(nested_dictionary,explore_dictionary):
 nested_dictionary = cube_base_dict
 explore_dictionary = looker_explore_dict
 
-def get_git_root(path):
-
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return (git_root)
-
-git_def_path = get_git_root(os.getcwd())
-
 def output():
-    
-    git_path = git_def_path
 
-    rel_path = "schema"
+    if ExploresVariables.cube_path == None:
+ 
+        git_path = IdentifyConfigVariables.git_path
 
-    path = os.path.join(git_path, rel_path)
+        rel_path = "schema"
+
+        path = os.path.join(git_path, rel_path)
+
+    elif ExploresVariables.cube_path != None:
+
+        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.cube_path)
 
     if not os.path.exists(path):
         os.makedirs(path)

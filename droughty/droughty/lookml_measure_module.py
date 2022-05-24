@@ -14,7 +14,10 @@ import yaml
 import git
 
 from droughty.lookml_base_dict import base_dict
-
+from droughty.config import (
+    ExploresVariables,
+    IdentifyConfigVariables
+)
 
 def get_all_values(nested_dictionary):
 
@@ -95,12 +98,18 @@ def get_git_root(path):
 git_def_path = get_git_root(os.getcwd())
 
 def measure_output():
-    
-    git_path = git_def_path
 
-    rel_path = "lookml/base"
+    if ExploresVariables.lookml_path == None:
+   
+        git_path = git_def_path
 
-    path = os.path.join(git_path, rel_path)
+        rel_path = "lookml/base"
+
+        path = os.path.join(git_path, rel_path)
+
+    elif ExploresVariables.lookml_path != None:
+
+        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.lookml_path)
 
     if not os.path.exists(path):
         os.makedirs(path)

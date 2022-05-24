@@ -16,21 +16,25 @@ from droughty.dbml_base_dict import dbml_dict
 from droughty.config import (
     ProjectVariables,
     ExploresVariables,
-    get_git_root
+    IdentifyConfigVariables
 )
 
 try: 
 
     def get_all_values(nested_dictionary):
 
-        rel_path = "db_docs"
+        if ExploresVariables.dbml_path == None:
 
-        path = os.path.join(get_git_root(os.getcwd()), rel_path)
+            rel_path = "db_docs"
+
+            path = os.path.join(IdentifyConfigVariables.git_path, rel_path)
+
+        elif ExploresVariables.dbml_path != None:
+
+            path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.dbml_path)
 
         if not os.path.exists(path):
             os.makedirs(path)
-
-            #if key[0] in ExploresVariables.dbml_schemas:
 
         for schema in ExploresVariables.dbml_schemas:
     

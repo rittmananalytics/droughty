@@ -1,0 +1,38 @@
+profile: kaplan_poc
+
+dimensional_inference: enabled
+
+field_description_path: warehouse_docs
+field_description_file_name: field_descriptions.md
+
+test_schemas:
+    - lewis_analytics_dev_staging
+    - lewis_analytics_dev_integration
+    - lewis_analytics_dev
+
+dbml_schemas:
+    - lewis_analytics_dev_staging
+    - lewis_analytics_dev_integration
+    - lewis_analytics_dev
+
+explores:
+
+  parent_table: 
+    - sales_applications
+  dimensions: 
+    - core_countries
+    - core_agents
+    - core_sponsors
+    - sales_application_agent_bridge
+    - core_users
+    - core_country_mapping
+    - core_institutions
+    - sales_student
+    - core_user_mapping
+    - core_program_intakes
+    - core_programs
+    - core_subjects
+  facts:
+    - sales_applications_summary
+    - product_progression_plans
+    - product_study_plans

@@ -11,6 +11,10 @@ from itertools import chain
 
 from droughty.dbt_test_base_dict import dbt_test_dict
 from droughty.dbt_test_field_base import described_columns_list
+from droughty.config import (
+    IdentifyConfigVariables,
+    ExploresVariables
+)
 
 import sys
 import ruamel.yaml
@@ -80,25 +84,23 @@ get_all_values(nested_dictionary)
 
 data = get_all_values(nested_dictionary)
 
-def get_git_root(path):
-
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return (git_root)
-
-git_def_path = get_git_root(os.getcwd())
-
 def schema_output():
+
+    if ExploresVariables.dbt_path == None:
     
-    git_path = git_def_path
+        git_path = IdentifyConfigVariables.git_path
 
-    rel_path = "models"
+        rel_path = "models"
 
-    path = os.path.join(git_path, rel_path)
+        path = os.path.join(git_path, rel_path)
+
+    elif ExploresVariables.dbt_path != None:
+
+        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.dbt_path)
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
+            
     filename = 'droughty_schema.yml'
 
     with open(os.path.join(path, filename), 'w') as file:

@@ -16,7 +16,11 @@ import droughty.cube_parser.cube as cube
 
 from droughty.cube_base_dict import cube_base_dict
 from droughty.cube_explore_dict import cube_explore_dict
-from droughty.config import ProjectVariables
+from droughty.config import (
+    ProjectVariables,
+    ExploresVariables,
+    IdentifyConfigVariables
+)
 
 def get_all_values(nested_dictionary,explore_dictionary):
     
@@ -134,11 +138,17 @@ git_def_path = get_git_root(os.getcwd())
 
 def explore_output():
     
-    git_path = git_def_path
+    if ExploresVariables.cube_path == None:
+ 
+        git_path = IdentifyConfigVariables.git_path
 
-    rel_path = "schema"
+        rel_path = "schema"
 
-    path = os.path.join(git_path, rel_path)
+        path = os.path.join(git_path, rel_path)
+
+    elif ExploresVariables.cube_path != None:
+
+        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.cube_path)
 
     if not os.path.exists(path):
         os.makedirs(path)

@@ -220,6 +220,10 @@ class ExploresVariables:
     test_schemas: str.lower
     dbml_schemas: str.lower
     parent_table_name: str.lower
+    lookml_path: str.lower
+    dbml_path: str.lower
+    cube_path: str.lower
+    dbt_path: str.lower
 
 def assign_explore_variables():
 
@@ -237,12 +241,21 @@ def assign_explore_variables():
 
             ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
 
+            try: 
+
+                ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
+                ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
+                ExploresVariables.cube_path = (droughty_project.get("cube_path"))  
+                ExploresVariables.dbt_path = (droughty_project.get("dbt_path"))  
+            except:
+
+                pass     
+
             try:
 
                 parent_table_path = "explores.parent_table"
                 actual = glom.glom(droughty_project, parent_table_path)
                 ExploresVariables.parent_table_name = ''.join(actual)
-
             except:
 
                 pass

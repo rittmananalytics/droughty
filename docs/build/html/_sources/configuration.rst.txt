@@ -1,11 +1,11 @@
 Configuration
 =============
 
-Setting up droughty to run is pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
+Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
 
 **droughty_project.yaml set-up**
 
-To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. Find an drought_project.yaml file below::
+To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below::
 
   profile: example_project
 
@@ -37,7 +37,7 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
 
 Create this file in the root of your git repo.
 
-**It's important that the profile name with the drought_project.yaml aligns with the paired entry within your profile.yaml.**
+**It's important that the profile name with the droughty_project.yaml aligns with the paired entry within your profile.yaml.**
 
 
 --------------

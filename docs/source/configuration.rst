@@ -1,11 +1,11 @@
 Configuration
 =============
 
-Setting up droughty to run is pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
+Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
 
 **droughty_project.yaml set-up**
 
-To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. Find an drought_project.yaml file below::
+To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below::
 
   profile: example_project
 
@@ -35,9 +35,21 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
     - example_dev_integration
     - example_analytics_dev
 
-Create this file in the root of your git repo.
+Create this file in the root of your git repo (unless you are specifying the path through the --project-dir argument)
 
-**It's important that the profile name with the drought_project.yaml aligns with the paired entry within your profile.yaml.**
+Optional variables
+==================
+
+**Defining relative file outputs (starting from the root of your git repo)**
+
+Just add these variables to your droughty_project.yaml
+
+  dbt_path: example_path
+  dbml_path: example_path
+  lookml_path: example_path
+  cube_path: example_path
+
+**It's important that the profile name with the droughty_project.yaml aligns with the paired entry within your profile.yaml.**
 
 
 --------------
@@ -45,6 +57,7 @@ Create this file in the root of your git repo.
 **profile.yaml set-up**
 
 A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions. 
+
 
 This file should be created in a .droughty dir, such as::
 
@@ -73,6 +86,10 @@ profile example::
       warehouse_name: big_query
 
 --------------
+
+**warehouse_name options**
+
+At the moment, only 'big_query' and 'snowflake' are supported
 
 
 **Configuration Considerations**

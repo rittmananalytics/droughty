@@ -13,7 +13,7 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_explore_dict import looker_explore_dict,ExploreDictVariables
+from droughty.lookml_explore_dict import get_looker_explore_dict,ExploreDictVariables
 from droughty.config import (
     ExploresVariables,
     IdentifyConfigVariables
@@ -100,12 +100,6 @@ def get_all_values(nested_dictionary):
 
         yield(syntax)
 
-
-
-nested_dictionary = looker_explore_dict
-
-get_all_values(nested_dictionary)
-
 def get_git_root(path):
 
         git_repo = git.Repo(path, search_parent_directories=True)
@@ -138,6 +132,6 @@ def explore_output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(get_looker_explore_dict()):
 
                     print(value)

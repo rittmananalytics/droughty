@@ -35,7 +35,19 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
     - example_dev_integration
     - example_analytics_dev
 
-Create this file in the root of your git repo.
+Create this file in the root of your git repo (unless you are specifying the path through the --project-dir argument)
+
+Optional variables
+==================
+
+**Defining relative file outputs**
+
+Just add these variables to your droughty_project.yaml and it will write to the path name starting from the root of your git repo::
+
+  dbt_path: example_path
+  dbml_path: example_path
+  lookml_path: example_path
+  cube_path: example_path
 
 **It's important that the profile name with the droughty_project.yaml aligns with the paired entry within your profile.yaml.**
 
@@ -45,6 +57,7 @@ Create this file in the root of your git repo.
 **profile.yaml set-up**
 
 A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions. 
+
 
 This file should be created in a .droughty dir, such as::
 
@@ -73,6 +86,10 @@ profile example::
       warehouse_name: big_query
 
 --------------
+
+**warehouse_name options**
+
+At the moment, only 'big_query' and 'snowflake' are supported
 
 
 **Configuration Considerations**

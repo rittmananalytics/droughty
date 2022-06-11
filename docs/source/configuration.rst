@@ -40,9 +40,9 @@ Create this file in the root of your git repo (unless you are specifying the pat
 Optional variables
 ==================
 
-**Defining relative file outputs (starting from the root of your git repo)**
+**Defining relative file outputs**
 
-Just add these variables to your droughty_project.yaml
+Just add these variables to your droughty_project.yaml and it will write to the path name starting from the root of your git repo::
 
   dbt_path: example_path
   dbml_path: example_path

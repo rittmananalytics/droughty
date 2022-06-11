@@ -20,9 +20,9 @@ from droughty.config import (
 )
 
 
-def get_all_values():
+def get_all_values(nested_dictionary):
 
-    for key,value in get_looker_explore_dict().items():
+    for key,value in nested_dictionary.items():
 
         explore = {
 
@@ -93,7 +93,7 @@ def get_all_values():
 
                 yield(looker.dump(join))
 
-        for key,value in get_looker_explore_dict().items():
+        for key,value in nested_dictionary.items():
 
             syntax = "}"
 
@@ -132,6 +132,6 @@ def explore_output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(get_looker_explore_dict()):
 
                     print(value)

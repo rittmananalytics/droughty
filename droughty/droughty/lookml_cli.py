@@ -22,21 +22,18 @@ def lookml_base():
 
 def lookml_explore():
 
-        if ExploresVariables.explore_tables != None:
+    if ExploresVariables.explore_tables != None:
 
-            try:
+        try:
 
-                return explore_output()
-            
-            finally:
+            return explore_output()
+        
+        finally:
 
-                print("lookml explore layer generated")
+            print("lookml explore layer generated")
 
-        else: 
-
-            raise Exception("Please enable dimensional inference")
-
-
+    else:
+        pass
 
 def lookml_measures():
 

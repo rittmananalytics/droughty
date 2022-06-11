@@ -446,8 +446,8 @@ if ProjectVariables.warehouse == 'snowflake':
     inner join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
     '''
 
-if ExploresVariables.dimensional_inference == 'enabled':
-
+try:
+    
     if ProjectVariables.warehouse == 'big_query':
 
         params = {
@@ -476,7 +476,7 @@ if ExploresVariables.dimensional_inference == 'enabled':
 
         }
 
-elif ExploresVariables.dimensional_inference == 'disabled':
+except:
 
     if ProjectVariables.warehouse == 'big_query':
 

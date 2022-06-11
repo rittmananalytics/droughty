@@ -212,7 +212,6 @@ project_variables = assign_project_variables()
 class ExploresVariables:
 
     explore_tables: str.lower
-    dimensional_inference: str.lower
     single_list_tables: str.lower
     flat_list: str .lower
     final_list: str.lower
@@ -231,22 +230,17 @@ def assign_explore_variables():
 
         if key == 'profile':
 
-            explores = (droughty_project.get("explores"))
+            try:
 
-            ExploresVariables.explore_tables = (droughty_project.get("explores"))
-
-            ExploresVariables.dimensional_inference = (droughty_project.get("dimensional_inference")) 
-
-            ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
-
-            ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
-
-            try: 
-
+                explores = (droughty_project.get("explores"))
+                ExploresVariables.explore_tables = (droughty_project.get("explores"))
+                ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
+                ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
                 ExploresVariables.cube_path = (droughty_project.get("cube_path"))  
                 ExploresVariables.dbt_path = (droughty_project.get("dbt_path"))  
+
             except:
 
                 pass     
@@ -297,13 +291,13 @@ def assign_explore_variables():
 
                 pass
 
-    if ExploresVariables.dimensional_inference == None:
+#    if ExploresVariables.dimensional_inference == None:
+#
+#        raise Exception ("You need to specify if dimensional inference is enabled or not within the droughty_project file.")
 
-        raise Exception ("You need to specify if dimensional inference is enabled or not within the droughty_project file.")
-
-    if ExploresVariables.dimensional_inference == "enabled" and ExploresVariables.explore_tables == None:
-
-        raise Exception ("You have enabled dimensional inference but haven't specified an explore within the droughty_project file.")
+#    if ExploresVariables.dimensional_inference == "enabled" and ExploresVariables.explore_tables == None:
+#
+#        raise Exception ("You have enabled dimensional inference but haven't specified an explore within the droughty_project file.")
 
     if ExploresVariables.test_schemas == None:
 
@@ -335,13 +329,13 @@ def assign_dbt_test_variables():
     DbtTestVariables.field_description_path = (droughty_project.get("field_description_path"))
     DbtTestVariables.field_description_file_name = (droughty_project.get("field_description_file_name"))
 
-    if DbtTestVariables.field_description_path == None:
-
-        raise Exception ("You need to define the dbt field descriptions path within the droughty_project file.")
-
-    if DbtTestVariables.field_description_file_name == None:
-
-        raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
+#    if DbtTestVariables.field_description_path == None:
+#
+#        raise Exception ("You need to define the dbt field descriptions path within the droughty_project file.")
+#
+#    if DbtTestVariables.field_description_file_name == None:
+#
+#        raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
 
 dbt_test_variables = assign_dbt_test_variables()
 

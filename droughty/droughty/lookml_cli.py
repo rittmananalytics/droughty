@@ -6,7 +6,7 @@ from droughty.lookml_measure_module import measure_output
 
 from droughty.config import ExploresVariables
 
-dimensional_inference_status = ExploresVariables.dimensional_inference
+dimensional_inference_status = ExploresVariables.explore_tables
 
 def lookml_base():
 
@@ -22,7 +22,7 @@ def lookml_base():
 
 def lookml_explore():
 
-        if dimensional_inference_status == "enabled":
+        if ExploresVariables.explore_tables != None:
 
             try:
 

@@ -24,7 +24,9 @@ def lookml_explore():
 
     if ExploresVariables.explore_tables != None:
 
-        try:
+        print("Generating explore layer")
+
+        try: 
 
             return explore_output()
         
@@ -33,6 +35,7 @@ def lookml_explore():
             print("lookml explore layer generated")
 
     else:
+
         pass
 
 def lookml_measures():

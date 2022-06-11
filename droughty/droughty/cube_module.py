@@ -13,7 +13,7 @@ import yaml
 import git
 
 import droughty.cube_parser.cube as cube
-from droughty.cube_base_dict import cube_base_dict
+from droughty.cube_base_dict import get_cube_base_dict
 from droughty.lookml_explore_dict import get_looker_explore_dict
 from droughty.config import (
     ProjectVariables,
@@ -84,9 +84,6 @@ def get_all_values(nested_dictionary,explore_dictionary):
                     closing_syntax = "}});"
 
                 yield (closing_syntax)
-        
-nested_dictionary = cube_base_dict
-explore_dictionary = get_looker_explore_dict()
 
 def output():
 
@@ -111,6 +108,6 @@ def output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary,explore_dictionary):
+                for value in get_all_values(get_cube_base_dict(),get_looker_explore_dict()):
 
                     print(value)

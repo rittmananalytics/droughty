@@ -13,7 +13,7 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_base_dict import base_dict
+from droughty.lookml_base_dict import get_base_dict
 from droughty.config import (
     ExploresVariables,
     IdentifyConfigVariables
@@ -83,11 +83,6 @@ def get_all_values(nested_dictionary):
 
 
         yield(syntax)
-                
-
-nested_dictionary = base_dict
-
-get_all_values(nested_dictionary)
 
 def get_git_root(path):
 
@@ -120,6 +115,6 @@ def measure_output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(get_base_dict()):
 
                     print(value)    

@@ -52,4 +52,3 @@ def get_dbml_dict():
 
     return(wrangled_dataframe)
 
-dbml_dict = get_dbml_dict()

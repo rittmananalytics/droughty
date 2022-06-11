@@ -70,6 +70,3 @@ def get_looker_explore_dict():
 
     return (d2)
 
-looker_explore_dict = get_looker_explore_dict()
-
-

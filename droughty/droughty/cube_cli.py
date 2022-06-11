@@ -6,8 +6,6 @@ from droughty.cube_measure_module import measure_output
 
 from droughty.config import ExploresVariables
 
-dimensional_inference_status = ExploresVariables.dimensional_inference
-
 def base():
 
     print("Generating cube base layer")
@@ -24,19 +22,14 @@ def explore():
 
     print("Generating explore layer")
 
-    if dimensional_inference_status == "enabled":
 
-        try:
+    try:
 
-            return explore_output()
+        return explore_output()
 
-        finally:
+    finally:
 
-            print("cube explore layer generated")
-
-    else: 
-
-        raise Exception("Please enable dimensional inference")
+        print("cube explore layer generated")
 
 
 def measures():

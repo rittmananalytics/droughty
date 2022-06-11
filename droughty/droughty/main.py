@@ -17,13 +17,13 @@ def start():
 
     if Common.args_command == 'lookml':
 
-        if ExploresVariables.dimensional_inference == 'enabled':
+        if ExploresVariables.explore_tables != None:
 
             lookml_base()
             lookml_explore()
             lookml_measures()
 
-        elif ExploresVariables.dimensional_inference != 'enabled':
+        elif ExploresVariables.explore_tables == None:
 
             lookml_base()
             lookml_measures()

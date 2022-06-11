@@ -484,6 +484,7 @@ except:
             'project_id': ProjectVariables.project,
             'schema_id': ProjectVariables.schema, 
             'test_schemas': ExploresVariables.test_schemas,
+            'dbml_schemas': ExploresVariables.dbml_schemas,
         }
 
     if ProjectVariables.warehouse == 'snowflake':
@@ -492,6 +493,7 @@ except:
             'database': ProjectVariables.database,
             'schema_id': ProjectVariables.schema, 
             'test_schemas': ExploresVariables.test_schemas,
+            'dbml_schemas': ExploresVariables.dbml_schemas,
         }
 
 def quote_sql_string(value):

@@ -12,7 +12,7 @@ import sys
 import yaml
 import git
 
-from droughty.dbml_base_dict import dbml_dict
+from droughty.dbml_base_dict import get_dbml_dict
 from droughty.config import (
     ProjectVariables,
     ExploresVariables,
@@ -101,8 +101,6 @@ except:
 
     print("I doesn't look like you have any primary or foreign keys declared")
             
-nested_dictionary = dbml_dict
-
 def dbml_output():
 
-    get_all_values(nested_dictionary)
+    get_all_values(get_dbml_dict())

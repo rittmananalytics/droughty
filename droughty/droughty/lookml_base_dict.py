@@ -52,5 +52,3 @@ def get_base_dict():
     for n, grp in wrangled_dataframe.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
 
     return(wrangled_dataframe)
-
-base_dict = get_base_dict()

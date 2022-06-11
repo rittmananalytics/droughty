@@ -64,6 +64,3 @@ def get_cube_explore_dict():
     d2 = df4
 
     return(d2)
-
-cube_explore_dict = get_cube_explore_dict()
-

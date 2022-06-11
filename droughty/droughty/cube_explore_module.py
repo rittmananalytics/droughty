@@ -14,8 +14,8 @@ import git
 
 import droughty.cube_parser.cube as cube
 
-from droughty.cube_base_dict import cube_base_dict
-from droughty.cube_explore_dict import cube_explore_dict
+from droughty.cube_base_dict import get_cube_base_dict
+from droughty.cube_explore_dict import get_cube_explore_dict
 from droughty.config import (
     ProjectVariables,
     ExploresVariables,
@@ -121,12 +121,6 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                 yield (closing_syntax)
 
-        
-nested_dictionary = cube_base_dict
-explore_dictionary = cube_explore_dict
-
-get_all_values(nested_dictionary,explore_dictionary)
-
 def get_git_root(path):
 
         git_repo = git.Repo(path, search_parent_directories=True)
@@ -159,6 +153,6 @@ def explore_output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary,explore_dictionary):
+                for value in get_all_values(get_cube_base_dict(),get_cube_explore_dict()):
 
                     print(value)

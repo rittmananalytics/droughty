@@ -13,6 +13,10 @@ from droughty.droughty_dbml.dbml_cli import erd
 from droughty.droughty_core.config_cli import Common
 from droughty.droughty_core.config import ExploresVariables
 
+from droughty.droughty_hydrometer.hydrometer_cli import fks
+from droughty.droughty_savanna.savanna_main import app
+
+
 def start():
 
     if Common.args_command == 'lookml':
@@ -41,6 +45,11 @@ def start():
     elif Common.args_command == 'dbt':
 
         tests()
+
+    elif Common.args_command == 'hydrometer':
+
+        fks()
+        app.run()
 
     else:
 

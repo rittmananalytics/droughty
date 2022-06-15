@@ -1,5 +1,7 @@
 {
     "restructuredtext.confPath": "",
-    "cSpell.words": [],
+    "cSpell.words": [
+        "dbml"
+    ],
     "esbonio.sphinx.confDir": ""
 }

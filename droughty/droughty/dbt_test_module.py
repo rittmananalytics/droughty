@@ -78,12 +78,6 @@ def get_all_values(nested_dictionary):
 
     return res
 
-nested_dictionary = dbt_test_dict
-
-get_all_values(nested_dictionary)
-
-data = get_all_values(nested_dictionary)
-
 def schema_output():
 
     if ExploresVariables.dbt_path == None:
@@ -100,14 +94,24 @@ def schema_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-            
-    filename = 'droughty_schema.yml'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.dbt_tests_filename != None:
+
+        filename = ExploresVariables.dbt_tests_filename
+        
+    else:
+
+        filename = 'droughty_schema'
+  
+    suffix = '.yml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 
-            for i in data:
+            for i in get_all_values(dbt_test_dict()):
                 
                 yaml = ruamel.yaml.YAML()
                 yaml.indent(mapping=2, sequence=4, offset=2)            

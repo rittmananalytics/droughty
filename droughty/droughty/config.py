@@ -219,10 +219,23 @@ class ExploresVariables:
     test_schemas: str.lower
     dbml_schemas: str.lower
     parent_table_name: str.lower
+    #paths
     lookml_path: str.lower
     dbml_path: str.lower
     cube_path: str.lower
     dbt_path: str.lower
+    #filenames
+    lookml_base_filename: str.lower
+    lookml_explore_filename: str.lower
+    lookml_measures_filename: str.lower
+
+    cube_base_filename: str.lower
+    cube_integration_filename: str.lower
+    cube_measures_filename: str.lower
+
+    dbml_filenames: str.lower
+
+    dbt_tests_filename: str.lower
 
 def assign_explore_variables():
 
@@ -236,10 +249,20 @@ def assign_explore_variables():
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
                 ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
                 ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
+
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
                 ExploresVariables.cube_path = (droughty_project.get("cube_path"))  
                 ExploresVariables.dbt_path = (droughty_project.get("dbt_path"))  
+
+                ExploresVariables.lookml_base_filename = (droughty_project.get("lookml_base_filename"))  
+                ExploresVariables.lookml_explore_filename = (droughty_project.get("lookml_explore_filename"))  
+                ExploresVariables.lookml_measures_filename = (droughty_project.get("lookml_measures_filename"))  
+                ExploresVariables.cube_base_filename = (droughty_project.get("cube_base_filename"))  
+                ExploresVariables.cube_integration_filename = (droughty_project.get("cube_integration_filename"))  
+                ExploresVariables.cube_measures_filename = (droughty_project.get("cube_measures_filename"))  
+                ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
+                ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
 
             except:
 

@@ -13,7 +13,7 @@ import yaml
 import git
 
 import droughty.cube_parser.cube as cube
-from droughty.cube_base_dict import cube_base_dict
+from droughty.cube_base_dict import get_cube_base_dict
 from droughty.lookml_explore_dict import get_looker_explore_dict
 from droughty.config import (
     ProjectVariables,
@@ -84,9 +84,6 @@ def get_all_values(nested_dictionary,explore_dictionary):
                     closing_syntax = "}});"
 
                 yield (closing_syntax)
-        
-nested_dictionary = cube_base_dict
-explore_dictionary = get_looker_explore_dict()
 
 def output():
 
@@ -104,13 +101,23 @@ def output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = 'cube_base.js'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.cube_base_filename != None:
+
+        filename = ExploresVariables.cube_base_filename
+
+    else:
+        
+        filename = 'cube_base'
+
+    suffix = '.js'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary,explore_dictionary):
+                for value in get_all_values(get_cube_base_dict(),get_looker_explore_dict()):
 
                     print(value)

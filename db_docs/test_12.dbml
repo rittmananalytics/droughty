@@ -1,25 +1,25 @@
 project kaplan_poc
 { database_type: 'big_query' }
 table audit_dbt_last_results      {
-status varchar
 object varchar
+status varchar
 pct_diff_from_previous_load_ts numeric
-row_count numeric
-previous_load_ts numeric
 diff_from_previous_load_ts numeric
+previous_load_ts numeric
 execution_time numeric
+row_count numeric
 max_load_ts timestamp
 load_ts timestamp
 }
 table budgets_sales      {
 budget_pk varchar [pk]
 institution_fk varchar [ref: - core_institutions.institution_pk]
-budget_name varchar
-institution_name varchar
 budget_group varchar
-sales_region_group varchar
-entry_type_code varchar
+budget_name varchar
 intake_name varchar
+sales_region_group varchar
+institution_name varchar
+entry_type_code varchar
 budget_amt numeric
 }
 table core_agents      {
@@ -27,11 +27,11 @@ agent_pk varchar [pk]
 country_fk varchar [ref: - core_countries.country_pk]
 agent_natural_key numeric
 country_natural_key numeric
-agent_salesforce_business_key varchar
-name varchar
-sales_channel varchar
 status varchar
 group varchar
+name varchar
+agent_salesforce_business_key varchar
+sales_channel varchar
 uk_based_agent boolean
 }
 table core_countries      {
@@ -39,8 +39,8 @@ country_pk varchar [pk]
 country_natural_key numeric
 country_nationality varchar
 salesforce_country_key varchar
-country varchar
 country_iso_key varchar
+country varchar
 country_is_sanctioned boolean
 }
 table core_country_mapping      {
@@ -51,33 +51,33 @@ country_natural_key numeric
 schols_region varchar
 sales_region_group varchar
 sales_region varchar
-valid_to timestamp
 valid_from timestamp
+valid_to timestamp
 }
 table core_institutions      {
 institution_pk varchar [pk]
 country_fk varchar [ref: - core_countries.country_pk]
 country_natural_key numeric
 institution_natural_key numeric
-institution_type varchar
-institution_code varchar
-institution_name varchar
 institution_group varchar
+institution_name varchar
+institution_code varchar
+institution_type varchar
 }
 table core_program_intakes      {
 program_intake_pk varchar [pk]
 program_fk varchar // [ref: - not_available.not_available]
-program_intake_natural_key numeric
 program_natural_key numeric
+program_intake_natural_key numeric
+intake_season varchar
 status varchar
 intake_academic_year varchar
 intake_name varchar
-intake_season varchar
-intake_quota_exists numeric
 program_fee numeric
-enrolment_end date
+intake_quota_exists numeric
 teaching_end date
 teaching_start date
+enrolment_end date
 intake date
 enrolment_start date
 }
@@ -86,44 +86,44 @@ program_pk varchar [pk]
 institution_fk varchar [ref: - core_institutions.institution_pk]
 program_natural_key numeric
 institution_natural_key numeric
-university_unit_school varchar
-duration_length varchar
-award_code varchar
-award_title varchar
-award_type varchar
-entry_level varchar
-university_unit_division varchar
-university_unit_institute varchar
 university_unit_college varchar
+university_unit_institute varchar
+university_unit_division varchar
+entry_level varchar
+award_type varchar
+award_title varchar
+award_code varchar
+duration_length varchar
+entry_type_code varchar
 university_unit_department varchar
+university_unit_school varchar
 university_unit_faculty varchar
 type varchar
 status varchar
 level varchar
 name varchar
-entry_type_code varchar
 program_code varchar
 }
 table core_scholarship_reason_owners      {
 scholarship_reason_owner_pk varchar [pk]
-budget_owner varchar
-budget_pot varchar
 sales_region_group varchar
+budget_pot varchar
+budget_owner varchar
 }
 table core_scholarship_reasons      {
 scholarship_reason_pk varchar [pk]
-scholarship_reason varchar
 budget_pot varchar
+scholarship_reason varchar
 }
 table core_sponsors      {
 sponsor_pk varchar [pk]
 country_fk varchar [ref: - core_countries.country_pk]
-country_natural_key numeric
 sponsor_natural_key numeric
+country_natural_key numeric
+sponsor_salesforce_business_key varchar
 status varchar
 group varchar
 name varchar
-sponsor_salesforce_business_key varchar
 uk_sponsor boolean
 }
 table core_subjects      {
@@ -146,222 +146,222 @@ table core_users      {
 user_pk varchar [pk]
 user_natural_key varchar
 name varchar
-sales_region varchar
 sales_region_group varchar
+sales_region varchar
 }
 table dq_duplicate_studyplan_versions      {
 application_pk varchar [pk]
+study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+student_fk varchar [ref: - sales_student.student_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
 sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
-cas_team_owner_fk varchar // [ref: - not_available.not_available]
 application_owner_fk varchar // [ref: - not_available.not_available]
 sales_manager_fk varchar // [ref: - not_available.not_available]
-institution_fk varchar [ref: - core_institutions.institution_pk]
-student_fk varchar [ref: - sales_student.student_pk]
-study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+cas_team_owner_fk varchar // [ref: - not_available.not_available]
+sponsor_natural_key numeric
+cas_team_owner_natural_key varchar
+salesforce_opportunity_natural_key varchar
 application_natural_key numeric
 student_natural_key varchar
 sales_manager_natural_key varchar
 application_owner_natural_key varchar
-cas_team_owner_natural_key varchar
-salesforce_opportunity_natural_key varchar
-sponsor_natural_key numeric
-status_group varchar
-status varchar
 has_deferred varchar
+sponsor_reference varchar
 accommodation_required varchar
 returning_student varchar
 learning_mode varchar
-immigration_category varchar
 payment_status varchar
-sponsor_reference varchar
-weighting_non_deferred numeric
-weighting numeric
+immigration_category varchar
+status varchar
+status_group varchar
 class_application_id numeric
-is_deferred boolean
+weighting numeric
+weighting_non_deferred numeric
 has_second_agent boolean
+is_deferred boolean
 is_confirmation_required boolean
-is_application_completed boolean
-is_application_submitted boolean
-is_visa_needed boolean
-is_acceptance_form_issued boolean
 is_offer_letter_issued boolean
+is_acceptance_form_issued boolean
+is_visa_needed boolean
+is_application_submitted boolean
+is_application_completed boolean
 intake_date date
-created_at timestamp
-modified_at timestamp
 status_update timestamp
+modified_at timestamp
+created_at timestamp
 }
 table int_application_agents      {
-application_partner_natural_key numeric
 application_natural_key numeric
 agent_natural_key numeric
+application_partner_natural_key numeric
 is_main_agent boolean
 }
 table int_application_history      {
-application_natural_key numeric
 program_natural_key numeric
-institution_natural_key numeric
+application_natural_key numeric
 program_intake_natural_key numeric
+institution_natural_key numeric
+change varchar
+has_deferred varchar
 reporting_status varchar
 reporting_status_group varchar
 program_code varchar
 program_name varchar
 intake_name varchar
-change varchar
-has_deferred varchar
+offers numeric
+deposits numeric
+enrolled numeric
 lost numeric
 change_count numeric
-enrolled numeric
-deposits numeric
 applications numeric
-offers numeric
 study_plan_version_number numeric
 intake_date date
 valid_to timestamp
 valid_from timestamp
 }
 table int_application_quota      {
-quota_item_natural_key numeric
-institution_natural_key numeric
-program_natural_key numeric
-program_intake_natural_key numeric
-application_natural_key numeric
 student_natural_key varchar
-sponsor_natural_key numeric
+application_natural_key numeric
+quota_item_natural_key numeric
+program_intake_natural_key numeric
+program_natural_key numeric
+institution_natural_key numeric
 agent_natural_key numeric
+sponsor_natural_key numeric
+degree_name varchar
+allow_program varchar
 university_code varchar
 university_name varchar
 college_code varchar
+application_status_group varchar
 include_nationality varchar
+institution_code varchar
 exclude_nationality varchar
 include_sponsor varchar
 exclude_sponsor varchar
-allow_nationaility varchar
-student_nationality varchar
-allow_program varchar
-application_status_group varchar
-institution_code varchar
-study_plan_program_code varchar
-degree_name varchar
-quota_group varchar
-program varchar
-exclude_agent_region varchar
 include_agent_region varchar
+exclude_agent_region varchar
+study_plan_program_code varchar
+program varchar
+quota_group varchar
+student_nationality varchar
+allow_nationaility varchar
 agent_name varchar
-allow_agent_region varchar
 allow_sponsor varchar
 sponsor_name varchar
+allow_agent_region varchar
 sales_region_name varchar
 quota_year numeric
 created_ts timestamp
 }
 table int_applications      {
-application_natural_key numeric
-student_natural_key varchar
-class_application_natural_key numeric
 sponsor_natural_key numeric
+class_application_natural_key numeric
 institution_natural_key numeric
 salesforce_opportunity_natural_key varchar
-cas_team_owner_natural_key varchar
 application_owner_natural_key varchar
 sales_manager_natural_key varchar
-has_deferred varchar
+student_natural_key varchar
+application_natural_key numeric
+cas_team_owner_natural_key varchar
 application_status varchar
 application_status_group varchar
 payment_status varchar
-immigration_category varchar
+learning_mode varchar
 returning_student varchar
 accommodation_required varchar
 intake_season varchar
+has_deferred varchar
+immigration_category varchar
 sponsor_reference varchar
-learning_mode varchar
+is_offer_letter_issued boolean
+is_acceptance_form_issued boolean
 has_second_agent boolean
 is_confirmation_required boolean
 is_application_completed boolean
 is_application_submitted boolean
 is_visa_needed boolean
-is_acceptance_form_issued boolean
-is_offer_letter_issued boolean
 intake_date date
 created_ts timestamp
 modified_ts timestamp
 application_status_ts timestamp
 }
 table int_applications_history      {
-class_application_natural_key numeric
-sponsor_natural_key numeric
-cas_team_owner_natural_key varchar
 application_owner_natural_key varchar
 sales_manager_natural_key varchar
+class_application_natural_key numeric
+cas_team_owner_natural_key varchar
+salesforce_opportunity_natural_key varchar
 student_natural_key varchar
 application_natural_key numeric
-salesforce_opportunity_natural_key varchar
+sponsor_natural_key numeric
+accommodation_required varchar
 returning_student varchar
-learning_mode varchar
-immigration_category varchar
 payment_status varchar
 application_status_group varchar
 application_status varchar
-accommodation_required varchar
+immigration_category varchar
+learning_mode varchar
+sponsor_reference varchar
 new_title varchar
 old_title varchar
-sponsor_reference varchar
 application_index numeric
-has_second_agent boolean
+is_current_application_record boolean
 is_confirmation_required boolean
 is_application_completed boolean
 is_application_submitted boolean
-is_visa_needed boolean
 is_acceptance_form_issued boolean
-is_current_application_record boolean
 is_offer_letter_issued boolean
-application_valid_to timestamp
+has_second_agent boolean
+is_visa_needed boolean
 application_valid_from timestamp
+application_valid_to timestamp
 created_ts timestamp
-application_status_log_created_ts timestamp
 modified_ts timestamp
+application_status_log_created_ts timestamp
 }
 table int_applications_status_history      {
-application_status_natural_key numeric
-application_status_reason_natural_key numeric
-payment_status_natural_key numeric
-immigration_category_natural_key numeric
-accommodation_required_natural_key numeric
-learning_mode_natural_key numeric
-application_status_log_natural_key numeric
-salesforce_opportunity_natural_key varchar
-returning_student_natural_key numeric
-cas_team_owner_natural_key varchar
-sales_manager_natural_key varchar
-student_natural_key varchar
 application_natural_key numeric
+student_natural_key varchar
+sales_manager_natural_key varchar
 application_owner_natural_key varchar
+application_status_reason_natural_key numeric
+cas_team_owner_natural_key varchar
+salesforce_opportunity_natural_key varchar
+application_status_natural_key numeric
+application_status_log_natural_key numeric
+immigration_category_natural_key numeric
+learning_mode_natural_key numeric
+returning_student_natural_key numeric
+accommodation_required_natural_key numeric
+payment_status_natural_key numeric
 new_title varchar
 old_title varchar
 application_index numeric
-is_current_application_record boolean
+has_second_agent boolean
 is_confirmation_required boolean
 is_application_completed boolean
+is_current_application_record boolean
 is_application_submitted boolean
 is_visa_needed boolean
 is_acceptance_form_issued boolean
 is_offer_letter_issued boolean
-has_second_agent boolean
-application_status_log_created_ts timestamp
-modified_ts timestamp
 created_ts timestamp
+application_status_log_created_ts timestamp
 application_valid_from timestamp
 application_valid_to timestamp
+modified_ts timestamp
 }
 table int_change_history      {
 application_natural_key numeric
 reporting_status_group varchar
 reporting_status varchar
-valid_to timestamp
 valid_from timestamp
+valid_to timestamp
 }
 table int_core_agents      {
-agent_natural_key numeric
 country_natural_key numeric
+agent_natural_key numeric
 agent_sales_channel varchar
 agent_status varchar
 agent_group varchar
@@ -371,34 +371,34 @@ uk_based_agent boolean
 }
 table int_core_countries      {
 country_natural_key numeric
-country_name varchar
-country_iso_key varchar
 salesforce_country_key varchar
-sales_region_group_name varchar
-sales_region_name varchar
 country_nationality varchar
+sales_region_name varchar
+sales_region_group_name varchar
+country_iso_key varchar
+country_name varchar
 is_sanctioned boolean
 }
 table int_core_country_mapping      {
 country_natural_key numeric
-sales_region_name varchar
-sales_region_group_name varchar
 schols_region varchar
+sales_region_group_name varchar
+sales_region_name varchar
 nationality_iso_key varchar
 valid_from timestamp
 valid_to timestamp
 }
 table int_core_institutions      {
-institution_natural_key numeric
 country_natural_key numeric
+institution_natural_key numeric
 institution_code varchar
-institution_group varchar
 institution_name varchar
+institution_group varchar
 institution_type varchar
 }
 table int_core_program_intakes      {
-program_intake_natural_key numeric
 program_natural_key numeric
+program_intake_natural_key numeric
 academic_year varchar
 intake_name varchar
 intake_season varchar
@@ -406,33 +406,33 @@ program_status varchar
 intake_quota_exists numeric
 program_fee numeric
 program_teaching_end_date date
-program_teaching_start_date date
+program_enrolment_end date
 program_enrolment_start date
 intake_date date
-program_enrolment_end date
+program_teaching_start_date date
 }
 table int_core_programs      {
 program_natural_key numeric
-institution_unit_natural_key numeric
 institution_natural_key numeric
-program_type varchar
-instituiton_unit_department varchar
-instituiton_unit_division varchar
-instituiton_unit_institute varchar
-award_code varchar
-program_entry_type_code varchar
-program_name varchar
-instituiton_unit_college varchar
-instituiton_unit_faculty varchar
-program_subject varchar
-program_level varchar
-entry_level varchar
-award_name varchar
-program_status varchar
+institution_unit_natural_key numeric
 instituiton_unit_school varchar
+instituiton_unit_department varchar
+instituiton_unit_college varchar
+instituiton_unit_institute varchar
+instituiton_unit_division varchar
+program_level varchar
+program_status varchar
+program_type varchar
+instituiton_unit_faculty varchar
 duration varchar
 award_type varchar
+program_subject varchar
+award_name varchar
+award_code varchar
 program_code varchar
+program_name varchar
+program_entry_type_code varchar
+entry_level varchar
 }
 table int_core_scholarship_reason_owners      {
 scholarship_reason_owner_natural_key numeric
@@ -446,10 +446,10 @@ scholarship_reason varchar
 budget_pot varchar
 }
 table int_core_sponsors      {
-country_natural_key numeric
 sponsor_natural_key numeric
-sponsor_salesforce_business_key varchar
+country_natural_key numeric
 sponsor_name varchar
+sponsor_salesforce_business_key varchar
 sponsor_group varchar
 sponsor_status varchar
 uk_sponsor boolean
@@ -462,96 +462,96 @@ program_subject varchar
 }
 table int_core_user_mapping      {
 user_natural_key varchar
-sales_region_name varchar
 sales_region_group_name varchar
-valid_from timestamp
+sales_region_name varchar
 valid_to timestamp
+valid_from timestamp
 }
 table int_core_users      {
 user_natural_key varchar
 user_sales_region varchar
-user_sales_region_group varchar
 user_fullname varchar
+user_sales_region_group varchar
 }
 table int_institution_targets      {
 institution_natural_key numeric
-target_intake_name varchar
 target_institution_name varchar
+target_intake_name varchar
 target_amt numeric
 }
 table int_new_programs      {
-new_program_natural_key numeric
 program_natural_key numeric
-program_intake_natural_key numeric
+new_program_natural_key numeric
 institution_natural_key numeric
-institution_code varchar
-institution_name varchar
-program_type varchar
-program_name varchar
+program_intake_natural_key numeric
 intake_name varchar
-program_code varchar
-launch_name varchar
+institution_name varchar
+institution_code varchar
 award_name varchar
-launch_expiry_date date
+launch_name varchar
+program_code varchar
+program_name varchar
+program_type varchar
 launch_date date
+launch_expiry_date date
 }
 table int_pathways      {
-study_plan_program_intake_natural_key numeric
-application_natural_key numeric
-study_plan_natural_key numeric
-institution_natural_key numeric
-study_plan_program_natural_key numeric
 study_plan_version_natural_key numeric
 study_plan_track_natural_key numeric
-study_plan_intake_season varchar
-study_plan_intake_name varchar
-study_plan_intake_academic_year varchar
+study_plan_program_intake_natural_key numeric
+application_natural_key numeric
+study_plan_program_natural_key numeric
+institution_natural_key numeric
+study_plan_natural_key numeric
 study_plan_track_entry_type_code varchar
 is_primary_progression varchar
+study_plan_intake_academic_year varchar
+pathway_sk varchar
+study_plan_program_code varchar
+study_plan_intake_season varchar
+study_plan_intake_name varchar
 study_plan_program_name varchar
 study_plan_program_entry_level varchar
-study_plan_program_code varchar
-pathway_sk varchar
 study_plan_version_number numeric
 track_type numeric
 is_deferred boolean
-has_deferred boolean
 is_current_version boolean
-study_plan_program_start_date date
+has_deferred boolean
+study_plan_enrolment_date date
 version_date date
 study_plan_intake_date date
-study_plan_teaching_end_date date
 study_plan_program_end_date date
-study_plan_enrolment_date date
 study_plan_teaching_start_date date
-study_plan_created_at timestamp
-study_plan_modified_at timestamp
+study_plan_teaching_end_date date
+study_plan_program_start_date date
 version_created_at timestamp
 version_modified_at_ts timestamp
+study_plan_created_at timestamp
+study_plan_modified_at timestamp
 }
 table int_pathways_history      {
 application_natural_key numeric
-study_plan_natural_key numeric
-institution_natural_key numeric
-study_plan_program_natural_key numeric
-study_plan_program_intake_natural_key numeric
 study_plan_track_natural_key numeric
-study_plan_program_entry_level varchar
+study_plan_program_intake_natural_key numeric
+institution_natural_key numeric
+study_plan_natural_key numeric
+study_plan_program_natural_key numeric
+study_plan_program_name varchar
 has_deferred varchar
 is_primary_progression varchar
 study_plan_track_entry_type_code varchar
 study_plan_intake_academic_year varchar
 study_plan_intake_name varchar
 study_plan_intake_season varchar
+study_plan_program_entry_level varchar
 study_plan_program_code varchar
-study_plan_program_name varchar
 pathway_sk varchar
-study_plan_version_number numeric
 track_type numeric
+study_plan_version_number numeric
+study_plan_program_start_date date
 study_plan_teaching_end_date date
 study_plan_teaching_start_date date
 study_plan_program_end_date date
-study_plan_program_start_date date
 study_plan_intake_date date
 version_date date
 study_plan_enrolment_date date
@@ -561,217 +561,217 @@ version_modified_at_ts timestamp
 version_created_at_ts timestamp
 }
 table int_priority_programs      {
+priority_program_natural_key numeric
+program_natural_key numeric
 program_intake_natural_key numeric
 institution_natural_key numeric
-program_natural_key numeric
-priority_program_natural_key numeric
-course_type varchar
-program_code varchar
 program_name varchar
+program_code varchar
+course_type varchar
+subject_group varchar
+subject varchar
+award_code varchar
+priority_reason varchar
 institution_code varchar
 institution_name varchar
 intake_name varchar
-subject_group varchar
-subject varchar
-priority_reason varchar
-award_code varchar
 priority_row numeric
 priority_start_date date
 priority_end_date date
 }
 table int_progression_plans      {
-progression_plan_track_natural_key numeric
 progression_plan_program_natural_key numeric
-progression_plan_program_intake_natural_key numeric
-institution_natural_key numeric
-application_natural_key numeric
 progression_plan_natural_key numeric
+application_natural_key numeric
+institution_natural_key numeric
+progression_plan_program_intake_natural_key numeric
+progression_plan_track_natural_key numeric
+is_primary_progression varchar
+progression_plan_program_name varchar
+progression_plan_program_code varchar
 progression_plan_track_entry_type_code varchar
 pathway_sk varchar
-progression_plan_program_code varchar
-progression_plan_program_name varchar
-is_primary_progression varchar
 progression_plan_entry_level varchar
 progression_plan_intake_season varchar
 progression_plan_version_number numeric
-progression_plan_intake_date date
-progression_plan_enrolment_date date
-progression_plan_teaching_end_date date
-progression_plan_program_start_date date
-progression_plan_program_end_date date
 progression_plan_teaching_start_date date
+progression_plan_program_end_date date
+progression_plan_program_start_date date
+progression_plan_teaching_end_date date
+progression_plan_enrolment_date date
+progression_plan_intake_date date
 progression_plan_created_at timestamp
 progression_plan_modified_at timestamp
 }
 table int_progression_plans_history      {
+progression_plan_program_natural_key numeric
 institution_natural_key numeric
 application_natural_key numeric
 progression_plan_natural_key numeric
-progression_plan_track_natural_key numeric
 progression_plan_program_intake_natural_key numeric
-progression_plan_program_natural_key numeric
-is_primary_progression varchar
-progression_plan_program_name varchar
-progression_plan_program_code varchar
-progression_plan_track_entry_type_code varchar
-pathway_sk varchar
+progression_plan_track_natural_key numeric
 progression_plan_entry_level varchar
 progression_plan_intake_season varchar
+progression_plan_program_code varchar
+progression_plan_program_name varchar
+is_primary_progression varchar
+progression_plan_track_entry_type_code varchar
+pathway_sk varchar
 progression_plan_index numeric
 progression_plan_version_number numeric
 is_current_progression_plan_record boolean
-progression_plan_intake_date date
-progression_plan_enrolment_date date
 progression_plan_teaching_start_date date
 progression_plan_program_end_date date
-version_date date
 progression_plan_program_start_date date
 progression_plan_teaching_end_date date
+progression_plan_enrolment_date date
+progression_plan_intake_date date
+version_date date
 progression_plan_valid_to timestamp
+progression_plan_created_at timestamp
+version_created_at_ts timestamp
+version_modified_at_ts timestamp
 progression_plan_valid_from timestamp
 progression_plan_modified_at timestamp
-progression_plan_created_at timestamp
-version_modified_at_ts timestamp
-version_created_at_ts timestamp
 }
 table int_quota_allocations      {
-program_criteria varchar
-agent_region_criteria varchar
-sponsor_criteria varchar
 nationaility_criteria varchar
 quota_group varchar
 degree_concat varchar
 college_code varchar
+sponsor_criteria varchar
+agent_region_criteria varchar
+program_criteria varchar
 university_name varchar
 university_code varchar
-quota_year numeric
-deposits_amt numeric
-cas_enrolment_amt numeric
 progression_amt numeric
+deposits_amt numeric
+quota_year numeric
+cas_enrolment_amt numeric
 }
 table int_quota_items      {
-quota_item_natural_key numeric
 institution_natural_key numeric
-program_natural_key numeric
 program_intake_natural_key numeric
-degree_name varchar
-quota_group varchar
-program varchar
-exclude_agent_region varchar
-include_agent_region varchar
-exclude_sponsor varchar
-include_sponsor varchar
-exclude_nationality varchar
-include_nationality varchar
-college_code varchar
+program_natural_key numeric
+quota_item_natural_key numeric
 university_name varchar
+college_code varchar
+include_nationality varchar
+exclude_nationality varchar
+include_sponsor varchar
+exclude_sponsor varchar
+include_agent_region varchar
+program varchar
+quota_group varchar
+degree_name varchar
 university_code varchar
+exclude_agent_region varchar
 quota_year numeric
 }
 table int_sales_budgets      {
 institution_natural_key numeric
+budget_group varchar
 sales_region_group varchar
 entry_type_code varchar
 institution_name varchar
 intake_name varchar
 budget_name varchar
-budget_group varchar
-row numeric
 sales_budgets numeric
+row numeric
 }
 table int_sales_region_targets      {
 country_natural_key numeric
-target_country_name varchar
 target_intake_name varchar
-target_sales_channel varchar
-target_sales_region_group varchar
+target_country_name varchar
 target_sales_region varchar
+target_sales_region_group varchar
+target_sales_channel varchar
 target_amt numeric
 }
 table int_scholarship_budgets      {
+budget_owner varchar
+budget_pot varchar
 intake_name varchar
 sales_region_group varchar
-budget_pot varchar
-budget_owner varchar
 schols_region varchar
 budget_amt numeric
 }
 table int_scholarships      {
-student_ledger_sop_line_item_natural_key numeric
-study_plan_natural_key numeric
 application_natural_key numeric
-scholarship_reason varchar
-scholarship_note varchar
-student_ledger_currency_code varchar
-budget_pot varchar
+study_plan_natural_key numeric
+student_ledger_sop_line_item_natural_key numeric
 application_status_group varchar
+budget_pot varchar
+student_ledger_currency_code varchar
+scholarship_note varchar
+scholarship_reason varchar
 student_ledger_sop_line_item_actual_amount numeric
 created_at timestamp
 }
 table int_students      {
+student_natural_key varchar
 student_kss_natural_key varchar
 student_class_natural_key varchar
 student_salesforce_natural_key varchar
 country_natural_key numeric
-student_natural_key varchar
-student_fullname varchar
-student_gender varchar
-country_iso_key varchar
-student_source varchar
 student_nationality varchar
 nationality_iso_key varchar
+student_source varchar
+country_iso_key varchar
+student_fullname varchar
+student_gender varchar
 student_dob date
-student_modified_at timestamp
 student_created_at timestamp
+student_modified_at timestamp
 }
 table int_study_plan_history      {
 study_plan_natural_key numeric
 application_natural_key numeric
+program_natural_key numeric
 institution_natural_key numeric
 program_intake_natural_key numeric
-program_natural_key numeric
 intake_name varchar
+academic_year varchar
 program_name varchar
 program_code varchar
-academic_year varchar
 study_plan_version_number numeric
 intake_date date
 valid_to timestamp
 valid_from timestamp
 }
 table int_study_plans      {
-study_plan_track_natural_key numeric
-study_plan_program_intake_natural_key numeric
-study_plan_version_natural_key numeric
-institution_natural_key numeric
 study_plan_natural_key numeric
+study_plan_track_natural_key numeric
 application_natural_key numeric
+study_plan_version_natural_key numeric
 study_plan_program_natural_key numeric
-study_plan_intake_season varchar
-study_plan_intake_name varchar
-study_plan_intake_academic_year varchar
-study_plan_track_entry_type_code varchar
-is_primary_progression varchar
-study_plan_program_entry_level varchar
-pathway_sk varchar
-study_plan_program_name varchar
+institution_natural_key numeric
+study_plan_program_intake_natural_key numeric
 study_plan_program_code varchar
-track_type numeric
+study_plan_track_entry_type_code varchar
+study_plan_intake_academic_year varchar
+study_plan_intake_name varchar
+study_plan_intake_season varchar
+study_plan_program_name varchar
+study_plan_program_entry_level varchar
+is_primary_progression varchar
+pathway_sk varchar
 study_plan_version_number numeric
+track_type numeric
 is_current_version boolean
 has_deferred boolean
 is_deferred boolean
+study_plan_enrolment_date date
+version_date date
+study_plan_intake_date date
 study_plan_program_end_date date
 study_plan_teaching_start_date date
 study_plan_teaching_end_date date
 study_plan_program_start_date date
-study_plan_enrolment_date date
-version_date date
-study_plan_intake_date date
-version_created_at timestamp
-version_modified_at_ts timestamp
-study_plan_created_at timestamp
 study_plan_modified_at timestamp
+study_plan_created_at timestamp
+version_modified_at_ts timestamp
+version_created_at timestamp
 }
 table int_study_plans_history      {
 application_natural_key numeric
@@ -780,90 +780,90 @@ institution_natural_key numeric
 study_plan_program_natural_key numeric
 study_plan_program_intake_natural_key numeric
 study_plan_track_natural_key numeric
+study_plan_program_entry_level varchar
+study_plan_program_code varchar
+study_plan_program_name varchar
+pathway_sk varchar
 has_deferred varchar
 is_primary_progression varchar
 study_plan_track_entry_type_code varchar
 study_plan_intake_academic_year varchar
 study_plan_intake_name varchar
 study_plan_intake_season varchar
-study_plan_program_entry_level varchar
-study_plan_program_code varchar
-study_plan_program_name varchar
-pathway_sk varchar
-study_plan_version_number numeric
 track_type numeric
+study_plan_version_number numeric
 study_plan_index numeric
 is_current_study_plan_record boolean
-study_plan_intake_date date
-version_date date
 study_plan_enrolment_date date
+version_date date
+study_plan_intake_date date
+study_plan_program_start_date date
+study_plan_program_end_date date
 study_plan_teaching_end_date date
 study_plan_teaching_start_date date
-study_plan_program_end_date date
-study_plan_program_start_date date
-study_plan_valid_from timestamp
-version_created_at_ts timestamp
-version_modified_at_ts timestamp
+study_plan_created_at timestamp
 study_plan_valid_to timestamp
 study_plan_modified_at timestamp
-study_plan_created_at timestamp
+study_plan_valid_from timestamp
+version_modified_at_ts timestamp
+version_created_at_ts timestamp
 }
 table product_progression_plans      {
 progression_plan_pk varchar [pk]
+progression_plan_fk varchar // [ref: - not_available.not_available]
+application_fk varchar [ref: - sales_applications.application_pk]
 application_fk varchar [ref: - sales_application_summary.application_pk]
+application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
 institution_fk varchar [ref: - core_institutions.institution_pk]
 progression_plan_program_intake_fk varchar // [ref: - not_available.not_available]
-application_fk varchar [ref: - sales_applications.application_pk]
 progression_plan_program_fk varchar // [ref: - not_available.not_available]
-application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
-progression_plan_fk varchar // [ref: - not_available.not_available]
-institution_natural_key numeric
 progression_plan_program_natural_key numeric
+institution_natural_key numeric
 university_intake_season varchar
-entry_type_code varchar
-degree_code varchar
-degree_name varchar
-degree_entry_level varchar
 is_primary_progression varchar
+degree_entry_level varchar
+degree_name varchar
+degree_code varchar
+entry_type_code varchar
 version_number numeric
-degree_teaching_start date
 university_intake_date date
 university_enrolment date
 degree_teaching_end date
 degree_start date
 degree_end date
-modified_at timestamp
+degree_teaching_start date
 created_at timestamp
+modified_at timestamp
 }
 table product_progression_plans_history      {
 study_plan_history_pk varchar [pk]
 progression_plan_pk varchar [pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+application_fk varchar [ref: - sales_applications_fact.application_pk]
+application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
+application_fk varchar [ref: - sales_application_summary.application_pk]
 application_fk varchar [ref: - sales_applications.application_pk]
 progression_plan_fk varchar // [ref: - not_available.not_available]
-application_fk varchar [ref: - sales_application_summary.application_pk]
-application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
-application_fk varchar [ref: - sales_applications_fact.application_pk]
-institution_fk varchar [ref: - core_institutions.institution_pk]
-progression_plan_program_fk varchar // [ref: - not_available.not_available]
 progression_plan_program_intake_fk varchar // [ref: - not_available.not_available]
+progression_plan_program_fk varchar // [ref: - not_available.not_available]
 institution_natural_key numeric
 progression_plan_program_natural_key numeric
-progression_plan_track_entry_type_code varchar
-progression_plan_intake_season varchar
-is_primary_progression varchar
-progression_plan_entry_level varchar
 progression_plan_program_name varchar
+progression_plan_entry_level varchar
+is_primary_progression varchar
+progression_plan_intake_season varchar
 progression_plan_program_code varchar
+progression_plan_track_entry_type_code varchar
 progression_plan_index numeric
 progression_plan_version_number numeric
 is_current_progression_plan_record boolean
-progression_plan_intake_date date
 progression_plan_teaching_start_date date
-progression_plan_program_end_date date
 progression_plan_program_start_date date
-enrolment_date date
 progression_plan_teaching_end_date date
+enrolment_date date
+progression_plan_intake_date date
+progression_plan_program_end_date date
 progression_plan_valid_to timestamp
 progression_plan_valid_from timestamp
 progression_plan_modified_at timestamp
@@ -871,41 +871,41 @@ progression_plan_created_at timestamp
 }
 table product_study_plans      {
 study_plan_pk varchar [pk]
-application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
-application_fk varchar [ref: - sales_application_summary.application_pk]
-application_fk varchar [ref: - sales_applications.application_pk]
 study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+application_fk varchar [ref: - sales_application_summary.application_pk]
+application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
 institution_fk varchar [ref: - core_institutions.institution_pk]
 study_plan_program_intake_fk varchar // [ref: - not_available.not_available]
 study_plan_program_fk varchar // [ref: - not_available.not_available]
-study_plan_natural_key numeric
-institution_natural_key numeric
 study_plan_program_natural_key numeric
-entry_level varchar
-intake_academic_year varchar
-intake_name varchar
-intake_season varchar
-course_name varchar
-course_code varchar
+institution_natural_key numeric
+study_plan_natural_key numeric
 entry_type_code varchar
+course_code varchar
+course_name varchar
+intake_season varchar
+intake_name varchar
+intake_academic_year varchar
+entry_level varchar
 version_number numeric
-is_deferred boolean
-has_deferred boolean
 is_current_version boolean
-intake_date date
-enrolment date
-course_start date
-course_end date
-teaching_end date
+has_deferred boolean
+is_deferred boolean
 teaching_start date
-created_at timestamp
+teaching_end date
+course_end date
+course_start date
+enrolment date
+intake_date date
 modified_at timestamp
+created_at timestamp
 }
 table product_study_plans_history      {
 study_plan_history_pk varchar [pk]
-study_plan_program_intake_fk varchar // [ref: - not_available.not_available]
 study_plan_program_fk varchar // [ref: - not_available.not_available]
+study_plan_program_intake_fk varchar // [ref: - not_available.not_available]
 institution_fk varchar [ref: - core_institutions.institution_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
 application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
@@ -915,246 +915,246 @@ study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
 study_plan_natural_key numeric
 institution_natural_key numeric
 study_plan_program_natural_key numeric
-pathway_sk varchar
 study_plan_track_entry_type_code varchar
+pathway_sk varchar
 study_plan_program_code varchar
-study_plan_program_name varchar
-study_plan_intake_season varchar
 study_plan_program_entry_level varchar
+study_plan_intake_season varchar
+study_plan_program_name varchar
 has_deferred varchar
 study_plan_version_number numeric
 study_plan_index numeric
 is_current_study_plan_record boolean
 study_plan_teaching_start_date date
-study_plan_program_end_date date
-study_plan_teaching_end_date date
-study_plan_program_start_date date
-enrolment_date date
 study_plan_intake_date date
-study_plan_created_at timestamp
-study_plan_modified_at timestamp
-study_plan_valid_from timestamp
+study_plan_program_end_date date
+study_plan_program_start_date date
+study_plan_teaching_end_date date
+enrolment_date date
 study_plan_valid_to timestamp
+study_plan_created_at timestamp
+study_plan_valid_from timestamp
+study_plan_modified_at timestamp
 }
 table sales_application_agent_bridge      {
 application_agent_pk varchar [pk]
+application_fk varchar [ref: - sales_applications.application_pk]
 application_fk varchar [ref: - sales_application_summary.application_pk]
 application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
 agent_fk varchar [ref: - core_agents.agent_pk]
-application_fk varchar [ref: - sales_applications.application_pk]
 is_main_agent boolean
 }
 table sales_application_history      {
 application_history_pk varchar [pk]
-application_fk varchar [ref: - sales_applications.application_pk]
-sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
+cas_team_owner_fk varchar // [ref: - not_available.not_available]
 application_owner_fk varchar // [ref: - not_available.not_available]
 sales_manager_fk varchar // [ref: - not_available.not_available]
+sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
 student_fk varchar [ref: - sales_student.student_pk]
-program_intake_fk varchar // [ref: - not_available.not_available]
-institution_fk varchar [ref: - core_institutions.institution_pk]
-program_fk varchar // [ref: - not_available.not_available]
-application_fk varchar [ref: - sales_applications_fact.application_pk]
-application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
 application_fk varchar [ref: - sales_application_summary.application_pk]
-cas_team_owner_fk varchar // [ref: - not_available.not_available]
+application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
+application_fk varchar [ref: - sales_applications_fact.application_pk]
+program_fk varchar // [ref: - not_available.not_available]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+program_intake_fk varchar // [ref: - not_available.not_available]
 salesforce_opportunity_natural_key varchar
+status varchar
+status_group varchar
 has_deferred varchar
-change varchar
 program_name varchar
 program_code varchar
-status_group varchar
-status varchar
-deposits numeric
+change varchar
+study_plan_version_number numeric
 offers numeric
-applications numeric
+change_count numeric
 lost numeric
 enrolled numeric
-change_count numeric
-study_plan_version_number numeric
+applications numeric
+deposits numeric
 intake date
-modified_at timestamp
-created_at timestamp
-valid_to timestamp
 valid_from timestamp
+valid_to timestamp
+created_at timestamp
+modified_at timestamp
 }
 table sales_application_summary      {
 application_pk varchar [pk]
+sales_applications_fact_application_deposit_count numeric
 sales_applications_fact_application_offer_count numeric
 sales_applications_fact_application_count numeric
-sales_applications_fact_application_deposit_count numeric
 sales_applications_fact_application_enrolled_count numeric
 }
 table sales_applications      {
 application_pk varchar [pk]
-student_fk varchar [ref: - sales_student.student_pk]
 study_plan_fk varchar [ref: - product_study_plans.study_plan_pk]
-institution_fk varchar [ref: - core_institutions.institution_pk]
-sales_manager_fk varchar // [ref: - not_available.not_available]
+sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
 application_owner_fk varchar // [ref: - not_available.not_available]
 cas_team_owner_fk varchar // [ref: - not_available.not_available]
-sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+student_fk varchar [ref: - sales_student.student_pk]
+sales_manager_fk varchar // [ref: - not_available.not_available]
+sponsor_natural_key numeric
+application_natural_key numeric
 student_natural_key varchar
 sales_manager_natural_key varchar
 application_owner_natural_key varchar
 cas_team_owner_natural_key varchar
 salesforce_opportunity_natural_key varchar
-sponsor_natural_key numeric
-application_natural_key numeric
-payment_status varchar
-immigration_category varchar
 learning_mode varchar
+immigration_category varchar
+payment_status varchar
 returning_student varchar
-sponsor_reference varchar
-status varchar
-status_group varchar
 accommodation_required varchar
+sponsor_reference varchar
 has_deferred varchar
+status_group varchar
+status varchar
 class_application_id numeric
-weighting_non_deferred numeric
 weighting numeric
+weighting_non_deferred numeric
 is_deferred boolean
-has_second_agent boolean
-is_confirmation_required boolean
-is_application_completed boolean
-is_application_submitted boolean
 is_offer_letter_issued boolean
 is_acceptance_form_issued boolean
 is_visa_needed boolean
+is_application_submitted boolean
+is_application_completed boolean
+is_confirmation_required boolean
+has_second_agent boolean
 intake_date date
-created_at timestamp
 modified_at timestamp
 status_update timestamp
+created_at timestamp
 }
 table sales_applications_fact      {
 application_pk varchar [pk]
-application_owner_fk varchar // [ref: - not_available.not_available]
-sales_manager_fk varchar // [ref: - not_available.not_available]
-institution_fk varchar [ref: - core_institutions.institution_pk]
-student_fk varchar [ref: - sales_student.student_pk]
 cas_team_owner_fk varchar // [ref: - not_available.not_available]
+application_owner_fk varchar // [ref: - not_available.not_available]
 sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
-institution_natural_key numeric
-sales_manager_natural_key varchar
-application_owner_natural_key varchar
-cas_team_owner_natural_key varchar
-salesforce_opportunity_natural_key varchar
-sponsor_natural_key numeric
-class_application_natural_key numeric
-student_natural_key varchar
+student_fk varchar [ref: - sales_student.student_pk]
+institution_fk varchar [ref: - core_institutions.institution_pk]
+sales_manager_fk varchar // [ref: - not_available.not_available]
 application_natural_key numeric
-application_status varchar
+institution_natural_key numeric
+class_application_natural_key numeric
+sponsor_natural_key numeric
+salesforce_opportunity_natural_key varchar
+cas_team_owner_natural_key varchar
+application_owner_natural_key varchar
+sales_manager_natural_key varchar
+student_natural_key varchar
 sponsor_reference varchar
 intake_season varchar
 accommodation_required varchar
-returning_student varchar
 learning_mode varchar
 immigration_category varchar
 payment_status varchar
 application_status_group varchar
+application_status varchar
+returning_student varchar
 application_weight numeric
+has_second_agent boolean
+is_confirmation_required boolean
+is_application_completed boolean
+is_application_submitted boolean
+is_visa_needed boolean
 is_offer_letter_issued boolean
 is_acceptance_form_issued boolean
-is_visa_needed boolean
-is_application_submitted boolean
-is_application_completed boolean
-is_confirmation_required boolean
-has_second_agent boolean
 intake_date date
-created_ts timestamp
 modified_ts timestamp
+created_ts timestamp
 application_status_ts timestamp
 }
 table sales_applications_history      {
 application_history_pk varchar [pk]
-cas_team_owner_fk varchar // [ref: - not_available.not_available]
 sponsor_fk varchar [ref: - core_sponsors.sponsor_pk]
-application_fk varchar [ref: - sales_applications.application_pk]
+cas_team_owner_fk varchar // [ref: - not_available.not_available]
+sales_manager_fk varchar // [ref: - not_available.not_available]
+student_fk varchar [ref: - sales_student.student_pk]
+application_owner_fk varchar // [ref: - not_available.not_available]
 application_fk varchar [ref: - sales_application_summary.application_pk]
 application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
-student_fk varchar [ref: - sales_student.student_pk]
-sales_manager_fk varchar // [ref: - not_available.not_available]
-application_owner_fk varchar // [ref: - not_available.not_available]
-sponsor_natural_key numeric
+application_fk varchar [ref: - sales_applications.application_pk]
+application_natural_key numeric
 student_natural_key varchar
 sales_manager_natural_key varchar
 application_owner_natural_key varchar
 cas_team_owner_natural_key varchar
 salesforce_opportunity_natural_key varchar
-application_natural_key numeric
-learning_mode varchar
-returning_student varchar
-accommodation_required varchar
-sponsor_reference varchar
-old_title varchar
+sponsor_natural_key numeric
 new_title varchar
+old_title varchar
+sponsor_reference varchar
+accommodation_required varchar
+returning_student varchar
 immigration_category varchar
 payment_status varchar
 application_status_group varchar
 application_status varchar
+learning_mode varchar
 class_application_id numeric
+application_weight numeric
 application_index numeric
 application_status_duration_seconds numeric
-application_weight numeric
-is_current_application_record boolean
-is_acceptance_form_issued boolean
-is_visa_needed boolean
-is_application_submitted boolean
-is_application_completed boolean
-is_confirmation_required boolean
-has_second_agent boolean
 is_offer_letter_issued boolean
+is_current_application_record boolean
+has_second_agent boolean
+is_confirmation_required boolean
+is_application_completed boolean
+is_application_submitted boolean
+is_visa_needed boolean
+is_acceptance_form_issued boolean
 application_status_log_created_ts timestamp
 modified_ts timestamp
 created_ts timestamp
-application_valid_to timestamp
 application_valid_from timestamp
+application_valid_to timestamp
 }
 table sales_applications_quota      {
 application_quota_pk varchar [pk]
+quota_allocation_fk varchar [ref: - sales_quota_allocations.quota_allocation_pk]
+application_fk varchar [ref: - sales_applications.application_pk]
+application_fk varchar [ref: - sales_application_summary.application_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
 application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
-application_fk varchar [ref: - sales_applications.application_pk]
-quota_allocation_fk varchar [ref: - sales_quota_allocations.quota_allocation_pk]
-application_fk varchar [ref: - sales_application_summary.application_pk]
-application_status_group varchar
 degree_name varchar
+application_status_group varchar
 }
 table sales_applications_summary      {
 application_summary_pk varchar [pk]
+sales_applications_application_deposit_count numeric
+sales_applications_unconverted_application_count_non_deferred numeric
+sales_applications_application_offer_count_non_deferred numeric
+sales_applications_application_count_non_deferred numeric
 sales_applications_unconverted_application_count numeric
 sales_applications_application_offer_count numeric
 sales_applications_unweighted_offer_count numeric
 sales_applications_application_count numeric
 sales_applications_enrollments_and_deposit_count numeric
 sales_applications_application_enrolled_count numeric
-sales_applications_application_deposit_count numeric
-sales_applications_unconverted_application_count_non_deferred numeric
-sales_applications_application_offer_count_non_deferred numeric
-sales_applications_application_count_non_deferred numeric
 }
 table sales_new_programs      {
 program_launch_pk varchar [pk]
-program_intake_fk varchar // [ref: - not_available.not_available]
-program_fk varchar // [ref: - not_available.not_available]
 institution_fk varchar [ref: - core_institutions.institution_pk]
-intake_name varchar
-award_name varchar
-program_type varchar
-program_name varchar
-program_code varchar
-institution_name varchar
+program_fk varchar // [ref: - not_available.not_available]
+program_intake_fk varchar // [ref: - not_available.not_available]
 launch_name varchar
+institution_name varchar
+program_code varchar
+program_name varchar
+program_type varchar
+award_name varchar
+intake_name varchar
 launch_expiry date
 launch date
 }
 table sales_priority_programs      {
 priority_program_pk varchar [pk]
-institution_fk varchar [ref: - core_institutions.institution_pk]
-program_fk varchar // [ref: - not_available.not_available]
 program_intake_fk varchar // [ref: - not_available.not_available]
+program_fk varchar // [ref: - not_available.not_available]
+institution_fk varchar [ref: - core_institutions.institution_pk]
 intake_name varchar
 program_name varchar
 program_code varchar
@@ -1162,24 +1162,24 @@ institution_name varchar
 priority_reason varchar
 award_name numeric
 program_type numeric
-priority_end date
 priority_start date
+priority_end date
 }
 table sales_quota_allocations      {
 quota_allocation_pk varchar [pk]
-university_code varchar
-university_name varchar
-degree_concat varchar
+nationaility_criteria varchar
 program_criteria varchar
 agent_region_criteria varchar
 sponsor_criteria varchar
-nationaility_criteria varchar
-quota_group varchar
+degree_concat varchar
 college_code varchar
-cas_enrolment_amt numeric
-deposits_amt numeric
+university_code varchar
+university_name varchar
+quota_group varchar
 quota_year numeric
 progression_amt numeric
+cas_enrolment_amt numeric
+deposits_amt numeric
 }
 table sales_scholarships      {
 scholarships_pk varchar [pk]
@@ -1188,64 +1188,64 @@ application_fk varchar [ref: - sales_applications.application_pk]
 application_fk varchar [ref: - sales_application_summary.application_pk]
 application_fk varchar [ref: - dq_duplicate_studyplan_versions.application_pk]
 application_fk varchar [ref: - sales_applications_fact.application_pk]
-scholarship_reason varchar
-scholarship_note varchar
-student_ledger_currency_code varchar
-budget_pot varchar
 application_status_group varchar
+budget_pot varchar
+scholarship_note varchar
+scholarship_reason varchar
+student_ledger_currency_code varchar
 student_ledger_sop_line_item_actual_amount numeric
 created_at timestamp
 }
 table sales_student      {
 student_pk varchar [pk]
-country_fk varchar [ref: - core_countries.country_pk]
 nationality_fk varchar // [ref: - not_available.not_available]
-student_natural_key varchar
+country_fk varchar [ref: - core_countries.country_pk]
 student_salesforce_natural_key varchar
 country_natural_key numeric
-nationality varchar
-source varchar
+student_natural_key varchar
 country_iso_key varchar
 gender varchar
 name varchar
 class_student_id varchar
 kss_student_id varchar
+source varchar
+nationality varchar
 dob date
-created_at timestamp
 modified_at timestamp
+created_at timestamp
 }
 table scholarship_budgets      {
 scholarship_budgets_pk varchar [pk]
-budget_owner varchar
-budget_pot varchar
-schols_region varchar
-sales_region_group varchar
 intake_name varchar
+sales_region_group varchar
+schols_region varchar
+budget_pot varchar
+budget_owner varchar
 budget_amt numeric
 }
 table scholarship_targets      {
 scholarship_targets_pk varchar [pk]
-sales_region_group varchar
 intake_name varchar
+sales_region_group varchar
 schols_region varchar
 target_amt numeric
 budget_amt numeric
 }
 table stg_kss_application_partners      {
-application_partner_natural_key numeric
-application_natural_key numeric
-business_natural_key numeric
 counsellor_natural_key numeric
 liaison_natural_key numeric
+business_natural_key numeric
+application_natural_key numeric
+application_partner_natural_key numeric
 partner_type varchar
 application_partner_reference varchar
 is_main_agent boolean
 }
 table stg_kss_application_status_logs      {
-application_status_log_natural_key numeric
-application_natural_key numeric
-old_status_natural_key numeric
 new_status_natural_key numeric
+old_status_natural_key numeric
+application_natural_key numeric
+application_status_log_natural_key numeric
 reason_natural_key numeric
 status_reference varchar
 application_status_log_modified_ts timestamp
@@ -1256,8 +1256,8 @@ application_natural_key numeric
 student_natural_key varchar
 sales_manager_natural_key varchar
 application_owner_natural_key varchar
-cas_team_owner_natural_key varchar
 salesforce_opportunity_natural_key varchar
+cas_team_owner_natural_key varchar
 application_status_natural_key numeric
 application_status_reason_natural_key numeric
 payment_status_natural_key numeric
@@ -1265,35 +1265,35 @@ immigration_category_natural_key numeric
 learning_mode_natural_key numeric
 returning_student_natural_key numeric
 accommodation_required_natural_key numeric
+has_second_agent boolean
+is_application_completed boolean
+is_application_submitted boolean
+is_visa_needed boolean
 is_acceptance_form_issued boolean
 is_offer_letter_issued boolean
-is_application_completed boolean
-is_visa_needed boolean
 is_confirmation_required boolean
-has_second_agent boolean
-is_application_submitted boolean
 modified_ts timestamp
 created_ts timestamp
 }
 table stg_kss_awards      {
-award_natural_key numeric
 award_type_natural_key numeric
-award_name varchar
+award_natural_key numeric
 award_code varchar
+award_name varchar
 }
 table stg_kss_businesses      {
-status_natural_key numeric
 business_natural_key numeric
+status_natural_key numeric
+business_type varchar
+business_group varchar
 business_name varchar
 country_iso_key varchar
 salesforce_business_key varchar
-business_group varchar
-business_type varchar
 }
 table stg_kss_catalogue_pick_list_items      {
 pick_list_natural_key numeric
-description varchar
 pick_list_type varchar
+description varchar
 }
 table stg_kss_college_booking_item      {
 college_booking_item_natural_key numeric
@@ -1305,11 +1305,11 @@ config_value varchar
 }
 table stg_kss_countries      {
 country_natural_key numeric
-salesforce_country_key varchar
-nationality_iso_key varchar
-country_name varchar
 country_iso_key varchar
+country_name varchar
+salesforce_country_key varchar
 sales_region_name varchar
+nationality_iso_key varchar
 is_sanctioned boolean
 }
 table stg_kss_institution_unit      {
@@ -1318,18 +1318,18 @@ institution_natural_key numeric
 institution_unit_name varchar
 }
 table stg_kss_institution_unit_details      {
+institution_unit_type_natural_key numeric
 institution_unit_detail_natural_key numeric
 institution_unit_natural_key numeric
-institution_unit_type_natural_key numeric
 institution_unit_name varchar
 }
 table stg_kss_institutions      {
 institution_natural_key numeric
-country_iso_key varchar
-institution_code varchar
-institution_name varchar
-institution_short_name varchar
 institution_type varchar
+institution_short_name varchar
+institution_name varchar
+institution_code varchar
+country_iso_key varchar
 }
 table stg_kss_modules      {
 module_natural_key numeric
@@ -1338,9 +1338,9 @@ module_name varchar
 }
 table stg_kss_nationalities      {
 nationality_natural_key numeric
-nationality_iso_key varchar
-nationality_key varchar
 nationality varchar
+nationality_key varchar
+nationality_iso_key varchar
 }
 table stg_kss_program_activity_types      {
 program_activity_type_natural_key numeric
@@ -1359,8 +1359,8 @@ season_natural_key numeric
 program_natural_key numeric
 program_intake_natural_key numeric
 currency_code varchar
-intake_quota_exists numeric
 program_fee numeric
+intake_quota_exists numeric
 intake_date date
 }
 table stg_kss_program_subject_area      {
@@ -1373,28 +1373,28 @@ subject_natural_key varchar
 program_subject varchar
 }
 table stg_kss_programs      {
-program_natural_key numeric
-institution_natural_key numeric
-program_award_natural_key numeric
-institution_unit_natural_key numeric
-program_level_natural_key numeric
 program_entry_level_natural_key numeric
 program_type_natural_key numeric
 program_status_natural_key numeric
 program_duration_natural_key numeric
 subject_natural_key varchar
-program_entry_type_code varchar
-program_duration_length varchar
-program_code varchar
+program_level_natural_key numeric
+program_award_natural_key numeric
+institution_unit_natural_key numeric
+program_natural_key numeric
+institution_natural_key numeric
 program_name varchar
+program_code varchar
+program_duration_length varchar
+program_entry_type_code varchar
 }
 table stg_kss_status      {
-parent_status_natural_key numeric
 status_natural_key numeric
+parent_status_natural_key numeric
+title varchar
 reporting_status_group varchar
 reporting_status varchar
 reference varchar
-title varchar
 }
 table stg_kss_student_ledger_sop_header      {
 student_ledger_sop_header_natural_key numeric
@@ -1412,9 +1412,9 @@ student_class_natural_key varchar
 student_salesforce_natural_key varchar
 student_fullname varchar
 student_gender varchar
+country_iso_key varchar
 student_source varchar
 nationality_key varchar
-country_iso_key varchar
 student_dob date
 student_modified_at timestamp
 student_created_at timestamp
@@ -1424,24 +1424,24 @@ study_plan_booking_item_natural_key numeric
 study_plan_natural_key numeric
 student_ledger_sop_line_item_natural_key numeric
 student_ledger_sop_header_natural_key numeric
+study_plan_booking_item_category_code varchar
 scholarship_note varchar
 study_plan_booking_item_is_active varchar
-study_plan_booking_item_category_code varchar
 study_plan_booking_item numeric
 created_at timestamp
 }
 table stg_kss_study_plan_pick_list_items      {
 pick_list_natural_key numeric
-study_plan_pick_list_description varchar
 study_plan_pick_list_type varchar
+study_plan_pick_list_description varchar
 }
 table stg_kss_study_plan_program_dates      {
 program_intake_natural_key numeric
 program_activity_type_natural_key numeric
 study_plan_track_natural_key numeric
 study_plan_program_date_natural_key numeric
-study_plan_program_start_date date
 study_plan_program_end_date date
+study_plan_program_start_date date
 }
 table stg_kss_study_plan_program_intake      {
 study_plan_program_intake_natural_key numeric
@@ -1454,12 +1454,12 @@ intake_date date
 }
 table stg_kss_study_plan_programs      {
 study_plan_program_natural_key numeric
+institution_natural_key numeric
 study_plan_track_natural_key numeric
 program_natural_key numeric
-institution_natural_key numeric
-program_entry_level varchar
 program_name varchar
 program_code varchar
+program_entry_level varchar
 }
 table stg_kss_study_plan_term      {
 program_intake_natural_key numeric
@@ -1469,16 +1469,16 @@ study_plan_teaching_start_date date
 }
 table stg_kss_study_plan_tracks      {
 program_intake_natural_key numeric
-study_plan_track_natural_key numeric
-study_plan_version_natural_key numeric
 program_natural_key numeric
-is_primary_progression varchar
+study_plan_version_natural_key numeric
+study_plan_track_natural_key numeric
 study_plan_track_entry_type_code varchar
+is_primary_progression varchar
 track_type numeric
 }
 table stg_kss_study_plan_versions      {
-study_plan_natural_key numeric
 study_plan_version_natural_key numeric
+study_plan_natural_key numeric
 study_plan_version_number numeric
 study_plan_enrolment_date date
 version_date date
@@ -1486,12 +1486,12 @@ created_ts timestamp
 modified_ts timestamp
 }
 table stg_kss_study_plans      {
-study_plan_natural_key numeric
-application_natural_key numeric
 enrolment_natural_key varchar
+application_natural_key numeric
+study_plan_natural_key numeric
 study_plan_version_number numeric
-study_plan_created_at timestamp
 study_plan_modified_at timestamp
+study_plan_created_at timestamp
 }
 table stg_kss_subject      {
 subject_natural_key varchar
@@ -1506,138 +1506,138 @@ user_natural_key varchar
 user_fullname varchar
 }
 table stg_map_countries      {
-schols_region varchar
-sales_region_group_name varchar
-sales_region_name varchar
 country_name varchar
+sales_region_name varchar
+sales_region_group_name varchar
+schols_region varchar
 valid_to timestamp
 valid_from timestamp
 }
 table stg_map_institution_groups      {
-institution_name varchar
 institution_group varchar
+institution_name varchar
 }
 table stg_map_institution_targets_2      {
-target_institution_name varchar
 target_intake_name varchar
+target_institution_name varchar
 target_amt numeric
 }
 table stg_map_new_programs      {
-institution_code varchar
-program_name varchar
-program_code varchar
-intake_name varchar
 launch_name varchar
+intake_name varchar
+program_code varchar
+program_name varchar
+institution_code varchar
 institution_name varchar
 launch_expiry_date date
 launch_date date
 }
 table stg_map_priority_programs      {
-subject varchar
-award_code varchar
-program_name varchar
-program_code varchar
-priority_reason varchar
-subject_group varchar
 intake_name varchar
 institution_name varchar
 institution_code varchar
+priority_reason varchar
+program_code varchar
+program_name varchar
+award_code varchar
+subject varchar
+subject_group varchar
 course_type varchar
-priority_end_date date
 priority_start_date date
+priority_end_date date
 }
 table stg_map_quota_allocations      {
-comments varchar
-notes varchar
-quota_group varchar
-program varchar
-exclude_agent_region varchar
-include_agent_region varchar
 exclude_sponsor varchar
+include_agent_region varchar
+exclude_agent_region varchar
+program varchar
+quota_group varchar
+notes varchar
+comments varchar
 include_sponsor varchar
-exclude_nationality varchar
-include_nationality varchar
-degree_concat varchar
-college_code varchar
 university_code varchar
 university_name varchar
-quota_year numeric
+college_code varchar
+degree_concat varchar
+include_nationality varchar
+exclude_nationality varchar
 deposits_amt numeric
+quota_year numeric
 cas_enrolment_amt numeric
 progression_amt numeric
 }
 table stg_map_quota_items      {
-exclude_nationality varchar
-include_nationality varchar
-degree_name varchar
+include_sponsor varchar
+exclude_agent_region varchar
+include_agent_region varchar
+exclude_sponsor varchar
 college_code varchar
+degree_name varchar
+include_nationality varchar
+exclude_nationality varchar
+quota_group varchar
+program varchar
 university_name varchar
 university_code varchar
-include_sponsor varchar
-exclude_sponsor varchar
-exclude_agent_region varchar
-program varchar
-quota_group varchar
-include_agent_region varchar
 quota_year numeric
 }
 table stg_map_sales_budgets      {
 budget_group varchar
+entry_type_code varchar
+sales_region_group varchar
 budget_name varchar
 intake_name varchar
 institution_name varchar
-entry_type_code varchar
-sales_region_group varchar
 sales_budgets numeric
 }
 table stg_map_sales_region_targets_2      {
-target_sales_channel varchar
-target_sales_region_group varchar
-target_sales_region varchar
-target_country_name varchar
 target_intake_name varchar
+target_country_name varchar
+target_sales_region varchar
+target_sales_region_group varchar
+target_sales_channel varchar
 target_amt numeric
 }
 table stg_map_scholarship_budgets      {
 schols_region varchar
 sales_region_group varchar
 intake_name varchar
-budget_pot_7 numeric
-budget_pot_6 numeric
-budget_pot_8 numeric
-budget_pot_9 numeric
-budget_pot_10 numeric
 budget_pot_5 numeric
+budget_pot_6 numeric
+budget_pot_10 numeric
+budget_pot_9 numeric
+budget_pot_7 numeric
+budget_pot_8 numeric
 budget_pot_4 numeric
-budget_pot_3 numeric
-budget_pot_2 numeric
 budget_pot_1 numeric
+budget_pot_2 numeric
+budget_pot_3 numeric
 schols_budget numeric
 }
 table stg_map_scholarship_budgets_pots      {
-budget_pot_1 varchar
-budget_pot_2 varchar
+budget_pot_10 varchar
 budget_pot_9 varchar
 budget_pot_8 varchar
 budget_pot_7 varchar
 budget_pot_6 varchar
 budget_pot_5 varchar
-budget_pot_4 varchar
 budget_pot_3 varchar
-budget_pot_10 varchar
+budget_pot_2 varchar
+budget_pot_1 varchar
+budget_pot_4 varchar
 }
 table stg_map_scholarship_reason_owners      {
-budget_pot varchar
 sales_region_group varchar
+budget_pot varchar
 budget_owner varchar
 }
 table stg_map_scholarship_reasons      {
-budget_pot varchar
 scholarship_reason varchar
+budget_pot varchar
 }
 table stg_map_status_reasons      {
-team varchar
 status_reason varchar
+team varchar
 }
 table stg_map_subject_groups      {
 subject_group varchar
@@ -1653,8 +1653,8 @@ table stg_map_user_sales_regions      {
 user_fullname varchar
 sales_region varchar
 sales_region_group varchar
-valid_to timestamp
 valid_from timestamp
+valid_to timestamp
 }
 table targets_institutions      {
 institution_target_pk varchar [pk]
@@ -1666,11 +1666,11 @@ target_amt numeric
 table targets_sales_regions      {
 sales_region_target_pk varchar [pk]
 sales_region_target_country_fk varchar // [ref: - not_available.not_available]
-sales_channel varchar
 sales_region_group varchar
 sales_region varchar
 country_name varchar
 intake_name varchar
+sales_channel varchar
 target_amt numeric
 }
 dbml erd generated

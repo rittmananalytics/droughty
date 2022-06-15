@@ -59,6 +59,6 @@ def recur_dictify(frame):
 
 model_name = 'model'
 
-retrieve_test_dict = get_dbt_dict()
+def dbt_test_dict():
 
-dbt_test_dict = (recur_dictify(retrieve_test_dict))
+    return recur_dictify(get_dbt_dict())

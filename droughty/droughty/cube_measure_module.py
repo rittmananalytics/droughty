@@ -15,7 +15,7 @@ import git
 
 import droughty.cube_parser.cube as cube
 
-from droughty.cube_base_dict import cube_base_dict
+from droughty.cube_base_dict import get_cube_base_dict
 from droughty.config import (
     ProjectVariables,
     ExploresVariables,
@@ -82,11 +82,6 @@ def get_all_values(nested_dictionary):
             
         yield (closing_syntax)
                 
-
-nested_dictionary = cube_base_dict
-
-get_all_values(nested_dictionary)
-
 def get_git_root(path):
 
         git_repo = git.Repo(path, search_parent_directories=True)
@@ -111,13 +106,23 @@ def measure_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = 'cube_aggregates.js'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.cube_measures_filename != None:
+
+        filename = ExploresVariables.cube_measures_filename
+
+    else:
+        
+        filename = 'cube_aggregates'
+
+    suffix = '.js'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(get_cube_base_dict()):
 
                     print(value)

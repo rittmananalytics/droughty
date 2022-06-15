@@ -35,9 +35,9 @@
             
   <section id="configuration">
 <h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<p>Setting up droughty to run is pretty easy. It depends on two files, a drought_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
+<p>Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
 <p><strong>droughty_project.yaml set-up</strong></p>
-<p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a drought_project.yaml to specify a project specific target. Find an drought_project.yaml file below:</p>
+<p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span><span class="p">:</span> <span class="n">example_project</span>
 
 <span class="n">dimensional_inference</span><span class="p">:</span> <span class="n">enabled</span>
@@ -67,8 +67,19 @@
   <span class="o">-</span> <span class="n">example_analytics_dev</span>
 </pre></div>
 </div>
-<p>Create this file in the root of your git repo.</p>
-<p><strong>It’s important that the profile name with the drought_project.yaml aligns with the paired entry within your profile.yaml.</strong></p>
+<p>Create this file in the root of your git repo (unless you are specifying the path through the –project-dir argument)</p>
+</section>
+<section id="optional-variables">
+<h1>Optional variables<a class="headerlink" href="#optional-variables" title="Permalink to this headline">¶</a></h1>
+<p><strong>Defining relative file outputs</strong></p>
+<p>Just add these variables to your droughty_project.yaml and it will write to the path name starting from the root of your git repo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dbt_path</span><span class="p">:</span> <span class="n">example_path</span>
+<span class="n">dbml_path</span><span class="p">:</span> <span class="n">example_path</span>
+<span class="n">lookml_path</span><span class="p">:</span> <span class="n">example_path</span>
+<span class="n">cube_path</span><span class="p">:</span> <span class="n">example_path</span>
+</pre></div>
+</div>
+<p><strong>It’s important that the profile name with the droughty_project.yaml aligns with the paired entry within your profile.yaml.</strong></p>
 <hr class="docutils" />
 <p><strong>profile.yaml set-up</strong></p>
 <p>A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions.</p>
@@ -98,6 +109,8 @@
 </pre></div>
 </div>
 <hr class="docutils" />
+<p><strong>warehouse_name options</strong></p>
+<p>At the moment, only ‘big_query’ and ‘snowflake’ are supported</p>
 <p><strong>Configuration Considerations</strong></p>
 <p>droughty has been developed to work with dbt, db docs and looker. However, it only really depends accessing the information schema within a supported warehouse.</p>
 <p>When using droughty it’s assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer. Look at the usage page for further information.</p>
@@ -123,6 +136,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#optional-variables">Optional variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>

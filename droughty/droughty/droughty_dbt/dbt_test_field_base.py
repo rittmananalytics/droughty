@@ -3,7 +3,7 @@ import markdown
 import os
 import yaml
 
-from droughty.config import DbtTestVariables,IdentifyConfigVariables
+from droughty.droughty_core.config import DbtTestVariables,IdentifyConfigVariables
 
 droughty_project = os.path.join(IdentifyConfigVariables.git_path,DbtTestVariables.field_description_path,DbtTestVariables.field_description_file_name)
 

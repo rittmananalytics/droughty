@@ -1,6 +1,6 @@
 """Console script for droughty dbt modules."""
 
-from droughty.dbt_test_module import schema_output
+from droughty.droughty_dbt.dbt_test_module import schema_output
 
 
 def tests():

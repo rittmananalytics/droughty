@@ -7,7 +7,7 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty.config import (
+from droughty.droughty_core.config import (
     ProjectVariables,
     get_snowflake_connector_url,
     ExploresVariables
@@ -18,7 +18,7 @@ class ExploreDictVariables():
 
 def get_looker_explore_dict():
 
-    from droughty.warehouse_target import create_lookml_explore_sql
+    from droughty.droughty_core.warehouse_target import create_lookml_explore_sql
 
     pd.options.mode.chained_assignment = None
 

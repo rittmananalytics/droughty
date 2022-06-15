@@ -7,7 +7,7 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty.config import (
+from droughty.droughty_core.config import (
     ProjectVariables,
     get_snowflake_connector_url
 )
@@ -17,7 +17,7 @@ class CubeExploreDictVariables():
 
 def get_cube_explore_dict():
 
-    from droughty.warehouse_target import create_cube_explore_sql
+    from droughty.droughty_core.warehouse_target import create_cube_explore_sql
 
     pd.options.mode.chained_assignment = None
 

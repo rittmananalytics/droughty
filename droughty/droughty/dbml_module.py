@@ -38,76 +38,75 @@ try:
 
         for schema in ExploresVariables.dbml_schemas:
 
-            for file_names in ExploresVariables.dbml_filenames:
+            if ExploresVariables.dbml_filenames != None:
 
-                if ExploresVariables.dbml_filenames != None:
+                for file_names in ExploresVariables.dbml_filenames:
 
-                    filename = file_names
-                    
-                else:
+                        filename = file_names           
+            else:
 
-                    filename = ProjectVariables.environment_profile+'_'+schema
+                filename = ProjectVariables.environment_profile+'_'+schema
 
-                suffix = '.dbml'
+            suffix = '.dbml'
 
-                extension = filename+suffix
+            extension = filename+suffix
 
-                sys.stdout = open(os.path.join(path,extension), 'w')
+            sys.stdout = open(os.path.join(path,extension), 'w')
 
-                ## create dbml
-                
-                project = 'project'+' '+ProjectVariables.environment_profile
+            ## create dbml
+            
+            project = 'project'+' '+ProjectVariables.environment_profile
 
-                print (project)
+            print (project)
 
-                project_params = "{ database_type"+":"+" '"+ProjectVariables.warehouse+"' }"
+            project_params = "{ database_type"+":"+" '"+ProjectVariables.warehouse+"' }"
 
-                print (project_params)
+            print (project_params)
 
-                for key,value in nested_dictionary.items():
+            for key,value in nested_dictionary.items():
 
-                    if key[0] == schema:
+                if key[0] == schema:
 
-                        explore = "table"+" "+key[1]+"      {"
-                                
-                        print(explore)
+                    explore = "table"+" "+key[1]+"      {"
+                            
+                    print(explore)
 
-                        for key,value in value.items():
+                    for key,value in value.items():
 
-                            if "pk" in key[0]:
+                        if "pk" in key[0]:
 
-                                dimension = key[0]+" "+key[1]+" [pk]"
+                            dimension = key[0]+" "+key[1]+" [pk]"
 
-                                print(dimension)   
+                            print(dimension)   
 
-                            elif "fk" in key[0] and "not_available" not in key[3]:
+                        elif "fk" in key[0] and "not_available" not in key[3]:
 
-                                dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
+                            dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
 
-                                print(dimension)
+                            print(dimension)
 
-                            elif "fk" in key[0] and "not_available" in key[3]:
+                        elif "fk" in key[0] and "not_available" in key[3]:
 
-                                dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
+                            dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
 
-                                print(dimension)
+                            print(dimension)
 
-                            elif "pk" not in key[0] and "fk" not in key[0]:
+                        elif "pk" not in key[0] and "fk" not in key[0]:
 
-                                dimension = key[0]+" "+key[1]
+                            dimension = key[0]+" "+key[1]
 
-                                print(dimension)
+                            print(dimension)
 
 
-                            else:   
+                        else:   
 
-                                pass
+                            pass
 
-                        for key,value in nested_dictionary.items():
+                    for key,value in nested_dictionary.items():
 
-                            syntax = "}"
+                        syntax = "}"
 
-                        print(syntax)
+                    print(syntax)
 
 except:
 

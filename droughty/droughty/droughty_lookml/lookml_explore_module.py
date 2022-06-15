@@ -14,8 +14,8 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_explore_dict import get_looker_explore_dict,ExploreDictVariables
-from droughty.config import (
+from droughty.droughty_lookml.lookml_explore_dict import get_looker_explore_dict,ExploreDictVariables
+from droughty.droughty_core.config import (
     ExploresVariables,
     IdentifyConfigVariables
 )

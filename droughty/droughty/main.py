@@ -1,17 +1,17 @@
-from droughty.lookml_cli import (
+from droughty.droughty_lookml.lookml_cli import (
     lookml_base,
     lookml_explore,
     lookml_measures
 )
-from droughty.cube_cli import (
+from droughty.droughty_cube.cube_cli import (
     base,
     explore,
     measures
 )
-from droughty.dbt_test_cli import tests
-from droughty.dbml_cli import erd
-from droughty.config_cli import Common
-from droughty.config import ExploresVariables
+from droughty.droughty_dbt.dbt_test_cli import tests
+from droughty.droughty_dbml.dbml_cli import erd
+from droughty.droughty_core.config_cli import Common
+from droughty.droughty_core.config import ExploresVariables
 
 def start():
 

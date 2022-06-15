@@ -13,8 +13,8 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_base_dict import get_base_dict
-from droughty.config import (
+from droughty.droughty_lookml.lookml_base_dict import get_base_dict
+from droughty.droughty_core.config import (
     ExploresVariables,
     IdentifyConfigVariables
 )

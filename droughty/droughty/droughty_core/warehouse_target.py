@@ -11,7 +11,7 @@ from jinjasql import JinjaSql
 from six import string_types
 from copy import deepcopy
 
-from droughty.config import ProjectVariables,ExploresVariables
+from droughty.droughty_core.config import ProjectVariables,ExploresVariables
 
 
 # generic warehouse schema

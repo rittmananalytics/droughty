@@ -10,10 +10,10 @@ from google.oauth2 import service_account
 from snowflake.sqlalchemy import URL
 from sqlalchemy import create_engine
 
-from droughty.config import ProjectVariables, get_snowflake_connector_url
-from droughty.droughty_data_prep import (wrangle_bigquery_dbml_dataframes,
+from droughty.droughty_core.config import ProjectVariables, get_snowflake_connector_url
+from droughty.droughty_core.droughty_data_prep import (wrangle_bigquery_dbml_dataframes,
                                          wrangle_snowflake_dbml_dataframes)
-from droughty.warehouse_target import create_dbml_sql
+from droughty.droughty_core.warehouse_target import create_dbml_sql
 
 
 def get_dbml_dict():

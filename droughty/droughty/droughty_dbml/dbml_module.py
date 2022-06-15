@@ -12,8 +12,8 @@ import sys
 import yaml
 import git
 
-from droughty.dbml_base_dict import get_dbml_dict
-from droughty.config import (
+from droughty.droughty_dbml.dbml_base_dict import get_dbml_dict
+from droughty.droughty_core.config import (
     ProjectVariables,
     ExploresVariables,
     IdentifyConfigVariables

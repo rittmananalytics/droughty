@@ -7,12 +7,12 @@ from snowflake.sqlalchemy import URL
 import pandas as pd
 import pandas
 
-from droughty.warehouse_target import create_base_sql
-from droughty.config import (
+from droughty.droughty_core.warehouse_target import create_base_sql
+from droughty.droughty_core.config import (
     ProjectVariables,
     get_snowflake_connector_url
 )
-from droughty.droughty_data_prep import (
+from droughty.droughty_core.droughty_data_prep import (
     wrangle_bigquery_dataframes,
     wrangle_snowflake_dataframes
 )

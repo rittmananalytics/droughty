@@ -7,7 +7,7 @@ from google.oauth2 import service_account
 from snowflake.sqlalchemy import URL
 import glom
 
-from droughty.config_cli import Common
+from droughty.droughty_core.config_cli import Common
 
 path = os.path.expanduser('~')
 

@@ -1,10 +1,10 @@
 """Console script for droughty lookml modules."""
 
-from droughty.lookml_module import output
-from droughty.lookml_explore_module import explore_output
-from droughty.lookml_measure_module import measure_output
+from droughty.droughty_lookml.lookml_module import output
+from droughty.droughty_lookml.lookml_explore_module import explore_output
+from droughty.droughty_lookml.lookml_measure_module import measure_output
 
-from droughty.config import ExploresVariables
+from droughty.droughty_core.config import ExploresVariables
 
 dimensional_inference_status = ExploresVariables.explore_tables
 

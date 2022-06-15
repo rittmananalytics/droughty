@@ -14,9 +14,9 @@ import git
 
 import droughty.cube_parser.cube as cube
 
-from droughty.cube_base_dict import get_cube_base_dict
-from droughty.cube_explore_dict import get_cube_explore_dict
-from droughty.config import (
+from droughty.droughty_cube.cube_base_dict import get_cube_base_dict
+from droughty.droughty_cube.cube_explore_dict import get_cube_explore_dict
+from droughty.droughty_core.config import (
     ProjectVariables,
     ExploresVariables,
     IdentifyConfigVariables

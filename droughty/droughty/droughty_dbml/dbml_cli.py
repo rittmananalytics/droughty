@@ -1,6 +1,6 @@
 """Console script for droughty dbml modules."""
 
-from droughty.dbml_module import dbml_output
+from droughty.droughty_dbml.dbml_module import dbml_output
 
 def erd():
 

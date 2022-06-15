@@ -9,9 +9,9 @@ import json
 import sys
 from itertools import chain
 
-from droughty.dbt_test_base_dict import dbt_test_dict
-from droughty.dbt_test_field_base import described_columns_list
-from droughty.config import (
+from droughty.droughty_dbt.dbt_test_base_dict import dbt_test_dict
+from droughty.droughty_dbt.dbt_test_field_base import described_columns_list
+from droughty.droughty_core.config import (
     IdentifyConfigVariables,
     ExploresVariables
 )

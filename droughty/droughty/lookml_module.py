@@ -13,7 +13,7 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_base_dict import base_dict
+from droughty.lookml_base_dict import get_base_dict
 from droughty.config import (
     ExploresVariables,
     IdentifyConfigVariables
@@ -148,11 +148,6 @@ def get_all_values(nested_dictionary):
 
         yield(syntax)         
 
-nested_dictionary = base_dict
-
-get_all_values(nested_dictionary)
-
-
 def output():
 
     if ExploresVariables.lookml_path == None:
@@ -171,12 +166,22 @@ def output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = '_base.layer.lkml'
+    if ExploresVariables.lookml_base_filename != None:
 
-    with open(os.path.join(path, filename), 'w') as file:
+        filename = ExploresVariables.lookml_base_filename
+        
+    else:
+
+        filename = '_base.layer'
+   
+    suffix = '.lkml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(get_base_dict()):
 
                     print(value)

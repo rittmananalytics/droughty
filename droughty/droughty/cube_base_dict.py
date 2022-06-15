@@ -80,5 +80,3 @@ def get_cube_base_dict():
     for n, grp in wrangled_dataframe.set_index(['table_name', 'column_name','data_type','description']).groupby(level='table_name')}
 
     return(wrangled_dataframe)
-
-cube_base_dict = get_cube_base_dict()

@@ -1,3 +1,4 @@
+from sqlite3 import enable_shared_cache
 import lkml as looker
 from google.oauth2 import service_account
 import pandas_gbq
@@ -108,7 +109,6 @@ def get_git_root(path):
 
 git_def_path = get_git_root(os.getcwd())
 
-
 def explore_output():
 
     if ExploresVariables.lookml_path == None:
@@ -125,10 +125,20 @@ def explore_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = '_explore.layer.lkml'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.lookml_explore_filename != None:
+
+        filename = ExploresVariables.lookml_explore_filename
+        
+    else:
+
+        filename = '_explore.layer'
+   
+    suffix = '.lkml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 

@@ -12,7 +12,7 @@ import sys
 import yaml
 import git
 
-from droughty.dbml_base_dict import dbml_dict
+from droughty.dbml_base_dict import get_dbml_dict
 from droughty.config import (
     ProjectVariables,
     ExploresVariables,
@@ -37,10 +37,21 @@ try:
             os.makedirs(path)
 
         for schema in ExploresVariables.dbml_schemas:
-    
-            filename = ProjectVariables.environment_profile+'_'+schema+'.dbml'
 
-            sys.stdout = open(os.path.join(path, filename), 'w')
+            if ExploresVariables.dbml_filenames != None:
+
+                for file_names in ExploresVariables.dbml_filenames:
+
+                        filename = file_names           
+            else:
+
+                filename = ProjectVariables.environment_profile+'_'+schema
+
+            suffix = '.dbml'
+
+            extension = filename+suffix
+
+            sys.stdout = open(os.path.join(path,extension), 'w')
 
             ## create dbml
             
@@ -101,8 +112,6 @@ except:
 
     print("I doesn't look like you have any primary or foreign keys declared")
             
-nested_dictionary = dbml_dict
-
 def dbml_output():
 
-    get_all_values(nested_dictionary)
+    get_all_values(get_dbml_dict())

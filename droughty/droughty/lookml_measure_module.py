@@ -13,7 +13,7 @@ import sys
 import yaml
 import git
 
-from droughty.lookml_base_dict import base_dict
+from droughty.lookml_base_dict import get_base_dict
 from droughty.config import (
     ExploresVariables,
     IdentifyConfigVariables
@@ -83,11 +83,6 @@ def get_all_values(nested_dictionary):
 
 
         yield(syntax)
-                
-
-nested_dictionary = base_dict
-
-get_all_values(nested_dictionary)
 
 def get_git_root(path):
 
@@ -113,13 +108,24 @@ def measure_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = '_aggregate.layer.lkml'
 
-    with open(os.path.join(path, filename), 'w') as file:
+
+    if ExploresVariables.lookml_measures_filename != None:
+
+        filename = ExploresVariables.lookml_measures_filename
+        
+    else:
+
+        filename = '_aggregate.layer'
+   
+    suffix = '.lkml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 
-                for value in get_all_values(nested_dictionary):
+                for value in get_all_values(get_base_dict()):
 
                     print(value)    

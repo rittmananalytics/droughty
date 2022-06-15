@@ -1,5 +1,0 @@
-project snowflake_demo_olivier
-{ database_type: 'snowflake' }
-dbml erd generated
-Generating dbt tests
-dbt tests generated

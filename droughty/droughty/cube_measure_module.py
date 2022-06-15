@@ -106,10 +106,20 @@ def measure_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = 'cube_aggregates.js'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.cube_measures_filename != None:
+
+        filename = ExploresVariables.cube_measures_filename
+
+    else:
+        
+        filename = 'cube_aggregates'
+
+    suffix = '.js'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 

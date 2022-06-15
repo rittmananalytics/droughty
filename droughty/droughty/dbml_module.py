@@ -37,65 +37,77 @@ try:
             os.makedirs(path)
 
         for schema in ExploresVariables.dbml_schemas:
-    
-            filename = ProjectVariables.environment_profile+'_'+schema+'.dbml'
 
-            sys.stdout = open(os.path.join(path, filename), 'w')
+            for file_names in ExploresVariables.dbml_filenames:
 
-            ## create dbml
-            
-            project = 'project'+' '+ProjectVariables.environment_profile
+                if ExploresVariables.dbml_filenames != None:
 
-            print (project)
+                    filename = file_names
+                    
+                else:
 
-            project_params = "{ database_type"+":"+" '"+ProjectVariables.warehouse+"' }"
+                    filename = ProjectVariables.environment_profile+'_'+schema
 
-            print (project_params)
+                suffix = '.dbml'
 
-            for key,value in nested_dictionary.items():
+                extension = filename+suffix
 
-                if key[0] == schema:
+                sys.stdout = open(os.path.join(path,extension), 'w')
 
-                    explore = "table"+" "+key[1]+"      {"
-                            
-                    print(explore)
+                ## create dbml
+                
+                project = 'project'+' '+ProjectVariables.environment_profile
 
-                    for key,value in value.items():
+                print (project)
 
-                        if "pk" in key[0]:
+                project_params = "{ database_type"+":"+" '"+ProjectVariables.warehouse+"' }"
 
-                            dimension = key[0]+" "+key[1]+" [pk]"
+                print (project_params)
 
-                            print(dimension)   
+                for key,value in nested_dictionary.items():
 
-                        elif "fk" in key[0] and "not_available" not in key[3]:
+                    if key[0] == schema:
 
-                            dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
+                        explore = "table"+" "+key[1]+"      {"
+                                
+                        print(explore)
 
-                            print(dimension)
+                        for key,value in value.items():
 
-                        elif "fk" in key[0] and "not_available" in key[3]:
+                            if "pk" in key[0]:
 
-                            dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
+                                dimension = key[0]+" "+key[1]+" [pk]"
 
-                            print(dimension)
+                                print(dimension)   
 
-                        elif "pk" not in key[0] and "fk" not in key[0]:
+                            elif "fk" in key[0] and "not_available" not in key[3]:
 
-                            dimension = key[0]+" "+key[1]
+                                dimension = key[0]+" "+key[1]+" [ref: - "+key[3]+"."+key[4]+"]"
 
-                            print(dimension)
+                                print(dimension)
+
+                            elif "fk" in key[0] and "not_available" in key[3]:
+
+                                dimension = key[0]+" "+key[1]+" // [ref: - "+key[3]+"."+key[4]+"]"
+
+                                print(dimension)
+
+                            elif "pk" not in key[0] and "fk" not in key[0]:
+
+                                dimension = key[0]+" "+key[1]
+
+                                print(dimension)
 
 
-                        else:   
+                            else:   
 
-                            pass
+                                pass
 
-                    for key,value in nested_dictionary.items():
+                        for key,value in nested_dictionary.items():
 
-                        syntax = "}"
+                            syntax = "}"
 
-                    print(syntax)
+                        print(syntax)
 
 except:
 

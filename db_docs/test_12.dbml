@@ -1673,5 +1673,6 @@ country_name varchar
 intake_name varchar
 target_amt numeric
 }
+dbml erd generated
 Generating dbt tests
 dbt tests generated

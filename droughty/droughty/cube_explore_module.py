@@ -146,10 +146,20 @@ def explore_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = 'cube_integration.js'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.cube_integration_filename != None:
+
+        filename = ExploresVariables.cube_integration_filename
+        
+    else:
+        
+        filename = 'cube_integration'
+
+    suffix = '.js'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 

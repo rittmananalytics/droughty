@@ -166,9 +166,19 @@ def output():
     if not os.path.exists(path):
         os.makedirs(path)
         
-    filename = '_base.layer.lkml'
+    if ExploresVariables.lookml_base_filename != None:
 
-    with open(os.path.join(path, filename), 'w') as file:
+        filename = ExploresVariables.lookml_base_filename
+        
+    else:
+
+        filename = '_base.layer'
+   
+    suffix = '.lkml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 

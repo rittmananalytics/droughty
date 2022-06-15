@@ -94,10 +94,20 @@ def schema_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-            
-    filename = 'droughty_schema.yml'
 
-    with open(os.path.join(path, filename), 'w') as file:
+    if ExploresVariables.dbt_tests_filename != None:
+
+        filename = ExploresVariables.dbt_tests_filename
+        
+    else:
+
+        filename = 'droughty_schema'
+  
+    suffix = '.yml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 

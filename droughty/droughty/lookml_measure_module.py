@@ -108,10 +108,21 @@ def measure_output():
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    filename = '_aggregate.layer.lkml'
 
-    with open(os.path.join(path, filename), 'w') as file:
+
+    if ExploresVariables.lookml_measures_filename != None:
+
+        filename = ExploresVariables.lookml_measures_filename
+        
+    else:
+
+        filename = '_aggregate.layer'
+   
+    suffix = '.lkml'
+
+    extension = filename+suffix
+
+    with open(os.path.join(path,extension), 'w') as file:
 
         with redirect_stdout(file):
 

@@ -4,13 +4,13 @@
   <table id="data" class="table table-striped">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Orphaned Foreign  Keys</th>
       </tr>
     </thead>
     <tbody>
-      {% for fk in user %}
+      {% for user in users %}
         <tr>
-          <td>{{ fk }}</td>
+          <td>{{ user }}</td>
         </tr>
       {% endfor %}
     </tbody>

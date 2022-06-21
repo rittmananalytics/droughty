@@ -19,6 +19,14 @@ droughty is an analytics engineering toolkit, helping keep your workflow dry. Cu
 
 The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done...
 
+**How do I install it?**
+
+`droughty` is available to install on [pip](https://pypi.org/project/droughty/) via the following command:
+
+```
+pip install droughty
+```
+
 **ReadTheDocs**
 
 https://droughty.readthedocs.io/en/latest/

@@ -23,11 +23,9 @@ The purpose of this project is to automate the repetitive, dull elements of anal
 
 Installation, configuration and usage documentation can be found on `ReadTheDocs <https://droughty.readthedocs.io/en/latest/>`_
 
-**How do I install it?**
+**Installation**
 
-`droughty` is available to install on [pip](https://pypi.org/project/droughty/) via the following command:
+droughty is available through `pip <https://pypi.org/project/droughty>`_::
 
-```
-pip install droughty
-```
+    pip install droughty
 

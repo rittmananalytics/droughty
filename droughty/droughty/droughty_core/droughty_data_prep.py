@@ -4,6 +4,14 @@ from unicodedata import category
 import pandas as pd
 import numpy as np
 
+def recur_dictify(frame):
+    if len(frame.columns) == 1:
+        if frame.values.size == 1: return frame.values[0][0]
+        return frame.values.squeeze()
+    grouped = frame.groupby(frame.columns[0])
+    d = {k: recur_dictify(g.iloc[:,1:]) for k,g in grouped}
+    return d
+
 def wrangle_bigquery_dataframes(dataframe):
 
     dataframe['description'] = dataframe['description'].fillna('not available')
@@ -38,6 +46,26 @@ def wrangle_snowflake_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('TEXT','string')
     dataframe['data_type'] = dataframe['data_type'].str.replace('VARIANT','string')   
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','yesno')
+
+    dataframe = dataframe.apply(lambda col: col.str.lower())
+
+    return (dataframe)
+
+def wrangle_bigquery_dataframes_drill_sets(dataframe):
+
+    dataframe['description'] = dataframe['description'].fillna('not available')
+
+    dataframe = dataframe[['table_name','column_name']]
+
+    return (dataframe)
+
+def wrangle_snowflake_dataframes_drill_sets(dataframe):
+
+    dataframe['description'] = dataframe['comment'].fillna('not available')
+
+    dataframe = dataframe.groupby(['table_name', 'column_name']).size().reset_index().rename(columns={0:'count'})
+
+    dataframe = dataframe[['table_name','column_name']]
 
     dataframe = dataframe.apply(lambda col: col.str.lower())
 

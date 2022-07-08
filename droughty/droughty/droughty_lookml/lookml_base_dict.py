@@ -17,8 +17,7 @@ from droughty.droughty_core.droughty_data_prep import (
     wrangle_bigquery_dataframes,
     wrangle_snowflake_dataframes,
     wrangle_bigquery_dataframes_drill_sets,
-    wrangle_snowflake_dataframes_drill_sets,
-    recur_dictify
+    wrangle_snowflake_dataframes_drill_sets
 )
 
 def get_base_dict():

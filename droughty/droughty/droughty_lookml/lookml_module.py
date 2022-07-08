@@ -156,7 +156,7 @@ def get_all_values(nested_dictionary,field_dict):
 
             "set": {
                 "fields": field_name,
-                "name": table_name+"_set"
+                "name": table_name
             }
         }   
 

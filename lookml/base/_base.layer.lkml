@@ -230,7 +230,7 @@ dimension_group: published_date_start {
   description: "not available"
 }
 }
-set: actors_dim_set {
+set: actors_dim {
   fields: [
     actor_code,
     actor_geo_country_code,
@@ -240,7 +240,7 @@ set: actors_dim_set {
     actor_type_name,
   ]
 }
-set: events_fct_set {
+set: events_fct {
   fields: [
     action_geo_country_code,
     action_geo_country_name,
@@ -252,10 +252,10 @@ set: events_fct_set {
     protest_fk,
   ]
 }
-set: narratives_fct_set {
+set: narratives_fct {
   fields: [actor_fk, event_fk, narrative, narrative_pk]
 }
-set: observations_fct_set {
+set: observations_fct {
   fields: [
     event_fk,
     observation_keywords,
@@ -268,10 +268,10 @@ set: observations_fct_set {
     published_date,
   ]
 }
-set: observers_dim_set {
+set: observers_dim {
   fields: [observer_domain, observer_pk]
 }
-set: protests_dim_set {
+set: protests_dim {
   fields: [
     countries,
     page_description_regex,

@@ -42,32 +42,34 @@ def get_all_values(nested_dictionary):
         yield(looker.dump(view))
         
 
-        for key, value in value.items():
+        for key1, value in value.items():
             
-            if "pk" in key[0]:
+            if "pk" in key1[0]:
 
                 count_distinct = {
 
                     "measure": {
                         "type": "count_distinct",
-                        "sql": "${TABLE}."+key[0],
-                        "name": "count_of_"+key[0],
-                        "description": key[2]
+                        "sql": "${TABLE}."+key1[0],
+                        "name": "count_of_"+key1[0],
+                        "description": key1[2],
+                        "drill_fields": key
 
                     }
                 }
 
                 yield(looker.dump(count_distinct))
 
-            if key[1] == 'number':
+            if key1[1] == 'number':
 
                 sum_distinct = {
 
                     "measure": {
                         "type": "sum_distinct",
-                        "sql": "${TABLE}."+key[0],
-                        "name": "sum_of_"+key[0],
-                        "description": key[2]
+                        "sql": "${TABLE}."+key1[0],
+                        "name": "sum_of_"+key1[0],
+                        "description": key1[2],
+                        "drill_fields": key
 
                     }
                 }

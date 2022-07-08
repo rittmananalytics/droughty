@@ -87,20 +87,6 @@ def get_field_dict():
         connection.close()
         engine.dispose()
 
-    #wrangled_dataframe = {n: grp.loc[n].to_dict('index')
-        
-    #for n, grp in wrangled_dataframe.set_index(['table_name', 'column_name']).groupby(level='table_name')}
-
-    #return(wrangled_dataframe)
-        
-    #wrangled_dataframe.to_dict('index')
-
-    #wrangled_dataframe = wrangled_dataframe.to_dict('list')
-
-    #return (wrangled_dataframe)
-
     wrangled_dataframe = wrangled_dataframe.groupby('table_name')['column_name'].apply(list).to_dict()
 
     return(wrangled_dataframe)
-       
-print(get_field_dict())

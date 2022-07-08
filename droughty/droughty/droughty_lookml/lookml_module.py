@@ -79,7 +79,8 @@ def get_all_values(nested_dictionary,field_dict):
                         "type": key1[1],
                         "sql": "${TABLE}."+key1[0],
                         "name": key1[0],
-                        "description": key1[2]
+                        "description": key1[2],
+                        "drill_fields": [key+"_set*"]
                     }
                 }
 

@@ -53,7 +53,7 @@ def get_all_values(nested_dictionary):
                         "sql": "${TABLE}."+key1[0],
                         "name": "count_of_"+key1[0],
                         "description": key1[2],
-                        "drill_fields": key
+                        "drill_fields": key+"_set"
 
                     }
                 }
@@ -69,7 +69,7 @@ def get_all_values(nested_dictionary):
                         "sql": "${TABLE}."+key1[0],
                         "name": "sum_of_"+key1[0],
                         "description": key1[2],
-                        "drill_fields": key
+                        "drill_fields": key+"_set"
 
                     }
                 }

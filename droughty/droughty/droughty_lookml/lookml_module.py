@@ -13,14 +13,17 @@ import sys
 import yaml
 import git
 
-from droughty.droughty_lookml.lookml_base_dict import get_base_dict
+from droughty.droughty_lookml.lookml_base_dict import (
+    get_base_dict,
+    get_field_dict
+)
 from droughty.droughty_core.config import (
     ExploresVariables,
     IdentifyConfigVariables
 )
 
 
-def get_all_values(nested_dictionary):
+def get_all_values(nested_dictionary,field_dict):
 
     
     for key,value in nested_dictionary.items():
@@ -51,40 +54,41 @@ def get_all_values(nested_dictionary):
         yield(looker.dump(view))
         
 
-        for key, value in value.items():
+        for key1, value1 in value.items():
             
-            if "pk" not in key[0] and "fk" not in key[0] and "date" not in key[1] and "timestamp" not in key[1] and "number" not in key [1]:
+            if "pk" not in key1[0] and "fk" not in key1[0] and "date" not in key1[1] and "timestamp" not in key1[1] and "number" not in key1 [1]:
 
                 dimension = {
 
                     "dimension": {
-                        "type": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
+                        "type": key1[1],
+                        "sql": "${TABLE}."+key1[0],
+                        "name": key1[0],
+                        "description": key1[2]
                     }
                 }
 
                 yield(looker.dump(dimension))
 
-            elif "pk" in key[0]:
+
+            elif "pk" in key1[0]:
 
                 dimension = {
 
                     "dimension": {
-                        "primary_key": "yes",
+                        "primary_key1": "yes",
                         "hidden": "yes",
-                        "type": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
+                        "type": key1[1],
+                        "sql": "${TABLE}."+key1[0],
+                        "name": key1[0],
+                        "description": key1[2]
 
                     }
                 }
 
                 yield(looker.dump(dimension))
 
-            elif "date" in key[1]:
+            elif "date" in key1[1]:
 
                 dimension = {
 
@@ -93,17 +97,17 @@ def get_all_values(nested_dictionary):
                             "timeframes": "[raw,date,week,month,quarter,year]",
 
                         "type": "time",
-                        "datatype": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
+                        "datatype": key1[1],
+                        "sql": "${TABLE}."+key1[0],
+                        "name": key1[0],
+                        "description": key1[2]
 
                     }
                 }
 
                 yield(looker.dump(dimension))
 
-            elif "timestamp" in key[1]:
+            elif "timestamp" in key1[1]:
 
 
                 dimension = {
@@ -113,10 +117,10 @@ def get_all_values(nested_dictionary):
                             "timeframes": "[time,raw,date,week,month,quarter,year]",
 
                         "type": "time",
-                        "datatype": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
+                        "datatype": key1[1],
+                        "sql": "${TABLE}."+key1[0],
+                        "name": key1[0],
+                        "description": key1[2]
 
                     }
                 }
@@ -130,23 +134,33 @@ def get_all_values(nested_dictionary):
 
                     "dimension": {
                         "hidden": "yes ",
-                        "type": key[1],
-                        "sql": "${TABLE}."+key[0],
-                        "name": key[0],
-                        "description": key[2]
+                        "type": key1[1],
+                        "sql": "${TABLE}."+key1[0],
+                        "name": key1[0],
+                        "description": key1[2]
 
                     }
                 }
 
                 yield(looker.dump(dimension))
 
-                
         for key,value in nested_dictionary.items():
 
             syntax = "}"
 
+        yield(syntax)      
 
-        yield(syntax)         
+    for table_name,field_name in field_dict.items():
+
+        set = {
+
+            "set": {
+                "fields": field_name,
+                "name": table_name+"_set"
+            }
+        }   
+
+        yield(looker.dump(set))
 
 def output():
 
@@ -182,6 +196,6 @@ def output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(get_base_dict()):
+                for value in get_all_values(get_base_dict(),get_field_dict()):
 
                     print(value)

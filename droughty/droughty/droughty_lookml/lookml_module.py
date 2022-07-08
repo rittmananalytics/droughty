@@ -160,11 +160,11 @@ def get_all_values(nested_dictionary,field_dict):
                 yield(looker.dump(dimension))
 
 
-    for key,value in nested_dictionary.items():
+        for key,value in nested_dictionary.items():
 
-        syntax = "}"
+            syntax = "}"
 
-    yield(syntax)
+        yield(syntax)
 
 def output():
 

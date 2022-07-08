@@ -76,7 +76,7 @@ def get_all_values(nested_dictionary,field_dict):
                 dimension = {
 
                     "dimension": {
-                        "primary_key1": "yes",
+                        "primary_key": "yes",
                         "hidden": "yes",
                         "type": key1[1],
                         "sql": "${TABLE}."+key1[0],

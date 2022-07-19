@@ -61,8 +61,8 @@ def wrangle_bigquery_dataframes_drill_sets(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('STRING','string')
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOL','yesno')
 
-    dataframe = dataframe[dataframe.data_type != 'date']
-    dataframe = dataframe[dataframe["column_name"].str.contains("_fk|_pk") == False]
+    dataframe = dataframe[dataframe["data_type"].str.contains("date|timestamp") == False]
+    dataframe = dataframe[dataframe["column_name"].str.contains("_fk|_pk|natural_key") == False]
 
     dataframe = dataframe[['table_name','column_name']]
 
@@ -82,14 +82,14 @@ def wrangle_snowflake_dataframes_drill_sets(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('VARIANT','string')   
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','yesno')
 
-    dataframe = dataframe[dataframe.data_type != 'date']
+    dataframe = dataframe[dataframe["data_type"].str.contains("date|timestamp") == False]
 
     dataframe = dataframe.groupby(['table_name', 'column_name']).size().reset_index().rename(columns={0:'count'})
 
     dataframe = dataframe[['table_name','column_name']]
 
     dataframe = dataframe.apply(lambda col: col.str.lower())
-    dataframe = dataframe[dataframe["column_name"].str.contains("_fk|_pk") == False]
+    dataframe = dataframe[dataframe["column_name"].str.contains("_fk|_pk|natural_key") == False]
 
     return (dataframe)
 

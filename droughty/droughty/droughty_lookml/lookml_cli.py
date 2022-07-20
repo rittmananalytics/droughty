@@ -3,6 +3,7 @@
 from droughty.droughty_lookml.lookml_module import output
 from droughty.droughty_lookml.lookml_explore_module import explore_output
 from droughty.droughty_lookml.lookml_measure_module import measure_output
+from droughty.droughty_lookml.lookml_pop_module import pop_output
 
 from droughty.droughty_core.config import ExploresVariables
 
@@ -49,6 +50,18 @@ def lookml_measures():
     finally:
 
         print("lookml measure layer generated")
+
+def lookml_pop():
+
+    print("Generating base parameter layer")
+
+    try:
+
+        return pop_output()
+
+    finally:
+
+        print("lookml base parameter layer generated")
 
 
 #def full_refresh():

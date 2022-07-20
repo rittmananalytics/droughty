@@ -221,6 +221,7 @@ class ExploresVariables:
     parent_table_name: str.lower
     #paths
     lookml_path: str.lower
+    lookml_pop: str.lower
     dbml_path: str.lower
     cube_path: str.lower
     dbt_path: str.lower
@@ -249,6 +250,7 @@ def assign_explore_variables():
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
                 ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
                 ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
+                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
 
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  

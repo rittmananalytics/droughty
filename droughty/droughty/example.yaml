@@ -1,0 +1,23 @@
+profile: snowflake_demo_olivier
+
+
+field_description_path: warehouse_docs
+field_description_file_name: field_descriptions.md
+
+test_schemas:
+    - analytics_qa
+    - analytics_staging
+    - analytics_integration
+
+dbml_schemas:
+    - analytics_qa
+    - analytics_staging
+    - analytics_integration
+
+lookml_pop: 
+    views: 
+        example_1: 
+          - example_2
+        example_3:
+          - example_4
+          - example_5

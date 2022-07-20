@@ -1,7 +1,8 @@
 from droughty.droughty_lookml.lookml_cli import (
     lookml_base,
     lookml_explore,
-    lookml_measures
+    lookml_measures,
+    lookml_pop
 )
 from droughty.droughty_cube.cube_cli import (
     base,
@@ -22,11 +23,13 @@ def start():
             lookml_base()
             lookml_explore()
             lookml_measures()
+            lookml_pop()
 
         elif ExploresVariables.explore_tables == None:
 
             lookml_base()
             lookml_measures()
+            lookml_pop()
 
     elif Common.args_command == 'cube':
 
@@ -47,6 +50,7 @@ def start():
         lookml_base()
         lookml_explore()
         lookml_measures()
+        lookml_pop()
         base()
         explore()
         measures()

@@ -186,7 +186,7 @@ def pop():
                     "type": "time",
                     "datatype": "datetime",
                     "timeframes": "[time,hour_of_day,raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
-                    "sql": "cast(${table}."+field_names+" as date)",
+                    "sql": "cast(${TABLE}."+field_names+" as date)",
                     "name": field_names+"_date"
 
                     },
@@ -209,9 +209,9 @@ def pop():
                     {
                     "label": "period over period",
                     "type": "string",
-                    "sql": "case when ${"+view_name+"."+field_names+"date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
-                            "when  ${"+view_name+"."+field_names+"date_raw} >= ${first_date_in_prior_period} \n"
-                            "and  ${"+view_name+"."+field_names+"date_raw} <= ${last_date_in_prior_period} \n"
+                    "sql": "case when ${"+view_name+"."+field_names+"_date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
+                            "when  ${"+view_name+"."+field_names+"_date_raw} >= ${first_date_in_prior_period} \n"
+                            "and  ${"+view_name+"."+field_names+"_date_raw} <= ${last_date_in_prior_period} \n"
                             "then 'prior {% parameter timeframe %} to date' \n"
                             "else null \n"
                             "end",

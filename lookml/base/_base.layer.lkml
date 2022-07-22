@@ -108,7 +108,7 @@ dimension: event_pk {
   description: "not available"
 }
 dimension_group: event_ts {
-  timeframes: [raw,date,week,month,quarter,year]
+  timeframes: [raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]
   type: time
   datatype: date
   sql: ${TABLE}.event_ts ;;
@@ -213,7 +213,7 @@ dimension: observer_fk {
   description: "not available"
 }
 dimension_group: published_date {
-  timeframes: [raw,date,week,month,quarter,year]
+  timeframes: [raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]
   type: time
   datatype: date
   sql: ${TABLE}.published_date ;;
@@ -270,14 +270,14 @@ dimension: protest_pk {
   description: "not available"
 }
 dimension_group: published_date_end {
-  timeframes: [raw,date,week,month,quarter,year]
+  timeframes: [raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]
   type: time
   datatype: date
   sql: ${TABLE}.published_date_end ;;
   description: "not available"
 }
 dimension_group: published_date_start {
-  timeframes: [raw,date,week,month,quarter,year]
+  timeframes: [raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]
   type: time
   datatype: date
   sql: ${TABLE}.published_date_start ;;

@@ -110,7 +110,7 @@ def get_all_values(nested_dictionary,field_dict):
 
                     "dimension_group": {
 
-                            "timeframes": "[raw,date,week,month,quarter,year]",
+                            "timeframes": "[raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
 
                         "type": "time",
                         "datatype": key1[1],
@@ -130,7 +130,7 @@ def get_all_values(nested_dictionary,field_dict):
 
                     "dimension_group": {
 
-                            "timeframes": "[time,raw,date,week,month,quarter,year]",
+                            "timeframes": "[time,hour_of_day,raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
 
                         "type": "time",
                         "datatype": key1[1],

@@ -143,24 +143,24 @@ def pop():
 
     dimension: first_date_in_period {
         type: date
-        sql: DATE_TRUNC(CURRENT_DATE(), {% parameter timeframe %});;
+        sql: DATE_TRUNC({% parameter timeframe %}, CURRENT_DATE());;
     }
 
     dimension: days_in_period {
         type: number
-        sql: DATE_DIFF(CURRENT_DATE(),${first_date_in_period}, DAY) ;;
+        sql: DATE_DIFF(${first_date_in_period}, DAY,CURRENT_DATE()) ;;
     }
 
     dimension: first_date_in_prior_period {
         type: date
         hidden: no
-        sql: DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 {% parameter timeframe %}),{% parameter timeframe %});;
+        sql: DATE_TRUNC({% parameter timeframe %},DATE_SUB(CURRENT_DATE(), INTERVAL 1 {% parameter timeframe %}));;
     }
 
     dimension: last_date_in_prior_period {
         type: date
         hidden: no
-        sql: DATE_ADD(${first_date_in_prior_period}, INTERVAL ${days_in_period} DAY) ;;
+        sql: DATE_ADD(INTERVAL ${days_in_period} DAY,${first_date_in_prior_period}) ;;
     }
 
     }
@@ -319,30 +319,28 @@ def pop():
                     "description": "Use this dimension alongside \"Select Timeframe\" and \"Select Comparison Type\" Filters to compare a specific timeframe (month, quarter, year) and the corresponding one of the previous year",
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'ytd' %} \n "
-                        "CASE \n "
-                        "WHEN ${"+view_name+"."+field_names+"_date_date} BETWEEN DATE_TRUNC(DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, YEAR), MONTH) AND DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, DAY) \n "
-                            "THEN ${selected_dynamic_timeframe_advanced} \n "
-                        "WHEN ${"+view_name+"."+field_names+"_date_date} BETWEEN DATE_TRUNC(DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 YEAR), YEAR), MONTH) AND DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 YEAR), MONTH) \n "
-                            "THEN ${selected_dynamic_timeframe_advanced} \n "
-                        "ELSE NULL \n "
-                        "END \n "
+                        "case \n"
+                        "when ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_date}\n"
+                            "then  ${selected_dynamic_timeframe_advanced}\n"
+                        "when  ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, dateadd(year, -1,${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date})\n"
+                            "then  ${selected_dynamic_timeframe_advanced}\n"
+                        "else  null\n"
+                        "end \n"
                     "{% else %} \n "
                         "{% if select_comparison._parameter_value == 'year' %} \n "
-                        "CASE \n "
-                            "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, {% parameter select_timeframe_advanced %}) \n "
-                            "THEN ${selected_dynamic_timeframe_advanced} \n "
-                            "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 YEAR), {% parameter select_timeframe_advanced %}) \n "
-                            "THEN ${selected_dynamic_timeframe_advanced} \n "
-                            "ELSE NULL \n "
-                        "END \n "
+                        "case \n "
+                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n "
+                            "then ${selected_dynamic_timeframe_advanced} \n "
+                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n "
+                            "then ${selected_dynamic_timeframe_advanced} \n "
+                        "end \n "
                         "{% elsif select_comparison._parameter_value == 'period' %} \n "
-                        "CASE \n "
-                            "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, {% parameter select_timeframe_advanced %}) \n "
-                            "THEN ${selected_dynamic_timeframe_advanced} \n "
-                            "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 {% parameter select_timeframe_advanced %}), {% parameter select_timeframe_advanced %}) \n "
-                            "THEN ${selected_dynamic_timeframe_advanced} \n "
-                            "ELSE NULL \n "
-                        "END \n "
+                        "case \n"
+                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n"
+                            "then ${selected_dynamic_timeframe_advanced} \n"
+                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd({% parameter parameters.select_timeframe_advanced %}, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n"
+                            "then ${selected_dynamic_timeframe_advanced} \n"
+                        "end \n"
                         "{% endif %} \n "
                     "{% endif %} \n ",
                     "name":  "current_vs_previous_period_advanced"
@@ -355,30 +353,28 @@ def pop():
                     "description": "Hide this measure so that it doesn't appear in the field picket and use it to filter measures (since the values are static)",
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'ytd' %} \n "
-                    "CASE \n "
-                        "WHEN ${"+view_name+"."+field_names+"_date_date} BETWEEN DATE_TRUNC(DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, YEAR), MONTH) AND DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, DAY) \n "
-                        "THEN 'reference' \n "
-                        "WHEN ${"+view_name+"."+field_names+"_date_date} BETWEEN DATE_TRUNC(DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 YEAR), YEAR), MONTH) AND DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 YEAR), MONTH) \n "
-                        "THEN 'comparison' \n "
-                        "ELSE NULL \n "
-                    "END \n "
+                        " case \n"
+                        " when ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_raw} \n"
+                            " then 'reference' \n"
+                        " when ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date}) \n"
+                            " then 'comparison' \n"
+                        " else null \n"
+                        " end \n"
                     "{% else %} \n "
                     "{% if select_comparison._parameter_value == 'year' %} \n "
-                        "CASE \n "
-                        "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, {% parameter select_timeframe_advanced %}) \n "
-                            "THEN 'reference' \n "
-                        "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 YEAR), {% parameter select_timeframe_advanced %}) \n "
-                            "THEN 'comparison' \n "
-                        "ELSE NULL \n "
-                        "END \n "
+                    "case \n"
+                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n"
+                        "then 'reference' \n"
+                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n"
+                        "then 'comparison' \n"
+                    "end \n"
                     "{% elsif select_comparison._parameter_value == 'period' %} \n "
-                        "CASE \n "
-                        "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(${selected_reference_date_default_today_advanced_raw}, {% parameter select_timeframe_advanced %}) \n "
-                            "THEN 'reference' \n "
-                        "WHEN DATE_TRUNC(${"+view_name+"."+field_names+"_date_raw},  {% parameter select_timeframe_advanced %}) = DATE_TRUNC(DATE_SUB(${selected_reference_date_default_today_advanced_raw}, INTERVAL 1 {% parameter select_timeframe_advanced %}), {% parameter select_timeframe_advanced %}) \n "
-                            "THEN 'comparison' \n "
-                        "ELSE NULL \n "
-                        "END \n "
+                    "case \n"
+                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n"
+                        "then 'reference' \n"
+                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd({% parameter parameters.select_timeframe_advanced %}, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n"
+                        "then 'comparison' \n"
+                    "end \n"
                     "{% endif %} \n "
                     "{% endif %} \n ",
                     "name":  "current_vs_previous_period_hidden_advanced"
@@ -519,7 +515,7 @@ def pop():
 
                 yield(syntax)
 
-def pop_output():
+def pop_output_snowflake():
 
     if ExploresVariables.lookml_path == None:
     

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "droughty"
-version = "0.6.2"
+version = "0.6.4"
 description = "droughty is an analytics engineering toolkit, helping keep your workflow dry."
 authors = ["Lewis <lewischarlesbaker@gmail.com>"]
 license = "MIT"

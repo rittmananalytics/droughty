@@ -12,13 +12,14 @@ from droughty.droughty_core.config import (
 
 def pop():
 
+    include = "include: /lookml/base/_base.layer.lkml"
 
+    print (include)
+    
     for view_name, field_name in ExploresVariables.lookml_pop.items():
 
         view =  """
     
-    include: "/lookml/base/_base.layer.lkml"
-
     view: +"""+view_name+""" {
 
     parameter: select_timeframe_advanced {
@@ -180,12 +181,12 @@ def pop():
                 "dimension_group": [
 
                     {
-                    "label": "Date Surrogate",
+                    "label": "date surrogate",
                     "hidden": "yes",
                     "type": "time",
                     "datatype": "datetime",
                     "timeframes": "[time,hour_of_day,raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
-                    "sql": "cast(${TABLE}."+field_names+" as date)",
+                    "sql": "cast(${table}."+field_names+" as date)",
                     "name": field_names+"_date"
 
                     },
@@ -195,26 +196,26 @@ def pop():
                 "dimensions": [
 
                     {
-                    "label": "Orders Month of Quarter",
-                    "group_label": "Orders Dates",
-                    "group_item_label": "Month of Quarter",
+                    "label": "orders month of quarter",
+                    "group_label": "orders dates",
+                    "group_item_label": "month of quarter",
                     "type": "number",
                     "sql":
-                    "case when ${"+view_name+"."+field_names+"_date_month_num} IN (1,4,7,10) THEN 1 when ${"+view_name+"."+field_names+"_date_month_num} IN (2,5,8,11) THEN 2 else 3 end",
+                    "case when ${"+view_name+"."+field_names+"_date_month_num} in (1,4,7,10) then 1 when ${"+view_name+"."+field_names+"_date_month_num} in (2,5,8,11) then 2 else 3 end",
                     "name": field_names+"_date_month_of_quarter_advanced",
 
                     },
 
                     {
-                    "label": "Period over Period",
+                    "label": "period over period",
                     "type": "string",
-                    "sql": "CASE WHEN ${"+view_name+"."+field_names+" >=  ${first_date_in_period} THEN 'This {% parameter timeframe %} to Date' \n"
-                            "WHEN  ${"+view_name+"."+field_names+" >= ${first_date_in_prior_period} \n"
-                            "AND  ${"+view_name+"."+field_names+" <= ${last_date_in_prior_period} \n"
-                            "THEN 'Prior {% parameter timeframe %} to Date' \n"
-                            "ELSE NULL \n"
-                            "END",
-                    "name": field_names+"_date_month_of_quarter_advanced",
+                    "sql": "case when ${"+view_name+"."+field_names+"date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
+                            "when  ${"+view_name+"."+field_names+"date_raw} >= ${first_date_in_prior_period} \n"
+                            "and  ${"+view_name+"."+field_names+"date_raw} <= ${last_date_in_prior_period} \n"
+                            "then 'prior {% parameter timeframe %} to date' \n"
+                            "else null \n"
+                            "end",
+                    "name": field_names+"_period_selected",
 
                     },
                     
@@ -256,7 +257,7 @@ def pop():
                     "{% elsif select_timeframe_advanced._parameter_value == 'quarter' %} \n "
                     "${"+view_name+"."+field_names+"_date_quarter} \n "
                     "{% elsif select_timeframe_advanced._parameter_value == 'ytd' %} \n "
-                    "CONCAT('YTD (',${"+view_name+"."+field_names+"_date_year},'-',${selected_reference_date_default_today_advanced_month_num},'-',${selected_reference_date_default_today_advanced_day_of_month},')') \n "
+                    "concat('ytd (',${"+view_name+"."+field_names+"_date_year},'-',${selected_reference_date_default_today_advanced_month_num},'-',${selected_reference_date_default_today_advanced_day_of_month},')') \n "
                     "{% else %} \n "
                     "${"+view_name+"."+field_names+"_date_month} \n "
                     "{% endif %}",
@@ -267,12 +268,12 @@ def pop():
                     "type": "string",
                     "order_by_field": view_name+".selected_dynamic_day_of_sort_advanced",
                     "label": "{% \n" 
-                    "if select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'month' %}Day of Month{% \n"
-                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'week' %}Day of Week{% \n"
-                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'day' %}Hour of Day{% \n"
-                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'year' %}Months{% \n"
-                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'ytd' %}Day of Year{% \n"
-                    "else %}Selected Dynamic Timeframe Granularity{% \n"
+                    "if select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'month' %}day of month{% \n"
+                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'week' %}day of week{% \n"
+                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'day' %}hour of day{% \n"
+                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'year' %}months{% \n"
+                    "elsif select_timeframe_advanced._is_filtered and select_timeframe_advanced._parameter_value == 'ytd' %}day of year{% \n"
+                    "else %}selected dynamic timeframe granularity{% \n"
                     "endif %} \n",
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'day' %} \n"
@@ -315,14 +316,14 @@ def pop():
                     {
                     "type": "string",
                     "hidden": "no",
-                    "label": "Current vs Previous Period",
-                    "description": "Use this dimension alongside \"Select Timeframe\" and \"Select Comparison Type\" Filters to compare a specific timeframe (month, quarter, year) and the corresponding one of the previous year",
+                    "label": "current vs previous period",
+                    "description": "use this dimension alongside \"select timeframe\" and \"select comparison type\" filters to compare a specific timeframe (month, quarter, year) and the corresponding one of the previous year",
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'ytd' %} \n "
                         "case \n"
-                        "when ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_date}\n"
+                        "when ${"+view_name+"."+field_names+" between date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_date}\n"
                             "then  ${selected_dynamic_timeframe_advanced}\n"
-                        "when  ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, dateadd(year, -1,${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date})\n"
+                        "when  ${"+view_name+"."+field_names+" between date_trunc(year, dateadd(year, -1,${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date})\n"
                             "then  ${selected_dynamic_timeframe_advanced}\n"
                         "else  null\n"
                         "end \n"
@@ -349,14 +350,14 @@ def pop():
                     {
                     "type": "string",
                     "hidden": "yes",
-                    "label": "Current vs Previous Period (Hidden - for measure only)",
-                    "description": "Hide this measure so that it doesn't appear in the field picket and use it to filter measures (since the values are static)",
+                    "label": "current vs previous period (hidden - for measure only)",
+                    "description": "hide this measure so that it doesn't appear in the field picket and use it to filter measures (since the values are static)",
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'ytd' %} \n "
                         " case \n"
-                        " when ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_raw} \n"
+                        " when ${"+view_name+"."+field_names+" between date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_raw} \n"
                             " then 'reference' \n"
-                        " when ${"+view_name+"."+field_names+" BETWEEN date_trunc(year, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date}) \n"
+                        " when ${"+view_name+"."+field_names+" between date_trunc(year, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date}) \n"
                             " then 'comparison' \n"
                         " else null \n"
                         " end \n"
@@ -414,9 +415,9 @@ def pop():
                             "measures": [
                                 
                             {
-                                "label" : key1[0]+" count  ({% if select_reference_date_advanced._is_filtered %}Reference {% else %}Current {% endif %} {% parameter "+key+".select_timeframe_advanced %})",
+                                "label" : key1[0]+" count  ({% if select_reference_date_advanced._is_filtered %}reference {% else %}current {% endif %} {% parameter "+key+".select_timeframe_advanced %})",
                                 "type": "count_distinct",
-                                "sql": "${TABLE}."+key1[0],
+                                "sql": "${table}."+key1[0],
                                 "name": "count_of_"+key1[0]+"_reference_advanced",
                                 "description": key1[2],
                                 "drill_fields": [key+"_set*"],
@@ -425,9 +426,9 @@ def pop():
                             },
 
                             {
-                                "label" :  key1[0]+" count (Previous {% parameter "+key+".select_timeframe_advanced %})",
+                                "label" :  key1[0]+" count (previous {% parameter "+key+".select_timeframe_advanced %})",
                                 "type": "count_distinct",
-                                "sql": "${TABLE}."+key1[0],
+                                "sql": "${table}."+key1[0],
                                 "name": "count_of_"+key1[0]+"_previous_advanced",
                                 "description": key1[2],
                                 "drill_fields": [key+"_set*"],

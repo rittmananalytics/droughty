@@ -53,6 +53,7 @@ include: /lookml/base/_base.layer.lkml
     }
 
     parameter: apply_to_date_filter_advanced {
+        label: "apply to date filter advanced"
         type: yesno
         default_value: "false"
     }
@@ -103,6 +104,7 @@ include: /lookml/base/_base.layer.lkml
     }
 
     parameter: timeframe {
+        label: "timeframe to-date"
         type: unquoted
         allowed_value: {
         label: "week to date"
@@ -501,6 +503,7 @@ measure: sum_of_engagement_index_previous_advanced {
     }
 
     parameter: apply_to_date_filter_advanced {
+        label: "apply to date filter advanced"
         type: yesno
         default_value: "false"
     }
@@ -551,6 +554,7 @@ measure: sum_of_engagement_index_previous_advanced {
     }
 
     parameter: timeframe {
+        label: "timeframe to-date"
         type: unquoted
         allowed_value: {
         label: "week to date"
@@ -1017,6 +1021,7 @@ measure: sum_of_event_time_on_page_secs_previous_advanced {
     }
 
     parameter: apply_to_date_filter_advanced {
+        label: "apply to date filter advanced"
         type: yesno
         default_value: "false"
     }
@@ -1067,6 +1072,7 @@ measure: sum_of_event_time_on_page_secs_previous_advanced {
     }
 
     parameter: timeframe {
+        label: "timeframe to-date"
         type: unquoted
         allowed_value: {
         label: "week to date"
@@ -1397,6 +1403,7 @@ measure: count_of_student_fk_previous_advanced {
     }
 
     parameter: apply_to_date_filter_advanced {
+        label: "apply to date filter advanced"
         type: yesno
         default_value: "false"
     }
@@ -1447,6 +1454,7 @@ measure: count_of_student_fk_previous_advanced {
     }
 
     parameter: timeframe {
+        label: "timeframe to-date"
         type: unquoted
         allowed_value: {
         label: "week to date"

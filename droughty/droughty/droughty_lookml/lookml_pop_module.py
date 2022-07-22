@@ -72,6 +72,7 @@ def pop():
     }
 
     parameter: apply_to_date_filter_advanced {
+        label: "apply to date filter advanced"
         type: yesno
         default_value: "false"
     }
@@ -122,6 +123,7 @@ def pop():
     }
 
     parameter: timeframe {
+        label: "timeframe to-date"
         type: unquoted
         allowed_value: {
         label: "week to date"

@@ -19,7 +19,7 @@ def pop():
     
     include: "/lookml/base/_base.layer.lkml"
 
-    view: +"""+view_name+""" {
+    view: parameters {
 
     parameter: select_timeframe_advanced {
         label: "select timeframe"
@@ -119,50 +119,6 @@ def pop():
         ;;
 
     }
-
-    parameter: timeframe {
-        type: unquoted
-        allowed_value: {
-        label: "Week to Date"
-        value: "Week"
-        }
-        allowed_value: {
-        label: "Month to Date"
-        value: "Month"
-        }
-        allowed_value: {
-        label: "Quarter to Date"
-        value: "Quarter"
-        }
-        allowed_value: {
-        label: "Year to Date"
-        value: "Year"
-        }
-        default_value: "Quarter"
-    }
-
-    dimension: first_date_in_period {
-        type: date
-        sql: DATE_TRUNC(CURRENT_DATE(), {% parameter timeframe %});;
-    }
-
-    dimension: days_in_period {
-        type: number
-        sql: DATE_DIFF(CURRENT_DATE(),${first_date_in_period}, DAY) ;;
-    }
-
-    dimension: first_date_in_prior_period {
-        type: date
-        hidden: no
-        sql: DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 {% parameter timeframe %}),{% parameter timeframe %});;
-    }
-
-    dimension: last_date_in_prior_period {
-        type: date
-        hidden: no
-        sql: DATE_ADD(${first_date_in_prior_period}, INTERVAL ${days_in_period} DAY) ;;
-    }
-
     }
     """
 
@@ -177,6 +133,7 @@ def pop():
                 "view": [
                     {
                     
+
                 "dimension_group": [
 
                     {
@@ -201,19 +158,6 @@ def pop():
                     "type": "number",
                     "sql":
                     "case when ${"+view_name+"."+field_names+"_date_month_num} IN (1,4,7,10) THEN 1 when ${"+view_name+"."+field_names+"_date_month_num} IN (2,5,8,11) THEN 2 else 3 end",
-                    "name": field_names+"_date_month_of_quarter_advanced",
-
-                    },
-
-                    {
-                    "label": "Period over Period",
-                    "type": "string",
-                    "sql": "CASE WHEN ${"+view_name+"."+field_names+" >=  ${first_date_in_period} THEN 'This {% parameter timeframe %} to Date' \n"
-                            "WHEN  ${"+view_name+"."+field_names+" >= ${first_date_in_prior_period} \n"
-                            "AND  ${"+view_name+"."+field_names+" <= ${last_date_in_prior_period} \n"
-                            "THEN 'Prior {% parameter timeframe %} to Date' \n"
-                            "ELSE NULL \n"
-                            "END",
                     "name": field_names+"_date_month_of_quarter_advanced",
 
                     },

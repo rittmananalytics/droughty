@@ -250,7 +250,6 @@ def assign_explore_variables():
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
                 ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
                 ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
-                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
 
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
@@ -265,6 +264,8 @@ def assign_explore_variables():
                 ExploresVariables.cube_measures_filename = (droughty_project.get("cube_measures_filename"))  
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
+
+                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
 
             except:
 

@@ -37,6 +37,14 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
     facts:
       - example_fact
 
+  lookml_pop: 
+      views: 
+          example_1: 
+                  - example_2
+          example_3:
+                  - example_4
+                  - example_5
+
   lookml_base_filename: example__1
   lookml_explore_filename: example__2
   lookml_measures_filename: example__3

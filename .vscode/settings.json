@@ -1,5 +1,7 @@
 {
     "restructuredtext.confPath": "",
-    "cSpell.words": [],
+    "cSpell.words": [
+        "lookml"
+    ],
     "esbonio.sphinx.confDir": ""
 }

@@ -1,26 +1,38 @@
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Read the Docs](https://img.shields.io/readthedocs/lkml)](https://droughty.readthedocs.io/en/latest/)
+\#\#\#\# droughty. \#\# adjective, drought·i·er, drought·i·est. \#\#
+dry.
 
-# droughty
+Droughty helps keep your workflow *ah hem* dry
 
-droughty is an analytics engineering toolkit, helping keep your workflow dry.
+------------------------------------------------------------------------
 
-**Read the documentation on [Read the Docs](https://droughty.readthedocs.io/en/latest/).**
+**What is droughty?**
 
-invoke using:
+droughty is an analytics engineering toolkit. It takes warehouse
+metadata and outputs semantic files.
 
-- droughty lookml - generates a base layer.lkml file with views and explores from a warehouse schema 
-- droughty dbt-tests - generates a base schema from specified warehouse schemas. Includes standard testing routines
-- droughty dbml - generates an ERD based on the warehouse layer of your warehouse. Includes pk, fk relationships
+Current tools and supported platforms are:
 
-The purpose of this project is to automate the repetitive, dull elements of analytics engineering in the modern data stack. It turns out this also leads to cleaner projects, less human error and increases the likelihood of the basics getting done...
+-   lookml - generates a lkml with views, explores and measures from a
+    warehouse schema
+-   dbt - generates a base schema from specified warehouse schemas.
+    Includes standard testing routines
+-   dbml - generates an ERD based on the warehouse layer of your
+    warehouse. Includes pk, fk relationships
+-   cube - generates a cube schema including dimensions, integrations
+    and meassures
 
-Interested in contributing to `droughty`? Check out the [contributor guidelines](CONTRIBUTING.md).
+The purpose of this project is to automate the repetitive, dull elements
+of analytics engineering in the modern data stack. It turns out this
+also leads to cleaner projects, less human error and increases the
+likelihood of the basics getting done\...
 
-## How do I install it?
+**Documentation**
 
-`droughty` is available to install on [pip](https://pypi.org/project/droughty/) via the following command:
+Installation, configuration and usage documentation can be found on
+[ReadTheDocs](https://droughty.readthedocs.io/en/latest/)
 
-```
-pip install droughty
-```
+**Installation**
+
+droughty is available through [pip](https://pypi.org/project/droughty):
+
+    pip install droughty

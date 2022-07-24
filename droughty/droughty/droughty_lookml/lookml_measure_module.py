@@ -96,17 +96,18 @@ git_def_path = get_git_root(os.getcwd())
 
 def measure_output():
 
-    if ExploresVariables.lookml_path == None:
-   
+    if ExploresVariables.lookml_path != None:
+
+        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.lookml_path)
+
+
+    else:
+
         git_path = git_def_path
 
         rel_path = "lookml/base"
 
         path = os.path.join(git_path, rel_path)
-
-    elif ExploresVariables.lookml_path != None:
-
-        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.lookml_path)
 
     if not os.path.exists(path):
         os.makedirs(path)

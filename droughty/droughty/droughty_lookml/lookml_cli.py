@@ -57,21 +57,23 @@ def lookml_measures():
 
 def lookml_pop():
 
-    print("Generating base parameter layer")
+    if ExploresVariables.lookml_pop != None:
 
-    try:
+        print("Generating base parameter layer")
 
-        if ProjectVariables.warehouse == 'big_query':
+        try:
 
-            return pop_output()
+            if ProjectVariables.warehouse == 'big_query':
 
-        elif ProjectVariables.warehouse == 'snowflake':
+                return pop_output()
 
-            return pop_output_snowflake()
+            elif ProjectVariables.warehouse == 'snowflake':
 
-    finally:
+                return pop_output_snowflake()
 
-        print("lookml base parameter layer generated")
+        finally:
+
+            print("lookml base parameter layer generated")
 
 
 #def full_refresh():

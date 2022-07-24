@@ -4,6 +4,14 @@ from unicodedata import category
 import pandas as pd
 import numpy as np
 
+def recur_dictify(frame):
+    if len(frame.columns) == 1:
+        if frame.values.size == 1: return frame.values[0][0]
+        return frame.values.squeeze()
+    grouped = frame.groupby(frame.columns[0])
+    d = {k: recur_dictify(g.iloc[:,1:]) for k,g in grouped}
+    return d
+
 def wrangle_bigquery_dataframes(dataframe):
 
     dataframe['description'] = dataframe['description'].fillna('not available')
@@ -40,6 +48,48 @@ def wrangle_snowflake_dataframes(dataframe):
     dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','yesno')
 
     dataframe = dataframe.apply(lambda col: col.str.lower())
+
+    return (dataframe)
+
+def wrangle_bigquery_dataframes_drill_sets(dataframe):
+
+    dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('NUMERIC','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('STRING','string')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('BOOL','yesno')
+
+    dataframe = dataframe[dataframe["data_type"].str.contains("date|timestamp") == False]
+    dataframe = dataframe[dataframe["column_name"].str.contains("_fk|_pk|natural_key") == False]
+
+    dataframe = dataframe[['table_name','column_name']]
+
+    return (dataframe)
+
+def wrangle_snowflake_dataframes_drill_sets(dataframe):
+
+
+    dataframe['data_type'] = dataframe['data_type'].replace({'TIMESTAMP':'timestamp','TIMESTAMP_TZ':'timestamp','TIMESTAMP_NTZ':'timestamp'})
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('NUMERIC','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('NUMBER','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT','number')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('TEXT','string')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('VARIANT','string')   
+    dataframe['data_type'] = dataframe['data_type'].str.replace('BOOLEAN','yesno')
+
+    dataframe = dataframe[dataframe["data_type"].str.contains("date|timestamp") == False]
+
+    dataframe = dataframe.groupby(['table_name', 'column_name']).size().reset_index().rename(columns={0:'count'})
+
+    dataframe = dataframe[['table_name','column_name']]
+
+    dataframe = dataframe.apply(lambda col: col.str.lower())
+    dataframe = dataframe[dataframe["column_name"].str.contains("_fk|_pk|natural_key") == False]
 
     return (dataframe)
 

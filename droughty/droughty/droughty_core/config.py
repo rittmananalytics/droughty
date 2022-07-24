@@ -221,6 +221,7 @@ class ExploresVariables:
     parent_table_name: str.lower
     #paths
     lookml_path: str.lower
+    lookml_pop: str.lower
     dbml_path: str.lower
     cube_path: str.lower
     dbt_path: str.lower
@@ -263,6 +264,8 @@ def assign_explore_variables():
                 ExploresVariables.cube_measures_filename = (droughty_project.get("cube_measures_filename"))  
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
+
+                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
 
             except:
 

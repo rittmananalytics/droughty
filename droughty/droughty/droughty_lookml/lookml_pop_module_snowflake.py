@@ -12,7 +12,7 @@ from droughty.droughty_core.config import (
 
 def pop():
 
-    include = "include: /lookml/base/_base.layer.lkml"
+    include = 'include: "/lookml/base/_base.layer.lkml"'
 
     print (include)
     
@@ -144,28 +144,28 @@ def pop():
         default_value: "Quarter"
     }
 
-    dimension: first_date_in_period {
-        type: date
-        sql: DATE_TRUNC({% parameter timeframe %}, CURRENT_DATE());;
-    }
-
-    dimension: days_in_period {
-        type: number
-        sql: datediff(day,CURRENT_DATE(),${first_date_in_period}) ;;
-    }
-
-    dimension: first_date_in_prior_period {
-        type: date
-        hidden: no
-        sql: date_trunc({% parameter timeframe %},(dateadd({% parameter timeframe %}, -1, CURRENT_DATE())));;
-    }
-
-    dimension: last_date_in_prior_period {
-        type: date
-        hidden: no
-        sql: DATE_ADD(INTERVAL ${days_in_period} DAY,${first_date_in_prior_period}) ;;
-    }
-
+#    dimension: first_date_in_period {
+#        type: date
+#        sql: DATE_TRUNC({% parameter timeframe %}, CURRENT_DATE());;
+#    }
+#
+#    dimension: days_in_period {
+#        type: number
+#        sql: datediff(day,CURRENT_DATE(),${first_date_in_period}) ;;
+#    }
+#
+#    dimension: first_date_in_prior_period {
+#        type: date
+#        hidden: no
+#        sql: date_trunc({% parameter timeframe %},(dateadd({% parameter timeframe %}, -1, CURRENT_DATE())));;
+#    }
+#
+#    dimension: last_date_in_prior_period {
+#        type: date
+#        hidden: no
+#        sql: DATE_ADD(INTERVAL ${days_in_period} DAY,${first_date_in_prior_period}) ;;
+#    }
+#
     }
     """
 
@@ -208,18 +208,18 @@ def pop():
 
                     },
 
-                    {
-                    "label": "period over period",
-                    "type": "string",
-                    "sql": "case when ${"+view_name+"."+field_names+"_date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
-                            "when  ${"+view_name+"."+field_names+"_date_raw} >= ${first_date_in_prior_period} \n"
-                            "and  ${"+view_name+"."+field_names+"_date_raw} <= ${last_date_in_prior_period} \n"
-                            "then 'prior {% parameter timeframe %} to date' \n"
-                            "else null \n"
-                            "end",
-                    "name": field_names+"_period_selected",
-
-                    },
+#                    {
+#                    "label": "period over period",
+#                    "type": "string",
+#                    "sql": "case when ${"+view_name+"."+field_names+"_date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
+#                            "when  ${"+view_name+"."+field_names+"_date_raw} >= ${first_date_in_prior_period} \n"
+#                            "and  ${"+view_name+"."+field_names+"_date_raw} <= ${last_date_in_prior_period} \n"
+#                            "then 'prior {% parameter timeframe %} to date' \n"
+#                            "else null \n"
+#                            "end",
+#                    "name": field_names+"_period_selected",
+#
+#                    },
                     
                     {
                     "hidden": "yes",

@@ -12,7 +12,7 @@ from droughty.droughty_core.config import (
 
 def pop():
 
-    include = "include: /lookml/base/_base.layer.lkml"
+    include = 'include: "/lookml/base/_base.layer.lkml"'
 
     print (include)
     
@@ -144,28 +144,28 @@ def pop():
         default_value: "Quarter"
     }
 
-    dimension: first_date_in_period {
-        type: date
-        sql: DATE_TRUNC({% parameter timeframe %}, CURRENT_DATE());;
-    }
-
-    dimension: days_in_period {
-        type: number
-        sql: DATE_DIFF(${first_date_in_period}, DAY,CURRENT_DATE()) ;;
-    }
-
-    dimension: first_date_in_prior_period {
-        type: date
-        hidden: no
-        sql: DATE_TRUNC({% parameter timeframe %},DATE_SUB(CURRENT_DATE(), INTERVAL 1 {% parameter timeframe %}));;
-    }
-
-    dimension: last_date_in_prior_period {
-        type: date
-        hidden: no
-        sql: DATE_ADD(INTERVAL ${days_in_period} DAY,${first_date_in_prior_period}) ;;
-    }
-
+#    dimension: first_date_in_period {
+#        type: date
+#        sql: DATE_TRUNC({% parameter timeframe %}, CURRENT_DATE());;
+#    }
+#
+#    dimension: days_in_period {
+#        type: number
+#        sql: datediff(day,CURRENT_DATE(),${first_date_in_period}) ;;
+#    }
+#
+#    dimension: first_date_in_prior_period {
+#        type: date
+#        hidden: no
+#        sql: date_trunc({% parameter timeframe %},(dateadd({% parameter timeframe %}, -1, CURRENT_DATE())));;
+#    }
+#
+#    dimension: last_date_in_prior_period {
+#        type: date
+#        hidden: no
+#        sql: DATE_ADD(INTERVAL ${days_in_period} DAY,${first_date_in_prior_period}) ;;
+#    }
+#
     }
     """
 
@@ -208,18 +208,18 @@ def pop():
 
                     },
 
-                    {
-                    "label": "period over period",
-                    "type": "string",
-                    "sql": "case when ${"+view_name+"."+field_names+"_date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
-                            "when  ${"+view_name+"."+field_names+"_date_raw} >= ${first_date_in_prior_period} \n"
-                            "and  ${"+view_name+"."+field_names+"_date_raw} <= ${last_date_in_prior_period} \n"
-                            "then 'prior {% parameter timeframe %} to date' \n"
-                            "else null \n"
-                            "end",
-                    "name": field_names+"_period_selected",
-
-                    },
+#                    {
+#                    "label": "period over period",
+#                    "type": "string",
+#                    "sql": "case when ${"+view_name+"."+field_names+"_date_raw} >=  ${first_date_in_period} then 'this {% parameter timeframe %} to date' \n"
+#                            "when  ${"+view_name+"."+field_names+"_date_raw} >= ${first_date_in_prior_period} \n"
+#                            "and  ${"+view_name+"."+field_names+"_date_raw} <= ${last_date_in_prior_period} \n"
+#                            "then 'prior {% parameter timeframe %} to date' \n"
+#                            "else null \n"
+#                            "end",
+#                    "name": field_names+"_period_selected",
+#
+#                    },
                     
                     {
                     "hidden": "yes",
@@ -323,25 +323,25 @@ def pop():
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'ytd' %} \n "
                         "case \n"
-                        "when ${"+view_name+"."+field_names+" between date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_date}\n"
+                        "when ${"+view_name+"."+field_names+"_raw} between date_trunc(year, ${selected_reference_date_default_today_advanced_raw}) and ${selected_reference_date_default_today_advanced_date}\n"
                             "then  ${selected_dynamic_timeframe_advanced}\n"
-                        "when  ${"+view_name+"."+field_names+" between date_trunc(year, dateadd(year, -1,${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date})\n"
+                        "when  ${"+view_name+"."+field_names+"_raw} between date_trunc(year, dateadd(year, -1,${selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${selected_reference_date_default_today_advanced_date})\n"
                             "then  ${selected_dynamic_timeframe_advanced}\n"
                         "else  null\n"
                         "end \n"
                     "{% else %} \n "
                         "{% if select_comparison._parameter_value == 'year' %} \n "
                         "case \n "
-                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n "
+                            "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, ${selected_reference_date_default_today_advanced_raw}) \n "
                             "then ${selected_dynamic_timeframe_advanced} \n "
-                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n "
+                            "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, dateadd(year, -1, ${selected_reference_date_default_today_advanced_raw})) \n "
                             "then ${selected_dynamic_timeframe_advanced} \n "
                         "end \n "
                         "{% elsif select_comparison._parameter_value == 'period' %} \n "
                         "case \n"
-                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n"
+                            "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, ${selected_reference_date_default_today_advanced_raw}) \n"
                             "then ${selected_dynamic_timeframe_advanced} \n"
-                            "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd({% parameter parameters.select_timeframe_advanced %}, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n"
+                            "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, dateadd({% parameter select_timeframe_advanced %}, -1, ${selected_reference_date_default_today_advanced_raw})) \n"
                             "then ${selected_dynamic_timeframe_advanced} \n"
                         "end \n"
                         "{% endif %} \n "
@@ -357,25 +357,25 @@ def pop():
                     "sql":
                     "{% if select_timeframe_advanced._parameter_value == 'ytd' %} \n "
                         " case \n"
-                        " when ${"+view_name+"."+field_names+" between date_trunc(year, ${parameters.selected_reference_date_default_today_advanced_raw}) and ${parameters.selected_reference_date_default_today_advanced_raw} \n"
+                        " when ${"+view_name+"."+field_names+"_raw} between date_trunc(year, ${selected_reference_date_default_today_advanced_raw}) and ${selected_reference_date_default_today_advanced_raw} \n"
                             " then 'reference' \n"
-                        " when ${"+view_name+"."+field_names+" between date_trunc(year, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_date}) \n"
+                        " when ${"+view_name+"."+field_names+"_raw} between date_trunc(year, dateadd(year, -1, ${selected_reference_date_default_today_advanced_raw})) and dateadd(year, -1, ${selected_reference_date_default_today_advanced_date}) \n"
                             " then 'comparison' \n"
                         " else null \n"
                         " end \n"
                     "{% else %} \n "
                     "{% if select_comparison._parameter_value == 'year' %} \n "
                     "case \n"
-                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n"
+                        "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, ${selected_reference_date_default_today_advanced_raw}) \n"
                         "then 'reference' \n"
-                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd(year, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n"
+                        "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, dateadd(year, -1, ${selected_reference_date_default_today_advanced_raw})) \n"
                         "then 'comparison' \n"
                     "end \n"
                     "{% elsif select_comparison._parameter_value == 'period' %} \n "
                     "case \n"
-                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, ${parameters.selected_reference_date_default_today_advanced_raw}) \n"
+                        "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, ${selected_reference_date_default_today_advanced_raw}) \n"
                         "then 'reference' \n"
-                        "when date_trunc({% parameter parameters.select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw) = date_trunc({% parameter parameters.select_timeframe_advanced %}, dateadd({% parameter parameters.select_timeframe_advanced %}, -1, ${parameters.selected_reference_date_default_today_advanced_raw})) \n"
+                        "when date_trunc({% parameter select_timeframe_advanced %}, ${"+view_name+"."+field_names+"_raw}) = date_trunc({% parameter select_timeframe_advanced %}, dateadd({% parameter select_timeframe_advanced %}, -1, ${selected_reference_date_default_today_advanced_raw})) \n"
                         "then 'comparison' \n"
                     "end \n"
                     "{% endif %} \n "
@@ -419,7 +419,7 @@ def pop():
                             {
                                 "label" : key1[0]+" count  ({% if select_reference_date_advanced._is_filtered %}reference {% else %}current {% endif %} {% parameter "+key+".select_timeframe_advanced %})",
                                 "type": "count_distinct",
-                                "sql": "${table}."+key1[0],
+                                "sql": "${TABLE}."+key1[0],
                                 "name": "count_of_"+key1[0]+"_reference_advanced",
                                 "description": key1[2],
                                 "drill_fields": [key+"_set*"],
@@ -430,7 +430,7 @@ def pop():
                             {
                                 "label" :  key1[0]+" count (previous {% parameter "+key+".select_timeframe_advanced %})",
                                 "type": "count_distinct",
-                                "sql": "${table}."+key1[0],
+                                "sql": "${TABLE}."+key1[0],
                                 "name": "count_of_"+key1[0]+"_previous_advanced",
                                 "description": key1[2],
                                 "drill_fields": [key+"_set*"],

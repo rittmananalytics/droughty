@@ -12,7 +12,7 @@ from droughty.droughty_core.config import (
 
 def pop():
 
-    include = "include: /lookml/base/_base.layer.lkml"
+    include = 'include: "/lookml/base/_base.layer.lkml"'
 
     print (include)
 

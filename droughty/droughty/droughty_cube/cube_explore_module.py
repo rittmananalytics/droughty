@@ -43,8 +43,7 @@ def get_all_values(nested_dictionary,explore_dictionary):
                 yield(cube.dump(explore))
         
 
-                for key1, value1 in explore_value.items(): 
-
+                for key1, value1 in explore_value.items():
                     
 
                     join = {
@@ -68,7 +67,7 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                     yield(cube.dump(join))
                     
-                    join_end = "},"                 
+                    join_end = "}, "                 
 
                 yield(join_end)
                 
@@ -78,18 +77,18 @@ def get_all_values(nested_dictionary,explore_dictionary):
                 yield(dimension_start)
 
 
-                for key, value in value.items():
+                for key1, value1 in value.items():
                     
-                    if "pk" not in key[0] and "number" not in key [1]:  
+                    if "pk" not in key1[0]: #and "number" not in key1 [1]:  
                     
                         dimension = {
 
 
                             "dimension": {
-                            "sql": key[0],
-                            "type": key[1],
-                            "name": key[0],
-                            "description": key[2]
+                            "sql": key1[0],
+                            "type": key1[1],
+                            "name": key1[0],
+                            "description": key1[2]
 
 
                             }
@@ -98,23 +97,67 @@ def get_all_values(nested_dictionary,explore_dictionary):
                     
                         yield(cube.dump(dimension))
                         
-                    elif "pk" in key[0]:
+                    elif "pk" in key1[0]:
 
                         dimension = {
 
 
                             "dimension": {
                                 "primaryKey": "true",
-                                "type": key[1],
-                                "sql": key[0],
-                                "name": key[0],
-                                "description": key[2]
+                                "type": key1[1],
+                                "sql": key1[0],
+                                "name": key1[0],
+                                "description": key1[2]
 
                             }
                         }
 
                         yield(cube.dump(dimension))
+
+                closing_syntax = "} ,"
+
+                yield (closing_syntax)
+
+                measure_start = "measures: {"
+
+                yield(measure_start)
+
+                for key1, value1 in value.items():
                     
+                    if "pk" in key1[0]:
+
+                        measure = {
+
+
+                            "measure": {
+                            "sql": key1[0],
+                            "type": "count",
+                            "name": "count_of_"+key1[0]
+
+                            }
+
+                        }
+
+                        yield(cube.dump(measure))
+                        
+
+                    if key1[1] == 'number':
+
+                        measure = {
+
+
+                            "measure": {
+                            "sql": key1[0],
+                            "type": "sum",
+                            "name": "sum_of_"+key1[0]
+
+                            }
+
+                        }
+
+                        yield(cube.dump(measure))
+                
+                
                 for key,value in nested_dictionary.items():
 
                     closing_syntax = "}});"

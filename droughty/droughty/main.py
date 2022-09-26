@@ -7,7 +7,7 @@ from droughty.droughty_lookml.lookml_cli import (
 from droughty.droughty_cube.cube_cli import (
     base,
     explore,
-    measures
+    #measures
 )
 from droughty.droughty_dbt.dbt_test_cli import tests
 from droughty.droughty_dbml.dbml_cli import erd
@@ -46,7 +46,7 @@ def start():
 
         base()
         explore()
-        measures()
+        #measures()
 
     elif Common.args_command == 'dbml':
 

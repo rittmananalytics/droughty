@@ -32,17 +32,17 @@ def explore():
         print("cube explore layer generated")
 
 
-#def measures():
-#
-#    print("Generating measure layer")
-#
-#    try:
-#
-#        return measure_output()
-#
-#    finally:
-#
-#        print("cube measure layer generated")
+def measures():
+
+    print("Generating measure layer")
+
+    try:
+
+        return measure_output()
+
+    finally:
+
+        print("cube measure layer generated")
 
 #def full_refresh():
 #

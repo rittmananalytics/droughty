@@ -20,8 +20,12 @@ import sys
 import ruamel.yaml
 import git
 
+print(ExploresVariables.ignore_tests)
+
+##type(ExploresVariables.ignore_tests)
     
 def get_all_values(nested_dictionary):
+
     res = [{"version":2},{"models":None}]
     
     for key,value in nested_dictionary.items():
@@ -34,7 +38,7 @@ def get_all_values(nested_dictionary):
 
                 if key1 in described_columns_list:
 
-                    if "pk" in key1:
+                    if "pk" in key1 and key1 not in ExploresVariables.ignore_tests:
                         
                         elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null", "unique"]}
                         seq.append(elem)
@@ -54,7 +58,12 @@ def get_all_values(nested_dictionary):
                         elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": [""+"dbt_utils.at_least_one"]}
                         seq.append(elem)  
 
-                else:
+                    elif "pk" not in key1 or "fk" not in key1:
+                
+                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}"}
+                        seq.append(elem)  
+
+                elif key1 not in described_columns_list:
 
                         if "pk" in key1:
                             

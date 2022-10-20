@@ -217,6 +217,7 @@ class ExploresVariables:
     final_list: str.lower
     join_key_list: str.lower
     test_schemas: str.lower
+    ignore_tests: str.lower
     dbml_schemas: str.lower
     parent_table_name: str.lower
     #paths
@@ -248,7 +249,6 @@ def assign_explore_variables():
 
                 explores = (droughty_project.get("explores"))
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
-                ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
                 ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
 
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
@@ -266,6 +266,10 @@ def assign_explore_variables():
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
 
                 ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
+                
+                ExploresVariables.test_schemas = droughty_project['dbt_tests']['test_schemas']
+                ExploresVariables.ignore_tests = (droughty_project.get("dbt_tests"))  
+
 
             except:
 

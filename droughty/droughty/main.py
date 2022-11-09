@@ -10,6 +10,7 @@ from droughty.droughty_cube.cube_cli import (
     measures
 )
 from droughty.droughty_dbt.dbt_test_cli import tests
+from droughty.droughty_tml.tml_cli import tml
 from droughty.droughty_dbml.dbml_cli import erd
 from droughty.droughty_core.config_cli import Common
 from droughty.droughty_core.config import ExploresVariables
@@ -56,6 +57,10 @@ def start():
 
         tests()
 
+    elif Common.args_command == 'tml':
+
+        tml()
+
     else:
 
         lookml_base()
@@ -67,6 +72,7 @@ def start():
         measures()
         erd()
         tests()
+        tml()
 
 
 if __name__ == '__main__':

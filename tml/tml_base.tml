@@ -1,0 +1,18 @@
+sql_view: base_backend__web_events
+sql: `select * from analytics_qa.base_backend__web_events`,
+dimensions: {
+A:  {
+  sql: `A`,
+  type: `c`,
+  description: `c`,
+} ,
+C:  {
+  sql: `C`,
+  type: `l`,
+  description: `i`,
+} ,
+D:  {
+  sql: `D`,
+  type: `a`,
+  description: `t`,
+} ,

@@ -216,17 +216,20 @@ class ExploresVariables:
     flat_list: str .lower
     final_list: str.lower
     join_key_list: str.lower
-    test_schemas: str.lower
     ignore_tests: str.lower
     dbml_schemas: str.lower
     parent_table_name: str.lower
+
     #paths
+
     lookml_path: str.lower
     lookml_pop: str.lower
     dbml_path: str.lower
     cube_path: str.lower
     dbt_path: str.lower
+
     #filenames
+
     lookml_base_filename: str.lower
     lookml_explore_filename: str.lower
     lookml_measures_filename: str.lower
@@ -238,6 +241,8 @@ class ExploresVariables:
     dbml_filenames: str.lower
 
     dbt_tests_filename: str.lower
+    test_schemas: str.lower
+
 
 def assign_explore_variables():
 
@@ -267,9 +272,9 @@ def assign_explore_variables():
 
                 ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
                 
-                ExploresVariables.test_schemas = droughty_project['dbt_tests']['test_schemas']
-                ExploresVariables.ignore_tests = (droughty_project.get("dbt_tests"))  
+                ExploresVariables.ignore_tests = (droughty_project.get("ignore_tests"))
 
+                ExploresVariables.test_schemas = droughty_project['test_schemas']
 
             except:
 

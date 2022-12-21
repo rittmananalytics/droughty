@@ -9,6 +9,9 @@ import json
 import sys
 from itertools import chain
 
+from collections import defaultdict
+
+
 from droughty.droughty_dbt.dbt_test_base_dict import dbt_test_dict
 from droughty.droughty_dbt.dbt_test_field_base import described_columns_list
 from droughty.droughty_core.config import (
@@ -22,13 +25,35 @@ import git
 
 print(ExploresVariables.ignore_tests)
 
+
+
+def test ():
+    
+    for key, value in ExploresVariables.ignore_tests.items():
+
+        for key1 in value.items():
+
+            return (key1)
+        
+test_2 = test()
+
+def test():
+
+    dd = defaultdict(list)
+
+    for d in (test_2, dbt_test_dict()): # you can list as many input dicts as you want here
+        for key, value in d.items():
+             dd[key].append(value)
+
+print(test())
+
 ##type(ExploresVariables.ignore_tests)
     
 def get_all_values(nested_dictionary):
 
     res = [{"version":2},{"models":None}]
     
-    for key,value in nested_dictionary.items():
+    for (key,value), (ignore_tests_key,ignore_tests_value) in zip(nested_dictionary.items(),ignore_tests.items()):
 
             seq = []
             res.append([{"name": key, "columns": seq}])
@@ -63,7 +88,7 @@ def get_all_values(nested_dictionary):
                         elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}"}
                         seq.append(elem)  
 
-                elif key1 not in described_columns_list:
+                elif key1 not in described_columns_list and key1 not in ExploresVariables.ignore_tests:
 
                         if "pk" in key1:
                             

@@ -23,49 +23,30 @@ import sys
 import ruamel.yaml
 import git
 
-print(ExploresVariables.ignore_tests)
-
-
-
-def test ():
     
-    for key, value in ExploresVariables.ignore_tests.items():
+def get_all_values(nested_dictionary,test_overwrite_dictionary):
 
-        for key1 in value.items():
+    nested_dictionary.update(test_overwrite_dictionary)
 
-            return (key1)
-        
-test_2 = test()
-
-def test():
-
-    dd = defaultdict(list)
-
-    for d in (test_2, dbt_test_dict()): # you can list as many input dicts as you want here
-        for key, value in d.items():
-             dd[key].append(value)
-
-print(test())
-
-##type(ExploresVariables.ignore_tests)
-    
-def get_all_values(nested_dictionary):
+    ignore_test_keys = list(ExploresVariables.test_overwrite.keys())
 
     res = [{"version":2},{"models":None}]
     
-    for (key,value), (ignore_tests_key,ignore_tests_value) in zip(nested_dictionary.items(),ignore_tests.items()):
+    for key,value in nested_dictionary.items():
+
+        if key not in ignore_test_keys and not key in ExploresVariables.test_ignore:
 
             seq = []
             res.append([{"name": key, "columns": seq}])
             # for key1, value1 in value.items():  # not using value1
-            
-            for key1 in value.keys():
+
+            for key1,value1 in value.items():
 
                 if key1 in described_columns_list:
 
-                    if "pk" in key1 and key1 not in ExploresVariables.ignore_tests:
+                    if "pk" in key1 and "not_null" not in value1 and "unique" not in value1:
                         
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null", "unique"]}
+                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null","unique"]}
                         seq.append(elem)
                         
                     elif "fk" in key1:
@@ -88,11 +69,11 @@ def get_all_values(nested_dictionary):
                         elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}"}
                         seq.append(elem)  
 
-                elif key1 not in described_columns_list and key1 not in ExploresVariables.ignore_tests:
+                elif key1 not in described_columns_list:
 
                         if "pk" in key1:
                             
-                            elem = {"name": key1, "tests": ["not_null", "unique"]}
+                            elem = {"name": key1, "tests": [value1]}
                             seq.append(elem)
                             
                         elif "fk" in key1:
@@ -108,8 +89,27 @@ def get_all_values(nested_dictionary):
                         elif "pk" not in key1 or "fk" not in key1:
                     
                             elem = {"name": key1, "tests": [""+"dbt_utils.at_least_one"]}
-                            seq.append(elem)                
+                            seq.append(elem)
 
+        elif key in ignore_test_keys and key not in ExploresVariables.test_ignore:
+
+            seq = []
+            res.append([{"name": key, "columns": seq}])
+            # for key1, value1 in value.items():  # not using value1
+
+            for key1,value1 in value.items():
+
+                if key1 in described_columns_list:
+
+                        
+                    elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": value1}
+                    seq.append(elem)
+
+                elif key1 not in described_columns_list:
+
+                    elem = {"name": key1, "tests": value1}
+                    seq.append(elem)
+                            
     return res
 
 def schema_output():
@@ -145,7 +145,7 @@ def schema_output():
 
         with redirect_stdout(file):
 
-            for i in get_all_values(dbt_test_dict()):
+            for i in get_all_values(dbt_test_dict(),ExploresVariables.test_overwrite):
                 
                 yaml = ruamel.yaml.YAML()
                 yaml.indent(mapping=2, sequence=4, offset=2)            

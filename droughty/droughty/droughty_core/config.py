@@ -274,8 +274,6 @@ def assign_explore_variables():
                 ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
                 ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
                 ExploresVariables.test_ignore = droughty_project['test_ignore']['models']
-                #ExploresVariables.test_overwrite = (droughty_project.get("test_overwrite"))
-
                 ExploresVariables.test_schemas = droughty_project['test_schemas']
 
             except:

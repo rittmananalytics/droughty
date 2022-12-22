@@ -1,0 +1,18 @@
+profile: ra-development
+
+dimensional_inference: disabled
+
+field_description_path: warehouse_docs
+field_description_file_name: field_descriptions.md
+
+test_schemas:
+
+  - lewis_analytics_dev
+  - lewis_analytics_dev_staging
+  - lewis_analytics_dev_integration
+
+dbml_schemas:
+
+  - lewis_analytics_dev_staging
+  - lewis_analytics_dev_integration
+  - lewis_analytics_dev

@@ -19,6 +19,23 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
       - lewis_analytics_dev_integration
       - lewis_analytics_dev
 
+
+  test_overwrite:
+      models: 
+        wh_marketing__web_event_items_fact:
+              web_event_item_pk:
+                  - not_null
+                  - dbt_utils.at_least_one
+                  - unique
+              web_event_parameter_float_value:
+                  - dbt_utils.at_least_one
+
+  test_ignore:
+      models:
+        - base_backend__web_events
+        - base_ga4__web_events
+
+
   dbml_schemas:
       - lewis_analytics_dev_staging
       - lewis_analytics_dev_integration
@@ -57,6 +74,10 @@ Create this file in the root of your git repo (unless you are specifying the pat
 
 Optional variables
 ==================
+
+**Overwriting and ignoring model tests**
+
+Using the test_overwrite and test_ignore project parameters, you can overwrite tests or leave them blank using the test_overwrite parameter or ignore all model tests using the test_ignore parameter
 
 **Defining relative file outputs**
 

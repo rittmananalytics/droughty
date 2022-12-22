@@ -216,7 +216,8 @@ class ExploresVariables:
     flat_list: str .lower
     final_list: str.lower
     join_key_list: str.lower
-    ignore_tests: str.lower
+    test_overwrite: str.lower
+    test_ignore: str.lower
     dbml_schemas: str.lower
     parent_table_name: str.lower
 
@@ -271,8 +272,9 @@ def assign_explore_variables():
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
 
                 ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
-                
-                ExploresVariables.ignore_tests = (droughty_project.get("ignore_tests"))
+                ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
+                ExploresVariables.test_ignore = droughty_project['test_ignore']['models']
+                #ExploresVariables.test_overwrite = (droughty_project.get("test_overwrite"))
 
                 ExploresVariables.test_schemas = droughty_project['test_schemas']
 

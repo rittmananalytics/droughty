@@ -269,12 +269,14 @@ def assign_explore_variables():
                 ExploresVariables.cube_integration_filename = (droughty_project.get("cube_integration_filename"))  
                 ExploresVariables.cube_measures_filename = (droughty_project.get("cube_measures_filename"))  
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
-                ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
+                ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))
 
-                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
                 ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
                 ExploresVariables.test_ignore = droughty_project['test_ignore']['models']
-                ExploresVariables.test_schemas = droughty_project['test_schemas']
+                ExploresVariables.test_schemas = droughty_project['test_schemas']  
+
+                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views'] # If this is not at the bottom, it creates an error where other values will not fill. Something to look into
+
 
             except:
 

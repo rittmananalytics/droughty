@@ -53,20 +53,21 @@ def get_all_values(nested_dictionary,field_dict):
 
         yield(looker.dump(view))
 
+        if "bridge" not in key:
+       
+            for table_name,field_name in field_dict.items():
 
-        for table_name,field_name in field_dict.items():
+                if table_name in key:
 
-            if table_name in key:
+                    set = {
 
-                set = {
+                        "set": {
+                            "fields": field_name,
+                            "name": table_name+"_set"
+                        }
+                    }   
 
-                    "set": {
-                        "fields": field_name,
-                        "name": table_name+"_set"
-                    }
-                }   
-
-        yield(looker.dump(set))
+            yield(looker.dump(set))
         
 
         for key1, value1 in value.items():

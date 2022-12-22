@@ -1,0 +1,34 @@
+profile: ra-development
+
+dimensional_inference: enabled
+
+field_description_path: warehouse_docs
+field_description_file_name: field_descriptions.md
+
+test_schemas:
+  - lewis_analytics_dev
+  - lewis_analytics_dev_staging
+  - lewis_analytics_dev_integration
+
+test_overwrite:
+    models:
+      wh_marketing__web_event_items_fact:
+            web_event_item_pk:
+                - not_null
+                - dbt_utils.at_least_one
+                - unique
+            web_event_parameter_float_value:
+                - dbt_utils.at_least_one
+
+test_ignore:
+    models:
+      - base_backend__web_events
+      - base_ga4__web_events
+
+
+
+dbml_schemas:
+
+  - lewis_analytics_dev_staging
+  - lewis_analytics_dev_integration
+  - lewis_analytics_dev

@@ -216,16 +216,21 @@ class ExploresVariables:
     flat_list: str .lower
     final_list: str.lower
     join_key_list: str.lower
-    test_schemas: str.lower
+    test_overwrite: str.lower
+    test_ignore: str.lower
     dbml_schemas: str.lower
     parent_table_name: str.lower
+
     #paths
+
     lookml_path: str.lower
     lookml_pop: str.lower
     dbml_path: str.lower
     cube_path: str.lower
     dbt_path: str.lower
+
     #filenames
+
     lookml_base_filename: str.lower
     lookml_explore_filename: str.lower
     lookml_measures_filename: str.lower
@@ -237,6 +242,8 @@ class ExploresVariables:
     dbml_filenames: str.lower
 
     dbt_tests_filename: str.lower
+    test_schemas: str.lower
+
 
 def assign_explore_variables():
 
@@ -248,7 +255,6 @@ def assign_explore_variables():
 
                 explores = (droughty_project.get("explores"))
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
-                ExploresVariables.test_schemas = (droughty_project.get("test_schemas"))
                 ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
 
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
@@ -263,9 +269,30 @@ def assign_explore_variables():
                 ExploresVariables.cube_integration_filename = (droughty_project.get("cube_integration_filename"))  
                 ExploresVariables.cube_measures_filename = (droughty_project.get("cube_measures_filename"))  
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
-                ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))  
+                ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))
 
-                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views']
+#                ExploresVariables.test_overwrite = (droughty_project.get('test_overwrite', {}).get('models'))
+#                ExploresVariables.test_overwrite = (droughty_project.get('test_ignore', {}).get('models'))
+#                ExploresVariables.test_schemas = (droughty_project.get('test_schemas'))
+#
+#                ExploresVariables.test_overwrite = (droughty_project.get('lookml_pop', {}).get('views'))
+
+                try:
+                    ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
+                except:
+                    ExploresVariables.test_overwrite = "None"
+                try:
+                    ExploresVariables.test_ignore = droughty_project['test_ignore']['models']
+                except:
+                    ExploresVariables.test_ignore = "None"
+                try:
+                    ExploresVariables.test_schemas = droughty_project['test_schemas']  
+                except:
+                    ExploresVariables.test_schemas = "None"
+                try:
+                    ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views'] # If this is not at the bottom, it creates an error where other values will not fill. Something to look into
+                except:
+                    ExploresVariables.lookml_pop = None
 
             except:
 

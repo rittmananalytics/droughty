@@ -53,22 +53,26 @@ def get_all_values(nested_dictionary,field_dict):
 
         yield(looker.dump(view))
 
+        try:
+       
+            for table_name,field_name in field_dict.items():
 
-        for table_name,field_name in field_dict.items():
+                if table_name in key:
 
-            if table_name in key:
+                    set = {
 
-                set = {
+                        "set": {
+                            "fields": field_name,
+                            "name": table_name+"_set"
+                        }
+                    }   
 
-                    "set": {
-                        "fields": field_name,
-                        "name": table_name+"_set"
-                    }
-                }   
+            yield(looker.dump(set))
 
-        yield(looker.dump(set))
+        except:
+
+            pass
         
-
         for key1, value1 in value.items():
             
             if "pk" not in key1[0] and "fk" not in key1[0] and "date" not in key1[1] and "timestamp" not in key1[1] and "number" not in key1 [1]:

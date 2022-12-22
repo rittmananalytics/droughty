@@ -50,6 +50,23 @@
     <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
     <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
 
+
+<span class="n">test_overwrite</span><span class="p">:</span>
+    <span class="n">models</span><span class="p">:</span>
+      <span class="n">wh_marketing__web_event_items_fact</span><span class="p">:</span>
+            <span class="n">web_event_item_pk</span><span class="p">:</span>
+                <span class="o">-</span> <span class="n">not_null</span>
+                <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
+                <span class="o">-</span> <span class="n">unique</span>
+            <span class="n">web_event_parameter_float_value</span><span class="p">:</span>
+                <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
+
+<span class="n">test_ignore</span><span class="p">:</span>
+    <span class="n">models</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">base_backend__web_events</span>
+      <span class="o">-</span> <span class="n">base_ga4__web_events</span>
+
+
 <span class="n">dbml_schemas</span><span class="p">:</span>
     <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
     <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
@@ -89,6 +106,8 @@
 </section>
 <section id="optional-variables">
 <h1>Optional variables<a class="headerlink" href="#optional-variables" title="Permalink to this headline">¶</a></h1>
+<p><strong>Overwriting and ignoring model tests</strong></p>
+<p>Using the test_overwrite and test_ignore project parameters, you can overwrite tests or leave them blank using the test_overwrite parameter or ignore all model tests using the test_ignore parameter</p>
 <p><strong>Defining relative file outputs</strong></p>
 <p>Just add these variables to your droughty_project.yaml and it will write to the path name starting from the root of your git repo:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dbt_path</span><span class="p">:</span> <span class="n">example_path</span>

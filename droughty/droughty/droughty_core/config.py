@@ -271,12 +271,28 @@ def assign_explore_variables():
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))
 
-                ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
-                ExploresVariables.test_ignore = droughty_project['test_ignore']['models']
-                ExploresVariables.test_schemas = droughty_project['test_schemas']  
+#                ExploresVariables.test_overwrite = (droughty_project.get('test_overwrite', {}).get('models'))
+#                ExploresVariables.test_overwrite = (droughty_project.get('test_ignore', {}).get('models'))
+#                ExploresVariables.test_schemas = (droughty_project.get('test_schemas'))
+#
+#                ExploresVariables.test_overwrite = (droughty_project.get('lookml_pop', {}).get('views'))
 
-                ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views'] # If this is not at the bottom, it creates an error where other values will not fill. Something to look into
-
+                try:
+                    ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
+                except:
+                    ExploresVariables.test_overwrite = "None"
+                try:
+                    ExploresVariables.test_ignore = droughty_project['test_ignore']['models']
+                except:
+                    ExploresVariables.test_ignore = "None"
+                try:
+                    ExploresVariables.test_schemas = droughty_project['test_schemas']  
+                except:
+                    ExploresVariables.test_schemas = "None"
+                try:
+                    ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views'] # If this is not at the bottom, it creates an error where other values will not fill. Something to look into
+                except:
+                    ExploresVariables.lookml_pop = None
 
             except:
 

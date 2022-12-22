@@ -87,7 +87,7 @@ def get_all_values(nested_dictionary,test_overwrite_dictionary):
 
                         if "pk" in key1:
                             
-                            elem = {"name": key1, "tests": [value1]}
+                            elem = {"name": key1, "tests": ["not_null","unique"]}
                             seq.append(elem)
                             
                         elif "fk" in key1:

@@ -1,0 +1,3208 @@
+version: 2
+models:
+  - name: int_core__clients
+    columns:
+      - name: harvest_client_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core__people
+    columns:
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_core__sprints
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__clients
+    columns:
+      - name: harvest_client_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__employees
+    columns:
+      - name: harvest_employee_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_first_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_full_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_contractor
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_last_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_weekly_capacity
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__expenses
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_category_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_closed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_locked
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_locked_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_content_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_file_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_file_size
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_url
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_spent_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_total_cost
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_units
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_updated_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__invoice_line_items
+    columns:
+      - name: harvest_invoice_line_item_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_expenses_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_is_taxed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_kind
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_license_referral_fee_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_quantity
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_services_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_support_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_unit_price
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__invoices
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_creator_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_client_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_discount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_discount_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_due_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_due_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_issue_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_paid_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_paid_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_payment_term
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_period_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_period_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_purchase_order
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_sent_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_tax
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_tax_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__projects
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_bill_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_is_monthly
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget_include_expenses
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_ends_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_fixed_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notify_when_over_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_percentage
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_show_budget_to_all
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_starts_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__tasks
+    columns:
+      - name: harvest_task_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_billable_by_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_harvest__time_sheets
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_jira_issue_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_permalink
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_platform
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_billable_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_hours
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_hours_budgeted
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_closed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_locked
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_running
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_locked_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_spent_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_started_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_timer_started_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__boards
+    columns:
+      - name: jira_board_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_board_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__daily_issue_field_history
+    columns:
+      - name: jira_daily_issue_field_history_date_day
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_daily_issue_field_history_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_daily_issue_field_history_sprint
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_daily_issue_field_history_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__epics
+    columns:
+      - name: jira_epic_is_done
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_summary
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__fields
+    columns:
+      - name: jira_field_is_array
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_is_custom
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__issues
+    columns:
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_creator_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_current_sprint_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_affects_versions
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_any_assignment_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_assignee
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_conversation
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_count_comments
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_count_sprint_changes
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_creator
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_priority
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_sprint_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_status_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_due_date_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_environment
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_first_assigned_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_first_resolved_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_fixes_versions
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_is_active_sprint
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_is_parent_epic
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_assigned_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_assignment_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_viewed_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_open_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_original_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_parent_issue_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_parent_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_parent_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_priority
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_project
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_remaining_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_reporter
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_resolution_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_resolved_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint_completed_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint_ended_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint_started_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_category_changed_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_changed_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_story_point_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_summary
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_time_spent_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_work_ratio
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_reporter_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_resolution_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__issues_field_history
+    columns:
+      - name: issue_field_history_index
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_status_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_status_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_story_point_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_timestamp
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__projects
+    columns:
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_assigned_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_assigned_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_assigned_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_assigned_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_board_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_board_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_components
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_closed_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_open_assigned_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_open_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_epics
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_lead_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_assigned_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_assigned_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_assigned_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_assigned_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_project_type_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__sprints
+    columns:
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_complete_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_end_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_goal
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_start_at_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira__users
+    columns:
+      - name: jira_user_avg_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_avg_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_avg_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_avg_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_count_closed_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_count_open_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_locale
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_projects
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_time_zone
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_username
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira_intermediate__issues
+    columns:
+      - name: field_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_timestamp
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_value
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_jira_intermediate__issues_pivot
+    columns:
+      - name: jira_field_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history__original_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history__remaining_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history__time_spent
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_accelo
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_acceptance_criteria
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_affected_hardware
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_assignee
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_backout_plan
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_baseline_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_baseline_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_bug_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_change_completion_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_change_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_change_risk
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_change_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_change_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_compass
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_created
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_creator
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_deliverable_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_deliverable_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_development
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_development_stage
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_domain
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_due_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_environment
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_epic_color
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_epic_link
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_epic_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_epic_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_external_issue_id
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_hubspot_ticket_count__hub_id__4402794_
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_impact
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_implementation_plan
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_investigation_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_issue_color
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_last_viewed
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_linked_intercom_conversation_ids
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_locked_forms
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_number_of_linked_intercom_conversations
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_open_forms
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_operational_categorization
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_original_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_parent
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_parent_link
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_pending_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_planned_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_planned_end_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_planned_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_planned_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_position_in_hierarchy_
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_priority
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_product
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_product_categorization
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_program_increment
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_project
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_rank
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_remaining_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_reporter
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_request_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_resolution
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_resolved
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_risk_consequence
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_risk_probability
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_root_cause
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_satisfaction
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_satisfaction_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_security_level
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_severity
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_source
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_start_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_status_category_changed
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_story_point_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_story_points
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_submitted_forms
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_summary
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_target_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_target_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_task_progress
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_team
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_test_plan
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_time_spent
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_time_to_close_after_resolution
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_time_to_first_response
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_time_to_resolution
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_time_to_review_normal_change
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_timestamp
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_total_forms
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_updated
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_urgency
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_work_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_work_ratio
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_workaround
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__clients
+    columns:
+      - name: harvest_client_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__employee
+    columns:
+      - name: harvest_employee_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_first_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_full_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_contractor
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_last_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_weekly_capacity
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__employee_roles
+    columns:
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_role_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__expenses
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_category_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_closed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_locked
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_locked_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_content_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_file_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_file_size
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_url
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_spent_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_total_cost
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_units
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_updated_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__external_reference
+    columns:
+      - name: harvest_external_reference_group_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_jira_issue_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_permalink
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_platform
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__invoice_line_items
+    columns:
+      - name: harvest_invoice_line_item_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_expenses_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_is_taxed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_kind
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_license_referral_fee_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_quantity
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_services_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_support_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_unit_price
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__invoices
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_creator_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_client_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_discount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_discount_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_due_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_due_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_issue_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_paid_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_paid_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_payment_term
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_period_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_period_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_purchase_order
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_sent_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_tax
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_tax_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__project_users
+    columns:
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_user_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_user_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_user_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_user_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_user_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__projects
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_bill_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_is_monthly
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget_include_expenses
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_ends_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_fixed_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notify_when_over_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_percentage
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_show_budget_to_all
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_starts_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__projects_tasks
+    columns:
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_task_updated_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__roles
+    columns:
+      - name: harvest_role_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_role_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_role_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_role_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__tasks
+    columns:
+      - name: harvest_task_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_billable_by_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__time_sheet_external_reference
+    columns:
+      - name: harvest_external_reference_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_harvest__time_sheets
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_billable_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_hours
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_hours_budgeted
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_closed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_locked
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_running
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_locked_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_sk
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_spent_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_started_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_timer_started_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__boards
+    columns:
+      - name: jira_board_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_board_type
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__epics
+    columns:
+      - name: jira_epic_is_done
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_summary
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__fields
+    columns:
+      - name: jira_field_is_array
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_is_custom
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__issue_board
+    columns:
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__issues
+    columns:
+      - name: jira_issue_assignee
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_creator
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_due_date_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_viewed_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_original_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_parent_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_priority
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_project
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_remaining_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_reporter
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_resolved_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_category_changed_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_summary
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__issues_field_history
+    columns:
+      - name: jira_field_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_author_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_timestamp
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_value
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__project_board
+    columns:
+      - name: jira_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__projects
+    columns:
+      - name: jira_project_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_lead_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_project_type_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_row_number
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__sprints
+    columns:
+      - name: jira_complete_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_end_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_board_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_goal
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_start_at_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__statuses
+    columns:
+      - name: jira_status_category_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_status_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_status_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_status_natural_key
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_jira__users
+    columns:
+      - name: jira_user_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_locale
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_time_zone
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_username
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_core__clients_bridge
+    columns:
+      - name: client_pk
+        tests:
+          - string
+      - name: harvest_client_fk
+        tests:
+          - not_null
+      - name: jira_project_fk
+        tests:
+          - not_null
+      - name: nk
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_core__people_bridge
+    columns:
+      - name: harvest_employee_fk
+        tests:
+          - not_null
+      - name: jira_user_fk
+        tests:
+          - not_null
+      - name: nk
+        tests:
+          - dbt_utils.at_least_one
+      - name: person_pk
+        tests:
+          - string
+  - name: wh_core__sprints_bridge
+    columns:
+      - name: harvest_project_fk
+        tests:
+          - not_null
+      - name: jira_sprint_fk
+        tests:
+          - not_null
+      - name: nk
+        tests:
+          - dbt_utils.at_least_one
+      - name: sprint_pk
+        tests:
+          - string
+  - name: wh_delivery__harvest_clients_dim
+    columns:
+      - name: harvest_client_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_pk
+        tests:
+          - string
+      - name: harvest_client_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_clients_fact
+    columns:
+      - name: harvest_client_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_client_pk
+        tests:
+          - string
+      - name: harvest_client_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_employees_dim
+    columns:
+      - name: harvest_employee_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_first_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_full_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_contractor
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_last_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_pk
+        tests:
+          - string
+      - name: harvest_employee_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_weekly_capacity
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_employees_fact
+    columns:
+      - name: harvest_employee_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_first_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_full_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_is_contractor
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_last_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_pk
+        tests:
+          - string
+      - name: harvest_employee_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_weekly_capacity
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_expenses_fact
+    columns:
+      - name: harvest_client_fk
+        tests:
+          - not_null
+      - name: harvest_employee_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_fk
+        tests:
+          - not_null
+      - name: harvest_expense_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_category_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_closed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_is_locked
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_locked_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_pk
+        tests:
+          - string
+      - name: harvest_expense_receipt_content_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_file_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_file_size
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_receipt_url
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_spent_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_total_cost
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_units
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_expense_updated_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_fk
+        tests:
+          - not_null
+      - name: harvest_project_fk
+        tests:
+          - not_null
+  - name: wh_delivery__harvest_invoice_line_items_fact
+    columns:
+      - name: harvest_invoice_fk
+        tests:
+          - not_null
+      - name: harvest_invoice_line_item_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_expenses_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_is_taxed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_kind
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_license_referral_fee_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_pk
+        tests:
+          - string
+      - name: harvest_invoice_line_item_quantity
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_services_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_support_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_line_item_unit_price
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_fk
+        tests:
+          - not_null
+  - name: wh_delivery__harvest_invoices_fact
+    columns:
+      - name: harvest_client_fk
+        tests:
+          - not_null
+      - name: harvest_employee_fk
+        tests:
+          - not_null
+      - name: harvest_invoice_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_client_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_currency
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_discount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_discount_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_due_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_due_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_issue_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_number
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_paid_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_paid_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_payment_term
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_period_end
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_period_start
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_pk
+        tests:
+          - string
+      - name: harvest_invoice_purchase_order
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_sent_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_subject
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_tax
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_tax_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_invoices_xa
+    columns:
+      - name: harvest_client_invoice_sequence_nunber
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_net_amount
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_pk
+        tests:
+          - string
+      - name: harvest_invoice_revenue_amount_billed
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_projects_dim
+    columns:
+      - name: harvest_client_fk
+        tests:
+          - not_null
+      - name: harvest_project_bill_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_is_monthly
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget_include_expenses
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_ends_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_fixed_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notify_when_over_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_percentage
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_pk
+        tests:
+          - string
+      - name: harvest_project_show_budget_to_all
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_starts_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_projects_fact
+    columns:
+      - name: harvest_client_fk
+        tests:
+          - not_null
+      - name: harvest_project_bill_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_by
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_budget_is_monthly
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_code
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_cost_budget_include_expenses
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_created_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_ends_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_is_fixed_fee
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_notify_when_over_budget
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_over_budget_notification_percentage
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_pk
+        tests:
+          - string
+      - name: harvest_project_show_budget_to_all
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_starts_on
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_updated_at
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_tasks_dim
+    columns:
+      - name: harvest_task_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_billable_by_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_pk
+        tests:
+          - string
+      - name: harvest_task_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_tasks_fact
+    columns:
+      - name: harvest_task_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_default_hourly_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_billable_by_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_is_default
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_pk
+        tests:
+          - string
+      - name: harvest_task_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__harvest_time_sheets_fact
+    columns:
+      - name: harvest_client_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_employee_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_jira_fk
+        tests:
+          - not_null
+      - name: harvest_external_reference_jira_issue_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_permalink
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_external_reference_platform
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_invoice_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_project_fk
+        tests:
+          - not_null
+      - name: harvest_task_assignment_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_task_fk
+        tests:
+          - not_null
+      - name: harvest_timesheet_billable_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_cost_rate
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_hours
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_hours_budgeted
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_billable
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_billed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_closed
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_locked
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_is_running
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_locked_reason
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_notes
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_pk
+        tests:
+          - string
+      - name: harvest_timesheet_spent_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_started_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_timer_started_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: harvest_timesheet_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__jira_daily_issue_field_history_fact
+    columns:
+      - name: jira_daily_issue_field_history_date_day
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_daily_issue_field_history_pk
+        tests:
+          - string
+      - name: jira_daily_issue_field_history_sprint
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_daily_issue_field_history_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_fk
+        tests:
+          - not_null
+  - name: wh_delivery__jira_epics_dim
+    columns:
+      - name: jira_epic_is_done
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_epic_pk
+        tests:
+          - string
+      - name: jira_epic_summary
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__jira_fields_dim
+    columns:
+      - name: jira_field_is_array
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_is_custom
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_field_pk
+        tests:
+          - string
+  - name: wh_delivery__jira_issues_fact
+    columns:
+      - name: jira_creator_fk
+        tests:
+          - not_null
+      - name: jira_current_sprint_fk
+        tests:
+          - not_null
+      - name: jira_external_reference_jira_fk
+        tests:
+          - not_null
+      - name: jira_issue_affects_versions
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_any_assignment_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_assignee
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_conversation
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_count_comments
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_count_sprint_changes
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_created_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_creator
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_priority
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_sprint_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_current_status_category
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_due_date_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_environment
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_first_assigned_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_first_resolved_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_fixes_versions
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_is_active_sprint
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_is_done
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_is_parent_epic
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_assigned_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_assignment_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_last_viewed_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_natural_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_open_duration_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_original_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_parent_fk
+        tests:
+          - not_null
+      - name: jira_issue_parent_issue_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_parent_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_pk
+        tests:
+          - string
+      - name: jira_issue_priority
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_project
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_remaining_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_reporter
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_resolution_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_resolved_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint_completed_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint_ended_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_sprint_started_at
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_category_changed_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_status_stage
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_story_point_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_summary
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_time_spent_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_updated_at_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_work_ratio
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_reporter_fk
+        tests:
+          - not_null
+      - name: jira_resolution_fk
+        tests:
+          - not_null
+      - name: jira_user_fk
+        tests:
+          - not_null
+  - name: wh_delivery__jira_issues_field_history_fact
+    columns:
+      - name: jira_field_fk
+        tests:
+          - not_null
+      - name: jira_issue_field_history_is_active
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_status_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_status_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_story_point_estimate
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_field_history_timestamp
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_fk
+        tests:
+          - not_null
+      - name: jira_issues_field_history_pk
+        tests:
+          - string
+  - name: wh_delivery__jira_issues_xa
+    columns:
+      - name: jira_issue_age_in_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_development_stage
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_duration
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_issue_summary_pk
+        tests:
+          - string
+      - name: jira_issue_summary_story_point_estimate
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__jira_projects_dim
+    columns:
+      - name: jira_project_avg_age_currently_open_assigned_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_assigned_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_assigned_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_assigned_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_board_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_board_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_components
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_closed_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_open_assigned_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_open_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_epics
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_assigned_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_assigned_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_assigned_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_assigned_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_pk
+        tests:
+          - string
+      - name: jira_project_project_type_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_fk
+        tests:
+          - not_null
+  - name: wh_delivery__jira_projects_fact
+    columns:
+      - name: jira_project_avg_age_currently_open_assigned_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_assigned_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_assigned_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_assigned_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_avg_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_board_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_board_type
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_components
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_closed_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_open_assigned_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_count_open_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_description
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_epics
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_assigned_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_assigned_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_assigned_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_assigned_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_median_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_pk
+        tests:
+          - string
+      - name: jira_project_project_type_key
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_fk
+        tests:
+          - not_null
+  - name: wh_delivery__jira_sprints_dim
+    columns:
+      - name: jira_complete_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_end_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_fk
+        tests:
+          - not_null
+      - name: jira_sprint_goal
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_pk
+        tests:
+          - string
+      - name: jira_sprint_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_start_at_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__jira_sprints_fact
+    columns:
+      - name: jira_complete_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_end_at_date
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_project_fk
+        tests:
+          - not_null
+      - name: jira_sprint_goal
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_sprint_pk
+        tests:
+          - string
+      - name: jira_sprint_state
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_start_at_date
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_delivery__jira_users_dim
+    columns:
+      - name: jira_user_avg_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_avg_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_avg_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_avg_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_count_closed_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_count_open_issues
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_email
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_locale
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_age_currently_open_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_age_currently_open_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_close_time_days
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_median_close_time_seconds
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_pk
+        tests:
+          - string
+      - name: jira_user_projects
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_time_zone
+        tests:
+          - dbt_utils.at_least_one
+      - name: jira_user_username
+        tests:
+          - dbt_utils.at_least_one
+  - name: wh_marketing__web_event_items_fact
+    columns:
+      - name: web_event_item_pk
+        tests:
+          - not_null
+          - dbt_utils.at_least_one
+          - unique
+      - name: web_event_parameter_float_value
+        tests:
+          - dbt_utils.at_least_one

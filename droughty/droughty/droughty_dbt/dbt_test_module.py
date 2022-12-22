@@ -23,12 +23,26 @@ import sys
 import ruamel.yaml
 import git
 
-    
+
 def get_all_values(nested_dictionary,test_overwrite_dictionary):
 
-    nested_dictionary.update(test_overwrite_dictionary)
+    test_overwrite = ExploresVariables.test_overwrite
 
-    ignore_test_keys = list(ExploresVariables.test_overwrite.keys())
+    try:
+        
+        if test_overwrite != None:
+    
+            nested_dictionary.update(test_overwrite_dictionary)
+
+            ignore_test_keys = list(ExploresVariables.test_overwrite.keys())
+
+        else:
+        
+            pass
+
+    except:
+
+        ignore_test_keys = "None"
 
     res = [{"version":2},{"models":None}]
     

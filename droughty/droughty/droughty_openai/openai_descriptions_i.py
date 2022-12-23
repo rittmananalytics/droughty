@@ -8,11 +8,10 @@ from droughty.droughty_dbt.dbt_test_field_base import described_columns_list
 
 from droughty.droughty_core.config import (
     ExploresVariables,
-    ProjectVariables,
     IdentifyConfigVariables
 )
 
-openai.api_key = ProjectVariables.openai_secret
+openai.api_key = "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"
 model_engine = "text-davinci-003"
 
 def _get_ans_from_response(response:openai.openai_object.OpenAIObject) -> str:
@@ -28,6 +27,9 @@ def _getter(model_engine:str = model_engine,prompt:str = "") -> str:
                           max_tokens=1024
                           )
     return _get_ans_from_response(response)
+
+get_dbt_dict()
+
 
 def wrangle_descriptions():
 
@@ -46,42 +48,48 @@ def wrangle_descriptions():
 def list_rows(dataframe):
 
     for index, row in dataframe.iterrows():
-
-        if row['og_column_name'] not in described_columns_list:
         
-            print("{% docs "+row['og_column_name']+ " %}")
-            
-            print(_getter(prompt=row['column_name']))
-            
-            print("{% enddocs %}")
+        print("{% docs "+row['og_column_name']+ " %}")
+        
+        print(_getter(prompt=row['column_name']))
+        
+        print("{% enddocs %}")
 
 def description_output():
 
-    if ExploresVariables.openai_field_descriptions_path != None:
+#    if ExploresVariables.lookml_path != None:
+#
+#        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.lookml_path)
+#
+#    else:
+#
+#        git_path = IdentifyConfigVariables.git_path
+#
+#        rel_path = "lookml/base"
+#
+#        path = os.path.join(git_path, rel_path)
+#
+#    if not os.path.exists(path):
+#        os.makedirs(path)
+#        
+#    if ExploresVariables.lookml_path != None:
+#
+#        filename = ExploresVariables.lookml_base_filename
+#        
+#    else:
+#
+#        filename = '_base.layer'
 
-        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.openai_field_descriptions_path)
+    git_path = IdentifyConfigVariables.git_path
 
-    else:
+    rel_path = "warehouse_docs"
 
-        git_path = IdentifyConfigVariables.git_path
-
-        rel_path = "warehouse_docs"
-
-        path = os.path.join(git_path, rel_path)
+    path = os.path.join(git_path, rel_path)
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
-    if ExploresVariables.openai_field_descriptions_filename != None:
 
-        filename = ExploresVariables.openai_field_descriptions_filename
-        
-    else:
-
-        filename = 'openai_field_descriptions'
-
-
-    path = os.path.join(git_path, rel_path)
+    filename = "field_descriptions"
    
     suffix = '.md'
 

@@ -5,8 +5,8 @@ dimensional_inference: enabled
 field_description_path: warehouse_docs
 field_description_file_name: field_descriptions.md
 
-openai_field_descriptions_path:
-openai_field_descriptions_filename:
+#openai_field_descriptions_path: warehouse_docs_test
+#openai_field_descriptions_filename: warehouse_docs_test
 
 test_schemas:
   - lewis_analytics_dev

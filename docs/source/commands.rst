@@ -68,6 +68,20 @@ It will output the cube models into the follow dir::
 
 As with lookml, this assigns data types and also identifies pk, fk references and assigns them
 
+**docs**
+
+Generates inferred warehouse descriptions using openai, run::
+
+    droughty docs
+
+By default, it will output the inferred metadata into::
+
+    /warehouse_docs/openai_field_descriptions.md
+
+Droughty docs will read from your field_descriptions.md file and only create descriptions that are absent for entities in the warehouse.
+
+Openai isn't prefect so make sure you sanity check the output
+
 **arguments**
 
   - --profiles-dir 

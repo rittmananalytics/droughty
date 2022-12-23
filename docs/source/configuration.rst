@@ -14,6 +14,9 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
   field_description_path: warehouse_docs
   field_description_file_name: field_descriptions.md
 
+  openai_field_descriptions_path: warehouse_docs
+  openai_field_descriptions_filename: openai_field_descriptions 
+
   test_schemas:
       - lewis_analytics_dev_staging
       - lewis_analytics_dev_integration
@@ -123,6 +126,8 @@ profile example::
       user: 
 
       warehouse_name: big_query
+
+      openai_secret: sk-wdfnwfw40t493t304t9340t94wet0et90edf (example)
 
 --------------
 

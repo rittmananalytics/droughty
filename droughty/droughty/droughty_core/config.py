@@ -149,7 +149,11 @@ def assign_project_variables():
                     ProjectVariables.environment_profile = droughty_project['profile']
                     ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']                    
                     ProjectVariables.schema = droughty_profile[value]['schema_name']
-                    ProjectVariables.openai_secret = droughty_profile[value]['openai_secret']
+
+                    try:
+                        ProjectVariables.openai_secret = droughty_profile[value]['openai_secret']
+                    except:
+                        pass
 
                     # BigQuery
 
@@ -277,7 +281,7 @@ def assign_explore_variables():
 
                 ExploresVariables.openai_field_descriptions_path = (droughty_project.get("openai_field_descriptions_path"))
                 ExploresVariables.openai_field_descriptions_filename = (droughty_project.get("openai_field_descriptions_filename"))
-                
+
                 try:
                     ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']
                 except:

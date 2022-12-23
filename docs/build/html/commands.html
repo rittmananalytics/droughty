@@ -91,6 +91,17 @@
 </pre></div>
 </div>
 <p>As with lookml, this assigns data types and also identifies pk, fk references and assigns them</p>
+<p><strong>docs</strong></p>
+<p>Generates inferred warehouse descriptions using openai, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">docs</span>
+</pre></div>
+</div>
+<p>By default, it will output the inferred metadata into:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">warehouse_docs</span><span class="o">/</span><span class="n">openai_field_descriptions</span><span class="o">.</span><span class="n">md</span>
+</pre></div>
+</div>
+<p>Droughty docs will read from your field_descriptions.md file and only create descriptions that are absent for entities in the warehouse.</p>
+<p>Openai isn’t prefect so make sure you sanity check the output</p>
 <p><strong>arguments</strong></p>
 <blockquote>
 <div><ul class="simple">

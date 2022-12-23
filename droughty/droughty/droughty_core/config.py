@@ -125,7 +125,7 @@ class ProjectVariables:
     project: str.lower
     warehouse: str.lower
     schema: str.lower
-
+    openai_secret: str
     role: str.lower
     password: str.lower
     database: str.lower
@@ -149,6 +149,11 @@ def assign_project_variables():
                     ProjectVariables.environment_profile = droughty_project['profile']
                     ProjectVariables.warehouse =  droughty_profile[value]['warehouse_name']                    
                     ProjectVariables.schema = droughty_profile[value]['schema_name']
+
+                    try:
+                        ProjectVariables.openai_secret = droughty_profile[value]['openai_secret']
+                    except:
+                        pass
 
                     # BigQuery
 
@@ -244,6 +249,9 @@ class ExploresVariables:
     dbt_tests_filename: str.lower
     test_schemas: str.lower
 
+    openai_field_descriptions_path: str.lower
+    openai_field_descriptions_filename: str.lower
+
 
 def assign_explore_variables():
 
@@ -271,11 +279,8 @@ def assign_explore_variables():
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))
 
-#                ExploresVariables.test_overwrite = (droughty_project.get('test_overwrite', {}).get('models'))
-#                ExploresVariables.test_overwrite = (droughty_project.get('test_ignore', {}).get('models'))
-#                ExploresVariables.test_schemas = (droughty_project.get('test_schemas'))
-#
-#                ExploresVariables.test_overwrite = (droughty_project.get('lookml_pop', {}).get('views'))
+                ExploresVariables.openai_field_descriptions_path = (droughty_project.get("openai_field_descriptions_path"))
+                ExploresVariables.openai_field_descriptions_filename = (droughty_project.get("openai_field_descriptions_filename"))
 
                 try:
                     ExploresVariables.test_overwrite = droughty_project['test_overwrite']['models']

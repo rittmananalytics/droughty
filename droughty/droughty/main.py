@@ -9,10 +9,14 @@ from droughty.droughty_cube.cube_cli import (
     explore,
     measures
 )
+
 from droughty.droughty_dbt.dbt_test_cli import tests
 from droughty.droughty_dbml.dbml_cli import erd
 from droughty.droughty_core.config_cli import Common
 from droughty.droughty_core.config import ExploresVariables
+
+from droughty.droughty_docs.docs_cli import docs
+
 
 def start():
 
@@ -55,6 +59,10 @@ def start():
     elif Common.args_command == 'dbt':
 
         tests()
+
+    elif Common.args_command == 'docs':
+
+        docs()
 
     else:
 

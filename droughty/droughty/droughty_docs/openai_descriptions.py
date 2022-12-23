@@ -12,7 +12,11 @@ from droughty.droughty_core.config import (
     IdentifyConfigVariables
 )
 
-openai.api_key = ProjectVariables.openai_secret
+try: 
+    openai.api_key = ProjectVariables.openai_secret
+except:
+    pass
+
 model_engine = "text-davinci-003"
 
 def _get_ans_from_response(response:openai.openai_object.OpenAIObject) -> str:
@@ -37,8 +41,8 @@ def wrangle_descriptions():
     df = df.drop_duplicates()
     df['og_column_name'] = df['column_name']
     df['column_name'] = df['column_name'].str.replace('_',' ')
-    df['column_name'] = df['column_name'].str.replace(' fk','foreign key')
-    df['column_name'] = df['column_name'].str.replace(' pk','primary key')
+    df['column_name'] = df['column_name'].str.replace(' fk',' foreign key')
+    df['column_name'] = df['column_name'].str.replace(' pk',' primary key')
     df['column_name'] ='what is ' + df['column_name'].astype(str)
     df['column_name'] = df['column_name'].astype(str) + '?'
 
@@ -49,13 +53,9 @@ def list_rows(dataframe):
     for index, row in dataframe.iterrows():
 
         if row['og_column_name'] not in described_columns_list:
-        
-            print("{% docs "+row['og_column_name']+ " %}")
+             
+            print("\n{% docs "+row['og_column_name']+ " %}"+_getter(prompt=row['column_name'])+"\n"*2+"{% enddocs %}")
             
-            print(_getter(prompt=row['column_name']))
-            
-            print("{% enddocs %}")
-
 def description_output():
 
     if ExploresVariables.openai_field_descriptions_path != None:
@@ -80,9 +80,6 @@ def description_output():
     else:
 
         filename = 'openai_field_descriptions'
-
-
-    path = os.path.join(git_path, rel_path)
    
     suffix = '.md'
 
@@ -92,6 +89,12 @@ def description_output():
 
         with redirect_stdout(file):
 
+            try:
+
                 for value in list_rows(wrangle_descriptions()):
 
                     print(value)
+
+            except:
+
+                print ('droughty has filled all absent descriptions')

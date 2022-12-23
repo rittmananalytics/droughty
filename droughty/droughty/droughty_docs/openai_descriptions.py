@@ -97,4 +97,4 @@ def description_output():
 
             except:
 
-                print ('droughty has filled all absent descriptions')
+                pass

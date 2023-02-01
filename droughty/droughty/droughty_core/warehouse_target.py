@@ -13,6 +13,9 @@ from copy import deepcopy
 
 from droughty.droughty_core.config import ProjectVariables,ExploresVariables
 
+print(ExploresVariables.resolution_read_schema)
+print(ExploresVariables.resolution_tables)
+print(ExploresVariables.resolution_columns)
 
 # resolution warehouse schema
 
@@ -33,7 +36,10 @@ if ProjectVariables.warehouse == 'big_query':
         
         )
         select * from source
-        where table_name = {{resolution_table_names}}
+
+        {% for value in resolution_tables %}
+        where table_name  in {{value}}|inclause
+        {% endfor %}
     '''
 
 elif ProjectVariables.warehouse == 'snowflake':
@@ -56,7 +62,7 @@ elif ProjectVariables.warehouse == 'snowflake':
 
         where table_schema = upper('{{resolution_read_schema}}')
 
-        and table_name = upper('{{resolution_table_names}}')
+        and table_name = in (upper('{{resolution_table_names}}'))
     '''
 
 # generic warehouse schema

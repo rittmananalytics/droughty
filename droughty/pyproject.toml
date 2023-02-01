@@ -8,7 +8,7 @@ repository = 'https://github.com/lewischarlesbaker/droughty'
 readme = 'README.md'
 
 [tool.poetry.dependencies]
-python = ">=3.7.1,<3.11"
+python = ">=3.7.1,<3.11.2"
 lkml = "1.1.0"
 SQLAlchemy = "1.4.22"
 pandas = "1.3.5"

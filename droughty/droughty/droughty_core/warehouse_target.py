@@ -14,6 +14,51 @@ from copy import deepcopy
 from droughty.droughty_core.config import ProjectVariables,ExploresVariables
 
 
+# resolution warehouse schema
+
+if ProjectVariables.warehouse == 'big_query':
+    
+    resolution_warehouse_schema =   '''
+    with source as (
+        select
+
+        {% for value in resolution_columns %}
+        
+        {{value}}
+
+        {% if not loop.last %},{% endif %}
+        {% endfor %}
+        
+        from `{{project_id}}.{{resolution_read_schema}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+        
+        )
+        select * from source
+        where table_name = {{resolution_table_names}}
+    '''
+
+elif ProjectVariables.warehouse == 'snowflake':
+
+    resolution_warehouse_schema =   '''
+    with source as (
+        select
+
+        {% for value in resolution_columns %}
+        
+        {{value}}
+
+        {% if not loop.last %},{% endif %}
+        {% endfor %}
+        
+        from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
+        )
+
+        select * from source
+
+        where table_schema = upper('{{resolution_read_schema}}')
+
+        and table_name = upper('{{resolution_table_names}}')
+    '''
+
 # generic warehouse schema
 
 if ProjectVariables.warehouse == 'big_query':
@@ -452,7 +497,10 @@ try:
 
         params = {
             'project_id': ProjectVariables.project,
-            'schema_id': ProjectVariables.schema, 
+            'schema_id': ProjectVariables.schema,
+            'resolution_read_schema': ExploresVariables.resolution_read_schema,
+            'resolution_tables': ExploresVariables.resolution_tables,
+            'resolution_columns': ExploresVariables.resolution_columns,
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
@@ -467,6 +515,9 @@ try:
         params = {
             'database': ProjectVariables.database,
             'schema_id': ProjectVariables.schema, 
+            'resolution_read_schema': ExploresVariables.resolution_read_schema,
+            'resolution_tables': ExploresVariables.resolution_tables,
+            'resolution_columns': ExploresVariables.resolution_columns,
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
@@ -570,6 +621,16 @@ def create_dbml_sql():
     j = JinjaSql(param_style='pyformat')
 
     query, bind_params = j.prepare_query(dbml_query,params)
+
+    dbml_sql = (query % bind_params)
+
+    return dbml_sql
+
+def create_resolution_sql():
+
+    j = JinjaSql(param_style='pyformat')
+
+    query, bind_params = j.prepare_query(resolution_warehouse_schema,params)
 
     dbml_sql = (query % bind_params)
 

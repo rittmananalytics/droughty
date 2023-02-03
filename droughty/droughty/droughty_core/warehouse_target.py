@@ -27,7 +27,7 @@ if ProjectVariables.warehouse == 'big_query':
 
         select
 
-        {{value}} as example,
+        {{value}},
         '{{key}}' as source_table
         
         from `{{project_id}}.{{resolution_read_schema}}.{{key}}`
@@ -36,25 +36,9 @@ if ProjectVariables.warehouse == 'big_query':
 
         {% endfor %}
             
-        ),
-
-    final as (
-
-        select 
-
-        {% for key_1,value_1 in write_table_names.items(): %}
-        {% set value_1 = '\n    , '.join(value) %}
-
-        source.example as {{value_1}},
-        source.source_table
-
-        from source
-
-        {% endfor %}
-
     )
 
-    select * from final
+    select * from source
 
 
     '''
@@ -532,7 +516,6 @@ try:
             'schema_id': ProjectVariables.schema,
             'resolution_read_schema': ExploresVariables.resolution_read_schema,
             'resolution_tables': ExploresVariables.resolution_tables,
-            'write_table_names': ExploresVariables.write_table_names,
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
@@ -549,7 +532,6 @@ try:
             'schema_id': ProjectVariables.schema, 
             'resolution_read_schema': ExploresVariables.resolution_read_schema,
             'resolution_tables': ExploresVariables.resolution_tables,
-            'write_table_names': ExploresVariables.write_table_names,
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,

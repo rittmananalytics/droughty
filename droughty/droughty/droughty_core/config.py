@@ -255,9 +255,7 @@ class ExploresVariables:
     resolution_read_schema: str.lower
     resolution_write_schema: str.lower
     resolution_tables: str.lower
-    resolution_columns: str.lower
-
-
+    write_table_names: str.lower
 
 def assign_explore_variables():
 
@@ -313,13 +311,13 @@ def assign_explore_variables():
                 except:
                     ExploresVariables.resolution_write_schema = None
                 try:
-                    ExploresVariables.resolution_tables = droughty_project['entity_resolution']['table_names']
+                    ExploresVariables.resolution_tables = droughty_project['entity_resolution']['read_table_names']
                 except:
                     ExploresVariables.resolution_tables = None
                 try:
-                    ExploresVariables.resolution_columns = droughty_project['entity_resolution']['column_names']
+                    ExploresVariables.write_table_names = droughty_project['entity_resolution']['write_table_names']
                 except:
-                    ExploresVariables.resolution_columns = None
+                    ExploresVariables.write_table_names = None
 
 
             except:

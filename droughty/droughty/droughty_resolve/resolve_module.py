@@ -16,19 +16,30 @@ from droughty.droughty_resolve.resolve_base_dict import get_resolve_dataframe
 
 from droughty.droughty_core.config import (
     ExploresVariables,
+    ProjectVariables,
     IdentifyConfigVariables
 )
 
-print(get_resolve_dataframe())
-
-
 def entity_resolution_duplication():
+
+    resolution_columns = list(ExploresVariables.resolution_tables.values())
+    resolution_tables = list(ExploresVariables.resolution_tables.keys())
+
+    table_name = resolution_tables[0]
 
     if ExploresVariables.resolution_read_schema != None:
 
-        linked_dataframe = pandas_dedupe.link_dataframes(get_resolve_dataframe(),get_resolve_dataframe()['harvest_client_name','harvest_client_name'])
+        linked_dataframe = pandas_dedupe.dedupe_dataframe(get_resolve_dataframe(),['harvest_client_pk','harvest_client_name'])
 
-        pandas_gbq.to_gbq(linked_dataframe, 'resolved'+ExploresVariables.table_name, project_id=ExploresVariables.project_id)
+        linked_dataframe.columns = linked_dataframe.columns.str.replace(" ", "_")
+
+        pandas_gbq.to_gbq(linked_dataframe,
+        ExploresVariables.resolution_write_schema+'.'+table_name,
+        ProjectVariables.project,
+        if_exists='replace'
+        )
+
+        print(linked_dataframe)
 
 def resolve_output():
 

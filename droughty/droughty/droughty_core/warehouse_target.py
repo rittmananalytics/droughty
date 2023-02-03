@@ -13,56 +13,79 @@ from copy import deepcopy
 
 from droughty.droughty_core.config import ProjectVariables,ExploresVariables
 
-print(ExploresVariables.resolution_read_schema)
-print(ExploresVariables.resolution_tables)
-print(ExploresVariables.resolution_columns)
-
 # resolution warehouse schema
 
 if ProjectVariables.warehouse == 'big_query':
     
     resolution_warehouse_schema =   '''
+    
     with source as (
+        
+        {% for key,value in resolution_tables.items(): %}
+
+        {% set value = '\n    , '.join(value) %}
+
         select
 
-        {% for value in resolution_columns %}
+        {{value}} as example,
+        '{{key}}' as source_table
         
-        {{value}}
+        from `{{project_id}}.{{resolution_read_schema}}.{{key}}`
 
-        {% if not loop.last %},{% endif %}
-        {% endfor %}
-        
-        from `{{project_id}}.{{resolution_read_schema}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
-        
-        )
-        select * from source
+        {% if not loop.last %}union distinct{% endif %}
 
-        {% for value in resolution_tables %}
-        where table_name  in {{value}}|inclause
         {% endfor %}
+            
+        ),
+
+    final as (
+
+        select 
+
+        {% for key_1,value_1 in write_table_names.items(): %}
+        {% set value_1 = '\n    , '.join(value) %}
+
+        source.example as {{value_1}},
+        source.source_table
+
+        from source
+
+        {% endfor %}
+
+    )
+
+    select * from final
+
+
     '''
 
 elif ProjectVariables.warehouse == 'snowflake':
 
     resolution_warehouse_schema =   '''
+
     with source as (
+
+        {% for key,value in resolution_tables.items(): %}
+        {% set value = '\n    , '.join(value) %}
+
         select
 
-        {% for value in resolution_columns %}
+        {{value}},
+        '{{key}}' as source_table
         
-        {{value}}
-
         {% if not loop.last %},{% endif %}
+
+        from "{{database}}.{{resolution_read_schema}}.{{key}}"
+
+        {% if not loop.last %}union distinct{% endif %}
+
         {% endfor %}
-        
-        from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
+            
         )
 
         select * from source
 
-        where table_schema = upper('{{resolution_read_schema}}')
 
-        and table_name = in (upper('{{resolution_table_names}}'))
     '''
 
 # generic warehouse schema
@@ -71,9 +94,12 @@ if ProjectVariables.warehouse == 'big_query':
     
     warehouse_schema =   '''
     with source as (
-        select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
+        select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
         )
         select * from source
+
+        where table_schema = upper('{{schema_id}}')
+
     '''
 
 elif ProjectVariables.warehouse == 'snowflake':
@@ -506,7 +532,7 @@ try:
             'schema_id': ProjectVariables.schema,
             'resolution_read_schema': ExploresVariables.resolution_read_schema,
             'resolution_tables': ExploresVariables.resolution_tables,
-            'resolution_columns': ExploresVariables.resolution_columns,
+            'write_table_names': ExploresVariables.write_table_names,
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
@@ -523,7 +549,7 @@ try:
             'schema_id': ProjectVariables.schema, 
             'resolution_read_schema': ExploresVariables.resolution_read_schema,
             'resolution_tables': ExploresVariables.resolution_tables,
-            'resolution_columns': ExploresVariables.resolution_columns,
+            'write_table_names': ExploresVariables.write_table_names,
             'table_names': ExploresVariables.final_list,
             'table_names_unqouted': ExploresVariables.flat_list,
             'pk_fk_join_key_list': ExploresVariables.join_key_list,
@@ -641,3 +667,5 @@ def create_resolution_sql():
     dbml_sql = (query % bind_params)
 
     return dbml_sql
+
+print (create_resolution_sql())

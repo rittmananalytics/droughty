@@ -26,10 +26,17 @@ def entity_resolution_duplication():
     resolution_tables = list(ExploresVariables.resolution_tables.keys())
 
     table_name = resolution_tables[0]
+    cols = ExploresVariables.write_column_names
+
+    cols.append("source_table")
 
     if ExploresVariables.resolution_read_schema != None:
+        
+        linked_dataframe = get_resolve_dataframe() 
 
-        linked_dataframe = pandas_dedupe.dedupe_dataframe(get_resolve_dataframe(),['harvest_client_pk','harvest_client_name'])
+        linked_dataframe.columns = cols
+
+        linked_dataframe = pandas_dedupe.dedupe_dataframe(linked_dataframe,cols)
 
         linked_dataframe.columns = linked_dataframe.columns.str.replace(" ", "_")
 

@@ -78,12 +78,9 @@ if ProjectVariables.warehouse == 'big_query':
     
     warehouse_schema =   '''
     with source as (
-        select * from "{{database}}"."INFORMATION_SCHEMA"."COLUMNS"
+        select * from `{{project_id}}.{{schema_id}}.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS`
         )
         select * from source
-
-        where table_schema = upper('{{schema_id}}')
-
     '''
 
 elif ProjectVariables.warehouse == 'snowflake':
@@ -649,5 +646,3 @@ def create_resolution_sql():
     dbml_sql = (query % bind_params)
 
     return dbml_sql
-
-print (create_resolution_sql())

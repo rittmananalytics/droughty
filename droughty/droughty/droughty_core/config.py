@@ -263,7 +263,7 @@ def assign_explore_variables():
 
                 explores = (droughty_project.get("explores"))
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
-                ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
+                ExploresVariables.dbml_schemas = (droughty_profile[value]['dbml_schemas'])
 
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
@@ -291,7 +291,7 @@ def assign_explore_variables():
                 except:
                     ExploresVariables.test_ignore = "None"
                 try:
-                    ExploresVariables.test_schemas = droughty_project['test_schemas']  
+                    ExploresVariables.test_schemas = droughty_profile[value]['test_schemas']
                 except:
                     ExploresVariables.test_schemas = "None"
                 try:

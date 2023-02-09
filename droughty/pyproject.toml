@@ -31,7 +31,7 @@ tqdm = "4.62.3"
 Markdown = "^3.3.6"
 Jinja2 = "3.0.1"
 glom = "^22.1.0"
-pyarrow = "6.0.0"
+pyarrow = "8.0.0"
 openai = "^0.25.0"
 
 [tool.poetry.scripts]

@@ -24,7 +24,7 @@ import ruamel.yaml
 import git
 
 
-def get_all_values(nested_dictionary,test_overwrite_dictionary):
+def get_all_values(nested_dictionary):
 
     test_overwrite = ExploresVariables.test_overwrite
 
@@ -156,7 +156,7 @@ def schema_output():
 
         with redirect_stdout(file):
 
-            for i in get_all_values(dbt_test_dict(),ExploresVariables.test_overwrite):
+            for i in get_all_values(dbt_test_dict()):
                 yaml = ruamel.yaml.YAML()
                 yaml.indent(mapping=2, sequence=4, offset=2)
                 yaml.dump(i,file)   

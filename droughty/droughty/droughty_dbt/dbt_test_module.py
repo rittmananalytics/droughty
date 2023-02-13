@@ -68,7 +68,7 @@ def get_all_values(nested_dictionary):
                             
                         elif "fk" in key1:
                             
-                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null"]}
+                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["dbt_utils.at_least_one"]}
                             seq.append(elem)   
                             
                         elif "valid_to" in key1 or "valid_from" in key1:
@@ -95,7 +95,7 @@ def get_all_values(nested_dictionary):
                                 
                             elif "fk" in key1:
                                 
-                                elem = {"name": key1, "tests": ["not_null"]}
+                                elem = {"name": key1, "tests": ["dbt_utils.at_least_one"]}
                                 seq.append(elem)   
                                 
                             elif "valid_to" in key1 or "valid_from" in key1:

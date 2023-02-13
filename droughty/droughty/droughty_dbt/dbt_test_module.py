@@ -33,11 +33,13 @@ def get_all_values(nested_dictionary):
         if test_overwrite != None:
     
             ignore_test_keys_and_values = []
+
             for key, value in test_overwrite.items():
+
                 nested_dictionary[key].update(value)
+
                 for sub_key in value.keys():
                     ignore_test_keys_and_values.append(key + "-" + sub_key)
-
 
         else:
         
@@ -159,4 +161,4 @@ def schema_output():
             for i in get_all_values(dbt_test_dict()):
                 yaml = ruamel.yaml.YAML()
                 yaml.indent(mapping=2, sequence=4, offset=2)
-                yaml.dump(i,file)   
+                yaml.dump(i,file)

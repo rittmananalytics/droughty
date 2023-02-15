@@ -73,6 +73,24 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
   cube_measures_filename: example__6
   dbt_tests_filename: example__8
 
+  entity_resolution:
+    read_schema:
+      example_1
+    write_schema:
+      example_1
+    read_table_names:
+      example_1:
+        - example_3
+        - example_4
+      example_2:
+        - example_5
+        - example_6
+    write_column_names:
+      - example_7
+      - example_8
+    write_table_name:
+      - example_9
+
 Create this file in the root of your git repo (unless you are specifying the path through the --project-dir argument)
 
 Optional variables

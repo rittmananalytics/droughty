@@ -65,6 +65,13 @@ def profile_func():
     docs.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
     docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
 
+    # resolve
+
+    docs = subparser.add_parser('resolve')
+    docs.add_argument('--profile-dir', type=str, required=False)
+    docs.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
+    docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
+
     # parsing arguments
 
     args = profile_parser.parse_args()

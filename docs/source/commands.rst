@@ -82,6 +82,14 @@ Droughty docs will read from your field_descriptions.md file and only create des
 
 Openai isn't prefect so make sure you sanity check the output
 
+**resolve**
+
+Uses pandas_dudupe which is derived from depupe.io to resolve warehouse entities::
+
+    droughty resolve
+
+Once you have added the required parameters available within the configuration documentation, you can use the cli to resolve warehouse entities and output them to either big query or snowflake
+
 **arguments**
 
   - --profiles-dir 

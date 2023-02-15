@@ -102,6 +102,12 @@
 </div>
 <p>Droughty docs will read from your field_descriptions.md file and only create descriptions that are absent for entities in the warehouse.</p>
 <p>Openai isn’t prefect so make sure you sanity check the output</p>
+<p><strong>resolve</strong></p>
+<p>Uses pandas_dudupe which is derived from depupe.io to resolve warehouse entities:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">resolve</span>
+</pre></div>
+</div>
+<p>Once you have added the required parameters available within the configuration documentation, you can use the cli to resolve warehouse entities and output them to either big query or snowflake</p>
 <p><strong>arguments</strong></p>
 <blockquote>
 <div><ul class="simple">
@@ -176,7 +182,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/commands.rst.txt"

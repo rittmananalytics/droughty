@@ -57,9 +57,7 @@ elif ProjectVariables.warehouse == 'snowflake':
         {{value}},
         '{{key}}' as source_table
         
-        {% if not loop.last %},{% endif %}
-
-        from "{{database}}.{{resolution_read_schema}}.{{key}}"
+        from {{database}}.{{resolution_read_schema}}.{{key}}
 
         {% if not loop.last %}union distinct{% endif %}
 
@@ -545,6 +543,8 @@ except:
         params = {
             'project_id': ProjectVariables.project,
             'schema_id': ProjectVariables.schema, 
+            'resolution_read_schema': ExploresVariables.resolution_read_schema,
+            'resolution_tables': ExploresVariables.resolution_tables,
             'test_schemas': ExploresVariables.test_schemas,
             'dbml_schemas': ExploresVariables.dbml_schemas,
         }
@@ -554,6 +554,8 @@ except:
         params = {
             'database': ProjectVariables.database,
             'schema_id': ProjectVariables.schema, 
+            'resolution_read_schema': ExploresVariables.resolution_read_schema,
+            'resolution_tables': ExploresVariables.resolution_tables,
             'test_schemas': ExploresVariables.test_schemas,
             'dbml_schemas': ExploresVariables.dbml_schemas,
         }

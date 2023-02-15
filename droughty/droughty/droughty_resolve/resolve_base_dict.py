@@ -46,4 +46,4 @@ def get_resolve_dataframe():
         connection.close()
         engine.dispose()
 
-    return(dataframe)
+    return(wrangled_dataframe)

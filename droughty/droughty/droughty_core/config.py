@@ -256,6 +256,7 @@ class ExploresVariables:
     resolution_write_schema: str.lower
     resolution_tables: str.lower
     write_column_names: str.lower
+    write_table_name: str.lower
 
 def assign_explore_variables():
 
@@ -318,7 +319,10 @@ def assign_explore_variables():
                     ExploresVariables.write_column_names = droughty_project['entity_resolution']['write_column_names']
                 except:
                     ExploresVariables.write_column_names = None
-
+                try:
+                    ExploresVariables.write_table_name = droughty_project['entity_resolution']['write_table_name']
+                except:
+                    ExploresVariables.write_table_name = None
 
             except:
 
@@ -425,6 +429,22 @@ def get_snowflake_connector_url():
     account = ProjectVariables.account,
     user =  ProjectVariables.user,
     schema =  ProjectVariables.schema,
+    database =  ProjectVariables.database,
+    password =  ProjectVariables.password,
+    warehouse = ProjectVariables.snowflake_warehouse,
+    role =  ProjectVariables.role
+
+    )
+
+    return (url)
+
+def get_snowflake_resolution_connector_url():
+
+    url = URL(
+
+    account = ProjectVariables.account,
+    user =  ProjectVariables.user,
+    schema =  ExploresVariables.resolution_write_schema,
     database =  ProjectVariables.database,
     password =  ProjectVariables.password,
     warehouse = ProjectVariables.snowflake_warehouse,

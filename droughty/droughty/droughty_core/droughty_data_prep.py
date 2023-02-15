@@ -243,8 +243,6 @@ def wrangle_snowflake_cube_dataframes(dataframe):
 
 def wrangle_bigquery_resolve_dataframes(dataframe):
 
-    dataframe = dataframe[['harvest_client_name']]
-
     dataframe = dataframe.apply(lambda col: col.str.lower())
 
     dataframe = dataframe.drop_duplicates()
@@ -252,10 +250,6 @@ def wrangle_bigquery_resolve_dataframes(dataframe):
     return (dataframe)
 
 def wrangle_snowflake_resolve_dataframes(dataframe):
-
-    dataframe = dataframe[['harvest_client_name']]
-
-    dataframe = dataframe.apply(lambda col: col.str.lower())
 
     dataframe = dataframe.drop_duplicates()
 

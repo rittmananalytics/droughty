@@ -8,6 +8,7 @@ import yaml
 import git
 
 from jinjasql import JinjaSql
+
 from six import string_types
 from copy import deepcopy
 

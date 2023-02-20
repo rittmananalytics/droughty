@@ -7,7 +7,8 @@ import os
 import yaml
 import git
 
-from jinjasql import JinjaSql
+from droughty.droughty_jinjasql.jinjasql.core import JinjaSql 
+
 from six import string_types
 from copy import deepcopy
 

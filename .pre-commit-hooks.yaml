@@ -1,0 +1,9 @@
+-   repo: local
+    hooks:
+    
+    -   id: droughty_lookml
+        name: run droughty lookml
+        description: This hook runs droughty lookml
+        entry: droughty_loolml
+        language: python
+        types: [text]

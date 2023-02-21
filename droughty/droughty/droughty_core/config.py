@@ -259,11 +259,11 @@ def assign_explore_variables():
 
         if key == 'profile':
 
-            if 'dbml_schemas' in droughty_project.items() and 'dbml_schemas' not in droughty_profile[value]:
+            if 'dbml_schemas' in droughty_project and 'dbml_schemas' not in droughty_profile[value]:
         
                 raise Exception ("You have defined dbml_schemas in your project YAML file. As of 0.9.6 this is defined within the profile YAML file")
             
-            if 'test_schemas' in droughty_project.items() and 'test_schemas' not in droughty_profile[value]:
+            if 'test_schemas' in droughty_project and 'test_schemas' not in droughty_profile[value]:
     
                 raise Exception ("You have defined test_schemas in your project YAML file. As of 0.9.6 this is defined within the profile YAML file")
 

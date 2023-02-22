@@ -17,32 +17,21 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
   openai_field_descriptions_path: warehouse_docs
   openai_field_descriptions_filename: openai_field_descriptions 
 
-  test_schemas:
-      - lewis_analytics_dev_staging
-      - lewis_analytics_dev_integration
-      - lewis_analytics_dev
-
-
   test_overwrite:
       models: 
         wh_marketing__web_event_items_fact:
-              web_event_item_pk:
-                  - not_null
-                  - dbt_utils.at_least_one
-                  - unique
-              web_event_parameter_float_value:
-                  - dbt_utils.at_least_one
+          web_event_item_pk:
+              - not_null
+              - dbt_utils.at_least_one
+              - unique
+          web_event_parameter_float_value:
+              - dbt_utils.at_least_one
 
   test_ignore:
       models:
         - base_backend__web_events
         - base_ga4__web_events
 
-
-  dbml_schemas:
-      - lewis_analytics_dev_staging
-      - lewis_analytics_dev_integration
-      - lewis_analytics_dev
   
   dbml_filenames:
       - test_10
@@ -146,6 +135,16 @@ profile example::
       warehouse_name: big_query
 
       openai_secret: sk-wdfnwfw40t493t304t9340t94wet0et90edf (example)
+
+      test_schemas:
+        - lewis_analytics_dev_staging
+        - lewis_analytics_dev_integration
+        - lewis_analytics_dev
+
+      dbml_schemas:
+        - lewis_analytics_dev_staging
+        - lewis_analytics_dev_integration
+        - lewis_analytics_dev
 
 --------------
 

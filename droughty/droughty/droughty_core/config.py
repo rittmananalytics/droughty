@@ -264,11 +264,19 @@ def assign_explore_variables():
 
         if key == 'profile':
 
+            if 'dbml_schemas' in droughty_project and 'dbml_schemas' not in droughty_profile[value]:
+        
+                raise Exception ("You have defined dbml_schemas in your project YAML file. As of 0.9.6 this is defined within the profile YAML file")
+            
+            if 'test_schemas' in droughty_project and 'test_schemas' not in droughty_profile[value]:
+    
+                raise Exception ("You have defined test_schemas in your project YAML file. As of 0.9.6 this is defined within the profile YAML file")
+
             try:
 
                 explores = (droughty_project.get("explores"))
                 ExploresVariables.explore_tables = (droughty_project.get("explores"))
-                ExploresVariables.dbml_schemas = (droughty_project.get("dbml_schemas"))
+                ExploresVariables.dbml_schemas = (droughty_profile[value]['dbml_schemas'])
 
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
@@ -296,7 +304,7 @@ def assign_explore_variables():
                 except:
                     ExploresVariables.test_ignore = "None"
                 try:
-                    ExploresVariables.test_schemas = droughty_project['test_schemas']  
+                    ExploresVariables.test_schemas = droughty_profile[value]['test_schemas']
                 except:
                     ExploresVariables.test_schemas = "None"
                 try:

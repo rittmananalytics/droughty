@@ -91,6 +91,24 @@
 <span class="n">cube_integration_filename</span><span class="p">:</span> <span class="n">example__5</span>
 <span class="n">cube_measures_filename</span><span class="p">:</span> <span class="n">example__6</span>
 <span class="n">dbt_tests_filename</span><span class="p">:</span> <span class="n">example__8</span>
+
+<span class="n">entity_resolution</span><span class="p">:</span>
+  <span class="n">read_schema</span><span class="p">:</span>
+    <span class="n">example_1</span>
+  <span class="n">write_schema</span><span class="p">:</span>
+    <span class="n">example_1</span>
+  <span class="n">read_table_names</span><span class="p">:</span>
+    <span class="n">example_1</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">example_3</span>
+      <span class="o">-</span> <span class="n">example_4</span>
+    <span class="n">example_2</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">example_5</span>
+      <span class="o">-</span> <span class="n">example_6</span>
+  <span class="n">write_column_names</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">example_7</span>
+    <span class="o">-</span> <span class="n">example_8</span>
+  <span class="n">write_table_name</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">example_9</span>
 </pre></div>
 </div>
 <p>Create this file in the root of your git repo (unless you are specifying the path through the –project-dir argument)</p>

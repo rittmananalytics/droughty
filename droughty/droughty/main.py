@@ -14,8 +14,8 @@ from droughty.droughty_dbt.dbt_test_cli import tests
 from droughty.droughty_dbml.dbml_cli import erd
 from droughty.droughty_core.config_cli import Common
 from droughty.droughty_core.config import ExploresVariables
-
 from droughty.droughty_docs.docs_cli import docs
+from droughty.droughty_resolve.resolve_cli import entity_resolution
 
 
 def start():
@@ -64,6 +64,10 @@ def start():
 
         docs()
 
+    elif Common.args_command == 'resolve':
+
+        entity_resolution()
+
     else:
 
         lookml_base()
@@ -75,7 +79,6 @@ def start():
         measures()
         erd()
         tests()
-
 
 if __name__ == '__main__':
     start()

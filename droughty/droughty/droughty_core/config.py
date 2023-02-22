@@ -252,12 +252,25 @@ class ExploresVariables:
     openai_field_descriptions_path: str.lower
     openai_field_descriptions_filename: str.lower
 
+    resolution_read_schema: str.lower
+    resolution_write_schema: str.lower
+    resolution_tables: str.lower
+    write_column_names: str.lower
+    write_table_name: str.lower
 
 def assign_explore_variables():
 
     for key,value in droughty_project.items():
 
         if key == 'profile':
+
+            if 'dbml_schemas' in droughty_project and 'dbml_schemas' not in droughty_profile[value]:
+        
+                raise Exception ("You have defined dbml_schemas in your project YAML file. As of 0.9.6 this is defined within the profile YAML file")
+            
+            if 'test_schemas' in droughty_project and 'test_schemas' not in droughty_profile[value]:
+    
+                raise Exception ("You have defined test_schemas in your project YAML file. As of 0.9.6 this is defined within the profile YAML file")
 
             try:
 
@@ -298,6 +311,26 @@ def assign_explore_variables():
                     ExploresVariables.lookml_pop = droughty_project['lookml_pop']['views'] # If this is not at the bottom, it creates an error where other values will not fill. Something to look into
                 except:
                     ExploresVariables.lookml_pop = None
+                try:
+                    ExploresVariables.resolution_read_schema = droughty_project['entity_resolution']['read_schema']
+                except:
+                    ExploresVariables.resolution_read_schema = None
+                try:
+                    ExploresVariables.resolution_write_schema = droughty_project['entity_resolution']['write_schema']
+                except:
+                    ExploresVariables.resolution_write_schema = None
+                try:
+                    ExploresVariables.resolution_tables = droughty_project['entity_resolution']['read_table_names']
+                except:
+                    ExploresVariables.resolution_tables = None
+                try:
+                    ExploresVariables.write_column_names = droughty_project['entity_resolution']['write_column_names']
+                except:
+                    ExploresVariables.write_column_names = None
+                try:
+                    ExploresVariables.write_table_name = droughty_project['entity_resolution']['write_table_name']
+                except:
+                    ExploresVariables.write_table_name = None
 
             except:
 
@@ -404,6 +437,22 @@ def get_snowflake_connector_url():
     account = ProjectVariables.account,
     user =  ProjectVariables.user,
     schema =  ProjectVariables.schema,
+    database =  ProjectVariables.database,
+    password =  ProjectVariables.password,
+    warehouse = ProjectVariables.snowflake_warehouse,
+    role =  ProjectVariables.role
+
+    )
+
+    return (url)
+
+def get_snowflake_resolution_connector_url():
+
+    url = URL(
+
+    account = ProjectVariables.account,
+    user =  ProjectVariables.user,
+    schema =  ExploresVariables.resolution_write_schema,
     database =  ProjectVariables.database,
     password =  ProjectVariables.password,
     warehouse = ProjectVariables.snowflake_warehouse,

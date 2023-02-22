@@ -24,7 +24,7 @@ import ruamel.yaml
 import git
 
 
-def get_all_values(nested_dictionary,test_overwrite_dictionary):
+def get_all_values(nested_dictionary):
 
     test_overwrite = ExploresVariables.test_overwrite
 
@@ -32,9 +32,14 @@ def get_all_values(nested_dictionary,test_overwrite_dictionary):
         
         if test_overwrite != None:
     
-            nested_dictionary.update(test_overwrite_dictionary)
+            ignore_test_keys_and_values = []
 
-            ignore_test_keys = list(ExploresVariables.test_overwrite.keys())
+            for key, value in test_overwrite.items():
+
+                nested_dictionary[key].update(value)
+
+                for sub_key in value.keys():
+                    ignore_test_keys_and_values.append(key + "-" + sub_key)
 
         else:
         
@@ -47,83 +52,77 @@ def get_all_values(nested_dictionary,test_overwrite_dictionary):
     res = [{"version":2},{"models":None}]
     
     for key,value in nested_dictionary.items():
-
-        if key not in ignore_test_keys and not key in ExploresVariables.test_ignore:
-
+            
             seq = []
-            res.append([{"name": key, "columns": seq}])
-            # for key1, value1 in value.items():  # not using value1
 
             for key1,value1 in value.items():
 
-                if key1 in described_columns_list:
+                if key + "-" + key1 not in ignore_test_keys_and_values and not key in ExploresVariables.test_ignore:
 
-                    if "pk" in key1 and "not_null" not in value1 and "unique" not in value1:
-                        
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null","unique"]}
-                        seq.append(elem)
-                        
-                    elif "fk" in key1:
-                        
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null"]}
-                        seq.append(elem)   
-                        
-                    elif "valid_to" in key1 or "valid_from" in key1:
-                        
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
-                        seq.append(elem)  
+                    if key1 in described_columns_list:
 
-                    elif "pk" not in key1 or "fk" not in key1:
-                
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": [""+"dbt_utils.at_least_one"]}
-                        seq.append(elem)  
-
-                    elif "pk" not in key1 or "fk" not in key1:
-                
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}"}
-                        seq.append(elem)  
-
-                elif key1 not in described_columns_list:
-
-                        if "pk" in key1:
+                        if "pk" in key1 and "not_null" not in value1 and "unique" not in value1:
                             
-                            elem = {"name": key1, "tests": ["not_null","unique"]}
+                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null","unique"]}
                             seq.append(elem)
                             
                         elif "fk" in key1:
                             
-                            elem = {"name": key1, "tests": ["not_null"]}
+                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["dbt_utils.at_least_one"]}
                             seq.append(elem)   
                             
                         elif "valid_to" in key1 or "valid_from" in key1:
                             
-                            elem = {"name": key1, "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
+                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
                             seq.append(elem)  
 
                         elif "pk" not in key1 or "fk" not in key1:
                     
-                            elem = {"name": key1, "tests": [""+"dbt_utils.at_least_one"]}
-                            seq.append(elem)
+                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": [""+"dbt_utils.at_least_one"]}
+                            seq.append(elem)  
 
-        elif key in ignore_test_keys and key not in ExploresVariables.test_ignore:
+                        elif "pk" not in key1 or "fk" not in key1:
+                    
+                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}"}
+                            seq.append(elem)  
 
-            seq = []
-            res.append([{"name": key, "columns": seq}])
-            # for key1, value1 in value.items():  # not using value1
+                    elif key1 not in described_columns_list:
 
-            for key1,value1 in value.items():
+                            if "pk" in key1:
+                                
+                                elem = {"name": key1, "tests": ["not_null","unique"]}
+                                seq.append(elem)
+                                
+                            elif "fk" in key1:
+                                
+                                elem = {"name": key1, "tests": ["dbt_utils.at_least_one"]}
+                                seq.append(elem)   
+                                
+                            elif "valid_to" in key1 or "valid_from" in key1:
+                                
+                                elem = {"name": key1, "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
+                                seq.append(elem)  
 
-                if key1 in described_columns_list:
-
+                            elif "pk" not in key1 or "fk" not in key1:
                         
-                    elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": value1}
-                    seq.append(elem)
+                                elem = {"name": key1, "tests": [""+"dbt_utils.at_least_one"]}
+                                seq.append(elem)
+                    
+                elif key + "-" + key1 in ignore_test_keys_and_values and key not in ExploresVariables.test_ignore:
+                    
+                    if key1 in described_columns_list:
 
-                elif key1 not in described_columns_list:
-
-                    elem = {"name": key1, "tests": value1}
-                    seq.append(elem)
                             
+                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": value1}
+                        seq.append(elem)
+
+                    elif key1 not in described_columns_list:
+
+                        elem = {"name": key1, "tests": value1}
+                        seq.append(elem)
+            
+            res.append([{"name": key, "columns": seq}])
+
     return res
 
 def schema_output():
@@ -159,8 +158,7 @@ def schema_output():
 
         with redirect_stdout(file):
 
-            for i in get_all_values(dbt_test_dict(),ExploresVariables.test_overwrite):
-                
+            for i in get_all_values(dbt_test_dict()):
                 yaml = ruamel.yaml.YAML()
-                yaml.indent(mapping=2, sequence=4, offset=2)            
-                yaml.dump(i,file)    
+                yaml.indent(mapping=2, sequence=4, offset=2)
+                yaml.dump(i,file)

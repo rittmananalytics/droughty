@@ -17,32 +17,21 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
   openai_field_descriptions_path: warehouse_docs
   openai_field_descriptions_filename: openai_field_descriptions 
 
-  test_schemas:
-      - lewis_analytics_dev_staging
-      - lewis_analytics_dev_integration
-      - lewis_analytics_dev
-
-
   test_overwrite:
       models: 
         wh_marketing__web_event_items_fact:
-              web_event_item_pk:
-                  - not_null
-                  - dbt_utils.at_least_one
-                  - unique
-              web_event_parameter_float_value:
-                  - dbt_utils.at_least_one
+          web_event_item_pk:
+              - not_null
+              - dbt_utils.at_least_one
+              - unique
+          web_event_parameter_float_value:
+              - dbt_utils.at_least_one
 
   test_ignore:
       models:
         - base_backend__web_events
         - base_ga4__web_events
 
-
-  dbml_schemas:
-      - lewis_analytics_dev_staging
-      - lewis_analytics_dev_integration
-      - lewis_analytics_dev
   
   dbml_filenames:
       - test_10
@@ -72,6 +61,24 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
   cube_integration_filename: example__5
   cube_measures_filename: example__6
   dbt_tests_filename: example__8
+
+  entity_resolution:
+    read_schema:
+      example_1
+    write_schema:
+      example_1
+    read_table_names:
+      example_1:
+        - example_3
+        - example_4
+      example_2:
+        - example_5
+        - example_6
+    write_column_names:
+      - example_7
+      - example_8
+    write_table_name:
+      - example_9
 
 Create this file in the root of your git repo (unless you are specifying the path through the --project-dir argument)
 
@@ -128,6 +135,16 @@ profile example::
       warehouse_name: big_query
 
       openai_secret: sk-wdfnwfw40t493t304t9340t94wet0et90edf (example)
+
+      test_schemas:
+        - lewis_analytics_dev_staging
+        - lewis_analytics_dev_integration
+        - lewis_analytics_dev
+
+      dbml_schemas:
+        - lewis_analytics_dev_staging
+        - lewis_analytics_dev_integration
+        - lewis_analytics_dev
 
 --------------
 

@@ -424,6 +424,14 @@ if ProjectVariables.warehouse == 'big_query':
         from source
         where column_name like '%%pk%%'
     ),
+    bridge_tables as (
+        select 
+        table_name as pk_table_name,
+        column_name as pk_column_name,
+        trim(column_name, "_fk") as bridge_sk
+        from source
+        where table_name like '%%bridge%%'
+    ),
     fks as (
         select
         table_name as fk_table_name,
@@ -431,12 +439,15 @@ if ProjectVariables.warehouse == 'big_query':
         trim(column_name, "_fk") as fk_sk
         from source
         where column_name like '%%fk%%'
-    )
-    select 
-    pk_table_name,
-    pk_column_name,
-    fk_table_name,
-    fk_column_name,
+    ),
+
+    joined as (
+
+    select distinct
+    pks.pk_table_name,
+    pks.pk_column_name,
+    fks.fk_table_name,
+    fks.fk_column_name,
     case when merge_counts_pk.row_count > merge_counts_fk.row_count
             then 'belongsTo'   
         when merge_counts_pk.row_count < merge_counts_fk.row_count
@@ -447,8 +458,47 @@ if ProjectVariables.warehouse == 'big_query':
     
     from pks
     inner join fks on pks.pk_sk = fks.fk_sk
+
     left join row_counts as merge_counts_fk on merge_counts_fk.table_name = fks.fk_table_name
     left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+
+    ),
+
+    bridge_joined as (
+
+    select distinct
+    bridge_tables.pk_table_name,
+    bridge_tables.pk_column_name,
+    pks.pk_table_name as fk_table_name,
+    pks.pk_column_name as fk_column_name,
+
+    case when merge_counts_pk.row_count > merge_counts_fk.row_count
+            then 'belongsTo'   
+        when merge_counts_pk.row_count < merge_counts_fk.row_count
+            then 'hasMany'
+        when merge_counts_pk.row_count = merge_counts_fk.row_count
+            then 'HasOne'
+    end as true_relationship
+    
+    from bridge_tables
+    inner join pks on pks.pk_sk = bridge_tables.bridge_sk
+
+    left join row_counts as merge_counts_fk on merge_counts_fk.table_name = bridge_tables.pk_table_name
+    left join row_counts as merge_counts_pk on merge_counts_pk.table_name = pks.pk_table_name
+
+    ), 
+
+    unioned as (
+
+    select * from joined 
+
+    union distinct 
+
+    select * from bridge_joined
+
+    )
+
+    select * from unioned
     '''
 
 if ProjectVariables.warehouse == 'snowflake':   

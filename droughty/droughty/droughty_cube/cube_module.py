@@ -14,7 +14,7 @@ import git
 
 import droughty.cube_parser.cube as cube
 from droughty.droughty_cube.cube_base_dict import get_cube_base_dict
-from droughty.droughty_lookml.lookml_explore_dict import get_looker_explore_dict
+from droughty.droughty_cube.cube_explore_dict import get_cube_explore_dict
 from droughty.droughty_core.config import (
     ProjectVariables,
     ExploresVariables,
@@ -22,68 +22,70 @@ from droughty.droughty_core.config import (
 )
     
 def get_all_values(nested_dictionary,explore_dictionary):
-        
+    
     for key,value in nested_dictionary.items():
     
-        for explore_key, explore_value in explore_dictionary.items():
+        if key not in explore_dictionary.keys():
 
-            if explore_key not in key:
-                
-                explore = {
+            explore = {
 
 
-                    "cube": key,
-                    "sql": "select * from"+" "+ProjectVariables.schema+"."+key,
-                    "dimensions": '{'
+                "cube": key,
+                "sql": "select * from"+" "+ProjectVariables.schema+"."+key
 
-                }
+            }
 
-
-                yield(cube.dump(explore))
-
-
-                for key, value in value.items():
+            yield(cube.dump(explore))
+            
                     
-                    if "pk" not in key[0] and "number" not in key [1]:  
+            dimension_start = "dimensions: {"
 
-                        dimension = {
-
-
-                                "dimension": {
-                                "sql": key[0],
-                                "type": key[1],
-                                "name": key[0],
-                                "description": key[2]
-
-                                }
-
-                            }
-
-                        yield(cube.dump(dimension))
-                        
-                    elif "pk" in key[0]:
-
-                        dimension = {
+            yield(dimension_start)
 
 
-                            "dimension": {
-                                "primaryKey": "true",
-                                "type": key[1],
-                                "sql": key[0],
-                                "name": key[0],
-                                "description": key[2]
+            for key, value in value.items():
+                
+                if "pk" not in key[0] and "number" not in key [1]:  
+                
+                    dimension = {
 
-                            }
+
+                        "dimension": {
+                        "sql": key[0],
+                        "type": key[1],
+                        "name": key[0],
+                        "description": key[2]
+
+
                         }
 
-                        yield(cube.dump(dimension))
+                    }
                 
+                    yield(cube.dump(dimension))
+                    
+                elif "pk" in key[0]:
+
+                    dimension = {
+
+
+                        "dimension": {
+                            "primaryKey": "true",
+                            "type": key[1],
+                            "sql": key[0],
+                            "name": key[0],
+                            "description": key[2]
+
+                        }
+                    }
+
+                    yield(cube.dump(dimension))
                 
-                for key,value in nested_dictionary.items():
+            for key,value in nested_dictionary.items():
+                
 
-                    closing_syntax = "}});"
+                closing_syntax = "}});"
 
-                yield (closing_syntax)
+            yield (closing_syntax)
 
 def output():
 
@@ -118,6 +120,6 @@ def output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(get_cube_base_dict(),get_looker_explore_dict()):
+                for value in get_all_values(get_cube_base_dict(),get_cube_explore_dict()):
 
                     print(value)

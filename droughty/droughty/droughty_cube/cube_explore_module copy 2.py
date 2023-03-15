@@ -22,12 +22,19 @@ from droughty.droughty_core.config import (
     IdentifyConfigVariables
 )
 
+def get_git_root(path):
 
-def get_all_values(nested_dictionary,explore_dictionary):
+        git_repo = git.Repo(path, search_parent_directories=True)
+        git_root = git_repo.git.rev_parse("--show-toplevel")
+        return (git_root)
+
+git_def_path = get_git_root(os.getcwd())
+
+def explore_output():
     
-    for key,value in nested_dictionary.items():
+    for key,value in get_cube_base_dict().items():
     
-        for explore_key, explore_value in explore_dictionary.items():
+        for explore_key, explore_value in get_cube_explore_dict().items():
 
             if explore_key in key:
 
@@ -40,11 +47,14 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                 }
 
+
                 yield(cube.dump(explore))
+        
 
                 for key1, value1 in explore_value.items(): 
 
-                
+                    
+
                     join = {
 
 
@@ -62,7 +72,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                     }
                     
-                
+                    
+
                     yield(cube.dump(join))
                     
                     join_end = "},"                 
@@ -112,55 +123,44 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                         yield(cube.dump(dimension))
                     
-                for key,value in nested_dictionary.items():
-                    
+                for key,value in get_cube_base_dict().items():
 
                     closing_syntax = "}});"
 
                 yield (closing_syntax)
 
-def get_git_root(path):
-
-        git_repo = git.Repo(path, search_parent_directories=True)
-        git_root = git_repo.git.rev_parse("--show-toplevel")
-        return (git_root)
-
-git_def_path = get_git_root(os.getcwd())
-
-
-def explore_output():
     
-    if ExploresVariables.cube_path == None:
- 
-        git_path = IdentifyConfigVariables.git_path
-
-        rel_path = "schema"
-
-        path = os.path.join(git_path, rel_path)
-
-    elif ExploresVariables.cube_path != None:
-
-        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.cube_path)
-
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-    if ExploresVariables.cube_integration_filename != None:
-
-        filename = ExploresVariables.cube_integration_filename
+            if ExploresVariables.cube_path == None:
         
-    else:
-        
-        filename = 'cube_integration'
+                git_path = IdentifyConfigVariables.git_path
 
-    suffix = '.js'
+                rel_path = "schema"
 
-    extension = filename+suffix
+                path = os.path.join(git_path, rel_path)
 
-    with open(os.path.join(path,extension), 'w') as file:
+            elif ExploresVariables.cube_path != None:
 
-        with redirect_stdout(file):
+                path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.cube_path)
 
-                for value in get_all_values(get_cube_base_dict(),get_cube_explore_dict()):
+            if not os.path.exists(path):
+                os.makedirs(path)
 
-                    print(value)
+            if ExploresVariables.cube_integration_filename != None:
+
+                filename = ExploresVariables.cube_integration_filename
+                
+            else:
+                
+                filename = 'cube_integration'
+
+            suffix = '.js'
+
+            extension = filename+suffix
+
+            with open(os.path.join(path,key+suffix), 'w') as file:
+
+                with redirect_stdout(file):
+
+                    for value in (get_cube_base_dict(),get_cube_explore_dict()):
+
+                        print(value)

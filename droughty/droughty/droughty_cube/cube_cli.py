@@ -1,8 +1,9 @@
 """Console script for droughty cube module."""
 
-from droughty.droughty_cube.cube_module import output
+#from droughty.droughty_cube.cube_module import output
 from droughty.droughty_cube.cube_explore_module import explore_output
 from droughty.droughty_cube.cube_measure_module import measure_output
+from droughty.droughty_cube.cube_module import output
 
 from droughty.droughty_core.config import ExploresVariables
 

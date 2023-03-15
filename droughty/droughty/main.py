@@ -5,9 +5,10 @@ from droughty.droughty_lookml.lookml_cli import (
     lookml_pop
 )
 from droughty.droughty_cube.cube_cli import (
-    base,
     explore,
-    measures
+    measures,
+    base
+
 )
 
 from droughty.droughty_dbt.dbt_test_cli import tests
@@ -74,9 +75,7 @@ def start():
         lookml_explore()
         lookml_measures()
         lookml_pop()
-        base()
         explore()
-        measures()
         erd()
         tests()
 

@@ -22,7 +22,6 @@ from droughty.droughty_core.config import (
     IdentifyConfigVariables
 )
 
-
 def get_all_values(nested_dictionary,explore_dictionary):
     
     for key,value in nested_dictionary.items():
@@ -40,11 +39,14 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                 }
 
+
                 yield(cube.dump(explore))
+        
 
                 for key1, value1 in explore_value.items(): 
 
-                
+                    
+
                     join = {
 
 
@@ -62,7 +64,8 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                     }
                     
-                
+                    
+
                     yield(cube.dump(join))
                     
                     join_end = "},"                 
@@ -113,7 +116,6 @@ def get_all_values(nested_dictionary,explore_dictionary):
                         yield(cube.dump(dimension))
                     
                 for key,value in nested_dictionary.items():
-                    
 
                     closing_syntax = "}});"
 
@@ -126,6 +128,8 @@ def get_git_root(path):
         return (git_root)
 
 git_def_path = get_git_root(os.getcwd())
+
+print (get_all_values(get_cube_base_dict(),get_cube_explore_dict()))
 
 
 def explore_output():
@@ -157,10 +161,15 @@ def explore_output():
 
     extension = filename+suffix
 
-    with open(os.path.join(path,extension), 'w') as file:
+    for key in get_cube_base_dict().keys():
 
-        with redirect_stdout(file):
+        print (key)
 
-                for value in get_all_values(get_cube_base_dict(),get_cube_explore_dict()):
+#        with open(os.path.join(path,key+suffix), 'w') as file:
+#
+#            with redirect_stdout(file):
+#
+#                for value in get_all_values(get_cube_base_dict(),get_cube_explore_dict()):
+#
+#                    print(value)
 
-                    print(value)

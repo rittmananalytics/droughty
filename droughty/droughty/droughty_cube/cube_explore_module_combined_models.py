@@ -119,6 +119,64 @@ def get_all_values(nested_dictionary,explore_dictionary):
 
                 yield (closing_syntax)
 
+            if explore_key not in key:
+                
+                explore = {
+
+
+                    "cube": key,
+                    "sql": "select * from"+" "+ProjectVariables.schema+"."+key,
+                    "dimensions": '{'
+
+                }
+
+
+                yield(cube.dump(explore))
+
+
+                for key, value in value.items():
+                    
+                    if "pk" not in key[0] and "number" not in key [1]:  
+
+                        dimension = {
+
+
+                                "dimension": {
+                                "sql": key[0],
+                                "type": key[1],
+                                "name": key[0],
+                                "description": key[2]
+
+                                }
+
+                            }
+
+                        yield(cube.dump(dimension))
+                        
+                    elif "pk" in key[0]:
+
+                        dimension = {
+
+
+                            "dimension": {
+                                "primaryKey": "true",
+                                "type": key[1],
+                                "sql": key[0],
+                                "name": key[0],
+                                "description": key[2]
+
+                            }
+                        }
+
+                        yield(cube.dump(dimension))
+                
+                
+                for key,value in nested_dictionary.items():
+
+                    closing_syntax = "}});"
+
+                yield (closing_syntax)
+
 def get_git_root(path):
 
         git_repo = git.Repo(path, search_parent_directories=True)
@@ -126,6 +184,8 @@ def get_git_root(path):
         return (git_root)
 
 git_def_path = get_git_root(os.getcwd())
+
+print (get_all_values(get_cube_base_dict(),get_cube_explore_dict()))
 
 
 def explore_output():

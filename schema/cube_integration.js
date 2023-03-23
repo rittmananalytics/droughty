@@ -2,11 +2,11 @@ cube (`wh_core__clients_bridge`, {
 sql: `select * from lewis_analytics_dev.wh_core__clients_bridge`,
 joins : {
 wh_delivery__harvest_clients_dim:  {
-  relationship: `belongsTo`,
+  relationship: `hasMany`,
   sql: `${CUBE.harvest_client_fk} = ${wh_delivery__harvest_clients_dim.harvest_client_pk}`,
 } ,
 wh_delivery__jira_projects_fact:  {
-  relationship: `belongsTo`,
+  relationship: `hasMany`,
   sql: `${CUBE.jira_project_fk} = ${wh_delivery__jira_projects_fact.jira_project_pk}`,
 } ,
 },
@@ -239,7 +239,7 @@ cube (`wh_delivery__harvest_clients_dim`, {
 sql: `select * from lewis_analytics_dev.wh_delivery__harvest_clients_dim`,
 joins : {
 wh_core__clients_bridge:  {
-  relationship: `belongsTo`,
+  relationship: `hasMany`,
   sql: `${CUBE.harvest_client_pk} = ${wh_core__clients_bridge.harvest_client_fk}`,
 } ,
 wh_delivery__harvest_invoices_fact:  {
@@ -1505,7 +1505,7 @@ cube (`wh_delivery__jira_projects_fact`, {
 sql: `select * from lewis_analytics_dev.wh_delivery__jira_projects_fact`,
 joins : {
 wh_core__clients_bridge:  {
-  relationship: `belongsTo`,
+  relationship: `hasMany`,
   sql: `${CUBE.jira_project_pk} = ${wh_core__clients_bridge.jira_project_fk}`,
 } ,
 wh_delivery__jira_sprints_dim:  {

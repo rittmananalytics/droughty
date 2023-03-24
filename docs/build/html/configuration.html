@@ -1,18 +1,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Configuration &#8212; droughty 0.1.21 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Warehouse Support" href="warehouse_support.html" />
@@ -34,7 +33,7 @@
           <div class="body" role="main">
             
   <section id="configuration">
-<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h1>
 <p>Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
 <p><strong>droughty_project.yaml set-up</strong></p>
 <p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below:</p>
@@ -48,32 +47,21 @@
 <span class="n">openai_field_descriptions_path</span><span class="p">:</span> <span class="n">warehouse_docs</span>
 <span class="n">openai_field_descriptions_filename</span><span class="p">:</span> <span class="n">openai_field_descriptions</span>
 
-<span class="n">test_schemas</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
-
-
 <span class="n">test_overwrite</span><span class="p">:</span>
     <span class="n">models</span><span class="p">:</span>
       <span class="n">wh_marketing__web_event_items_fact</span><span class="p">:</span>
-            <span class="n">web_event_item_pk</span><span class="p">:</span>
-                <span class="o">-</span> <span class="n">not_null</span>
-                <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
-                <span class="o">-</span> <span class="n">unique</span>
-            <span class="n">web_event_parameter_float_value</span><span class="p">:</span>
-                <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
+        <span class="n">web_event_item_pk</span><span class="p">:</span>
+            <span class="o">-</span> <span class="n">not_null</span>
+            <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
+            <span class="o">-</span> <span class="n">unique</span>
+        <span class="n">web_event_parameter_float_value</span><span class="p">:</span>
+            <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
 
 <span class="n">test_ignore</span><span class="p">:</span>
     <span class="n">models</span><span class="p">:</span>
       <span class="o">-</span> <span class="n">base_backend__web_events</span>
       <span class="o">-</span> <span class="n">base_ga4__web_events</span>
 
-
-<span class="n">dbml_schemas</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
 
 <span class="n">dbml_filenames</span><span class="p">:</span>
     <span class="o">-</span> <span class="n">test_10</span>
@@ -126,7 +114,7 @@
 <p>Create this file in the root of your git repo (unless you are specifying the path through the –project-dir argument)</p>
 </section>
 <section id="optional-variables">
-<h1>Optional variables<a class="headerlink" href="#optional-variables" title="Permalink to this headline">¶</a></h1>
+<h1>Optional variables<a class="headerlink" href="#optional-variables" title="Permalink to this heading">¶</a></h1>
 <p><strong>Overwriting and ignoring model tests</strong></p>
 <p>Using the test_overwrite and test_ignore project parameters, you can overwrite tests or leave them blank using the test_overwrite parameter or ignore all model tests using the test_ignore parameter</p>
 <p><strong>Defining relative file outputs</strong></p>
@@ -166,6 +154,16 @@
   <span class="n">warehouse_name</span><span class="p">:</span> <span class="n">big_query</span>
 
   <span class="n">openai_secret</span><span class="p">:</span> <span class="n">sk</span><span class="o">-</span><span class="n">wdfnwfw40t493t304t9340t94wet0et90edf</span> <span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+  <span class="n">test_schemas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
+    <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
+    <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
+
+  <span class="n">dbml_schemas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
+    <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
+    <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -220,7 +218,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -237,7 +235,7 @@
       &copy;2022, lewis baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

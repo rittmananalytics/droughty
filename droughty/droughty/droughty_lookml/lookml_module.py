@@ -53,25 +53,15 @@ def get_all_values(nested_dictionary,field_dict):
 
         yield(looker.dump(view))
 
-        try:
        
-            for table_name,field_name in field_dict.items():
-
-                if table_name in key:
-
-                    set = {
-
-                        "set": {
-                            "fields": field_name,
-                            "name": table_name+"_set"
-                        }
-                    }   
-
-            yield(looker.dump(set))
-
-        except:
-
-            pass
+        if key in field_dict and field_dict[key]:
+            set_block = {  # Avoid using the name 'set' as it is a Python built-in type.
+                "set": {
+                    "fields": field_dict[key],
+                    "name": key + "_set"
+                }
+            }
+            yield(looker.dump(set_block))
         
         for key1, value1 in value.items():
             

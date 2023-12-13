@@ -13,13 +13,17 @@ import sys
 import yaml
 import git
 
-from droughty.droughty_lookml.lookml_base_dict import get_base_dict
+from droughty.droughty_lookml.lookml_base_dict import (
+    get_base_dict,
+    get_field_dict
+)   
+    
 from droughty.droughty_core.config import (
     ExploresVariables,
     IdentifyConfigVariables
 )
 
-def get_all_values(nested_dictionary):
+def get_all_values(nested_dictionary,field_dict):
 
 
     if ExploresVariables.lookml_base_path != None:
@@ -51,44 +55,77 @@ def get_all_values(nested_dictionary):
 
         yield(looker.dump(view))
         
+        
+        if key in field_dict and field_dict[key]:
 
-        for key1, value in value.items():
-            
-            if "pk" in key1[0]:
-
-                count_distinct = {
-
-                    "measure": {
-                        "type": "count_distinct",
-                        "sql": "${TABLE}."+key1[0],
-                        "name": "count_of_"+key1[0],
-                        "description": key1[2],
-                        "drill_fields": [key+"_set*"]
-
-                    }
-                }
-
-                yield(looker.dump(count_distinct))
-
-            if key1[1] == 'number':
-
-                sum_distinct = {
-
-                    "measure": {
-                        "type": "sum_distinct",
-                        "sql": "${TABLE}."+key1[0],
-                        "name": "sum_of_"+key1[0],
-                        "description": key1[2],
-                        "drill_fields": [key+"_set*"]
-
-                    }
-                }
-
-                yield(looker.dump(sum_distinct))
-
-
-
+            for key1, value in value.items():
                 
+                if "pk" in key1[0]:
+
+                    count_distinct = {
+
+                        "measure": {
+                            "type": "count_distinct",
+                            "sql": "${TABLE}."+key1[0],
+                            "name": "count_of_"+key1[0],
+                            "description": key1[2],
+                            "drill_fields": [key+"_set*"]
+
+                        }
+                    }
+
+                    yield(looker.dump(count_distinct))
+
+                if key1[1] == 'number':
+
+                    sum_distinct = {
+
+                        "measure": {
+                            "type": "sum_distinct",
+                            "sql": "${TABLE}."+key1[0],
+                            "name": "sum_of_"+key1[0],
+                            "description": key1[2],
+                            "drill_fields": [key+"_set*"]
+
+                        }
+                    }
+
+                    yield(looker.dump(sum_distinct))
+                    
+        else:
+            
+            for key1, value in value.items():
+                
+                if "pk" in key1[0]:
+
+                    count_distinct = {
+
+                        "measure": {
+                            "type": "count_distinct",
+                            "sql": "${TABLE}."+key1[0],
+                            "name": "count_of_"+key1[0],
+                            "description": key1[2]
+
+                        }
+                    }
+
+                    yield(looker.dump(count_distinct))
+
+                if key1[1] == 'number':
+
+                    sum_distinct = {
+
+                        "measure": {
+                            "type": "sum_distinct",
+                            "sql": "${TABLE}."+key1[0],
+                            "name": "sum_of_"+key1[0],
+                            "description": key1[2]
+
+                        }
+                    }
+
+                    yield(looker.dump(sum_distinct))
+  
         for key,value in nested_dictionary.items():
 
             syntax = "}"
@@ -139,6 +176,6 @@ def measure_output():
 
         with redirect_stdout(file):
 
-                for value in get_all_values(get_base_dict()):
+                for value in get_all_values(get_base_dict(),get_field_dict()):
 
                     print(value)    

@@ -60,6 +60,7 @@ To differentiate between multiple warehouse targets within the profiles.yaml fil
   cube_base_filename: example__4
   cube_integration_filename: example__5
   cube_measures_filename: example__6
+  lookml_base_path: example__7
   dbt_tests_filename: example__8
 
   entity_resolution:

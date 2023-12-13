@@ -22,11 +22,21 @@ from droughty.droughty_core.config import (
 def get_all_values(nested_dictionary):
 
 
-    includes = {
+    if ExploresVariables.lookml_base_path != None:
+    
+        includes = {
 
-        "includes": ["/lookml/base/_base.layer.lkml" ]
-            
-    }
+            "includes": [ExploresVariables.lookml_base_path]
+                
+        }
+        
+    else:
+        
+        includes = {
+
+            "includes": ["/lookml/base/_base.layer.lkml" ]
+                
+        }
 
     yield(looker.dump(includes))
 

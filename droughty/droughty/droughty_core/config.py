@@ -233,6 +233,7 @@ class ExploresVariables:
     dbml_path: str.lower
     cube_path: str.lower
     dbt_path: str.lower
+    lookml_base_path: str.lower
 
     #filenames
 
@@ -291,6 +292,7 @@ def assign_explore_variables():
                 ExploresVariables.cube_measures_filename = (droughty_project.get("cube_measures_filename"))  
                 ExploresVariables.dbml_filenames = (droughty_project.get("dbml_filenames"))  
                 ExploresVariables.dbt_tests_filename = (droughty_project.get("dbt_tests_filename"))
+                ExploresVariables.lookml_base_path = (droughty_project.get("lookml_base_path"))
 
                 ExploresVariables.openai_field_descriptions_path = (droughty_project.get("openai_field_descriptions_path"))
                 ExploresVariables.openai_field_descriptions_filename = (droughty_project.get("openai_field_descriptions_filename"))

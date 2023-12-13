@@ -19,6 +19,7 @@ def wrangle_bigquery_dataframes(dataframe):
     dataframe = dataframe[['table_name','column_name','data_type','description']]
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATETIME','datetime')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')
@@ -55,6 +56,7 @@ def wrangle_bigquery_dataframes_drill_sets(dataframe):
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATETIME','datetime')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('NUMERIC','number')
@@ -99,6 +101,7 @@ def wrangle_bigquery_dbt_test_dataframes(dataframe):
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATETIME','datetime')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('NUMERIC','number')
@@ -127,6 +130,7 @@ def wrangle_bigquery_dbml_dataframes(dataframe):
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','timestamp')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','date')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATETIME','datetime')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','numeric')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','numeric')
     dataframe['data_type'] = dataframe['data_type'].str.replace('NUMERIC','numeric')
@@ -208,6 +212,7 @@ def wrangle_bigquery_cube_dataframes(dataframe):
 
     dataframe['data_type'] = dataframe['data_type'].str.replace('TIMESTAMP','time')
     dataframe['data_type'] = dataframe['data_type'].str.replace('DATE','time')
+    dataframe['data_type'] = dataframe['data_type'].str.replace('DATETIME','datetime')
     dataframe['data_type'] = dataframe['data_type'].str.replace('INT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('FLOAT64','number')
     dataframe['data_type'] = dataframe['data_type'].str.replace('NUMERIC','number')

@@ -25,6 +25,15 @@ import ruamel.yaml
 import git
 
 
+def get_test_definition_key():
+    """
+    Returns the appropriate test definition key based on the dbt version.
+    """
+    if is_version_gte_1_8():
+        return "data_tests"
+    else:
+        return "tests"
+
 def get_all_values(nested_dictionary):
 
     test_overwrite = ExploresVariables.test_overwrite

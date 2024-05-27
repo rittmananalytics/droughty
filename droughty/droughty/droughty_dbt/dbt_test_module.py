@@ -18,6 +18,7 @@ from droughty.droughty_core.config import (
     IdentifyConfigVariables,
     ExploresVariables
 )
+from droughty.droughty_dbt.dbt_version_util import is_version_gte_1_8
 
 import sys
 import ruamel.yaml

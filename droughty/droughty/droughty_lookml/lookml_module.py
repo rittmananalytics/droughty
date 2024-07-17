@@ -6,15 +6,36 @@ from droughty.droughty_lookml.lookml_base_dict import get_base_dict, get_field_d
 from droughty.droughty_core.config import ExploresVariables, IdentifyConfigVariables
 
 def get_all_values(nested_dictionary, field_dict):
+
     for key, value in nested_dictionary.items():
         view = {
-            "view": key+" {",    
-            "sql_table_name": key                 
-            }
+            "view": key + " {",
+            "sql_table_name": key
+        }
         yield looker.dump(view)
+
+        if key in field_dict and field_dict[key]:
+            non_nested_fields_set = set()  # Use a set to store unique field names
+            for key1, value1 in value.items():
+                if "ARRAY<STRUCT<" not in key1[1]:  # Check if the field is not nested
+                    non_nested_fields_set.add(key1[0])  # Add field name to the set
+            
+            # Convert the set back to a list for LookML set block
+            non_nested_fields = list(non_nested_fields_set)
+
+            if non_nested_fields:
+                set_block = {
+                    "set": {
+                        "fields": non_nested_fields,
+                        "name": key + "_set"
+                    }
+                }
+                yield looker.dump(set_block)
+
 
         nested_views = []
         has_nested_fields = False
+        processed_dimensions = set()  # Set to track processed dimensions
 
         for key1, value1 in value.items():
             if "ARRAY<STRUCT<" in key1[1]:
@@ -22,57 +43,28 @@ def get_all_values(nested_dictionary, field_dict):
                 # Handle nested fields separately
                 nested_view_name = f"{key}__{key1[0]}"
                 nested_view = {
-                    "view": nested_view_name,
+                    "view": nested_view_name + " {",
                     "sql_table_name": key
                 }
-                yield looker.dump(nested_view)
-
-                start_index = key1[1].find('ARRAY<STRUCT<') + len('ARRAY<STRUCT<')
-                end_index = key1[1].rfind('>') - 1
-                struct_info = key1[1][start_index:end_index]
-                field_infos = struct_info.split(',')
-                nested_fields = {}
-                for field_info in field_infos:
-                    field_info = field_info.strip()
-                    field_parts = field_info.split()
-                    if len(field_parts) == 2:
-                        field_name = field_parts[0]
-                        field_type = field_parts[1]
-                        nested_fields[field_name] = (field_name, field_type, "")
-
-                nested_views.append((nested_view_name, nested_fields))
-
-                # # Add join for each nested field
-                # explore_name = key
-                # explore = {
-                #     "explore": explore_name,
-                #     "hidden": "yes",
-                #     "joins": []
-                # }
-                # join = {
-                #     "name": nested_view_name,
-                #     "view_label": f"{key}: {nested_view_name.replace('_', ' ').title()}",
-                #     "sql": f"LEFT JOIN UNNEST(${key}.{key1[0]}) AS {nested_view_name} ;;",
-                #     "relationship": "one_to_many"
-                # }
-                # explore["joins"].append(join)
-
-                yield looker.dump(explore)
-                yield "}"  # Close the explore
+                nested_views.append((nested_view_name, nested_view, key1[1]))
+                
 
             elif "pk" not in key1[0] and "fk" not in key1[0] and "date" not in key1[1] and "timestamp" not in key1[1] and "number" not in key1[1]:
-                dimension = {
-                    "dimension": {
-                        "type": key1[1],
-                        "sql": "${TABLE}." + key1[0],
-                        "name": key1[0],
-                        "description": key1[2],
-                        "drill_fields": [key + "_set*"]
+                if key1[0] not in processed_dimensions:
+                    processed_dimensions.add(key1[0])
+                    dimension = {
+                        "dimension": {
+                            "type": key1[1],
+                            "sql": "${TABLE}." + key1[0],
+                            "name": key1[0],
+                            "description": key1[2],
+                            "drill_fields": [key + "_set*"]
+                        }
                     }
-                }
-                yield looker.dump(dimension)
+                    yield looker.dump(dimension)
 
-            elif "pk" in key1[0]:
+            elif "pk" in key1[0] and key1[0] not in processed_dimensions:
+                processed_dimensions.add(key1[0])
                 dimension = {
                     "dimension": {
                         "primary_key": "yes",
@@ -85,7 +77,8 @@ def get_all_values(nested_dictionary, field_dict):
                 }
                 yield looker.dump(dimension)
 
-            elif "date" in key1[1]:
+            elif "date" in key1[1] and key1[0] not in processed_dimensions:
+                processed_dimensions.add(key1[0])
                 dimension = {
                     "dimension_group": {
                         "timeframes": "[raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
@@ -98,7 +91,8 @@ def get_all_values(nested_dictionary, field_dict):
                 }
                 yield looker.dump(dimension)
 
-            elif "timestamp" in key1[1]:
+            elif "timestamp" in key1[1] and key1[0] not in processed_dimensions:
+                processed_dimensions.add(key1[0])
                 dimension = {
                     "dimension_group": {
                         "timeframes": "[time,hour_of_day,raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
@@ -110,29 +104,107 @@ def get_all_values(nested_dictionary, field_dict):
                     }
                 }
                 yield looker.dump(dimension)
+            else:
+                if key1[0] not in processed_dimensions:
+                    processed_dimensions.add(key1[0])
+                    dimension = {
+                        "dimension": {
+                            "hidden": "yes",
+                            "type": key1[1],
+                            "sql": "${TABLE}." + key1[0],
+                            "name": key1[0],
+                            "description": key1[2]
+                        }
+                    }
+                    yield looker.dump(dimension)
+            
 
         yield "}"  # Close the base view
 
         # Generate nested views and dimensions for each nested field
-        for nested_view_name, nested_fields in nested_views:
-            nested_view = {
-                "view": nested_view_name,
-                "{sql_table_name": key
-            }
-
+        for nested_view_name, nested_view, struct in nested_views:
             yield looker.dump(nested_view)
 
+            start_index = struct.find('ARRAY<STRUCT<') + len('ARRAY<STRUCT<')
+            end_index = struct.rfind('>') - 1
+            struct_info = struct[start_index:end_index]
+            field_infos = struct_info.split(',')
+            nested_fields = {}
+            for field_info in field_infos:
+                field_info = field_info.strip()
+                field_parts = field_info.split()
+                if len(field_parts) == 2:
+                    field_name = field_parts[0]
+                    field_type = field_parts[1]
+                    nested_fields[field_name] = (field_name, field_type, "")
+
+            nested_processed_dimensions = set()  # Set to track nested processed dimensions
+
             for field_tuple in nested_fields.values():
-                dimension = {
-                    "dimension": {
-                        "hidden": "no",
-                        "type": field_tuple[1],
-                        "sql": "${TABLE}." + field_tuple[0],
-                        "name": field_tuple[0],
-                        "description": field_tuple[2]
-                    }
-                }
-                yield looker.dump(dimension)
+                if field_tuple[0] not in nested_processed_dimensions:
+                    nested_processed_dimensions.add(field_tuple[0])
+
+                    if "pk" not in field_tuple[0]and "fk" not in field_tuple[0] and "date" not in field_tuple[1] and "timestamp" not in field_tuple[1] and "number" not in field_tuple[1]:
+                        dimension = {
+                            "dimension": {
+                                "type": field_tuple[1],
+                                "sql": "${TABLE}." + field_tuple[0],
+                                "name": field_tuple[0],
+                                "description": "",
+                            }
+                        }
+                        yield looker.dump(dimension)
+
+                    elif "pk" in field_tuple[0]:
+                        dimension = {
+                            "dimension": {
+                                "primary_key": "yes",
+                                "hidden": "yes",
+                                "type": field_tuple[1],
+                                "sql": "${TABLE}." + field_tuple[0],
+                                "name": field_tuple[0],
+                                "description": ""
+                            }
+                        }
+                        yield looker.dump(dimension)
+
+                    elif "date" in field_tuple[1]:
+                        dimension = {
+                            "dimension_group": {
+                                "timeframes": "[raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
+                                "type": "time",
+                                "datatype": field_tuple[1],
+                                "sql": "${TABLE}." + field_tuple[0],
+                                "name": field_tuple[0],
+                                "description": ""
+                            }
+                        }
+                        yield looker.dump(dimension)
+
+                    elif "timestamp" in field_tuple[1]:
+                        dimension = {
+                            "dimension_group": {
+                                "timeframes": "[time,hour_of_day,raw,date,day_of_month,day_of_week,day_of_week_index,day_of_year,week, week_of_year, month, month_name, month_num, quarter, quarter_of_year, year]",
+                                "type": "time",
+                                "datatype": field_tuple[1],
+                                "sql": "${TABLE}." + field_tuple[0],
+                                "name": field_tuple[0],
+                                "description": ""
+                            }
+                        }
+                        yield looker.dump(dimension)
+
+                    else:
+                        dimension = {
+                            "dimension": {
+                                "hidden": "no",
+                                "type": field_tuple[1],
+                                "sql": "${TABLE}." + field_tuple[0],
+                                "name": field_tuple[0],
+                                "description": ""
+                            }
+                        }
+                        yield looker.dump(dimension)
 
             yield "}"  # Close the nested view
 
@@ -144,16 +216,16 @@ def get_all_values(nested_dictionary, field_dict):
                 "{hidden": "yes",
                 "joins": []
             }
-            
-            for nested_view_name, _ in nested_views:
+
+            for nested_view_name, _, __ in nested_views:
                 join = {
                     "name": nested_view_name,
                     "view_label": f"{key}: {nested_view_name.replace('_', ' ').title()}",
-                    "sql": f"LEFT JOIN UNNEST(${key}.{nested_view_name.split('__')[1]}) AS {nested_view_name} ;;",
+                    "sql": f"LEFT JOIN UNNEST(${key}.{nested_view_name.split('__')[1]}) AS {nested_view_name}",
                     "relationship": "one_to_many"
                 }
                 explore["joins"].append(join)
-            
+
             yield looker.dump(explore)
             yield "}"  # Close the explore
 

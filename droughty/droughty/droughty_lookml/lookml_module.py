@@ -17,7 +17,8 @@ def get_all_values(nested_dictionary, field_dict):
         if key in field_dict and field_dict[key]:
             non_nested_fields_set = set()  # Use a set to store unique field names
             for key1, value1 in value.items():
-                if "ARRAY<STRUCT<" not in key1[1]:  # Check if the field is not nested
+                # Exclude fields that are nested or contain "date", "timestamp", or "fk"
+                if "ARRAY<STRUCT<" not in key1[1] and "date" not in key1[1] and "timestamp" not in key1[1] and "fk" not in key1[0]:
                     non_nested_fields_set.add(key1[0])  # Add field name to the set
             
             # Convert the set back to a list for LookML set block
@@ -221,7 +222,7 @@ def get_all_values(nested_dictionary, field_dict):
                 join = {
                     "name": nested_view_name,
                     "view_label": f"{key}: {nested_view_name.replace('_', ' ').title()}",
-                    "sql": f"LEFT JOIN UNNEST(${key}.{nested_view_name.split('__')[1]}) AS {nested_view_name}",
+                    "sql": f"left join unnest(${key}.{nested_view_name.split('__')[1]}) AS {nested_view_name}",
                     "relationship": "one_to_many"
                 }
                 explore["joins"].append(join)

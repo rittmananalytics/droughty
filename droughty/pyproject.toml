@@ -1,11 +1,11 @@
 
 [tool.poetry]
 name = "droughty"
-version = "0.12.2"
+version = "0.12.0"
 description = "droughty is an analytics engineering toolkit, helping keep your workflow dry."
-authors = ["lydia <lydia@rittmananalytics.com>"]
+authors = ["Lewis <lewischarlesbaker@gmail.com>"]
 license = "MIT"
-repository = 'https://github.com/rittmananalytics/droughty'
+repository = 'https://github.com/lewischarlesbaker/droughty'
 readme = 'README.md'
 
 [tool.poetry.dependencies]
@@ -15,7 +15,7 @@ glom = "23.1.1"
 lkml = "1.3.1"
 Markdown = "3.4.1"
 numpy = "1.24.2"
-openai = "1.56.2"
+openai = "1.46.1"
 pandas = "1.5.3"
 pandas_dedupe = "1.5.0"
 pandas_gbq = "0.19.1"

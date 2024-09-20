@@ -6,13 +6,9 @@ class Common:
 
     profile_dir: str
     project_dir: str
+    assumptions_dir: str
     args_command: str
     env_vars: str
-
-#def some_function_1(profile_dir):
-#    """Some example funcion"""
-#    msg = profile_dir
-#    print(msg + "function test")
 
 def profile_func():
 
@@ -71,6 +67,14 @@ def profile_func():
     docs.add_argument('--profile-dir', type=str, required=False)
     docs.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
     docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
+    
+    # QA
+    
+    docs = subparser.add_parser('qa')
+    docs.add_argument('--profile-dir', type=str, required=False)
+    docs.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
+    docs.add_argument('--assumptions-dir', type=str, required=False, help='the directory of the qa assumptions for the project')
+    docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
 
     # parsing arguments
 
@@ -81,9 +85,9 @@ def profile_func():
     # assigning arguments to class
        
     Common.args_command = (args.command)
-
     Common.project_dir = (args.project_dir)
     Common.profile_dir = (args.profile_dir)
     Common.env_vars = (args.env_vars)
+    Common.assumptions_dir = (args.assumptions_dir)
  
 profile_func()

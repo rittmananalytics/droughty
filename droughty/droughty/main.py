@@ -16,6 +16,7 @@ from droughty.droughty_core.config_cli import Common
 from droughty.droughty_core.config import ExploresVariables
 from droughty.droughty_docs.docs_cli import docs
 from droughty.droughty_resolve.resolve_cli import entity_resolution
+from droughty.droughty_qa.qa_agent_cli import qa
 
 
 def start():
@@ -67,6 +68,10 @@ def start():
     elif Common.args_command == 'resolve':
 
         entity_resolution()
+        
+    elif Common.args_command == 'qa':
+
+        qa()
 
     else:
 

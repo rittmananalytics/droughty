@@ -18,6 +18,7 @@ class IdentifyConfigVariables(Common):
     path_source: str
     profile_path: str
     project_path: str
+    assumptions_path: str
     full_path: str
     git_path: str
 
@@ -102,9 +103,34 @@ def assign_droughty_project_paths():
 
         raise Exception ("It looks like you don't have a droughty_project file or you have directly specified the incorrect directory")  
 
+def assign_droughty_assumptions_paths():
+
+    if Common.assumptions_dir != None:
+
+        IdentifyConfigVariables.assumptions_path = Common.assumptions_dir  
+
+        IdentifyConfigVariables.path_source = 'local_vars'
+
+        print ("Using optional assumptions path")
+
+        print (Common.assumptions_dir)
+
+
+    elif Common.assumptions_dir == None:
+
+        path = get_git_root(os.getcwd())
+
+        IdentifyConfigVariables.assumptions_path = os.path.join(path,"droughty_qa_assumptions.yaml")       
+
+        print ("Using default assumptions path")
+
+    else:
+
+        raise Exception ("It looks like you don't have a droughty_qa_assumptions file or you have directly specified the incorrect directory") 
+
 
 assign_droughty_project_paths()
-
+assign_droughty_assumptions_paths()
 
 def load_droughty_project():
 
@@ -112,9 +138,17 @@ def load_droughty_project():
         droughty_project = yaml.load(f, Loader=yaml.FullLoader)
 
     return droughty_project
+
+def load_droughty_assumptions():
+
+    with open(IdentifyConfigVariables.assumptions_path) as f:
+        assumptions = yaml.load(f, Loader=yaml.FullLoader)
+
+    return assumptions
     
 droughty_profile = load_droughty_profile()
 droughty_project = load_droughty_project()
+droughty_assumptions = load_droughty_assumptions()
 
 @dataclass
 class ProjectVariables:

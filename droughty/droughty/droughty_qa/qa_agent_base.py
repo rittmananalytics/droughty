@@ -7,13 +7,10 @@ import yaml  # Import PyYAML to read the YAML file
 
 from droughty.droughty_core.config import ProjectVariables, droughty_assumptions
 
- 
-
 credentials = ProjectVariables.service_account
 project = ProjectVariables.project
 openai_api_key = ProjectVariables.openai_secret
 
-print(openai_api_key)
 
 # Function to query BigQuery using pandas.read_gbq
 def query_bigquery(query, project, credentials):
@@ -55,21 +52,44 @@ def qa_data(expectation, dataframe, column_name, llm):
 yaml_data = droughty_assumptions
 
 # Iterate over the expectations and apply them to the respective columns
-def process_yaml_expectations(dataframe, yaml_data, llm):
+def process_yaml_expectations(yaml_data, llm, project, credentials):
     """Process the expectations from the YAML file and apply them to the dataframe."""
-    for table_name, table_data in yaml_data['tables'].items():
-        for column_name, column_info in table_data['columns'].items():
-            for expectation_data in column_info:
-                expectation = expectation_data['expectation']
-                print(f"Processing expectation for column '{column_name}': {expectation}")
-                
-                # Check if the column exists in the dataframe before applying the expectation
-                if column_name in dataframe.columns:
-                    # Evaluate the expectation against the column in the dataframe
-                    agent_output = qa_data(expectation, dataframe, column_name, llm)
-                    print(f"LLM Output for column '{column_name}':\n{agent_output}\n")
-                else:
-                    print(f"Column '{column_name}' not found in the dataframe.")
+    
+    # Loop through each dataset in the YAML file
+    for dataset_name, dataset_data in yaml_data['datasets'].items():
+        
+        # For each dataset, loop through the tables
+        for table_name, table_data in dataset_data['tables'].items():
+            
+            # Dynamically build a list of column names to query for each table
+            columns_to_query = []
+            for column_name in table_data['columns']:
+                columns_to_query.append(column_name)
+            
+            # Generate the SQL query dynamically with the dataset and table name
+            query = f"""
+            SELECT {', '.join(columns_to_query)}
+            FROM `{project}.{dataset_name}.{table_name}`
+            """
+            
+            print(f"Running query for table '{table_name}' in dataset '{project}.{dataset_name}':\n{query}")
+            
+            # Run the query and load the DataFrame
+            dataframe = query_bigquery(query, project, credentials)
+            
+            # For each column in the table, process the expectations
+            for column_name, column_info in table_data['columns'].items():
+                for expectation_data in column_info:
+                    expectation = expectation_data['expectation']
+                    print(f"Processing expectation for column '{column_name}': {expectation}")
+                    
+                    # Check if the column exists in the dataframe before applying the expectation
+                    if column_name in dataframe.columns:
+                        # Evaluate the expectation against the column in the dataframe
+                        agent_output = qa_data(expectation, dataframe, column_name, llm)
+                        print(f"LLM Output for column '{column_name}':\n{agent_output}\n")
+                    else:
+                        print(f"Column '{column_name}' not found in the dataframe.")
 
 # Main function to orchestrate the process
 def qa_agent():
@@ -78,22 +98,11 @@ def qa_agent():
     project = ProjectVariables.project
     openai_secret = ProjectVariables.openai_secret
     
-    # Define the query (adjust the query if needed to retrieve the required columns)
-    query = """
-    SELECT customer_email, customer_pk, persona_type 
-    FROM `ra-development.looker_assets.wh_core_customers_dim`
-    """
-    
-    # Run the query and load the DataFrame
-    dataframe = query_bigquery(query, project, credentials)
-    print("DataFrame from BigQuery:")
-    print(dataframe)
-    
     # Initialize the LLM
     llm = create_llm(openai_secret)
     
     # Process the YAML expectations
-    process_yaml_expectations(dataframe, yaml_data, llm)
+    process_yaml_expectations(yaml_data, llm, project, credentials)
 
 # Call the main function
 qa_agent()

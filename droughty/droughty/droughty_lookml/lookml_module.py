@@ -61,7 +61,7 @@ def get_all_values(nested_dictionary, field_dict):
                 }
                 nested_views.append((nested_view_name, nested_view, key1[1]))
             
-            elif "time" in key1[1] and "timestamp" not in key1[1] and key1[0] not in processed_dimensions:
+            elif "time" in key1[1] and "timestamp" not in key1[1] and "datetime" not in key1[1] and key1[0] not in processed_dimensions:
                 processed_dimensions.add(key1[0])
                 # Add a string dimension for 'time' type fields
                 dimension = {

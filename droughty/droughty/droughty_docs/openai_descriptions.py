@@ -15,38 +15,50 @@ from droughty.droughty_core.config import (
 try: 
     openai.api_key = ProjectVariables.openai_secret
 except:
+    print("setting openai.api_key failed")
     pass
 
-model_engine = "text-davinci-003"
+model_engine = "gpt-4o-mini"
 
-def _get_ans_from_response(response:openai.openai_object.OpenAIObject) -> str:
-    first = dict(response)['choices']
-    sec = dict(first[0])
-    return sec['text']
 
-def _getter(model_engine:str = model_engine,prompt:str = "") -> str:
+def _message_constructor(prompt):
+    message = [
+        {
+            "role": "user",
+            "content": prompt
+        },
+    ]
+    return message
+
+def _get_ans_from_response(response) -> str:
+    return response.choices[0].message.content
+
+def _getter(model_engine:str = model_engine, prompt:str = "") -> str:
+
+    message = _message_constructor(prompt)
+
     # Send the request to the Chat GPT API
-    response = openai.Completion.create(
-                          engine=model_engine,
-                          prompt=prompt,
-                          max_tokens=1024
-                          )
-    return _get_ans_from_response(response)
+    completion = openai.chat.completions.create(
+                        model=model_engine,
+                        max_tokens=1024,
+                        messages=message
+                        )
+    return _get_ans_from_response(completion)
 
-def wrangle_descriptions():
 
-    df = get_dbt_dict()
-
-    df = df[['column_name']]
-    df = df.drop_duplicates()
-    df['og_column_name'] = df['column_name']
-    df['column_name'] = df['column_name'].str.replace('_',' ')
-    df['column_name'] = df['column_name'].str.replace(' fk',' foreign key')
-    df['column_name'] = df['column_name'].str.replace(' pk',' primary key')
-    df['column_name'] ='what is ' + df['column_name'].astype(str)
-    df['column_name'] = df['column_name'].astype(str) + '?'
-
-    return df
+def wrangle_descriptions() -> pd.DataFrame:
+    try:
+        df = get_dbt_dict()
+        df = df[['column_name']].drop_duplicates()
+        df['og_column_name'] = df['column_name']
+        df['column_name'] = df['column_name'].str.replace('_', ' ')
+        df['column_name'] = df['column_name'].str.replace(' fk', ' foreign key')
+        df['column_name'] = df['column_name'].str.replace(' pk', ' primary key')
+        df['column_name'] = 'what is ' + df['column_name'].astype(str) + '?'
+        return df
+    except Exception as e:
+        print(f"Error in wrangle_descriptions: {e}")
+        return pd.DataFrame()
 
 def list_rows(dataframe):
 
@@ -95,6 +107,8 @@ def description_output():
 
                     print(value)
 
-            except:
+            except Exception as e:
+
+                print('Failed with exception {}'.format(e))
 
                 pass

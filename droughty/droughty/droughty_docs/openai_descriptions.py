@@ -56,7 +56,7 @@ def wrangle_descriptions() -> pd.DataFrame:
         df['column_name'] = df['column_name'].str.replace(' pk', ' primary key')
         df['column_name'] = 'I need a concise description for a column called "' + df['column_name'].astype(str) + \
             '". It is in a database table named ' + df['table_name'].astype(str) + \
-            ' and is of type ' + df['data_type'].astype(str) + '. Return the description only. Avoid referencing the table name in the description, it is for content only'
+            ' and is of type ' + df['data_type'].astype(str) + '. Return the description only. Avoid referencing the table name in the description, it is for context only'
         return df
     except Exception as e:
         print(f"Error in wrangle_descriptions: {e}")

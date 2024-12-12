@@ -49,12 +49,14 @@ def _getter(model_engine:str = model_engine, prompt:str = "") -> str:
 def wrangle_descriptions() -> pd.DataFrame:
     try:
         df = get_dbt_dict()
-        df = df[['column_name']].drop_duplicates()
+        df = df.drop_duplicates(subset="column_name", keep="first")
         df['og_column_name'] = df['column_name']
         df['column_name'] = df['column_name'].str.replace('_', ' ')
         df['column_name'] = df['column_name'].str.replace(' fk', ' foreign key')
         df['column_name'] = df['column_name'].str.replace(' pk', ' primary key')
-        df['column_name'] = 'what is ' + df['column_name'].astype(str) + '?'
+        df['column_name'] = 'I need a concise description for a column called "' + df['column_name'].astype(str) + \
+            '". It is in a database table named ' + df['table_name'].astype(str) + \
+            ' and is of type ' + df['data_type'].astype(str) + '. Return the description only. Avoid referencing the table name in the description, it is for content only'
         return df
     except Exception as e:
         print(f"Error in wrangle_descriptions: {e}")
@@ -66,7 +68,7 @@ def list_rows(dataframe):
 
         if row['og_column_name'] not in described_columns_list:
              
-            print("\n{% docs "+row['og_column_name']+ " %}"+_getter(prompt=row['column_name'])+"\n"*2+"{% enddocs %}")
+            print("\n{% docs "+row['og_column_name']+ " %}\n"+_getter(prompt=row['column_name'])+"\n{% enddocs %}")
             
 def description_output():
 

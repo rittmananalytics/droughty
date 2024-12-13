@@ -25,5 +25,6 @@ try:
     for w in words:
         
         described_columns_list.append (w)
-except:
+except Exception as e:
+    print(f"Exception creating described_columns_list: {e}")
     described_columns_list = []

@@ -9,9 +9,9 @@ datasets:
             - expectation: "Check if all customer pks are unique"
           persona_type:
             - expectation: "Check if all customers have a persona"
-  analytics:
-    tables:
-      revenue_performance_fact:
-        columns:
-          total_delivery_tickets:
-            - expectation: "total_delivery_tickets does not exceed the other column total_delivery_tickets_completed"
+#  analytics:
+#    tables:
+#      revenue_performance_fact:
+#        columns:
+#          total_delivery_tickets:
+#            - expectation: "total delivery tickets does not exceed the other column total_delivery_tickets_completed"

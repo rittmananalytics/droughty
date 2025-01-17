@@ -68,7 +68,7 @@ def visualize_langgraph_dag(graph, filename='langgraph_dag.mmd'):
 
 # Initialize LangSmith client and tracer
 client = Client(api_key=ProjectVariables.langsmith_secret)
-tracer = LangChainTracer(project_name=ProjectVariables.langsmith_project)
+tracer = LangChainTracer(project_name=ProjectVariables.langsmith_project or "droughty-qa")
 
 # Initialize the model with tracing
 model = ChatOpenAI(
@@ -99,26 +99,27 @@ class QAOutput(BaseModel):
 
 
 ## LLM Chain - QA Evaluation
-qa_prompt_template = ChatPromptTemplate.from_messages([
-    (
-        "system",
-        """You are a data quality evaluator. Evaluate data based on explicit expectations and generate QA reports.
-        Be thorough in your analysis and provide specific evidence for your conclusions.
-        You must use the exact expectation provided in your evaluation."""
-    ),
-    (
-        "human",
-        """Evaluate the following data:
+qa_prompt_template = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """You are a data quality evaluator. Evaluate data based on expectations and generate QA reports.
+            Be thorough in your analysis and provide specific evidence for your conclusions."""
+        ),
+        (
+            "human",
+            """Evaluate the following data:
 
-            Table: {table_name}
-            Column & Data Type: {column_types}
-            Sample Data: {sample_data}
+                Table: {table_name}
+                Columns & Data Types: {column_types}
+                Sample Data: {sample_data}
 
-            Specific Expectation: {expectation}
+                Expectation: {expectation}
 
-            Provide a QA report that explicitly addresses whether this specific expectation was met and provide concrete evidence."""
-    ),
-])
+                Provide a QA report that describes whether the expectation was met and any violations or evidence."""
+        ),
+    ]
+)
 
 qa_chain = qa_prompt_template | model.with_structured_output(QAOutput)
 
@@ -151,37 +152,28 @@ def qa_node(state: ResearchState) -> ResearchState:
     if state["qa_cycles"] == 0:
         for dataset_name, dataset_content in parsed_yaml.get("datasets", {}).items():
             for table_name, table_content in dataset_content.get("tables", {}).items():
-                # Get columns and their expectations
-                columns_data = table_content.get("columns", {})
-                columns = list(columns_data.keys())
-                
-                # Create a mapping of column expectations
-                column_expectations = {
-                    col: data[0]["expectation"] 
-                    for col, data in columns_data.items()
-                }
+                columns = table_content.get("columns", [])
+                expectation = table_content.get("expectation", "No expectation provided")
 
                 # Query BigQuery
                 query = f"SELECT {', '.join(columns)} FROM `{dataset_name}.{table_name}`"
                 df = pd.read_gbq(query, project_id=project, credentials=credentials)
 
-                # Process each column with its specific expectation
-                for column, expectation in column_expectations.items():
-                    # Summarize DataFrame for this column
-                    column_types = {column: df[column].dtype}
-                    sample_data = df[[column]].to_dict(orient="records")
+                # Summarize DataFrame
+                column_types = df.dtypes.to_dict()
+                sample_data = df.head().to_dict(orient="records")
 
-                    # Invoke QA Chain with column-specific expectation
-                    qa_output = qa_chain.invoke(
-                        {
-                            "table_name": table_name,
-                            "column_types": column_types,
-                            "sample_data": sample_data,
-                            "expectation": expectation,
-                        }
-                    )
+                # Invoke QA Chain
+                qa_output = qa_chain.invoke(
+                    {
+                        "table_name": table_name,
+                        "column_types": column_types,
+                        "sample_data": sample_data,
+                        "expectation": expectation,
+                    }
+                )
 
-                    state["qa_results"].extend(qa_output.reports)
+                state["qa_results"].extend(qa_output.reports)
 
     return {"qa_cycles": state["qa_cycles"] + 1}
 

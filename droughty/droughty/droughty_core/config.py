@@ -160,6 +160,8 @@ class ProjectVariables:
     warehouse: str.lower
     schema: str.lower
     openai_secret: str
+    langsmith_secret: str
+    langsmith_project: str
     role: str.lower
     password: str.lower
     database: str.lower
@@ -186,6 +188,16 @@ def assign_project_variables():
 
                     try:
                         ProjectVariables.openai_secret = droughty_profile[value]['openai_secret']
+                    except:
+                        pass
+                    
+                    try:
+                        ProjectVariables.langsmith_secret = droughty_profile[value]['langsmith_secret']
+                    except:
+                        pass
+                    
+                    try:
+                        ProjectVariables.langsmith_project = droughty_profile[value]['langsmith_project']
                     except:
                         pass
 

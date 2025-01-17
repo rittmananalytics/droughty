@@ -1,8 +1,6 @@
 from operator import add
 from typing import Annotated, Any, Dict, List, Literal
 import os
-import subprocess
-
 from droughty.droughty_core.config import ProjectVariables, droughty_assumptions
 
 import pandas as pd
@@ -16,55 +14,6 @@ from typing_extensions import TypedDict
 from langsmith.run_trees import RunTree
 from langchain_core.tracers import LangChainTracer
 from langsmith import Client
-
-def get_git_root():
-    """
-    Get the root directory of the current git repository.
-    
-    Returns:
-    str: Path to the git repository root
-    """
-    try:
-        # Run git rev-parse command to get the root directory
-        git_root = subprocess.check_output(
-            ['git', 'rev-parse', '--show-toplevel'], 
-            text=True
-        ).strip()
-        return git_root
-    except subprocess.CalledProcessError:
-        raise RuntimeError("Not in a git repository")
-
-def visualize_langgraph_dag(graph, filename='langgraph_dag.mmd'):
-    """
-    Visualize the LangGraph DAG and save it as a Mermaid diagram.
-    
-    Args:
-    graph: LangGraph graph object
-    filename: Name of the output file (default: langgraph_dag.mmd)
-    
-    Returns:
-    str: Full path to the saved Mermaid diagram
-    """
-    # Get the git repository root
-    git_root = get_git_root()
-    
-    # Full path for the output file
-    output_path = os.path.join(git_root, filename)
-    
-    try:
-        # Generate Mermaid diagram as text
-        mermaid_diagram = graph.get_graph().draw_mermaid()
-        
-        # Write to file
-        with open(output_path, 'w') as f:
-            f.write(mermaid_diagram)
-        
-        print(f"LangGraph DAG diagram saved to: {output_path}")
-        return output_path
-    
-    except Exception as e:
-        print(f"Error generating LangGraph DAG diagram: {e}")
-        return None
 
 # Initialize LangSmith client and tracer
 client = Client(api_key=ProjectVariables.langsmith_secret)
@@ -99,26 +48,27 @@ class QAOutput(BaseModel):
 
 
 ## LLM Chain - QA Evaluation
-qa_prompt_template = ChatPromptTemplate.from_messages([
-    (
-        "system",
-        """You are a data quality evaluator. Evaluate data based on explicit expectations and generate QA reports.
-        Be thorough in your analysis and provide specific evidence for your conclusions.
-        You must use the exact expectation provided in your evaluation."""
-    ),
-    (
-        "human",
-        """Evaluate the following data:
+qa_prompt_template = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """You are a data quality evaluator. Evaluate data based on expectations and generate QA reports.
+            Be thorough in your analysis and provide specific evidence for your conclusions."""
+        ),
+        (
+            "human",
+            """Evaluate the following data:
 
-            Table: {table_name}
-            Column & Data Type: {column_types}
-            Sample Data: {sample_data}
+                Table: {table_name}
+                Columns & Data Types: {column_types}
+                Sample Data: {sample_data}
 
-            Specific Expectation: {expectation}
+                Expectation: {expectation}
 
-            Provide a QA report that explicitly addresses whether this specific expectation was met and provide concrete evidence."""
-    ),
-])
+                Provide a QA report that describes whether the expectation was met and any violations or evidence."""
+        ),
+    ]
+)
 
 qa_chain = qa_prompt_template | model.with_structured_output(QAOutput)
 
@@ -147,49 +97,32 @@ def qa_node(state: ResearchState) -> ResearchState:
     project = ProjectVariables.project
     credentials = ProjectVariables.service_account
     
-    # Only process if we haven't done any QA cycles yet
-    if state["qa_cycles"] == 0:
-        for dataset_name, dataset_content in parsed_yaml.get("datasets", {}).items():
-            for table_name, table_content in dataset_content.get("tables", {}).items():
-                # Get columns and their expectations
-                columns_data = table_content.get("columns", {})
-                columns = list(columns_data.keys())
-                
-                # Create a mapping of column expectations
-                column_expectations = {
-                    col: data[0]["expectation"] 
-                    for col, data in columns_data.items()
+    for dataset_name, dataset_content in parsed_yaml.get("datasets", {}).items():
+        for table_name, table_content in dataset_content.get("tables", {}).items():
+            columns = table_content.get("columns", [])
+            expectation = table_content.get("expectation", "No expectation provided")
+
+            # Query BigQuery
+            query = f"SELECT {', '.join(columns)} FROM `{dataset_name}.{table_name}`"
+            df = pd.read_gbq(query, project_id=project, credentials=credentials)
+
+            # Summarize DataFrame
+            column_types = df.dtypes.to_dict()
+            sample_data = df.head().to_dict(orient="records")
+
+            # Invoke QA Chain
+            qa_output = qa_chain.invoke(
+                {
+                    "table_name": table_name,
+                    "column_types": column_types,
+                    "sample_data": sample_data,
+                    "expectation": expectation,
                 }
+            )
 
-                # Query BigQuery
-                query = f"SELECT {', '.join(columns)} FROM `{dataset_name}.{table_name}`"
-                df = pd.read_gbq(query, project_id=project, credentials=credentials)
-
-                # Process each column with its specific expectation
-                for column, expectation in column_expectations.items():
-                    # Summarize DataFrame for this column
-                    column_types = {column: df[column].dtype}
-                    sample_data = df[[column]].to_dict(orient="records")
-
-                    # Invoke QA Chain with column-specific expectation
-                    qa_output = qa_chain.invoke(
-                        {
-                            "table_name": table_name,
-                            "column_types": column_types,
-                            "sample_data": sample_data,
-                            "expectation": expectation,
-                        }
-                    )
-
-                    state["qa_results"].extend(qa_output.reports)
+            state["qa_results"].extend(qa_output.reports)
 
     return {"qa_cycles": state["qa_cycles"] + 1}
-
-def check_qa_cycles(state: ResearchState) -> Literal["qa", "summary"]:
-    """
-    Proceed to summary after one QA cycle
-    """
-    return "summary" if state["qa_cycles"] >= 1 else "qa"
 
 
 def summary_node(state: ResearchState) -> ResearchState:
@@ -271,10 +204,6 @@ def qa_agent():
 
     print("Initialising QA Agent")
     agent = qa_agent_graph()
-    
-    # Visualize the DAG before running
-    visualize_langgraph_dag(agent, 'droughty_qa_agent_dag.mmd')
-    
     final_state = agent.invoke(initial_state)
 
     print("QA Completed")

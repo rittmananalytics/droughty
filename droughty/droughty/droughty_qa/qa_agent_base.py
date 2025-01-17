@@ -78,7 +78,7 @@ model = ChatOpenAI(
     callbacks=[tracer])
 
 ## Define State and Models
-class ResearchState(TypedDict):
+class QaRearch(TypedDict):
     assumptions: str
     parsed_yaml: Dict
     qa_cycles: int
@@ -124,7 +124,7 @@ qa_chain = qa_prompt_template | model.with_structured_output(QAOutput)
 
 
 ## Nodes
-def load_yaml_node(state: ResearchState) -> ResearchState:
+def load_yaml_node(state: QaRearch) -> QaRearch:
     """
     Load YAML assumptions and parse datasets, tables, and expectations.
     """
@@ -139,7 +139,7 @@ def load_yaml_node(state: ResearchState) -> ResearchState:
     }
 
 
-def qa_node(state: ResearchState) -> ResearchState:
+def qa_node(state: QaRearch) -> QaRearch:
     """
     Evaluate each dataset and table against its expectations, generating QA reports.
     """
@@ -185,14 +185,14 @@ def qa_node(state: ResearchState) -> ResearchState:
 
     return {"qa_cycles": state["qa_cycles"] + 1}
 
-def check_qa_cycles(state: ResearchState) -> Literal["qa", "summary"]:
+def check_qa_cycles(state: QaRearch) -> Literal["qa", "summary"]:
     """
     Proceed to summary after one QA cycle
     """
     return "summary" if state["qa_cycles"] >= 1 else "qa"
 
 
-def summary_node(state: ResearchState) -> ResearchState:
+def summary_node(state: QaRearch) -> QaRearch:
     """
     Generate a final summary of QA results.
     """
@@ -221,14 +221,14 @@ def summary_node(state: ResearchState) -> ResearchState:
 
 
 ## Edges
-def check_yaml_loaded(state: ResearchState) -> Literal["qa", END]:
+def check_yaml_loaded(state: QaRearch) -> Literal["qa", END]:
     """
     Transition to QA node if YAML assumptions are loaded; otherwise, end.
     """
     return "qa" if state["parsed_yaml"] else END
 
 
-def check_qa_cycles(state: ResearchState) -> Literal["qa", "summary"]:
+def check_qa_cycles(state: QaRearch) -> Literal["qa", "summary"]:
     """
     Continue QA evaluation if under cycle limit, otherwise proceed to summary.
     """
@@ -240,7 +240,7 @@ def qa_agent_graph():
     """
     Build and return the QA agent graph with LangSmith integration.
     """
-    builder = StateGraph(ResearchState)
+    builder = StateGraph(QaRearch)
 
     # Define nodes
     builder.add_node("load_yaml", load_yaml_node)

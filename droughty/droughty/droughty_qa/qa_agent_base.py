@@ -36,7 +36,7 @@ def get_git_root():
 
 def visualize_langgraph_dag(graph, filename='langgraph_dag.mmd'):
     """
-    Visualize the LangGraph DAG and save it as a Mermaid diagram.
+    Visualize the LangGraph DAG and save it as a Mermaid diagram in a langgraph directory.
     
     Args:
     graph: LangGraph graph object
@@ -45,13 +45,19 @@ def visualize_langgraph_dag(graph, filename='langgraph_dag.mmd'):
     Returns:
     str: Full path to the saved Mermaid diagram
     """
-    # Get the git repository root
-    git_root = get_git_root()
-    
-    # Full path for the output file
-    output_path = os.path.join(git_root, filename)
-    
     try:
+        # Get the git repository root
+        git_root = get_git_root()
+        
+        # Create langgraph directory path
+        langgraph_dir = os.path.join(git_root, 'langgraph')
+        
+        # Create the directory if it doesn't exist
+        os.makedirs(langgraph_dir, exist_ok=True)
+        
+        # Full path for the output file
+        output_path = os.path.join(langgraph_dir, filename)
+        
         # Generate Mermaid diagram as text
         mermaid_diagram = graph.get_graph().draw_mermaid()
         
@@ -120,7 +126,11 @@ qa_prompt_template = ChatPromptTemplate.from_messages([
     ),
 ])
 
-qa_chain = qa_prompt_template | model.with_structured_output(QAOutput)
+# Initialize qa_chain with function calling method
+qa_chain = qa_prompt_template | model.with_structured_output(
+    QAOutput,
+    method="function_calling"
+)
 
 
 ## Nodes
@@ -185,6 +195,7 @@ def qa_node(state: QaRearch) -> QaRearch:
 
     return {"qa_cycles": state["qa_cycles"] + 1}
 
+
 def check_qa_cycles(state: QaRearch) -> Literal["qa", "summary"]:
     """
     Proceed to summary after one QA cycle
@@ -228,13 +239,6 @@ def check_yaml_loaded(state: QaRearch) -> Literal["qa", END]:
     return "qa" if state["parsed_yaml"] else END
 
 
-def check_qa_cycles(state: QaRearch) -> Literal["qa", "summary"]:
-    """
-    Continue QA evaluation if under cycle limit, otherwise proceed to summary.
-    """
-    return "summary" if state["qa_cycles"] >= 3 else "qa"
-
-
 ## Build Agent Graph
 def qa_agent_graph():
     """
@@ -272,7 +276,7 @@ def qa_agent():
     print("Initialising QA Agent")
     agent = qa_agent_graph()
     
-    # Visualize the DAG before running
+    # Visualize the DAG before running (now saves to langgraph directory)
     visualize_langgraph_dag(agent, 'droughty_qa_agent_dag.mmd')
     
     final_state = agent.invoke(initial_state)
@@ -282,7 +286,3 @@ def qa_agent():
     print(f"\nView traces in LangSmith project: {ProjectVariables.langsmith_project}")
     
     return final_state
-
-
-if __name__ == "__main__":
-    qa_agent()

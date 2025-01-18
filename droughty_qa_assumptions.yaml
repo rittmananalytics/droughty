@@ -4,16 +4,8 @@ datasets:
       wh_core_customers_dim:
         columns:
           customer_email:
-            - expectation: "Check if all customer emails are in valid email format, does it expose PII and i'd like it to be infortmative and suitable for a marketing persona"
+            - expectation: "Check if all customer emails are in a valid email format, ensure it does not expose PII, and make it informative and suitable for a marketing persona."
           customer_pk:
-            - expectation: "Check if all customer pks are unique"
+            - expectation: "Check if all customer PKs are anonymized, and ensure they all start with the letter P."
           persona_type:
-            - expectation: "Can you check against ISO 8000 standards and ensure Check if all customers have a persona"
-            
-#"Check if all customers have a persona"
-#  analytics:
-#    tables:
-#      revenue_performance_fact:
-#        columns:
-#          total_delivery_tickets:
-#            - expectation: "total delivery tickets does not exceed the other column total_delivery_tickets_completed"
+            - expectation: "Check against ISO 8000 standards and ensure all customers have a persona."

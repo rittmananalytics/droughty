@@ -162,6 +162,9 @@ class ProjectVariables:
     openai_secret: str
     langsmith_secret: str
     langsmith_project: str
+    neo4j_uri: str
+    neo4j_user: str
+    neo4j_password: str
     role: str.lower
     password: str.lower
     database: str.lower
@@ -198,6 +201,21 @@ def assign_project_variables():
                     
                     try:
                         ProjectVariables.langsmith_project = droughty_profile[value]['langsmith_project']
+                    except:
+                        pass
+                    
+                    try:
+                        ProjectVariables.neo4j_uri = droughty_profile[value]['neo4j_uri']
+                    except:
+                        pass
+                    
+                    try:
+                        ProjectVariables.neo4j_user = droughty_profile[value]['neo4j_user']
+                    except:
+                        pass
+                    
+                    try:
+                        ProjectVariables.neo4j_password = droughty_profile[value]['neo4j_password']
                     except:
                         pass
 

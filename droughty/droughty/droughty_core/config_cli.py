@@ -76,6 +76,20 @@ def profile_func():
     docs.add_argument('--assumptions-dir', type=str, required=False, help='the directory of the qa assumptions for the project')
     docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
 
+    # Knowledge Graphs
+    
+    docs = subparser.add_parser('ontology')
+    docs.add_argument('--profile-dir', type=str, required=False)
+    docs.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
+    docs.add_argument('--assumptions-dir', type=str, required=False, help='the directory of the qa assumptions for the project')
+    docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
+
+    docs = subparser.add_parser('retrieval')
+    docs.add_argument('--profile-dir', type=str, required=False)
+    docs.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
+    docs.add_argument('--assumptions-dir', type=str, required=False, help='the directory of the qa assumptions for the project')
+    docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
+
     # parsing arguments
 
     args = profile_parser.parse_args()

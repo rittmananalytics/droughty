@@ -17,6 +17,9 @@ from droughty.droughty_core.config import ExploresVariables
 from droughty.droughty_docs.docs_cli import docs
 from droughty.droughty_resolve.resolve_cli import entity_resolution
 from droughty.droughty_qa.qa_agent_cli import qa
+from droughty.droughty_ontology.ontology_cli import ontology
+from droughty.droughty_ontology.ontology_cli import onotology_retrieval
+
 
 
 def start():
@@ -72,6 +75,14 @@ def start():
     elif Common.args_command == 'qa':
 
         qa()
+        
+    elif Common.args_command == "ontology":
+        
+        ontology()
+
+    elif Common.args_command == "retrieval":
+        
+        onotology_retrieval()
 
     else:
 

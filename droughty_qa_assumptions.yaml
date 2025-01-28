@@ -1,0 +1,11 @@
+datasets:
+  looker_assets:
+    tables:
+      wh_core_customers_dim:
+        columns:
+          customer_email:
+            - expectation: "Check if all customer emails are in valid email format, does it expose PII and i'd like it to be infortmative and suitable for a marketing persona"
+          customer_pk:
+            - expectation: "Check if all customer pks are unique"
+          persona_type:
+            - expectation: "Can you check against ISO 8000 standards and ensure Check if all customers have a persona"

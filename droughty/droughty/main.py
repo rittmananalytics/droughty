@@ -17,6 +17,7 @@ from droughty.droughty_core.config import ExploresVariables
 from droughty.droughty_docs.docs_cli import docs
 from droughty.droughty_resolve.resolve_cli import entity_resolution
 from droughty.droughty_qa.qa_agent_cli import qa
+from droughty.droughty_stage.stage_cli import stage
 
 
 def start():
@@ -72,6 +73,10 @@ def start():
     elif Common.args_command == 'qa':
 
         qa()
+
+    elif Common.args_command == 'stage':
+
+        stage()
 
     else:
 

@@ -155,6 +155,7 @@ class ProjectVariables:
     
     environment_profile: str.lower
     service_account_path: str.lower
+    bq_sdk_path: str.lower
     service_account: str.lower
     project: str.lower
     warehouse: str.lower
@@ -208,6 +209,7 @@ def assign_project_variables():
                         ProjectVariables.project = droughty_profile[value]['project_name']
 
                         ProjectVariables.service_account_path = droughty_profile[value]['key_file']
+                        ProjectVariables.bq_sdk_path = droughty_profile[value]['bq_sdk_path']
                         ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
                             ProjectVariables.service_account_path,
                         )
@@ -238,6 +240,7 @@ def assign_project_variables():
                         ProjectVariables.project = os.environ.get(droughty_profile[value]['project_name'])
 
                         ProjectVariables.service_account_path = os.environ.get(droughty_profile[value]['key_file'])
+                        ProjectVariables.service_account_path = os.environ.get(droughty_profile[value]['bq_sdk_path'])
                         ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
                             ProjectVariables.service_account_path,
                         )

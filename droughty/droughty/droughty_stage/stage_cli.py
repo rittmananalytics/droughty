@@ -1,4 +1,7 @@
-"""Console script for droughty lookml modules."""
+"""Console script for droughty stage."""
+
+import platform
+import sys
 
 from droughty.droughty_stage.stage_main import droughty_stage_main
 
@@ -9,18 +12,21 @@ from droughty.droughty_core.config import (
 
 dimensional_inference_status = ExploresVariables.explore_tables
 
-def basic_function():
-    print("Hello world 2")
-
-
 def stage():
+    # OS discovery
+    system = platform.system().lower()
 
-    print("Hello world")
+    if system not in ['darwin', 'linux']:
+        print("Due to running shell scripts, the stage command is only supported on MacOS. Exiting")
+        sys.exit(1)
+
+    print("Generating stage layer model files")
 
     try:
-
-        return droughty_stage_main()
-
-    finally:
-
-        print("stage layer generated")
+        # Run the function
+        droughty_stage_main()
+        print("Stage layer generated successfully")
+    
+    except Exception as e:
+        print(f"Error occurred while generating stage layer")
+        print(e)

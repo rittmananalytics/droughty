@@ -52,6 +52,8 @@ def droughty_stage_main(gcp_project_id=Common.project_id, target_datasets=Common
 
     # Set output to the current working directory
     scriptFolder = os.getcwd() + "/"
+    if ExploresVariables.stage_path == None:
+        ExploresVariables.stage_path = "stage_files/new/"
     output_dir = os.path.join(scriptFolder, ExploresVariables.stage_path)
 
     # pre-clean up

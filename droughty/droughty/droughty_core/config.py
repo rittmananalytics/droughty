@@ -155,6 +155,7 @@ class ProjectVariables:
     
     environment_profile: str.lower
     service_account_path: str.lower
+    bq_sdk_path: str.lower
     service_account: str.lower
     project: str.lower
     warehouse: str.lower
@@ -212,6 +213,11 @@ def assign_project_variables():
                             ProjectVariables.service_account_path,
                         )
 
+                        try:
+                            ProjectVariables.bq_sdk_path = droughty_profile[value]['bq_sdk_path']
+                        except:
+                            ProjectVariables.bq_sdk_path = None
+
                     # Snowflake
 
                     elif ProjectVariables.warehouse == 'snowflake':
@@ -241,6 +247,13 @@ def assign_project_variables():
                         ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
                             ProjectVariables.service_account_path,
                         )
+
+                        try:
+                            ProjectVariables.bq_sdk_path = droughty_profile[value]['bq_sdk_path']
+                        except:
+                            ProjectVariables.bq_sdk_path = None
+
+                        
 
                     # Snowflake
 
@@ -280,6 +293,7 @@ class ExploresVariables:
     cube_path: str.lower
     dbt_path: str.lower
     lookml_base_path: str.lower
+    stage_path: str.lower
 
     #filenames
 
@@ -328,7 +342,8 @@ def assign_explore_variables():
                 ExploresVariables.lookml_path = (droughty_project.get("lookml_path"))  
                 ExploresVariables.dbml_path = (droughty_project.get("dbml_path"))  
                 ExploresVariables.cube_path = (droughty_project.get("cube_path"))  
-                ExploresVariables.dbt_path = (droughty_project.get("dbt_path"))  
+                ExploresVariables.dbt_path = (droughty_project.get("dbt_path")) 
+                ExploresVariables.stage_path = (droughty_project.get("stage_path"))
 
                 ExploresVariables.lookml_base_filename = (droughty_project.get("lookml_base_filename"))  
                 ExploresVariables.lookml_explore_filename = (droughty_project.get("lookml_explore_filename"))  

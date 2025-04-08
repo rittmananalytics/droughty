@@ -9,6 +9,11 @@ class Common:
     assumptions_dir: str
     args_command: str
     env_vars: str
+    project_id: str
+    datasets: str
+    table: str
+
+
 
 def profile_func():
 
@@ -76,6 +81,16 @@ def profile_func():
     docs.add_argument('--assumptions-dir', type=str, required=False, help='the directory of the qa assumptions for the project')
     docs.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
 
+    # stage
+    
+    stage = subparser.add_parser('stage')
+    stage.add_argument('--profile-dir', type=str, required=False)
+    stage.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
+    stage.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
+    stage.add_argument('-p', '--project_id', type=str, required=True, help='e.g my-gcp-project')
+    stage.add_argument('-d', '--datasets', nargs="+", type=str, required=True, help='dataset1, dataset2, ...')
+    stage.add_argument('-t', '--table', required=False)
+
     # parsing arguments
 
     args = profile_parser.parse_args()
@@ -88,6 +103,10 @@ def profile_func():
     Common.project_dir = (args.project_dir)
     Common.profile_dir = (args.profile_dir)
     Common.env_vars = (args.env_vars)
-    Common.assumptions_dir = (args.assumptions_dir)
+    Common.assumptions_dir = getattr(args, 'assumptions_dir', None)
+    Common.project_id = getattr(args, 'project_id', None)
+    Common.datasets = getattr(args, 'datasets', None)
+    Common.table = getattr(args, 'table', None)
+
  
 profile_func()

@@ -246,17 +246,3 @@ def wrangle_snowflake_cube_dataframes(dataframe):
 
     return(dataframe)
 
-def wrangle_bigquery_resolve_dataframes(dataframe):
-
-    dataframe = dataframe.apply(lambda col: col.str.lower())
-
-    dataframe = dataframe.drop_duplicates()
-
-    return (dataframe)
-
-def wrangle_snowflake_resolve_dataframes(dataframe):
-
-    dataframe = dataframe.drop_duplicates()
-
-    return (dataframe)
-

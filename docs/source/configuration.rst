@@ -3,6 +3,44 @@ Configuration
 
 Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
 
+OAuth Authentication for BigQuery
+--------------------------------
+
+As an alternative to service account authentication, you can use OAuth for BigQuery. This allows users to authenticate with their own Google credentials instead of using a service account key file.
+
+To use OAuth, modify your profile.yaml as follows::
+
+    droughty_demo:
+      oauth:
+        client_secrets: /path/to/client_secrets.json
+        token_file: ~/.droughty/token.json
+      
+      project_name: example-project
+      schema_name: analytics_qa
+      warehouse_name: big_query
+      
+      # Other configuration options remain the same
+      test_schemas:
+        - analytics_dev_staging
+        - analytics_dev_integration
+        - analytics_dev
+      
+      dbml_schemas:
+        - analytics_dev_staging
+        - analytics_dev_integration
+        - analytics_dev
+
+To set up OAuth:
+
+1. Create a Google Cloud OAuth client ID (Desktop application type) in the Google Cloud Console
+2. Download the client secrets JSON file
+3. Specify the path to this file in your profile.yaml
+4. Specify where you want the token to be saved (token_file)
+5. When running droughty for the first time with OAuth, a browser window will open for authentication
+6. After authenticating, tokens will be saved to the specified path and reused for future sessions
+
+The OAuth method is recommended for local development environments and when you prefer not to use service account keys.
+
 **droughty_project.yaml set-up**
 
 To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below::

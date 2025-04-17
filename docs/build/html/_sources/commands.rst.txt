@@ -98,4 +98,13 @@ Once you have added the required parameters available within the configuration d
     - This allows you to specify the project directory if you don't want to use the default
   - --env-vars (enabled)
     - This allows you to enable the use of environment variables 
+
+**authentication**
+
+When using BigQuery, droughty supports both service account and OAuth authentication:
+
+- Service account: Specify a `key_file` in your profile.yaml
+- OAuth: Specify `oauth` configuration with `client_secrets` and `token_file` paths
+
+OAuth will prompt for browser authentication on first use.
   

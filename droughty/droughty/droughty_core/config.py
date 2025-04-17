@@ -203,15 +203,52 @@ def assign_project_variables():
                         pass
 
                     # BigQuery
-
                     if ProjectVariables.warehouse == 'big_query':
-                    
                         ProjectVariables.project = droughty_profile[value]['project_name']
-
-                        ProjectVariables.service_account_path = droughty_profile[value]['key_file']
-                        ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
-                            ProjectVariables.service_account_path,
-                        )
+                        
+                        # Check if using service account or OAuth
+                        if 'key_file' in droughty_profile[value]:
+                            # Service account authentication (existing method)
+                            ProjectVariables.service_account_path = droughty_profile[value]['key_file']
+                            ProjectVariables.service_account = service_account.Credentials.from_service_account_file(
+                                ProjectVariables.service_account_path,
+                            )
+                        elif 'oauth' in droughty_profile[value]:
+                            # OAuth authentication
+                            from google.auth.transport.requests import Request
+                            from google.oauth2.credentials import Credentials
+                            from google_auth_oauthlib.flow import InstalledAppFlow
+                            import json
+                            
+                            SCOPES = ['https://www.googleapis.com/auth/bigquery']
+                            oauth_config = droughty_profile[value]['oauth']
+                            
+                            # Get token file path with fallback
+                            token_path = oauth_config.get('token_file', 'token.json')
+                            client_secrets_path = oauth_config.get('client_secrets', 'client_secrets.json')
+                            
+                            creds = None
+                            try:
+                                with open(token_path, 'r') as token_file:
+                                    creds = Credentials.from_authorized_user_info(json.loads(token_file.read()), SCOPES)
+                            except (FileNotFoundError, json.JSONDecodeError):
+                                pass
+                                
+                            # If no valid credentials, let user log in
+                            if not creds or not creds.valid:
+                                if creds and creds.expired and creds.refresh_token:
+                                    creds.refresh(Request())
+                                else:
+                                    flow = InstalledAppFlow.from_client_secrets_file(client_secrets_path, SCOPES)
+                                    creds = flow.run_local_server(port=0)
+                                
+                                # Save credentials for future use
+                                with open(token_path, 'w') as token:
+                                    token.write(creds.to_json())
+                            
+                            ProjectVariables.service_account = creds  # Store OAuth creds in the same variable
+                        else:
+                            raise ValueError(f"Profile '{value}' must contain either 'key_file' or 'oauth' configuration for BigQuery")
 
                         try:
                             ProjectVariables.bq_sdk_path = droughty_profile[value]['bq_sdk_path']

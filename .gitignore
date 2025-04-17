@@ -1,1 +1,8 @@
 venv/
+
+# Sphinx documentation build files
+docs/build/
+docs/_build/
+docs/doctrees/
+*.doctree
+.doctrees/

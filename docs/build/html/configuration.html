@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Configuration &#8212; droughty 0.1.21 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b3523f8e" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
     <script src="_static/documentation_options.js?v=b3d22ae5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -18,8 +19,9 @@
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -34,6 +36,41 @@
   <section id="configuration">
 <h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
 <p>Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
+<section id="oauth-authentication-for-bigquery">
+<h2>OAuth Authentication for BigQuery<a class="headerlink" href="#oauth-authentication-for-bigquery" title="Link to this heading">¶</a></h2>
+<p>As an alternative to service account authentication, you can use OAuth for BigQuery. This allows users to authenticate with their own Google credentials instead of using a service account key file.</p>
+<p>To use OAuth, modify your profile.yaml as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty_demo</span><span class="p">:</span>
+  <span class="n">oauth</span><span class="p">:</span>
+    <span class="n">client_secrets</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">client_secrets</span><span class="o">.</span><span class="n">json</span>
+    <span class="n">token_file</span><span class="p">:</span> <span class="o">~/.</span><span class="n">droughty</span><span class="o">/</span><span class="n">token</span><span class="o">.</span><span class="n">json</span>
+
+  <span class="n">project_name</span><span class="p">:</span> <span class="n">example</span><span class="o">-</span><span class="n">project</span>
+  <span class="n">schema_name</span><span class="p">:</span> <span class="n">analytics_qa</span>
+  <span class="n">warehouse_name</span><span class="p">:</span> <span class="n">big_query</span>
+
+  <span class="c1"># Other configuration options remain the same</span>
+  <span class="n">test_schemas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">analytics_dev_staging</span>
+    <span class="o">-</span> <span class="n">analytics_dev_integration</span>
+    <span class="o">-</span> <span class="n">analytics_dev</span>
+
+  <span class="n">dbml_schemas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">analytics_dev_staging</span>
+    <span class="o">-</span> <span class="n">analytics_dev_integration</span>
+    <span class="o">-</span> <span class="n">analytics_dev</span>
+</pre></div>
+</div>
+<p>To set up OAuth:</p>
+<ol class="arabic simple">
+<li><p>Create a Google Cloud OAuth client ID (Desktop application type) in the Google Cloud Console</p></li>
+<li><p>Download the client secrets JSON file</p></li>
+<li><p>Specify the path to this file in your profile.yaml</p></li>
+<li><p>Specify where you want the token to be saved (token_file)</p></li>
+<li><p>When running droughty for the first time with OAuth, a browser window will open for authentication</p></li>
+<li><p>After authenticating, tokens will be saved to the specified path and reused for future sessions</p></li>
+</ol>
+<p>The OAuth method is recommended for local development environments and when you prefer not to use service account keys.</p>
 <p><strong>droughty_project.yaml set-up</strong></p>
 <p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span><span class="p">:</span> <span class="n">example_project</span>
@@ -113,6 +150,7 @@
 </div>
 <p>Create this file in the root of your git repo (unless you are specifying the path through the –project-dir argument)</p>
 </section>
+</section>
 <section id="optional-variables">
 <h1>Optional variables<a class="headerlink" href="#optional-variables" title="Link to this heading">¶</a></h1>
 <p><strong>Overwriting and ignoring model tests</strong></p>
@@ -179,7 +217,7 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="index.html">droughty</a></h1>
 
@@ -190,10 +228,22 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#oauth-authentication-for-bigquery">OAuth Authentication for BigQuery</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#optional-variables">Optional variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
@@ -209,16 +259,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -232,11 +272,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, lewis baker.
+      &#169;2022, lewis baker.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
       <a href="_sources/configuration.rst.txt"

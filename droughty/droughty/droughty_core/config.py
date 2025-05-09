@@ -4,6 +4,7 @@ import git
 from cgi import test
 from dataclasses import dataclass
 from google.oauth2 import service_account
+from google.auth import default
 from snowflake.sqlalchemy import URL
 import glom
 
@@ -529,6 +530,28 @@ def assign_dbt_test_variables():
 #        raise Exception ("You need to define the dbt field descriptions file name within the droughty_project file.")
 
 dbt_test_variables = assign_dbt_test_variables()
+
+def get_google_credentials():
+    try:
+        # Try ADC first as the default method
+        credentials, project = default()
+        return credentials
+    except Exception as e:
+        # If ADC fails, try the existing authentication method
+        if hasattr(ProjectVariables, 'service_account') and ProjectVariables.service_account:
+            return ProjectVariables.service_account
+        elif ProjectVariables.service_account_path:
+            return service_account.Credentials.from_service_account_file(
+                ProjectVariables.service_account_path
+            )
+        raise Exception("Failed to get Google Cloud credentials. Please run 'gcloud auth application-default login' or configure a service account.") from e
+
+# Initialising Google credentials
+google_credentials = None
+try:
+    google_credentials = get_google_credentials()
+except Exception as e:
+    print(f"Warning: Failed to initialise Google credentials: {e}")
 
 def get_snowflake_connector_url():
 

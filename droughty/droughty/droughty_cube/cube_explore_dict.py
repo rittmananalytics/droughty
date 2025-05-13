@@ -28,7 +28,7 @@ def get_cube_explore_dict():
         credentials = ProjectVariables.service_account
         project = ProjectVariables.project
 
-        explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
+        explore_df = pandas_gbq.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
 
         pk_table_name_df = explore_df[['pk_table_name']]
 

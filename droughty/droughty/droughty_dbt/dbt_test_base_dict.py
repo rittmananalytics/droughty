@@ -30,7 +30,7 @@ def get_dbt_dict():
         credentials = ProjectVariables.service_account
         project = ProjectVariables.project
 
-        dataframe = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
+        dataframe = pandas_gbq.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
         wrangled_dataframe = wrangle_bigquery_dbt_test_dataframes(dataframe)
 

@@ -1,4 +1,3 @@
-from sqlite3 import enable_shared_cache
 import lkml as looker
 from google.oauth2 import service_account
 import pandas_gbq

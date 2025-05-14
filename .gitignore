@@ -6,3 +6,7 @@ docs/_build/
 docs/doctrees/
 *.doctree
 .doctrees/
+
+sav-testing
+.venv310
+venv11

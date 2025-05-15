@@ -12,7 +12,6 @@ Welcome to droughty's documentation!
    installation
    configuration
    authentication
-   troubleshooting
    warehouse_support
    usage
    commands

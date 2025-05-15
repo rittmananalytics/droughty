@@ -267,7 +267,19 @@ def assign_project_variables():
                                 print("Successfully authenticated using OAuth")
                             else:
                                 # No fallback authentication method available
-                                raise ValueError(f"ADC authentication failed and profile '{value}' does not contain 'key_file' or 'oauth' configuration. Please run 'gcloud auth application-default login' or configure a service account.")
+                                # Instead of just showing an error, try to run gcloud auth automatically
+                                import subprocess
+                                print("\nNo credentials found. Attempting to run 'gcloud auth application-default login' for you...")
+                                try:
+                                    subprocess.run(["gcloud", "auth", "application-default", "login"], check=True)
+                                    print("Authentication successful! Retrying with new credentials...")
+                                    # Try to get credentials again after authentication
+                                    credentials, project_id = default()
+                                    ProjectVariables.service_account = credentials
+                                    print("Successfully authenticated using Application Default Credentials")
+                                except Exception as cmd_error:
+                                    raise ValueError(f"Failed to authenticate. Error: {cmd_error}\n\n"
+                                                  f"Please run 'gcloud auth application-default login' manually or configure a service account.")
                         
 
                         try:

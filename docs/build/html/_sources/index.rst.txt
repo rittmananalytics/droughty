@@ -11,6 +11,7 @@ Welcome to droughty's documentation!
 
    installation
    configuration
+   authentication
    warehouse_support
    usage
    commands

@@ -38,11 +38,11 @@ def get_cube_base_dict():
         credentials = ProjectVariables.service_account
         project = ProjectVariables.project
 
-        dataframe = pandas.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
+        dataframe = pandas_gbq.read_gbq(sql, dialect='standard', project_id=project, credentials=credentials)
 
         wrangled_dataframe = wrangle_bigquery_cube_dataframes(dataframe)
 
-        explore_df = pandas.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
+        explore_df = pandas_gbq.read_gbq(explore_sql, dialect='standard', project_id=project, credentials=credentials)
 
         pk_table_name_df = explore_df[['pk_table_name']]
 

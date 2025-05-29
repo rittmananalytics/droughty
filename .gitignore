@@ -1,4 +1,9 @@
 venv/
+.venv/
+.venv310
+droughty/venv/
+droughty/venv11/
+
 
 # Sphinx documentation build files
 docs/build/

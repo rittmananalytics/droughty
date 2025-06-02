@@ -1,7 +1,7 @@
 import os
 import yaml
 import git
-from cgi import test
+import warnings
 from dataclasses import dataclass
 from google.oauth2 import service_account
 from google.auth import default
@@ -71,11 +71,24 @@ IdentifyConfigVariables.git_path = get_git_root(os.getcwd())
 
 
 def load_droughty_profile():
-
+    # Load the profile YAML
     with open(IdentifyConfigVariables.profile_path) as f:
-
         droughty_profile = yaml.load(f, Loader=yaml.FullLoader)
 
+    # Verify the profile has the required structure
+    if not isinstance(droughty_profile, dict):
+        raise ValueError(f"Profile at {IdentifyConfigVariables.profile_path} is not properly formatted")
+        
+    # Handle profiles that don't have LangSmith configuration
+    # This ensures we don't require langsmith_secret and langsmith_project in profiles
+    for profile_name, profile_config in droughty_profile.items():
+        if isinstance(profile_config, dict):
+            # Set defaults for optional LangSmith parameters if they don't exist
+            if 'langsmith_secret' not in profile_config:
+                profile_config['langsmith_secret'] = None
+            if 'langsmith_project' not in profile_config:
+                profile_config['langsmith_project'] = None
+                
     return droughty_profile
 
 def assign_droughty_project_paths():
@@ -140,11 +153,19 @@ def load_droughty_project():
     return droughty_project
 
 def load_droughty_assumptions():
-
-    with open(IdentifyConfigVariables.assumptions_path) as f:
-        assumptions = yaml.load(f, Loader=yaml.FullLoader)
-
-    return assumptions
+    # Only attempt to load assumptions file if it exists or is required by the command
+    try:
+        if os.path.exists(IdentifyConfigVariables.assumptions_path):
+            with open(IdentifyConfigVariables.assumptions_path) as f:
+                assumptions = yaml.load(f, Loader=yaml.FullLoader)
+            return assumptions
+        else:
+            # Return empty dict if file doesn't exist
+            return {}    
+    except Exception as e:
+        # If we couldn't load the file for any reason, return an empty dict
+        print(f"Note: No valid assumptions file found at {IdentifyConfigVariables.assumptions_path}. Using default assumptions.")
+        return {}
     
 droughty_profile = load_droughty_profile()
 droughty_project = load_droughty_project()
@@ -153,23 +174,23 @@ droughty_assumptions = load_droughty_assumptions()
 @dataclass
 class ProjectVariables:
     
-    environment_profile: str.lower
-    service_account_path: str.lower
-    bq_sdk_path: str.lower
-    service_account: str.lower
-    project: str.lower
-    warehouse: str.lower
-    schema: str.lower
-    openai_secret: str
-    langsmith_secret: str
-    langsmith_project: str
-    role: str.lower
-    password: str.lower
-    database: str.lower
-    account: str.lower
-    user: str.lower
-    snowflake_warehouse: str.lower
-    database: str.lower
+    environment_profile: str.lower = None
+    service_account_path: str.lower = None
+    bq_sdk_path: str.lower = None
+    service_account: str.lower = None
+    project: str.lower = None
+    warehouse: str.lower = None
+    schema: str.lower = None
+    openai_secret: str = None
+    langsmith_secret: str = None
+    langsmith_project: str = None
+    role: str.lower = None
+    password: str.lower = None
+    database: str.lower = None
+    account: str.lower = None
+    user: str.lower = None
+    snowflake_warehouse: str.lower = None
+    database: str.lower = None
         
 def assign_project_variables():
 
@@ -596,9 +617,22 @@ def get_google_credentials():
     If ADC fails and no other credentials are available, it will automatically launch an interactive
     OAuth flow in the browser for the user to authenticate.
     """
+    # Suppress the default Google Auth SDK warning
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", "Your application has authenticated using end user credentials")
+        
     try:
         # Try ADC first as the default method
         credentials, project = default()
+        
+        # Check if project is None (which means no quota project is set)
+        if not project:
+            warnings.warn(
+                "\nProject hasn't been configured, hence access to all projects. "
+                "Be wary of API rate limits and quotas.\n"
+                "To set a quota project, run: gcloud auth application-default set-quota-project YOUR_PROJECT_ID"
+            )
+            
         return credentials
     except Exception as adc_error:
         # If ADC fails, try the existing authentication method

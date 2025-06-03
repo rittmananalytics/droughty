@@ -21,6 +21,4 @@ six>=1.16.0
 snowflake_connector_python>=3.13.0
 SQLAlchemy>=1.4.54
 typing_extensions>=4.12.2
-# Different PyArrow versions for different Python versions
-pyarrow>=14.0.1,<15.0.0; python_version<'3.13'
-pyarrow>=15.0.0; python_version>='3.13'
+pyarrow>=14.0.1,<19.0.0

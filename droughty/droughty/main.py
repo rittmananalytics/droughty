@@ -1,3 +1,17 @@
+import warnings
+import os
+
+# Set environment variables to disable progress bars and ANSI colors
+os.environ['TQDM_DISABLE'] = '1'
+os.environ['NO_COLOR'] = '1'
+
+# Configure warning filters
+warnings.filterwarnings("ignore", "API key must be provided when using hosted LangSmith API")
+warnings.filterwarnings("ignore", "pkg_resources is deprecated as an API")
+warnings.filterwarnings("ignore", "Your application has authenticated using end user credentials from Google Cloud SDK without a quota project")
+warnings.filterwarnings("once", "Project hasn't been configured, hence access to all projects")
+warnings.filterwarnings("ignore", "read_gbq is deprecated and will be removed in a future version")
+
 from droughty.droughty_lookml.lookml_cli import (
     lookml_base,
     lookml_explore,

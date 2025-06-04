@@ -1,9 +1,12 @@
+# Virtual environments
 venv/
 .venv/
 .venv310
+venv_py313
+venv_py312
 droughty/venv/
 droughty/venv11/
-
+test_venv313
 
 # Sphinx documentation build files
 docs/build/

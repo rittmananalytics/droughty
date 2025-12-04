@@ -19,7 +19,7 @@ openai = "1.59.8"
 pandas = "^2.2.0" 
 pandas_dedupe = { version = "^1.5.1", optional = true }
 pandas_gbq = "^0.20.0"
-protobuf = "5.29.3"
+protobuf = ">=6.0,<7.0"
 PyYAML = "6.0.2"
 six = "1.16.0"
 ruamel-yaml = "0.17.21"

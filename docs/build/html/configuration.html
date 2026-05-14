@@ -1,291 +1,733 @@
-<!DOCTYPE html>
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Authentication" href="authentication.html"><link rel="prev" title="How to Use — dbt &amp; BigQuery" href="howto_dbt_bigquery.html">
 
-<html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Configuration - droughty</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=dc353ed4" />
+    
+    
 
-    <title>Configuration &#8212; droughty 0.1.21 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=b3d22ae5"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Authentication" href="authentication.html" />
-    <link rel="prev" title="Installation" href="installation.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2563eb;
+  --color-brand-content: #1d4ed8;
+  --color-admonition-background: #f0f9ff;
   
-
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #93c5fd;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #93c5fd;
   
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
 
-  </head><body>
-  
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
 
-          <div class="body" role="main">
-            
-  <section id="configuration">
-<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
-<p>Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir</p>
-<section id="oauth-authentication-for-bigquery">
-<h2>OAuth Authentication for BigQuery<a class="headerlink" href="#oauth-authentication-for-bigquery" title="Link to this heading">¶</a></h2>
-<p>As an alternative to service account authentication, you can use OAuth for BigQuery. This allows users to authenticate with their own Google credentials instead of using a service account key file.</p>
-<p>To use OAuth, modify your profile.yaml as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty_demo</span><span class="p">:</span>
-  <span class="n">oauth</span><span class="p">:</span>
-    <span class="n">client_secrets</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">client_secrets</span><span class="o">.</span><span class="n">json</span>
-    <span class="n">token_file</span><span class="p">:</span> <span class="o">~/.</span><span class="n">droughty</span><span class="o">/</span><span class="n">token</span><span class="o">.</span><span class="n">json</span>
-
-  <span class="n">project_name</span><span class="p">:</span> <span class="n">example</span><span class="o">-</span><span class="n">project</span>
-  <span class="n">schema_name</span><span class="p">:</span> <span class="n">analytics_qa</span>
-  <span class="n">warehouse_name</span><span class="p">:</span> <span class="n">big_query</span>
-
-  <span class="c1"># Other configuration options remain the same</span>
-  <span class="n">test_schemas</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">analytics_dev_staging</span>
-    <span class="o">-</span> <span class="n">analytics_dev_integration</span>
-    <span class="o">-</span> <span class="n">analytics_dev</span>
-
-  <span class="n">dbml_schemas</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">analytics_dev_staging</span>
-    <span class="o">-</span> <span class="n">analytics_dev_integration</span>
-    <span class="o">-</span> <span class="n">analytics_dev</span>
-</pre></div>
-</div>
-<p>To set up OAuth:</p>
-<ol class="arabic simple">
-<li><p>Create a Google Cloud OAuth client ID (Desktop application type) in the Google Cloud Console</p></li>
-<li><p>Download the client secrets JSON file</p></li>
-<li><p>Specify the path to this file in your profile.yaml</p></li>
-<li><p>Specify where you want the token to be saved (token_file)</p></li>
-<li><p>When running droughty for the first time with OAuth, a browser window will open for authentication</p></li>
-<li><p>After authenticating, tokens will be saved to the specified path and reused for future sessions</p></li>
-</ol>
-<p>The OAuth method is recommended for local development environments and when you prefer not to use service account keys.</p>
-<p><strong>droughty_project.yaml set-up</strong></p>
-<p>To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span><span class="p">:</span> <span class="n">example_project</span>
-
-<span class="n">dimensional_inference</span><span class="p">:</span> <span class="n">enabled</span>
-
-<span class="n">field_description_path</span><span class="p">:</span> <span class="n">warehouse_docs</span>
-<span class="n">field_description_file_name</span><span class="p">:</span> <span class="n">field_descriptions</span><span class="o">.</span><span class="n">md</span>
-
-<span class="n">openai_field_descriptions_path</span><span class="p">:</span> <span class="n">warehouse_docs</span>
-<span class="n">openai_field_descriptions_filename</span><span class="p">:</span> <span class="n">openai_field_descriptions</span>
-
-<span class="n">test_overwrite</span><span class="p">:</span>
-    <span class="n">models</span><span class="p">:</span>
-      <span class="n">wh_marketing__web_event_items_fact</span><span class="p">:</span>
-        <span class="n">web_event_item_pk</span><span class="p">:</span>
-            <span class="o">-</span> <span class="n">not_null</span>
-            <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
-            <span class="o">-</span> <span class="n">unique</span>
-        <span class="n">web_event_parameter_float_value</span><span class="p">:</span>
-            <span class="o">-</span> <span class="n">dbt_utils</span><span class="o">.</span><span class="n">at_least_one</span>
-
-<span class="n">test_ignore</span><span class="p">:</span>
-    <span class="n">models</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">base_backend__web_events</span>
-      <span class="o">-</span> <span class="n">base_ga4__web_events</span>
-
-
-<span class="n">dbml_filenames</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">test_10</span>
-    <span class="o">-</span> <span class="n">test_11</span>
-    <span class="o">-</span> <span class="n">test_12</span>
-
-<span class="n">explores</span><span class="p">:</span>
-  <span class="n">parent_table</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">example_parent</span>
-  <span class="n">dimensions</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">example_dim</span>
-  <span class="n">facts</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">example_fact</span>
-
-<span class="n">lookml_pop</span><span class="p">:</span>
-    <span class="n">views</span><span class="p">:</span>
-        <span class="n">example_1</span><span class="p">:</span>
-                <span class="o">-</span> <span class="n">example_2</span>
-        <span class="n">example_3</span><span class="p">:</span>
-                <span class="o">-</span> <span class="n">example_4</span>
-                <span class="o">-</span> <span class="n">example_5</span>
-
-<span class="n">lookml_base_filename</span><span class="p">:</span> <span class="n">example__1</span>
-<span class="n">lookml_explore_filename</span><span class="p">:</span> <span class="n">example__2</span>
-<span class="n">lookml_measures_filename</span><span class="p">:</span> <span class="n">example__3</span>
-<span class="n">cube_base_filename</span><span class="p">:</span> <span class="n">example__4</span>
-<span class="n">cube_integration_filename</span><span class="p">:</span> <span class="n">example__5</span>
-<span class="n">cube_measures_filename</span><span class="p">:</span> <span class="n">example__6</span>
-<span class="n">lookml_base_path</span><span class="p">:</span> <span class="n">example__7</span>
-<span class="n">dbt_tests_filename</span><span class="p">:</span> <span class="n">example__8</span>
-
-<span class="n">entity_resolution</span><span class="p">:</span>
-  <span class="n">read_schema</span><span class="p">:</span>
-    <span class="n">example_1</span>
-  <span class="n">write_schema</span><span class="p">:</span>
-    <span class="n">example_1</span>
-  <span class="n">read_table_names</span><span class="p">:</span>
-    <span class="n">example_1</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">example_3</span>
-      <span class="o">-</span> <span class="n">example_4</span>
-    <span class="n">example_2</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">example_5</span>
-      <span class="o">-</span> <span class="n">example_6</span>
-  <span class="n">write_column_names</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">example_7</span>
-    <span class="o">-</span> <span class="n">example_8</span>
-  <span class="n">write_table_name</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">example_9</span>
-</pre></div>
-</div>
-<p>Create this file in the root of your git repo (unless you are specifying the path through the –project-dir argument)</p>
-</section>
-</section>
-<section id="optional-variables">
-<h1>Optional variables<a class="headerlink" href="#optional-variables" title="Link to this heading">¶</a></h1>
-<p><strong>Overwriting and ignoring model tests</strong></p>
-<p>Using the test_overwrite and test_ignore project parameters, you can overwrite tests or leave them blank using the test_overwrite parameter or ignore all model tests using the test_ignore parameter</p>
-<p><strong>Defining relative file outputs</strong></p>
-<p>Just add these variables to your droughty_project.yaml and it will write to the path name starting from the root of your git repo:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dbt_path</span><span class="p">:</span> <span class="n">example_path</span>
-<span class="n">dbml_path</span><span class="p">:</span> <span class="n">example_path</span>
-<span class="n">lookml_path</span><span class="p">:</span> <span class="n">example_path</span>
-<span class="n">cube_path</span><span class="p">:</span> <span class="n">example_path</span>
-</pre></div>
-</div>
-<p><strong>It’s important that the profile name with the droughty_project.yaml aligns with the paired entry within your profile.yaml.</strong></p>
-<hr class="docutils" />
-<p><strong>profile.yaml set-up</strong></p>
-<p>A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions.</p>
-<p>This file should be created in a .droughty dir, such as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">titus_groan</span><span class="o">/.</span><span class="n">droughty</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">yaml</span>
-</pre></div>
-</div>
-<p>Below is an example of what the profile should contain</p>
-<p>profile example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty_demo</span><span class="p">:</span>
-
-  <span class="n">host</span><span class="p">:</span>
-
-  <span class="n">key_file</span><span class="p">:</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">droughty_user</span><span class="o">/</span><span class="p">[</span><span class="n">key_file</span><span class="p">]</span>
-
-  <span class="n">password</span><span class="p">:</span>
-
-  <span class="n">port</span><span class="p">:</span>
-
-  <span class="n">project_name</span><span class="p">:</span> <span class="n">example</span><span class="o">-</span><span class="n">project</span>
-
-  <span class="n">schema_name</span><span class="p">:</span> <span class="n">analytics_qa</span>
-
-  <span class="n">user</span><span class="p">:</span>
-
-  <span class="n">warehouse_name</span><span class="p">:</span> <span class="n">big_query</span>
-
-  <span class="n">openai_secret</span><span class="p">:</span> <span class="n">sk</span><span class="o">-</span><span class="n">wdfnwfw40t493t304t9340t94wet0et90edf</span> <span class="p">(</span><span class="n">example</span><span class="p">)</span>
-
-  <span class="n">test_schemas</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
-
-  <span class="n">dbml_schemas</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_staging</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev_integration</span>
-    <span class="o">-</span> <span class="n">lewis_analytics_dev</span>
-</pre></div>
-</div>
-<hr class="docutils" />
-<p><strong>warehouse_name options</strong></p>
-<p>At the moment, only ‘big_query’ and ‘snowflake’ are supported</p>
-<p><strong>Configuration Considerations</strong></p>
-<p>droughty has been developed to work with dbt, db docs and looker. However, it only really depends accessing the information schema within a supported warehouse.</p>
-<p>When using droughty it’s assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer. Look at the usage page for further information.</p>
-</section>
-
-
-          </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">droughty</a></h1>
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
-
-
-
-
-
-
-<search id="searchbox" style="display: none" role="search">
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
-      <input type="submit" value="Go" />
-    </form>
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
     </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
-<ul class="current">
+    <div class="header-center">
+      <a href="index.html"><div class="brand">droughty</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">droughty</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#oauth-authentication-for-bigquery">OAuth Authentication for BigQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="#optional-variables">Optional variables</a></li>
+<p class="caption" role="heading"><span class="caption-text">How To</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_dbt_bigquery.html">How to Use — dbt &amp; BigQuery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage &amp; Workflows</a></li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
-      <li>Next: <a href="authentication.html" title="next chapter">Authentication</a></li>
-  </ul></li>
-</ul>
+</div>
 </div>
 
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/configuration.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
+<p>Droughty uses two configuration files:</p>
+<ol class="arabic simple">
+<li><p><strong>profile.yaml</strong> — warehouse credentials, stored at <code class="docutils literal notranslate"><span class="pre">~/.droughty/profile.yaml</span></code></p></li>
+<li><p><strong>droughty_project.yaml</strong> — project settings, stored at the root of your git repository</p></li>
+</ol>
+<hr class="docutils" />
+<section id="profile-yaml">
+<h2>profile.yaml<a class="headerlink" href="#profile-yaml" title="Link to this heading">¶</a></h2>
+<p>The profile file contains your warehouse credentials and connection details. It lives in the <code class="docutils literal notranslate"><span class="pre">.droughty</span></code> directory in your home folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>~/.droughty/profile.yaml
+</pre></div>
+</div>
+<p>You can have multiple named profiles in one file. The profile used for a given project is selected via the <code class="docutils literal notranslate"><span class="pre">profile</span></code> key in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+<section id="bigquery-profile">
+<h3>BigQuery Profile<a class="headerlink" href="#bigquery-profile" title="Link to this heading">¶</a></h3>
+<p>Minimal example (using ADC or browser OAuth — no key file needed):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">my_profile</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">warehouse_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">big_query</span>
+<span class="w">  </span><span class="nt">project_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-gcp-project</span>
+<span class="w">  </span><span class="nt">schema_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">analytics</span>
+<span class="w">  </span><span class="nt">test_schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_staging_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_integration_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_analytics_schema</span>
+<span class="w">  </span><span class="nt">dbml_schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_staging_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_integration_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_analytics_schema</span>
+</pre></div>
+</div>
+<p>Full example with all options:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">my_profile</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">warehouse_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">big_query</span>
+<span class="w">  </span><span class="nt">project_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-gcp-project</span><span class="w">        </span><span class="c1"># GCP project ID</span>
+<span class="w">  </span><span class="nt">schema_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">analytics</span><span class="w">              </span><span class="c1"># Primary analytics dataset</span>
 
+<span class="w">  </span><span class="nt">key_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/key.json</span><span class="w">         </span><span class="c1"># Service account key (optional if using OAuth/ADC)</span>
 
+<span class="w">  </span><span class="nt">openai_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sk-...</span><span class="w">               </span><span class="c1"># OpenAI API key — required for `droughty docs` and `droughty qa`</span>
+<span class="w">  </span><span class="nt">langsmith_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ls-...</span><span class="w">            </span><span class="c1"># LangSmith API key — optional, enables QA tracing</span>
+<span class="w">  </span><span class="nt">langsmith_project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-project</span><span class="w">       </span><span class="c1"># LangSmith project name — optional</span>
 
+<span class="w">  </span><span class="nt">test_schemas</span><span class="p">:</span><span class="w">                       </span><span class="c1"># Schemas scanned by `droughty dbt`</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_staging_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_integration_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_analytics_schema</span>
 
+<span class="w">  </span><span class="nt">dbml_schemas</span><span class="p">:</span><span class="w">                       </span><span class="c1"># Schemas scanned by `droughty dbml`</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_staging_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_integration_schema</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_analytics_schema</span>
+</pre></div>
+</div>
+</section>
+<section id="snowflake-profile">
+<h3>Snowflake Profile<a class="headerlink" href="#snowflake-profile" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">my_profile</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">warehouse_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">snowflake</span>
+<span class="w">  </span><span class="nt">account</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myaccount.us-east-1</span><span class="w">       </span><span class="c1"># Snowflake account identifier (include region)</span>
+<span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myuser</span>
+<span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mypassword</span>
+<span class="w">  </span><span class="nt">warehouse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute_wh</span><span class="w">              </span><span class="c1"># Snowflake virtual warehouse name</span>
+<span class="w">  </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_database</span>
+<span class="w">  </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">analytics</span>
+<span class="w">  </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_role</span><span class="w">                      </span><span class="c1"># Role with INFORMATION_SCHEMA SELECT access</span>
 
+<span class="w">  </span><span class="nt">test_schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">integration</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">analytics</span>
 
+<span class="w">  </span><span class="nt">dbml_schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">integration</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">analytics</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The profile name key (e.g. <code class="docutils literal notranslate"><span class="pre">my_profile</span></code>) must exactly match the <code class="docutils literal notranslate"><span class="pre">profile:</span></code> value in your <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="droughty-project-yaml">
+<h2>droughty_project.yaml<a class="headerlink" href="#droughty-project-yaml" title="Link to this heading">¶</a></h2>
+<p>The project file controls output paths, filenames, and optional features. Place it at the root of your git repository (or specify a custom location with <code class="docutils literal notranslate"><span class="pre">--project-dir</span></code>).</p>
+<section id="minimal-example">
+<h3>Minimal example<a class="headerlink" href="#minimal-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_profile</span>
 
+<span class="nt">lookml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lookml/</span>
+<span class="nt">dbt_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">models/</span>
+<span class="nt">dbml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_docs/</span>
+<span class="nt">cube_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">schema/</span>
+</pre></div>
+</div>
+</section>
+<section id="full-reference">
+<h3>Full reference<a class="headerlink" href="#full-reference" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_profile</span><span class="w">           </span><span class="c1"># Must match a key in ~/.droughty/profile.yaml</span>
+
+<span class="c1"># --- LookML output ---</span>
+<span class="nt">lookml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lookml/</span><span class="w">                        </span><span class="c1"># Directory for LookML output files</span>
+<span class="nt">lookml_base_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">base</span><span class="w">                  </span><span class="c1"># Filename for base views file</span>
+<span class="nt">lookml_explore_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">explores</span><span class="w">           </span><span class="c1"># Filename for explores file</span>
+<span class="nt">lookml_measures_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">measures</span><span class="w">          </span><span class="c1"># Filename for measures file</span>
+<span class="nt">lookml_base_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">views/</span><span class="w">                    </span><span class="c1"># Sub-path within lookml_path for views</span>
+
+<span class="c1"># --- dbt output ---</span>
+<span class="nt">dbt_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">models/</span><span class="w">                           </span><span class="c1"># Directory for dbt schema.yml output</span>
+<span class="nt">dbt_tests_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">schema</span><span class="w">                  </span><span class="c1"># Filename for schema tests file</span>
+
+<span class="c1"># --- DBML output ---</span>
+<span class="nt">dbml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_docs/</span><span class="w">                         </span><span class="c1"># Directory for DBML output files</span>
+<span class="nt">dbml_filenames</span><span class="p">:</span><span class="w">                             </span><span class="c1"># One output file per entry</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">analytics_layer</span>
+
+<span class="c1"># --- Cube output ---</span>
+<span class="nt">cube_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">schema/</span><span class="w">                          </span><span class="c1"># Directory for Cube schema output</span>
+<span class="nt">cube_base_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">base</span><span class="w">                    </span><span class="c1"># Filename for base cubes file</span>
+<span class="nt">cube_integration_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">integrations</span><span class="w">     </span><span class="c1"># Filename for integration file</span>
+<span class="nt">cube_measures_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">measures</span><span class="w">            </span><span class="c1"># Filename for measures file</span>
+
+<span class="c1"># --- Staging output (GCP only) ---</span>
+<span class="nt">stage_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">models/staging/</span><span class="w">                 </span><span class="c1"># Directory for staging model output</span>
+
+<span class="c1"># --- Documentation output ---</span>
+<span class="nt">field_description_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warehouse_docs</span>
+<span class="nt">field_description_file_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">field_descriptions.md</span>
+<span class="nt">openai_field_descriptions_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warehouse_docs</span>
+<span class="nt">openai_field_descriptions_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai_field_descriptions</span>
+
+<span class="c1"># --- Explores (optional) ---</span>
+<span class="c1"># Enables dimensional inference for LookML/Cube explore generation.</span>
+<span class="c1"># parent_table is joined to dimensions and facts.</span>
+<span class="nt">explores</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">parent_table</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_fact_table</span>
+<span class="w">  </span><span class="nt">dimensions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_dim_table</span>
+<span class="w">  </span><span class="nt">facts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_fact_table</span>
+
+<span class="c1"># --- LookML Period-over-Period parameters (optional) ---</span>
+<span class="c1"># Adds PoP dashboard parameters to specified views.</span>
+<span class="nt">lookml_pop</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">views</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">orders_view</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">orders_daily_fact</span>
+
+<span class="c1"># --- dbt test overrides (optional) ---</span>
+<span class="c1"># Replace the auto-generated tests for specific columns.</span>
+<span class="nt">test_overwrite</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">models</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">my_table</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">my_pk_field</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">not_null</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unique</span>
+
+<span class="c1"># --- dbt test ignore (optional) ---</span>
+<span class="c1"># Skip all test generation for these tables entirely.</span>
+<span class="nt">test_ignore</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">models</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">raw_events_table</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">temp_staging_table</span>
+
+<span class="c1"># --- Entity resolution (optional) ---</span>
+<span class="c1"># Used by `droughty resolve` for entity deduplication.</span>
+<span class="nt">entity_resolution</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">read_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resolution_schema</span>
+<span class="w">  </span><span class="nt">write_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resolution_schema</span>
+<span class="w">  </span><span class="nt">read_table_names</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">customer</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customer_col1</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customer_col2</span>
+<span class="w">  </span><span class="nt">write_column_names</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merge_key</span>
+<span class="w">  </span><span class="nt">write_table_name</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resolved_customer</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="configuration-key-reference">
+<h2>Configuration Key Reference<a class="headerlink" href="#configuration-key-reference" title="Link to this heading">¶</a></h2>
+<section id="profile-yaml-keys">
+<h3>profile.yaml keys<a class="headerlink" href="#profile-yaml-keys" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 15.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">warehouse_name</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">big_query</span></code> or <code class="docutils literal notranslate"><span class="pre">snowflake</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">project_name</span></code></p></td>
+<td><p>BigQuery only</p></td>
+<td><p>GCP project ID</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">schema_name</span></code></p></td>
+<td><p>BigQuery only</p></td>
+<td><p>Primary analytics dataset name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key_file</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Path to BigQuery service account JSON key</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">account</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake account identifier (include region suffix)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake username</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake password</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">warehouse</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake virtual warehouse name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">database</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake database name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">schema</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake schema name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">role</span></code></p></td>
+<td><p>Snowflake only</p></td>
+<td><p>Snowflake role with INFORMATION_SCHEMA access</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_schemas</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>List of schemas scanned by <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">dbt</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dbml_schemas</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>List of schemas scanned by <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">dbml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">openai_secret</span></code></p></td>
+<td><p>For docs/qa</p></td>
+<td><p>OpenAI API key (required for <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">docs</span></code> and <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">qa</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">langsmith_secret</span></code></p></td>
+<td><p>No</p></td>
+<td><p>LangSmith API key for QA tracing</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">langsmith_project</span></code></p></td>
+<td><p>No</p></td>
+<td><p>LangSmith project name for QA tracing</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="droughty-project-yaml-keys">
+<h3>droughty_project.yaml keys<a class="headerlink" href="#droughty-project-yaml-keys" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 15.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">profile</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Name of the profile in <code class="docutils literal notranslate"><span class="pre">~/.droughty/profile.yaml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lookml_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output directory for LookML files (default: <code class="docutils literal notranslate"><span class="pre">lookml/</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lookml_base_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Base views filename (default: <code class="docutils literal notranslate"><span class="pre">base</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lookml_explore_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Explores filename (default: <code class="docutils literal notranslate"><span class="pre">explores</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lookml_measures_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Measures filename (default: <code class="docutils literal notranslate"><span class="pre">measures</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lookml_base_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Sub-path for views within <code class="docutils literal notranslate"><span class="pre">lookml_path</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dbt_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output directory for dbt schema (default: <code class="docutils literal notranslate"><span class="pre">models/</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dbt_tests_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>dbt schema filename (default: <code class="docutils literal notranslate"><span class="pre">schema</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dbml_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output directory for DBML files (default: <code class="docutils literal notranslate"><span class="pre">db_docs/</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dbml_filenames</span></code></p></td>
+<td><p>No</p></td>
+<td><p>List of DBML output filenames</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cube_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output directory for Cube files (default: <code class="docutils literal notranslate"><span class="pre">schema/</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cube_base_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Base cubes filename</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cube_integration_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Integrations filename</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cube_measures_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Measures filename</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stage_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output directory for staging models (default: <code class="docutils literal notranslate"><span class="pre">models/staging/</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">openai_field_descriptions_path</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output directory for AI descriptions</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">openai_field_descriptions_filename</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output filename for AI descriptions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">explores</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Dimensional inference config for LookML/Cube explores</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lookml_pop</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Period-over-Period parameter config for Looker</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_overwrite</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Per-column test overrides for <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">dbt</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_ignore</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Tables to skip entirely in <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">dbt</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">entity_resolution</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Entity deduplication config for <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">resolve</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="authentication.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Authentication</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="howto_dbt_bigquery.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">How to Use — dbt &amp; BigQuery</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Rittman Analytics
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/rittmananalytics/droughty" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#profile-yaml">profile.yaml</a><ul>
+<li><a class="reference internal" href="#bigquery-profile">BigQuery Profile</a></li>
+<li><a class="reference internal" href="#snowflake-profile">Snowflake Profile</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#droughty-project-yaml">droughty_project.yaml</a><ul>
+<li><a class="reference internal" href="#minimal-example">Minimal example</a></li>
+<li><a class="reference internal" href="#full-reference">Full reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-key-reference">Configuration Key Reference</a><ul>
+<li><a class="reference internal" href="#profile-yaml-keys">profile.yaml keys</a></li>
+<li><a class="reference internal" href="#droughty-project-yaml-keys">droughty_project.yaml keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &#169;2022, lewis baker.
       
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
-      |
-      <a href="_sources/configuration.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=1154e574"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
 </html>

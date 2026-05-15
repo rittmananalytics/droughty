@@ -24,25 +24,22 @@ Full folder structure
    │   └── _base_parameters.layer.lkml   # PoP parameters layer (if lookml_pop is configured)
    │
    ├── staging/                          # Refinements of base views — light customisations
-   │   ├── stg_commerce__order.layer.lkml
-   │   ├── stg_commerce__order_item.layer.lkml
-   │   ├── stg_commerce__customer.layer.lkml
-   │   ├── stg_commerce__product.layer.lkml
-   │   └── stg_commerce__campaign.layer.lkml
+   │   ├── stg_commerce.layer.lkml
+   │   ├── stg_finance.layer.lkml
+   │   ├── stg_core.layer.lkml
+   │   └── stg_marketing.layer.lkml
    │
    ├── int/                              # Integration layer — explores, joins, business logic
-   │   ├── int_explore_commerce__order.explore.lkml
-   │   ├── int_explore_commerce__order_item.explore.lkml
-   │   ├── int_explore_commerce__customer.explore.lkml
-   │   ├── int_explore_commerce__product.explore.lkml
-   │   └── int_explore_commerce__campaign.explore.lkml
+   │   ├── int_explore_commerce.explore.lkml
+   │   ├── int_explore_finance.explore.lkml
+   │   ├── int_explore_core.explore.lkml
+   │   └── int_explore_marketing.explore.lkml
    │
    ├── aggregate/                        # Aggregate-awareness layers
-   │   ├── agg_commerce__order.layer.lkml
-   │   ├── agg_commerce__order_item.layer.lkml
-   │   ├── agg_commerce__customer.layer.lkml
-   │   ├── agg_commerce__product.layer.lkml
-   │   └── agg_commerce__campaign.layer.lkml
+   │   ├── agg_commerce.layer.lkml
+   │   ├── agg_finance.layer.lkml
+   │   ├── agg_core.layer.lkml
+   │   └── agg_marketing.layer.lkml
    │
    ├── derived/                          # Derived tables (PDTs)
    │

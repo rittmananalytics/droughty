@@ -4,15 +4,18 @@
    :hidden:
    :caption: Getting Started
 
-   overview
-   installation
-   quickstart
+   Overview <overview>
+   Installation <installation>
+   Quick Start <quickstart>
 
 .. toctree::
    :hidden:
    :caption: How To
 
-   howto_dbt_bigquery
+   dbt & BigQuery <howto_dbt_bigquery>
+   LookML Project Structure <howto_lookml_structure>
+   LookML Period-over-Period <howto_lookml_pop>
+   QA Assumptions <howto_qa_assumptions>
 
 .. toctree::
    :hidden:

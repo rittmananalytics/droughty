@@ -205,7 +205,51 @@ lookml/measures.lkml   # Measure definitions
 - Hides primary key and foreign key fields by default
 - Attaches column descriptions from the warehouse where available
 - Generates explores and joins based on the `explores` section of your project file
-- Supports Looker Period-over-Period (PoP) parameters via `lookml_pop` config
+- Generates Looker Period-over-Period (PoP) parameters via `lookml_pop` config (see below)
+
+**Recommended LookML folder structure:**
+
+```
+lookml/
+├── models/
+│   └── my_project.model.lkml         # Declares explores and global includes
+├── base/                             # ← droughty writes here — do not edit
+│   ├── _base.layer.lkml              # Base views from warehouse schema
+│   ├── _aggregate.layer.lkml         # Base views for aggregate tables
+│   └── _base_parameters.layer.lkml   # PoP parameters layer (if configured)
+├── staging/                          # Your refinements of the base views
+│   └── stg_<domain>.layer.lkml
+├── int/                              # Explores, joins, and business logic
+│   └── int_explore_<domain>.explore.lkml
+├── aggregate/                        # Aggregate awareness layers
+├── utils/                            # Shared utility dimensions
+└── dashboards/                       # LookML dashboard definitions
+```
+
+Keep `base/` untouched — droughty overwrites it on each run. All customisations (labels, tags, custom measures, access filters) go in `staging/` as Looker refinements (`view: +table_name { }`).
+
+**Period-over-Period (PoP) parameters:**
+
+Add `lookml_pop` to `droughty_project.yaml` to generate dashboard comparison parameters for any view:
+
+```yaml
+lookml_pop:
+  views:
+    fct_orders:
+      - order_date        # date column(s) to pivot on
+```
+
+This generates a `_base_parameters.layer.lkml` file in your `lookml_path` containing:
+- Parameters: `select_timeframe_advanced` (day/week/month/quarter/year/YTD), `select_comparison` (previous period or previous year), `apply_to_date_filter_advanced`, `select_reference_date_advanced`
+- Dimensions: `current_vs_previous_period_advanced` (use as pivot/series breakdown), `selected_dynamic_day_of_advanced` (use as x-axis), `is_to_date_advanced`
+- Paired measures for every `_pk`, `_fk`, and numeric column — one filtered to the reference period, one to the comparison period
+
+Include the file in your model alongside the base layer:
+
+```
+include: "/lookml/base/_base.layer.lkml"
+include: "/lookml/base/_base_parameters.layer.lkml"
+```
 
 ---
 
@@ -303,7 +347,7 @@ warehouse_docs/openai_field_descriptions.md
 
 ### `droughty qa`
 
-Runs a LangGraph-powered QA validation agent against your warehouse data. Generates a Mermaid diagram of the validation DAG.
+Runs a LangGraph-powered QA validation agent against your warehouse data. Validates columns against natural-language expectations you define, then outputs a summary report and a Mermaid diagram of the validation DAG.
 
 ```bash
 droughty qa
@@ -313,9 +357,35 @@ droughty qa --assumptions-dir ./droughty_qa_assumptions.yaml
 **Options:**
 | Option | Description |
 |--------|-------------|
-| `--assumptions-dir <path>` | Path to QA assumptions YAML file |
+| `--assumptions-dir <path>` | Path to QA assumptions YAML (default: `./droughty_qa_assumptions.yaml` at git root) |
 
-**Output:** Mermaid DAG files in `langgraph/` directory.
+**Assumptions file format:**
+
+Create `droughty_qa_assumptions.yaml` at the root of your git repository:
+
+```yaml
+datasets:
+  my_analytics_dataset:
+    tables:
+      fct_orders:
+        columns:
+          order_pk:
+            - expectation: "Check if all order PKs are unique and not null"
+          order_status:
+            - expectation: "Check that order_status only contains: pending, processing, shipped, delivered, cancelled"
+          order_value:
+            - expectation: "Check that order_value is always greater than zero"
+      dim_customers:
+        columns:
+          customer_email:
+            - expectation: "Check all emails are valid format. Flag test or dummy addresses."
+          persona_type:
+            - expectation: "Check all customers have a persona type and values align with ISO 8000 standards"
+```
+
+Expectations are plain English — they are passed to GPT-4 alongside sample data from the warehouse. The agent returns `met` or `violated` with evidence for each check.
+
+**Output:** Terminal summary report + Mermaid DAG in `langgraph/droughty_qa_agent_dag.mmd`.
 
 **Requires** `openai_secret` (and optionally `langsmith_secret`, `langsmith_project`) in `profile.yaml`.
 
@@ -641,6 +711,12 @@ models:
 ## Documentation
 
 Full documentation: [droughty.readthedocs.io](https://droughty.readthedocs.io/en/latest/)
+
+**How-to guides:**
+- [dbt & BigQuery end-to-end](https://droughty.readthedocs.io/en/latest/howto_dbt_bigquery.html)
+- [Recommended LookML project structure](https://droughty.readthedocs.io/en/latest/howto_lookml_structure.html)
+- [LookML Period-over-Period](https://droughty.readthedocs.io/en/latest/howto_lookml_pop.html)
+- [QA assumptions YAML](https://droughty.readthedocs.io/en/latest/howto_qa_assumptions.html)
 
 Source: [github.com/rittmananalytics/droughty](https://github.com/rittmananalytics/droughty)
 

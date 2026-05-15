@@ -1,5 +1,7 @@
 .. droughty documentation master file
 
+.. include:: overview.rst
+
 .. toctree::
    :hidden:
    :caption: Getting Started

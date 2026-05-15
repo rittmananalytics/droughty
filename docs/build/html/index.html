@@ -180,7 +180,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -254,19 +254,123 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <div class="toctree-wrapper compound">
+          <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
+<p><strong>droughty</strong> — <em>adjective, drought·i·er, drought·i·est.</em> dry.</p>
+<p>Droughty helps keep your analytics workflow <strong>DRY</strong> — Don’t Repeat Yourself.</p>
+<hr class="docutils" />
+<section id="the-problem">
+<h2>The problem<a class="headerlink" href="#the-problem" title="Link to this heading">¶</a></h2>
+<p>Analytics engineering is full of mechanical, repetitive work that nobody loves doing but everyone has to do:</p>
+<ul class="simple">
+<li><p>Your Looker views fall behind your warehouse because manually updating 40 views when a column changes isn’t anyone’s idea of a good time.</p></li>
+<li><p>Your dbt <code class="docutils literal notranslate"><span class="pre">schema.yml</span></code> tests are either missing or out of date because writing them from scratch is tedious.</p></li>
+<li><p>Your ERD diagram on Confluence hasn’t been updated since the project kicked off.</p></li>
+<li><p>Your Cube schema drifted from the warehouse two sprints ago and nobody noticed.</p></li>
+<li><p>Half your warehouse fields have no description, so new analysts waste hours asking “what does this column mean?”</p></li>
+</ul>
+<p>The real cost isn’t just time — it’s the bugs and confusion that creep in when your semantic layer doesn’t match your warehouse. Dimensions in Looker that reference columns that no longer exist. dbt tests that were never written, so a broken primary key makes it to production. ERDs that mislead rather than inform.</p>
+</section>
+<section id="the-solution">
+<h2>The solution<a class="headerlink" href="#the-solution" title="Link to this heading">¶</a></h2>
+<p>Droughty reads your data warehouse’s <code class="docutils literal notranslate"><span class="pre">INFORMATION_SCHEMA</span></code> and generates these files automatically. Your warehouse schema becomes the single source of truth, and every tool downstream stays in sync with it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>lookml<span class="w">    </span><span class="c1"># → LookML views, explores, measures</span>
+droughty<span class="w"> </span>dbt<span class="w">       </span><span class="c1"># → schema.yml with tests for every table</span>
+droughty<span class="w"> </span>dbml<span class="w">      </span><span class="c1"># → ERD with all PK/FK relationships</span>
+droughty<span class="w"> </span>cube<span class="w">      </span><span class="c1"># → Cube schema with dimensions and measures</span>
+droughty<span class="w"> </span>docs<span class="w">      </span><span class="c1"># → AI-generated field descriptions</span>
+droughty<span class="w"> </span>qa<span class="w">        </span><span class="c1"># → LLM-powered data quality validation</span>
+droughty<span class="w"> </span>stage<span class="w">     </span><span class="c1"># → dbt staging models from source tables</span>
+</pre></div>
 </div>
+<p>Run these commands as part of your development workflow and the mechanical stuff takes care of itself — so you can focus on the work that actually requires thinking.</p>
+</section>
+<section id="what-droughty-generates">
+<h2>What droughty generates<a class="headerlink" href="#what-droughty-generates" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 35.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Why it exists</p></th>
+<th class="head"><p>What it generates</p></th>
+<th class="head"><p>Target tool</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lookml</span></code></p></td>
+<td><p>Looker views drift from the warehouse every time a schema changes. Droughty keeps them in sync automatically.</p></td>
+<td><p>LookML views, explores &amp; measures</p></td>
+<td><p>Looker</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dbt</span></code></p></td>
+<td><p>Writing <code class="docutils literal notranslate"><span class="pre">schema.yml</span></code> tests is the task that always gets skipped. Droughty generates baseline coverage for every table instantly.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">schema.yml</span></code> with uniqueness, not-null &amp; validity tests</p></td>
+<td><p>dbt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dbml</span></code></p></td>
+<td><p>No one updates the ERD. Droughty generates it from the live warehouse, so it’s always accurate.</p></td>
+<td><p>DBML ERD with PK/FK relationships</p></td>
+<td><p>dbdocs / dbdiagram.io</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cube</span></code></p></td>
+<td><p>Same as LookML — schema drift is silent and expensive. Droughty keeps Cube in sync.</p></td>
+<td><p>Cube dimensions, measures &amp; joins</p></td>
+<td><p>Cube.js</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">docs</span></code></p></td>
+<td><p>Undocumented fields kill self-service analytics. AI gives you a first-pass description for every field in seconds.</p></td>
+<td><p>Markdown field descriptions via OpenAI</p></td>
+<td><p>Any</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qa</span></code></p></td>
+<td><p>Data issues are usually found by stakeholders, not the team that built the pipeline. Droughty validates your data proactively.</p></td>
+<td><p>LangGraph QA agent + Mermaid DAG</p></td>
+<td><p>Any</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stage</span></code></p></td>
+<td><p>Writing boilerplate staging SQL for new sources is pure mechanical work. Droughty does it from the source schema.</p></td>
+<td><p>dbt staging models and <code class="docutils literal notranslate"><span class="pre">sources.yml</span></code></p></td>
+<td><p>dbt + BigQuery</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="supported-warehouses">
+<h2>Supported warehouses<a class="headerlink" href="#supported-warehouses" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Google BigQuery</strong></p></li>
+<li><p><strong>Snowflake</strong></p></li>
+</ul>
+</section>
+<section id="quick-links">
+<h2>Quick links<a class="headerlink" href="#quick-links" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pypi.org/project/droughty">PyPI</a></p></li>
+<li><p><a class="reference external" href="https://github.com/rittmananalytics/droughty">GitHub</a></p></li>
+<li><p><a class="reference external" href="https://github.com/rittmananalytics/droughty/issues">Issues</a></p></li>
+</ul>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
 </div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -304,8 +408,33 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#the-problem">The problem</a></li>
+<li><a class="reference internal" href="#the-solution">The solution</a></li>
+<li><a class="reference internal" href="#what-droughty-generates">What droughty generates</a></li>
+<li><a class="reference internal" href="#supported-warehouses">Supported warehouses</a></li>
+<li><a class="reference internal" href="#quick-links">Quick links</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

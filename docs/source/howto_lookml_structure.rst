@@ -24,25 +24,25 @@ Full folder structure
    │   └── _base_parameters.layer.lkml   # PoP parameters layer (if lookml_pop is configured)
    │
    ├── staging/                          # Refinements of base views — light customisations
-   │   ├── stg_orders.layer.lkml
-   │   ├── stg_customers.layer.lkml
-   │   ├── stg_products.layer.lkml
-   │   ├── stg_sessions.layer.lkml
-   │   └── stg_marketing.layer.lkml
+   │   ├── stg_commerce__order.layer.lkml
+   │   ├── stg_commerce__order_item.layer.lkml
+   │   ├── stg_commerce__customer.layer.lkml
+   │   ├── stg_commerce__product.layer.lkml
+   │   └── stg_commerce__campaign.layer.lkml
    │
    ├── int/                              # Integration layer — explores, joins, business logic
-   │   ├── int_explore_orders.explore.lkml
-   │   ├── int_explore_customers.explore.lkml
-   │   ├── int_explore_products.explore.lkml
-   │   ├── int_explore_sessions.explore.lkml
-   │   └── int_explore_marketing.explore.lkml
+   │   ├── int_explore_commerce__order.explore.lkml
+   │   ├── int_explore_commerce__order_item.explore.lkml
+   │   ├── int_explore_commerce__customer.explore.lkml
+   │   ├── int_explore_commerce__product.explore.lkml
+   │   └── int_explore_commerce__campaign.explore.lkml
    │
    ├── aggregate/                        # Aggregate-awareness layers
-   │   ├── agg_orders.layer.lkml
-   │   ├── agg_customers.layer.lkml
-   │   ├── agg_products.layer.lkml
-   │   ├── agg_sessions.layer.lkml
-   │   └── agg_master.layer.lkml
+   │   ├── agg_commerce__order.layer.lkml
+   │   ├── agg_commerce__order_item.layer.lkml
+   │   ├── agg_commerce__customer.layer.lkml
+   │   ├── agg_commerce__product.layer.lkml
+   │   └── agg_commerce__campaign.layer.lkml
    │
    ├── derived/                          # Derived tables (PDTs)
    │
@@ -50,8 +50,8 @@ Full folder structure
    │   └── utils_period_boundaries.layer.lkml
    │
    └── dashboards/                       # LookML dashboard definitions
-       ├── orders__overview.dashboard.lookml
-       ├── customers__retention.dashboard.lookml
+       ├── commerce__orders_overview.dashboard.lookml
+       ├── commerce__customers_retention.dashboard.lookml
        └── ...
 
 ----

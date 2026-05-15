@@ -29,7 +29,6 @@ Add it at the top level of the file, alongside your other droughty settings:
    profile: my_profile
 
    lookml_path: lookml/base
-   lookml_base_filename: _base.layer
 
    lookml_pop:
      views:
@@ -55,7 +54,7 @@ With the :doc:`recommended folder structure <howto_lookml_structure>`, that is `
        ├── _aggregate.layer.lkml             ← aggregate views (droughty lookml)
        └── _base_parameters.layer.lkml       ← PoP layer (droughty lookml, if configured)
 
-The default filename is ``_base_parameters.layer``. Override it with ``lookml_base_filename`` in ``droughty_project.yaml`` if you need a different name.
+The default filename is ``_base_parameters.layer`` and cannot be changed via config — ``lookml_base_filename`` controls the base views filename only.
 
 Include all three files in your model:
 
@@ -169,7 +168,7 @@ Droughty generates the PoP layer alongside the base views and explores. The outp
 
    {lookml_path}/_base_parameters.layer.lkml
 
-Or, if you have set ``lookml_base_filename`` in your project config, that filename is used instead.
+The filename is always ``_base_parameters.layer.lkml`` — it is not affected by ``lookml_base_filename``, which controls only the base views output.
 
 With the default paths this looks like:
 

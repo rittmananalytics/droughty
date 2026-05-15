@@ -6,7 +6,6 @@
    :hidden:
    :caption: Getting Started
 
-   Overview <overview>
    Installation <installation>
    Quick Start <quickstart>
 

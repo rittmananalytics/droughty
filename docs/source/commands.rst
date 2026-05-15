@@ -387,7 +387,7 @@ Droughty reads the source schema from BigQuery and generates all of it in one co
 
 .. note::
 
-   This command currently requires **macOS or Linux**.
+   This command is **BigQuery only** and currently requires **macOS or Linux**.
 
 **What it does**
 

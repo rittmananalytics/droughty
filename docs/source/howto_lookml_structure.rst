@@ -260,7 +260,7 @@ With ``lookml_pop`` configured, the PoP file lands in the same ``lookml/base/`` 
        fct_orders:
          - order_date
 
-This generates ``lookml/base/_base_parameters.layer.lkml`` — included in the model alongside the other base files.
+This generates ``lookml/base/_base_parameters.layer.lkml`` — the PoP filename is fixed and is not affected by ``lookml_base_filename``.
 
 See :doc:`howto_lookml_pop` for full PoP setup details.
 

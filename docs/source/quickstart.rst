@@ -33,7 +33,7 @@ Then create the profile — no key file needed:
 
 .. code-block:: yaml
 
-   my_project:
+   my_profile:
      warehouse_name: big_query
      project_name: my-gcp-project
      schema_name: analytics
@@ -50,7 +50,7 @@ Then create the profile — no key file needed:
 
 .. code-block:: yaml
 
-   my_project:
+   my_profile:
      warehouse_name: snowflake
      account: myaccount.us-east-1
      user: myuser
@@ -79,7 +79,7 @@ Create ``droughty_project.yaml`` at the **root of your git repository**:
 
 .. code-block:: yaml
 
-   profile: my_project
+   profile: my_profile
 
    lookml_path: lookml/
    lookml_base_filename: base

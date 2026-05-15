@@ -90,7 +90,7 @@ Add your project configuration:
 
 .. code-block:: yaml
 
-   my_project:
+   my_profile:
      warehouse_name: big_query
      project_name: my-gcp-project           # your GCP project ID
      schema_name: myproject_analytics        # your analytics / warehouse dataset
@@ -120,7 +120,7 @@ Create ``droughty_project.yaml`` at the **root of your dbt git repository**:
 
 .. code-block:: yaml
 
-   profile: my_project
+   profile: my_profile
 
    # dbt test output
    dbt_path: models/
@@ -461,7 +461,7 @@ In a CI/CD pipeline, use environment variables instead of local files:
 
          - name: Generate dbt tests
            env:
-             PROFILE_NAME: my_project
+             PROFILE_NAME: my_profile
              WAREHOUSE_NAME: big_query
              PROJECT_NAME: ${{ secrets.GCP_PROJECT_ID }}
              SCHEMA_NAME: myproject_analytics

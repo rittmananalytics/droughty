@@ -21,31 +21,27 @@ Full folder structure
    ├── base/                             # ← droughty writes here — DO NOT edit these files
    │   ├── _base.layer.lkml              # Base views generated from warehouse schema
    │   ├── _aggregate.layer.lkml         # Base views for aggregate tables
-   │   ├── _base_parameters.layer.lkml   # PoP parameters layer (if lookml_pop is configured)
-   │   └── _snowplow_base.layer.lkml     # Optional: Snowplow base layer
+   │   └── _base_parameters.layer.lkml   # PoP parameters layer (if lookml_pop is configured)
    │
    ├── staging/                          # Refinements of base views — light customisations
-   │   ├── stg_commerce.layer.lkml
-   │   ├── stg_finance.layer.lkml
-   │   ├── stg_human_resource.layer.lkml
-   │   ├── stg_platform.layer.lkml
-   │   ├── stg_supply_chain.layer.lkml
-   │   └── stg_snowplow.layer.lkml
+   │   ├── stg_orders.layer.lkml
+   │   ├── stg_customers.layer.lkml
+   │   ├── stg_products.layer.lkml
+   │   ├── stg_sessions.layer.lkml
+   │   └── stg_marketing.layer.lkml
    │
    ├── int/                              # Integration layer — explores, joins, business logic
-   │   ├── int_explore_commerce.explore.lkml
-   │   ├── int_explore_finance.layer.lkml
-   │   ├── int_explore_human_resource.explore.lkml
-   │   ├── int_explore_platform.layer.lkml
-   │   ├── int_explore_supply_chain.layer.lkml
-   │   └── int_explore_snowplow.layer.lkml
+   │   ├── int_explore_orders.explore.lkml
+   │   ├── int_explore_customers.explore.lkml
+   │   ├── int_explore_products.explore.lkml
+   │   ├── int_explore_sessions.explore.lkml
+   │   └── int_explore_marketing.explore.lkml
    │
    ├── aggregate/                        # Aggregate-awareness layers
-   │   ├── agg_commerce.layer.lkml
-   │   ├── agg_finance.layer.lkml
-   │   ├── agg_human_resource.layer.lkml
-   │   ├── agg_platform.layer.lkml
-   │   ├── agg_supply_chain.layer.lkml
+   │   ├── agg_orders.layer.lkml
+   │   ├── agg_customers.layer.lkml
+   │   ├── agg_products.layer.lkml
+   │   ├── agg_sessions.layer.lkml
    │   └── agg_master.layer.lkml
    │
    ├── derived/                          # Derived tables (PDTs)
@@ -53,15 +49,10 @@ Full folder structure
    ├── utils/                            # Shared utility dimensions and measures
    │   └── utils_period_boundaries.layer.lkml
    │
-   ├── dashboards/                       # LookML dashboard definitions
-   │   ├── commerce__retail_cockpit.dashboard.lookml
-   │   ├── ecommerce__web_traffic.dashboard.lookml
-   │   └── ...
-   │
-   └── snowplow_lookml/                  # Optional: third-party LookML blocks
-       ├── attribution/
-       ├── ecommerce/
-       └── unified/
+   └── dashboards/                       # LookML dashboard definitions
+       ├── orders__overview.dashboard.lookml
+       ├── customers__retention.dashboard.lookml
+       └── ...
 
 ----
 

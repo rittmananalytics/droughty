@@ -1,203 +1,783 @@
-<!DOCTYPE html>
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Usage &amp; Workflows" href="usage.html"><link rel="prev" title="Warehouse Support" href="warehouse_support.html">
 
-<html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>Commands - droughty</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=dc353ed4" />
+    
+    
 
-    <title>Commands &#8212; droughty 0.1.21 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
-    <script src="_static/documentation_options.js?v=b3d22ae5"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Usage" href="usage.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2563eb;
+  --color-brand-content: #1d4ed8;
+  --color-admonition-background: #f0f9ff;
   
-
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #93c5fd;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #93c5fd;
   
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
 
-  </head><body>
-  
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
 
-          <div class="body" role="main">
-            
-  <section id="commands">
-<h1>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h1>
-<p>The three tools within this toolkit (lookml, dbt-test and dbml) each have a sub-command. These commands must be predicated by the droughty command.</p>
-<p><strong>lookml</strong></p>
-<p>Generates lookml based of the analytics layer of your warehouse, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">lookml</span>
-</pre></div>
-</div>
-<p>in your terminal.</p>
-<p>This will output a file within the root of your active git repo as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">lookml</span><span class="o">/</span><span class="n">base</span><span class="o">...</span>
-</pre></div>
-</div>
-<p>This file will contain explores and measures based on the multiple layers in your warehouse, defined by the targets within your profile.yaml file. It assigns dimension datatypes, descriptions (if available). It also assigns pk’s, hides pk(s) and fk’s by default.</p>
-<p><strong>dbt</strong></p>
-<p>run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">dbt</span>
-</pre></div>
-</div>
-<p>Generates standard schema tests, currently coverage is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unicity</span> <span class="n">of</span> <span class="n">pk</span><span class="s1">&#39;s</span>
-<span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">all</span> <span class="n">columns</span>
-<span class="n">valid_from</span> <span class="o">&lt;=</span> <span class="n">valid_to</span>
-</pre></div>
-</div>
-<p>It will output a schema.yml file in the follow dir at the root of your active repo:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">schema</span><span class="o">.</span><span class="n">yml</span>
-</pre></div>
-</div>
-<p>The target for your test schemas is defined in your profiles.yaml file within the /.droughty dir. Find an example below:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test_schemas</span><span class="p">:</span>
-
-  <span class="o">-</span> <span class="n">example_dev_staging</span>
-
-  <span class="o">-</span> <span class="n">example_dev_integration</span>
-
-  <span class="o">-</span> <span class="n">example_analytics_dev</span>
-</pre></div>
-</div>
-<p><strong>dbml</strong></p>
-<p>Generates dbml based on the analytics layer within your warehouse, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">dbml</span>
-</pre></div>
-</div>
-<p>It will output the dbml model into the follow dir:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">db_docs</span><span class="o">/....</span>
-</pre></div>
-</div>
-<p>As with lookml, this assigns data types and also identifies pk, fk references and assigns them</p>
-<p><strong>cube</strong></p>
-<p>Generates cube based on the analytics layer within your warehouse, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">cube</span>
-</pre></div>
-</div>
-<p>It will output the cube models into the follow dir:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">schema</span><span class="o">/....</span>
-</pre></div>
-</div>
-<p>As with lookml, this assigns data types and also identifies pk, fk references and assigns them</p>
-<p><strong>docs</strong></p>
-<p>Generates inferred warehouse descriptions using openai, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">docs</span>
-</pre></div>
-</div>
-<p>By default, it will output the inferred metadata into:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">warehouse_docs</span><span class="o">/</span><span class="n">openai_field_descriptions</span><span class="o">.</span><span class="n">md</span>
-</pre></div>
-</div>
-<p>Droughty docs will read from your field_descriptions.md file and only create descriptions that are absent for entities in the warehouse.</p>
-<p>Openai isn’t prefect so make sure you sanity check the output</p>
-<p><strong>resolve</strong></p>
-<p>Uses pandas_dudupe which is derived from depupe.io to resolve warehouse entities:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">droughty</span> <span class="n">resolve</span>
-</pre></div>
-</div>
-<p>Once you have added the required parameters available within the configuration documentation, you can use the cli to resolve warehouse entities and output them to either big query or snowflake</p>
-<p><strong>arguments</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p>–profiles-dir
-- This allows you to specify the profile directory if you don’t want to use the default</p></li>
-<li><p>–project-dir
-- This allows you to specify the project directory if you don’t want to use the default</p></li>
-<li><p>–env-vars (enabled)
-- This allows you to enable the use of environment variables</p></li>
-</ul>
-</div></blockquote>
-<p><strong>authentication</strong></p>
-<p>When using BigQuery, droughty supports both service account and OAuth authentication:</p>
-<ul class="simple">
-<li><p>Service account: Specify a <cite>key_file</cite> in your profile.yaml</p></li>
-<li><p>OAuth: Specify <cite>oauth</cite> configuration with <cite>client_secrets</cite> and <cite>token_file</cite> paths</p></li>
-</ul>
-<p>OAuth will prompt for browser authentication on first use.</p>
-</section>
-
-
-          </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">droughty</a></h1>
-
-
-
-
-
-
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
-<search id="searchbox" style="display: none" role="search">
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
-      <input type="submit" value="Go" />
-    </form>
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
     </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
-<ul class="current">
+    <div class="header-center">
+      <a href="index.html"><div class="brand">droughty</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">droughty</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How To</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_dbt_bigquery.html">dbt &amp; BigQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto_lookml_structure.html">LookML Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto_lookml_pop.html">LookML Period-over-Period</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto_qa_assumptions.html">QA Assumptions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html#optional-variables">Optional variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="warehouse_support.html">Warehouse Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Commands</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage &amp; Workflows</a></li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="usage.html" title="previous chapter">Usage</a></li>
-  </ul></li>
-</ul>
+</div>
 </div>
 
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/commands.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="commands">
+<h1>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h1>
+<p>All commands follow the pattern <code class="docutils literal notranslate"><span class="pre">droughty</span> <span class="pre">&lt;command&gt;</span> <span class="pre">[options]</span></code> and must be run from inside a git repository.</p>
+<hr class="docutils" />
+<section id="global-options">
+<h2>Global Options<a class="headerlink" href="#global-options" title="Link to this heading">¶</a></h2>
+<p>These options work on every command:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--profile-dir</span> <span class="pre">&lt;path&gt;</span></code></p></td>
+<td><p>Path to <code class="docutils literal notranslate"><span class="pre">profile.yaml</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">~/.droughty/profile.yaml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--project-dir</span> <span class="pre">&lt;path&gt;</span></code></p></td>
+<td><p>Path to <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>. Defaults to the git repository root</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--env-vars</span> <span class="pre">enabled</span></code></p></td>
+<td><p>Read all config from environment variables instead of local YAML files (useful for CI/CD)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+</section>
+<section id="lookml">
+<span id="cmd-lookml"></span><h2>lookml<a class="headerlink" href="#lookml" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>lookml
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>Your Looker semantic layer is just a reflection of your warehouse schema. But every time a column changes, gets added, or gets removed, someone has to go and manually update the LookML view. In a project with 30+ views across 3 schemas, that’s hours of mechanical work per sprint — and the work that doesn’t get done turns into stale dimensions, missing fields, and Looker views that silently reference columns that no longer exist.</p>
+<p>Droughty removes this entirely. Run it as a pre-commit hook and your LookML base layer stays permanently in sync with the warehouse, with zero manual effort.</p>
+<p><strong>What it does</strong></p>
+<p>Reads every column from your analytics schema via <code class="docutils literal notranslate"><span class="pre">INFORMATION_SCHEMA</span></code> and generates:</p>
+<ul class="simple">
+<li><p>A <strong>base views</strong> file with a LookML view for each table, containing dimensions for every column</p></li>
+<li><p>An <strong>explores</strong> file with explore definitions and joins (if the <code class="docutils literal notranslate"><span class="pre">explores</span></code> section is configured)</p></li>
+<li><p>A <strong>measures</strong> file with measure definitions</p></li>
+</ul>
+<p>Data type mapping from warehouse → LookML:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Warehouse type</p></th>
+<th class="head"><p>BigQuery</p></th>
+<th class="head"><p>Snowflake</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INT64</span></code>, <code class="docutils literal notranslate"><span class="pre">NUMERIC</span></code>, <code class="docutils literal notranslate"><span class="pre">FLOAT64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>, <code class="docutils literal notranslate"><span class="pre">INTEGER</span></code>, <code class="docutils literal notranslate"><span class="pre">FLOAT</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">STRING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code>, <code class="docutils literal notranslate"><span class="pre">VARCHAR</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TIMESTAMP</span></code>, <code class="docutils literal notranslate"><span class="pre">DATETIME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TIMESTAMP</span></code>, <code class="docutils literal notranslate"><span class="pre">TIMESTAMP_TZ</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">date</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATE</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">yesno</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BOOL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BOOLEAN</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Primary key fields (<code class="docutils literal notranslate"><span class="pre">_pk</span></code> suffix) and foreign key fields (<code class="docutils literal notranslate"><span class="pre">_fk</span></code> suffix) are hidden by default. Column descriptions from the warehouse are included where available.</p>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>lookml/base.lkml        # Views with all dimensions
+lookml/explores.lkml    # Explore definitions and joins
+lookml/measures.lkml    # Measure definitions
+</pre></div>
+</div>
+<p>Output paths are configured via <code class="docutils literal notranslate"><span class="pre">lookml_path</span></code>, <code class="docutils literal notranslate"><span class="pre">lookml_base_filename</span></code>, <code class="docutils literal notranslate"><span class="pre">lookml_explore_filename</span></code>, <code class="docutils literal notranslate"><span class="pre">lookml_measures_filename</span></code> in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>lookml
 
+<span class="c1"># Custom config paths</span>
+droughty<span class="w"> </span>lookml<span class="w"> </span>--profile-dir<span class="w"> </span>/custom/path<span class="w"> </span>--project-dir<span class="w"> </span>./
 
+<span class="c1"># In CI/CD with environment variables</span>
+droughty<span class="w"> </span>lookml<span class="w"> </span>--env-vars<span class="w"> </span>enabled
+</pre></div>
+</div>
+<p><strong>Optional config in droughty_project.yaml</strong></p>
+<p>Add explores with dimensional inference:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">explores</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">parent_table</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_fact_table</span>
+<span class="w">  </span><span class="nt">dimensions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_dim_table</span>
+<span class="w">  </span><span class="nt">facts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_fact_table</span>
+</pre></div>
+</div>
+<p>Add Period-over-Period dashboard parameters:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lookml_pop</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">views</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">orders_view</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">orders_daily_fact</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="dbt">
+<span id="cmd-dbt"></span><h2>dbt<a class="headerlink" href="#dbt" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>dbt
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>Writing <code class="docutils literal notranslate"><span class="pre">schema.yml</span></code> tests is the task that always gets pushed to “later” and then never happens. Without baseline tests, you don’t find out about broken primary keys or unexpected nulls until a dashboard shows a problem to a stakeholder — at which point the data has been wrong for weeks.</p>
+<p>Droughty generates test coverage for every single table in your schemas instantly. There’s no longer any reason not to have it.</p>
+<p><strong>What it does</strong></p>
+<p>Scans all tables in your <code class="docutils literal notranslate"><span class="pre">test_schemas</span></code> (defined in <code class="docutils literal notranslate"><span class="pre">profile.yaml</span></code>) and generates a <code class="docutils literal notranslate"><span class="pre">schema.yml</span></code> file with:</p>
+<ul class="simple">
+<li><p>A model definition for every table</p></li>
+<li><p>Column definitions with types and descriptions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unique</span></code> test on every primary key column (<code class="docutils literal notranslate"><span class="pre">_pk</span></code> suffix)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">not_null</span></code> test on every column</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expression_is_true:</span> <span class="pre">valid_from</span> <span class="pre">&lt;=</span> <span class="pre">valid_to</span></code> where both columns exist</p></li>
+</ul>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>models/schema.yml
+</pre></div>
+</div>
+<p>Path is configured via <code class="docutils literal notranslate"><span class="pre">dbt_path</span></code> and <code class="docutils literal notranslate"><span class="pre">dbt_tests_filename</span></code> in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>dbt
 
+<span class="c1"># CI/CD</span>
+droughty<span class="w"> </span>dbt<span class="w"> </span>--env-vars<span class="w"> </span>enabled
+</pre></div>
+</div>
+<p><strong>Customising tests</strong></p>
+<p>Override the generated tests for specific columns:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># droughty_project.yaml</span>
+<span class="nt">test_overwrite</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">models</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">my_table_name</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">my_pk_field</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">not_null</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unique</span>
+</pre></div>
+</div>
+<p>Skip all test generation for specific tables entirely:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">test_ignore</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">models</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">raw_events_table</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">temp_staging_table</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="dbml">
+<span id="cmd-dbml"></span><h2>dbml<a class="headerlink" href="#dbml" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>dbml
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>Nobody updates the ERD. It was accurate when the project kicked off and it’s been wrong ever since. When an engineer needs to understand how tables relate to each other — which happens constantly — they either dig through dbt YAML files, ask someone, or guess. All three options waste time.</p>
+<p>Droughty generates the ERD directly from the live warehouse on demand. Run it before raising a PR and your documentation is always current.</p>
+<p><strong>What it does</strong></p>
+<p>Reads all tables and columns from your <code class="docutils literal notranslate"><span class="pre">dbml_schemas</span></code> (defined in <code class="docutils literal notranslate"><span class="pre">profile.yaml</span></code>) and generates DBML files that:</p>
+<ul class="simple">
+<li><p>Define a <code class="docutils literal notranslate"><span class="pre">Table</span></code> for every table in the schema</p></li>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">Column</span></code> for every field, with correct data types</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Ref</span></code> relationships by matching <code class="docutils literal notranslate"><span class="pre">_pk</span></code> and <code class="docutils literal notranslate"><span class="pre">_fk</span></code> column suffixes across tables</p></li>
+</ul>
+<p>The output is ready to use with <a class="reference external" href="https://dbdocs.io">dbdocs.io</a> or <a class="reference external" href="https://dbdiagram.io">dbdiagram.io</a>.</p>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>db_docs/&lt;filename&gt;.dbml
+</pre></div>
+</div>
+<p>Path is configured via <code class="docutils literal notranslate"><span class="pre">dbml_path</span></code> and <code class="docutils literal notranslate"><span class="pre">dbml_filenames</span></code> in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>. Multiple filenames generate multiple files.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>dbml
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="cube">
+<span id="cmd-cube"></span><h2>cube<a class="headerlink" href="#cube" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>cube
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>The same schema drift problem that affects Looker affects Cube. When your warehouse schema changes, your Cube cubes need updating. Without automation, that work gets skipped and the Cube semantic layer quietly falls out of sync with what’s actually in the warehouse. Droughty keeps it in sync the same way it keeps LookML in sync.</p>
+<p><strong>What it does</strong></p>
+<p>Reads your analytics schema and generates Cube.js schema files with:</p>
+<ul class="simple">
+<li><p>A cube for every table, with dimensions for every column</p></li>
+<li><p>Data type mappings from warehouse types to Cube types</p></li>
+<li><p>Explore and join definitions (based on the <code class="docutils literal notranslate"><span class="pre">explores</span></code> config)</p></li>
+<li><p>Measure definitions</p></li>
+</ul>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>schema/base.yml             # Cube definitions with dimensions
+schema/integrations.yml     # Join/integration definitions
+schema/measures.yml         # Measure definitions
+</pre></div>
+</div>
+<p>Paths configured via <code class="docutils literal notranslate"><span class="pre">cube_path</span></code>, <code class="docutils literal notranslate"><span class="pre">cube_base_filename</span></code>, <code class="docutils literal notranslate"><span class="pre">cube_integration_filename</span></code>, <code class="docutils literal notranslate"><span class="pre">cube_measures_filename</span></code> in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>cube
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="docs">
+<span id="cmd-docs"></span><h2>docs<a class="headerlink" href="#docs" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>docs
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>Undocumented fields are the silent enemy of self-service analytics. When a column has no description, analysts either guess what it means, file a Slack question, or just avoid using it altogether. The reason fields go undocumented isn’t that people don’t care — it’s that writing a description for every single column in a 300-column warehouse is mind-numbing work.</p>
+<p>Droughty uses OpenAI to infer a reasonable first-pass description for every undocumented field in seconds. It won’t be perfect, but “probably correct and worth reviewing” is infinitely better than nothing.</p>
+<p><strong>What it does</strong></p>
+<ul class="simple">
+<li><p>Reads existing field descriptions from your warehouse and from a local <code class="docutils literal notranslate"><span class="pre">field_descriptions.md</span></code> file</p></li>
+<li><p>For every field that <strong>does not already have a description</strong>, calls the OpenAI API to infer one from the column name and data type</p></li>
+<li><p>Writes the results to a markdown file for review</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Always review AI-generated descriptions before using them in production documentation. The model makes reasonable guesses but can be wrong about domain-specific terminology.</p>
+</div>
+<p><strong>Requirements</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">openai_secret</span></code> must be set in <code class="docutils literal notranslate"><span class="pre">~/.droughty/profile.yaml</span></code></p></li>
+</ul>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>warehouse_docs/openai_field_descriptions.md
+</pre></div>
+</div>
+<p>Path configured via <code class="docutils literal notranslate"><span class="pre">openai_field_descriptions_path</span></code> and <code class="docutils literal notranslate"><span class="pre">openai_field_descriptions_filename</span></code> in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>docs
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="qa">
+<span id="cmd-qa"></span><h2>qa<a class="headerlink" href="#qa" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>qa
 
+<span class="c1"># With a custom assumptions file</span>
+droughty<span class="w"> </span>qa<span class="w"> </span>--assumptions-dir<span class="w"> </span>./droughty_qa_assumptions.yaml
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>Data quality issues are almost always found by end users, not by the team that built the pipeline. By the time someone files a ticket saying “these numbers look wrong”, the bad data has usually been sitting in the warehouse for days or weeks.</p>
+<p>The QA agent runs a set of validation checks against your actual warehouse data, using an LLM to interpret results and flag anomalies. It catches problems proactively — before they become stakeholder complaints.</p>
+<p><strong>What it does</strong></p>
+<p>Builds a <a class="reference external" href="https://www.langchain.com/langgraph">LangGraph</a> state machine that:</p>
+<ul class="simple">
+<li><p>Validates your warehouse data against a set of assumptions you define</p></li>
+<li><p>Uses the OpenAI API to interpret results and identify anomalies</p></li>
+<li><p>Outputs a Mermaid diagram of the validation DAG for traceability</p></li>
+<li><p>(Optional) traces all LLM calls through LangSmith for observability</p></li>
+</ul>
+<p><strong>Additional option</strong></p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--assumptions-dir</span> <span class="pre">&lt;path&gt;</span></code></p></td>
+<td><p>Path to a YAML file defining your QA validation rules and assumptions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Requirements</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">openai_secret</span></code> in <code class="docutils literal notranslate"><span class="pre">~/.droughty/profile.yaml</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">langsmith_secret</span></code> and <code class="docutils literal notranslate"><span class="pre">langsmith_project</span></code> (optional — enables LangSmith tracing)</p></li>
+</ul>
+<p><strong>Output</strong></p>
+<p>Mermaid DAG files in the <code class="docutils literal notranslate"><span class="pre">langgraph/</span></code> directory.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>qa<span class="w"> </span>--assumptions-dir<span class="w"> </span>./droughty_qa_assumptions.yaml
+</pre></div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="stage">
+<span id="cmd-stage"></span><h2>stage<a class="headerlink" href="#stage" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>droughty<span class="w"> </span>stage<span class="w"> </span>-p<span class="w"> </span>&lt;gcp_project_id&gt;<span class="w"> </span>-d<span class="w"> </span>&lt;dataset1&gt;<span class="w"> </span><span class="o">[</span>dataset2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>-t<span class="w"> </span>&lt;table&gt;<span class="o">]</span>
+</pre></div>
+</div>
+<p><strong>Why this exists</strong></p>
+<p>Onboarding a new data source in dbt means writing the same boilerplate every single time: a <code class="docutils literal notranslate"><span class="pre">sources.yml</span></code> block, a <code class="docutils literal notranslate"><span class="pre">stg_</span></code> SQL model that selects and renames columns, type casts, maybe a <code class="docutils literal notranslate"><span class="pre">_pk</span></code> surrogate key. It’s completely mechanical. For a source with 20 tables you’re looking at an afternoon of copy-paste work.</p>
+<p>Droughty reads the source schema from BigQuery and generates all of it in one command.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command is <strong>BigQuery only</strong> and currently requires <strong>macOS or Linux</strong>.</p>
+</div>
+<p><strong>What it does</strong></p>
+<p>Reads the specified BigQuery datasets and generates:</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">sources.yml</span></code> with source definitions for every table</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">stg_&lt;table_name&gt;.sql</span></code> dbt model for each table</p></li>
+</ul>
+<p><strong>Options</strong></p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">&lt;project_id&gt;</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>GCP project ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;datasets...&gt;</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>One or more BigQuery dataset names to generate staging models for</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">&lt;table&gt;</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Target a single table within the dataset instead of all tables</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>models/staging/sources.yml
+models/staging/stg_&lt;table_name&gt;.sql
+</pre></div>
+</div>
+<p>Path configured via <code class="docutils literal notranslate"><span class="pre">stage_path</span></code> in <code class="docutils literal notranslate"><span class="pre">droughty_project.yaml</span></code>.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Stage all tables in a dataset</span>
+droughty<span class="w"> </span>stage<span class="w"> </span>-p<span class="w"> </span>my-gcp-project<span class="w"> </span>-d<span class="w"> </span>raw_data
 
+<span class="c1"># Stage tables across multiple datasets</span>
+droughty<span class="w"> </span>stage<span class="w"> </span>-p<span class="w"> </span>my-gcp-project<span class="w"> </span>-d<span class="w"> </span>raw_data<span class="w"> </span>events_data
 
+<span class="c1"># Stage a single table</span>
+droughty<span class="w"> </span>stage<span class="w"> </span>-p<span class="w"> </span>my-gcp-project<span class="w"> </span>-d<span class="w"> </span>raw_data<span class="w"> </span>-t<span class="w"> </span>orders
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="command-quick-reference">
+<h2>Command Quick Reference<a class="headerlink" href="#command-quick-reference" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 12.0%" />
+<col style="width: 28.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>The problem it solves</p></th>
+<th class="head"><p>Run it when…</p></th>
+<th class="head"><p>Primary output</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#cmd-lookml"><span class="std std-ref">lookml</span></a></p></td>
+<td><p>Looker drifting from the warehouse</p></td>
+<td><p>Schema changes, pre-commit</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lookml/base.lkml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cmd-dbt"><span class="std std-ref">dbt</span></a></p></td>
+<td><p>No test coverage on warehouse tables</p></td>
+<td><p>After building models</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">models/schema.yml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cmd-dbml"><span class="std std-ref">dbml</span></a></p></td>
+<td><p>ERD is always out of date</p></td>
+<td><p>Before raising a PR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">db_docs/*.dbml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cmd-cube"><span class="std std-ref">cube</span></a></p></td>
+<td><p>Cube drifting from the warehouse</p></td>
+<td><p>Schema changes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">schema/base.yml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cmd-docs"><span class="std std-ref">docs</span></a></p></td>
+<td><p>Fields have no descriptions</p></td>
+<td><p>When documentation is lacking</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">warehouse_docs/*.md</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cmd-qa"><span class="std std-ref">qa</span></a></p></td>
+<td><p>Data issues found by stakeholders</p></td>
+<td><p>Before data releases</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">langgraph/</span></code> Mermaid DAG</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cmd-stage"><span class="std std-ref">stage</span></a></p></td>
+<td><p>Boilerplate staging models</p></td>
+<td><p>Onboarding a new source</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">models/staging/</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
 
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="usage.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Usage &amp; Workflows</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="warehouse_support.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Warehouse Support</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Rittman Analytics
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/rittmananalytics/droughty" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Commands</a><ul>
+<li><a class="reference internal" href="#global-options">Global Options</a></li>
+<li><a class="reference internal" href="#lookml">lookml</a></li>
+<li><a class="reference internal" href="#dbt">dbt</a></li>
+<li><a class="reference internal" href="#dbml">dbml</a></li>
+<li><a class="reference internal" href="#cube">cube</a></li>
+<li><a class="reference internal" href="#docs">docs</a></li>
+<li><a class="reference internal" href="#qa">qa</a></li>
+<li><a class="reference internal" href="#stage">stage</a></li>
+<li><a class="reference internal" href="#command-quick-reference">Command Quick Reference</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &#169;2022, lewis baker.
       
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
-      |
-      <a href="_sources/commands.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=1154e574"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
 </html>

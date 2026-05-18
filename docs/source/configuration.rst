@@ -1,199 +1,340 @@
 Configuration
 =============
 
-Setting up droughty to run is pretty easy. It depends on two files, a droughty_project.yaml file within the root of your repo and a profile.yaml file within a .droughty/ dir within your user dir
+Droughty uses two configuration files:
 
-OAuth Authentication for BigQuery
---------------------------------
+1. **profile.yaml** — warehouse credentials, stored at ``~/.droughty/profile.yaml``
+2. **droughty_project.yaml** — project settings, stored at the root of your git repository
 
-As an alternative to service account authentication, you can use OAuth for BigQuery. This allows users to authenticate with their own Google credentials instead of using a service account key file.
+----
 
-To use OAuth, modify your profile.yaml as follows::
+profile.yaml
+------------
 
-    droughty_demo:
-      oauth:
-        client_secrets: /path/to/client_secrets.json
-        token_file: ~/.droughty/token.json
-      
-      project_name: example-project
-      schema_name: analytics_qa
-      warehouse_name: big_query
-      
-      # Other configuration options remain the same
-      test_schemas:
-        - analytics_dev_staging
-        - analytics_dev_integration
-        - analytics_dev
-      
-      dbml_schemas:
-        - analytics_dev_staging
-        - analytics_dev_integration
-        - analytics_dev
+The profile file contains your warehouse credentials and connection details. It lives in the ``.droughty`` directory in your home folder:
 
-To set up OAuth:
+.. code-block:: bash
 
-1. Create a Google Cloud OAuth client ID (Desktop application type) in the Google Cloud Console
-2. Download the client secrets JSON file
-3. Specify the path to this file in your profile.yaml
-4. Specify where you want the token to be saved (token_file)
-5. When running droughty for the first time with OAuth, a browser window will open for authentication
-6. After authenticating, tokens will be saved to the specified path and reused for future sessions
+   ~/.droughty/profile.yaml
 
-The OAuth method is recommended for local development environments and when you prefer not to use service account keys.
+You can have multiple named profiles in one file. The profile used for a given project is selected via the ``profile`` key in ``droughty_project.yaml``.
 
-**droughty_project.yaml set-up**
+BigQuery Profile
+~~~~~~~~~~~~~~~~
 
-To differentiate between multiple warehouse targets within the profiles.yaml file, droughty uses a droughty_project.yaml to specify a project specific target. Find an droughty_project.yaml file below::
+Minimal example (using ADC or browser OAuth — no key file needed):
 
-  profile: example_project
+.. code-block:: yaml
 
-  dimensional_inference: enabled
+   my_profile:
+     warehouse_name: big_query
+     project_name: my-gcp-project
+     schema_name: analytics
+     test_schemas:
+       - my_staging_schema
+       - my_integration_schema
+       - my_analytics_schema
+     dbml_schemas:
+       - my_staging_schema
+       - my_integration_schema
+       - my_analytics_schema
 
-  field_description_path: warehouse_docs
-  field_description_file_name: field_descriptions.md
+Full example with all options:
 
-  openai_field_descriptions_path: warehouse_docs
-  openai_field_descriptions_filename: openai_field_descriptions 
+.. code-block:: yaml
 
-  test_overwrite:
-      models: 
-        wh_marketing__web_event_items_fact:
-          web_event_item_pk:
-              - not_null
-              - dbt_utils.at_least_one
-              - unique
-          web_event_parameter_float_value:
-              - dbt_utils.at_least_one
+   my_profile:
+     warehouse_name: big_query
+     project_name: my-gcp-project        # GCP project ID
+     schema_name: analytics              # Primary analytics dataset
 
-  test_ignore:
-      models:
-        - base_backend__web_events
-        - base_ga4__web_events
+     key_file: /path/to/key.json         # Service account key (optional if using OAuth/ADC)
 
-  
-  dbml_filenames:
-      - test_10
-      - test_11
-      - test_12
+     openai_secret: sk-...               # OpenAI API key — required for `droughty docs` and `droughty qa`
+     langsmith_secret: ls-...            # LangSmith API key — optional, enables QA tracing
+     langsmith_project: my-project       # LangSmith project name — optional
 
-  explores:
-    parent_table: 
-      - example_parent
-    dimensions: 
-      - example_dim
-    facts:
-      - example_fact
+     test_schemas:                       # Schemas scanned by `droughty dbt`
+       - my_staging_schema
+       - my_integration_schema
+       - my_analytics_schema
 
-  lookml_pop: 
-      views: 
-          example_1: 
-                  - example_2
-          example_3:
-                  - example_4
-                  - example_5
+     dbml_schemas:                       # Schemas scanned by `droughty dbml`
+       - my_staging_schema
+       - my_integration_schema
+       - my_analytics_schema
 
-  lookml_base_filename: example__1
-  lookml_explore_filename: example__2
-  lookml_measures_filename: example__3
-  cube_base_filename: example__4
-  cube_integration_filename: example__5
-  cube_measures_filename: example__6
-  lookml_base_path: example__7
-  dbt_tests_filename: example__8
+Snowflake Profile
+~~~~~~~~~~~~~~~~~
 
-  entity_resolution:
-    read_schema:
-      example_1
-    write_schema:
-      example_1
-    read_table_names:
-      example_1:
-        - example_3
-        - example_4
-      example_2:
-        - example_5
-        - example_6
-    write_column_names:
-      - example_7
-      - example_8
-    write_table_name:
-      - example_9
+.. code-block:: yaml
 
-Create this file in the root of your git repo (unless you are specifying the path through the --project-dir argument)
+   my_profile:
+     warehouse_name: snowflake
+     account: myaccount.us-east-1       # Snowflake account identifier (include region)
+     user: myuser
+     password: mypassword
+     warehouse: compute_wh              # Snowflake virtual warehouse name
+     database: my_database
+     schema: analytics
+     role: my_role                      # Role with INFORMATION_SCHEMA SELECT access
 
-Optional variables
-==================
+     test_schemas:
+       - staging
+       - integration
+       - analytics
 
-**Overwriting and ignoring model tests**
+     dbml_schemas:
+       - staging
+       - integration
+       - analytics
 
-Using the test_overwrite and test_ignore project parameters, you can overwrite tests or leave them blank using the test_overwrite parameter or ignore all model tests using the test_ignore parameter
+.. note::
 
-**Defining relative file outputs**
+   The profile name key (e.g. ``my_profile``) must exactly match the ``profile:`` value in your ``droughty_project.yaml``.
 
-Just add these variables to your droughty_project.yaml and it will write to the path name starting from the root of your git repo::
+----
 
-  dbt_path: example_path
-  dbml_path: example_path
-  lookml_path: example_path
-  cube_path: example_path
+droughty_project.yaml
+---------------------
 
-**It's important that the profile name with the droughty_project.yaml aligns with the paired entry within your profile.yaml.**
+The project file controls output paths, filenames, and optional features. Place it at the root of your git repository (or specify a custom location with ``--project-dir``).
 
+Minimal example
+~~~~~~~~~~~~~~~
 
---------------
+.. code-block:: yaml
 
-**profile.yaml set-up**
+   profile: my_profile
 
-A profile.yaml file is used to pass warehouse permissions to droughty, such as warehouse key files, project, schema names and other permissions. 
+   lookml_path: lookml/
+   dbt_path: models/
+   dbml_path: db_docs/
+   cube_path: schema/
 
+Full reference
+~~~~~~~~~~~~~~
 
-This file should be created in a .droughty dir, such as::
+.. code-block:: yaml
 
-      /Users/titus_groan/.droughty/profile.yaml
+   profile: my_profile           # Must match a key in ~/.droughty/profile.yaml
 
-Below is an example of what the profile should contain
+   # --- LookML output ---
+   lookml_path: lookml/                        # Directory for LookML output files
+   lookml_base_filename: base                  # Filename for base views file
+   lookml_explore_filename: explores           # Filename for explores file
+   lookml_measures_filename: measures          # Filename for measures file
+   lookml_base_path: views/                    # Sub-path within lookml_path for views
 
-profile example::
+   # --- dbt output ---
+   dbt_path: models/                           # Directory for dbt schema.yml output
+   dbt_tests_filename: schema                  # Filename for schema tests file
 
-    droughty_demo:
+   # --- DBML output ---
+   dbml_path: db_docs/                         # Directory for DBML output files
+   dbml_filenames:                             # One output file per entry
+     - analytics_layer
 
-      host:
+   # --- Cube output ---
+   cube_path: schema/                          # Directory for Cube schema output
+   cube_base_filename: base                    # Filename for base cubes file
+   cube_integration_filename: integrations     # Filename for integration file
+   cube_measures_filename: measures            # Filename for measures file
 
-      key_file: /Users/droughty_user/[key_file]
+   # --- Staging output (GCP only) ---
+   stage_path: models/staging/                 # Directory for staging model output
 
-      password:
+   # --- Documentation output ---
+   field_description_path: warehouse_docs
+   field_description_file_name: field_descriptions.md
+   openai_field_descriptions_path: warehouse_docs
+   openai_field_descriptions_filename: openai_field_descriptions
 
-      port:
+   # --- Explores (optional) ---
+   # Enables dimensional inference for LookML/Cube explore generation.
+   # parent_table is joined to dimensions and facts.
+   explores:
+     parent_table:
+       - my_fact_table
+     dimensions:
+       - my_dim_table
+     facts:
+       - my_fact_table
 
-      project_name: example-project
+   # --- LookML Period-over-Period parameters (optional) ---
+   # Adds PoP dashboard parameters to specified views.
+   lookml_pop:
+     views:
+       orders_view:
+         - orders_daily_fact
 
-      schema_name: analytics_qa
+   # --- dbt test overrides (optional) ---
+   # Replace the auto-generated tests for specific columns.
+   test_overwrite:
+     models:
+       my_table:
+         my_pk_field:
+           - not_null
+           - unique
 
-      user: 
+   # --- dbt test ignore (optional) ---
+   # Skip all test generation for these tables entirely.
+   test_ignore:
+     models:
+       - raw_events_table
+       - temp_staging_table
 
-      warehouse_name: big_query
+   # --- Entity resolution (optional) ---
+   # Used by `droughty resolve` for entity deduplication.
+   entity_resolution:
+     read_schema: resolution_schema
+     write_schema: resolution_schema
+     read_table_names:
+       customer:
+         - customer_col1
+         - customer_col2
+     write_column_names:
+       - merge_key
+     write_table_name:
+       - resolved_customer
 
-      openai_secret: sk-wdfnwfw40t493t304t9340t94wet0et90edf (example)
+----
 
-      test_schemas:
-        - lewis_analytics_dev_staging
-        - lewis_analytics_dev_integration
-        - lewis_analytics_dev
+Configuration Key Reference
+----------------------------
 
-      dbml_schemas:
-        - lewis_analytics_dev_staging
-        - lewis_analytics_dev_integration
-        - lewis_analytics_dev
+profile.yaml keys
+~~~~~~~~~~~~~~~~~
 
---------------
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
 
-**warehouse_name options**
+   * - Key
+     - Required
+     - Description
+   * - ``warehouse_name``
+     - Yes
+     - ``big_query`` or ``snowflake``
+   * - ``project_name``
+     - BigQuery only
+     - GCP project ID
+   * - ``schema_name``
+     - BigQuery only
+     - Primary analytics dataset name
+   * - ``key_file``
+     - No
+     - Path to BigQuery service account JSON key
+   * - ``account``
+     - Snowflake only
+     - Snowflake account identifier (include region suffix)
+   * - ``user``
+     - Snowflake only
+     - Snowflake username
+   * - ``password``
+     - Snowflake only
+     - Snowflake password
+   * - ``warehouse``
+     - Snowflake only
+     - Snowflake virtual warehouse name
+   * - ``database``
+     - Snowflake only
+     - Snowflake database name
+   * - ``schema``
+     - Snowflake only
+     - Snowflake schema name
+   * - ``role``
+     - Snowflake only
+     - Snowflake role with INFORMATION_SCHEMA access
+   * - ``test_schemas``
+     - Yes
+     - List of schemas scanned by ``droughty dbt``
+   * - ``dbml_schemas``
+     - Yes
+     - List of schemas scanned by ``droughty dbml``
+   * - ``openai_secret``
+     - For docs/qa
+     - OpenAI API key (required for ``droughty docs`` and ``droughty qa``)
+   * - ``langsmith_secret``
+     - No
+     - LangSmith API key for QA tracing
+   * - ``langsmith_project``
+     - No
+     - LangSmith project name for QA tracing
 
-At the moment, only 'big_query' and 'snowflake' are supported
+droughty_project.yaml keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
 
-**Configuration Considerations**
-
-droughty has been developed to work with dbt, db docs and looker. However, it only really depends accessing the information schema within a supported warehouse.
-
-When using droughty it's assumed that the warehouse structure it points towards has at least three data sets, staging, integration and a analytics layer. Look at the usage page for further information.
+   * - Key
+     - Required
+     - Description
+   * - ``profile``
+     - Yes
+     - Name of the profile in ``~/.droughty/profile.yaml``
+   * - ``lookml_path``
+     - No
+     - Output directory for LookML files (default: ``lookml/``)
+   * - ``lookml_base_filename``
+     - No
+     - Base views filename (default: ``base``)
+   * - ``lookml_explore_filename``
+     - No
+     - Explores filename (default: ``explores``)
+   * - ``lookml_measures_filename``
+     - No
+     - Measures filename (default: ``measures``)
+   * - ``lookml_base_path``
+     - No
+     - Sub-path for views within ``lookml_path``
+   * - ``dbt_path``
+     - No
+     - Output directory for dbt schema (default: ``models/``)
+   * - ``dbt_tests_filename``
+     - No
+     - dbt schema filename (default: ``schema``)
+   * - ``dbml_path``
+     - No
+     - Output directory for DBML files (default: ``db_docs/``)
+   * - ``dbml_filenames``
+     - No
+     - List of DBML output filenames
+   * - ``cube_path``
+     - No
+     - Output directory for Cube files (default: ``schema/``)
+   * - ``cube_base_filename``
+     - No
+     - Base cubes filename
+   * - ``cube_integration_filename``
+     - No
+     - Integrations filename
+   * - ``cube_measures_filename``
+     - No
+     - Measures filename
+   * - ``stage_path``
+     - No
+     - Output directory for staging models (default: ``models/staging/``)
+   * - ``openai_field_descriptions_path``
+     - No
+     - Output directory for AI descriptions
+   * - ``openai_field_descriptions_filename``
+     - No
+     - Output filename for AI descriptions
+   * - ``explores``
+     - No
+     - Dimensional inference config for LookML/Cube explores
+   * - ``lookml_pop``
+     - No
+     - Period-over-Period parameter config for Looker
+   * - ``test_overwrite``
+     - No
+     - Per-column test overrides for ``droughty dbt``
+   * - ``test_ignore``
+     - No
+     - Tables to skip entirely in ``droughty dbt``
+   * - ``entity_resolution``
+     - No
+     - Entity deduplication config for ``droughty resolve``

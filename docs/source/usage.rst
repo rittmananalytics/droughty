@@ -140,7 +140,7 @@ When you're adding a new source to the warehouse, use ``droughty stage`` to gene
 
    droughty stage -p my-gcp-project -d new_source_dataset
 
-This creates ``sources.yml`` and a ``stg_`` model for every table in the dataset. From there you refine the models rather than starting from a blank file.
+This creates ``_sources.yml`` and a ``stg_`` model for every table in the dataset. From there you refine the models rather than starting from a blank file. Note that all generated YAML files include ``version: 2`` at the top, as required by dbt.
 
 Documenting your warehouse
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

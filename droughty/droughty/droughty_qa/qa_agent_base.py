@@ -13,7 +13,6 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
-from langsmith.run_trees import RunTree
 from langchain_core.tracers import LangChainTracer
 from langsmith import Client
 

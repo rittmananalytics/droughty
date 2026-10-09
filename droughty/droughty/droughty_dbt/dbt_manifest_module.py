@@ -20,9 +20,13 @@ from droughty.droughty_dbt.dbt_manifest_base_dict import (
 from droughty.droughty_dbt.dbt_schema_builder import (
     build_schema_entries,
     read_described_columns,
-    render_schema,
-    schema_file_path,
     write_schema
+)
+from droughty.droughty_dbt.dbt_schema_layers import (
+    layer_settings,
+    schema_files,
+    stale_schema_files,
+    remove_or_report_stale
 )
 
 
@@ -61,11 +65,15 @@ def described_columns(droughty_project, git_path):
         return []
 
 
-def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None):
+def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None, clean=False):
+
+    """Write the schema file(s) and return their paths."""
 
     git_path = get_git_root(cwd or os.getcwd())
 
     droughty_project = load_project_settings(project_file_path(project_dir, git_path))
+
+    settings = layer_settings(droughty_project)
 
     path = resolve_manifest_path(manifest_path, droughty_project.get('dbt_manifest_path'), git_path)
 
@@ -89,14 +97,20 @@ def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None):
         described_columns(droughty_project, git_path)
     )
 
-    file_path = schema_file_path(
-        git_path,
-        droughty_project.get('dbt_path'),
-        droughty_project.get('dbt_tests_filename')
+    dbt_path = droughty_project.get('dbt_path')
+    dbt_tests_filename = droughty_project.get('dbt_tests_filename')
+
+    files = schema_files(entries, models, git_path, dbt_path, dbt_tests_filename, settings)
+
+    for file_path, text in files.items():
+
+        write_schema(file_path, text)
+
+    print(f"Wrote {len(models)} models to {', '.join(files)}")
+
+    remove_or_report_stale(
+        stale_schema_files(files, git_path, dbt_path, dbt_tests_filename),
+        clean
     )
 
-    write_schema(file_path, render_schema(entries))
-
-    print(f"Wrote {len(models)} models to {file_path}")
-
-    return file_path
+    return list(files)

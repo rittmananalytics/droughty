@@ -7,6 +7,7 @@ import git
 from droughty.droughty_core.config_cli import Common
 from droughty.droughty_dbt.dbt_manifest_base_dict import ManifestError
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
+from droughty.droughty_dbt.dbt_schema_layers import LayerError
 
 
 def manifest():
@@ -17,10 +18,11 @@ def manifest():
 
         manifest_schema_output(
             project_dir=Common.project_dir,
-            manifest_path=Common.manifest_path
+            manifest_path=Common.manifest_path,
+            clean=Common.clean
         )
 
-    except (ManifestError, FileNotFoundError, git.InvalidGitRepositoryError) as e:
+    except (ManifestError, LayerError, FileNotFoundError, git.InvalidGitRepositoryError) as e:
 
         print(f"Error: {e}")
 

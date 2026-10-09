@@ -212,11 +212,11 @@ def test_writes_schema_without_profile_or_warehouse(dbt_repo, monkeypatch):
     # no ~/.droughty/profile.yaml exists under this home directory
     monkeypatch.setenv('HOME', str(dbt_repo / 'home'))
 
-    file_path = manifest_schema_output(cwd=str(dbt_repo))
+    files = manifest_schema_output(cwd=str(dbt_repo))
 
-    assert file_path == os.path.join(str(dbt_repo), 'models', 'droughty_schema.yml')
+    assert files == [os.path.join(str(dbt_repo), 'models', 'droughty_schema.yml')]
 
-    with open(file_path) as f:
+    with open(files[0]) as f:
         assert f.read() == EXPECTED_SCHEMA
 
 
@@ -236,11 +236,11 @@ def test_uses_dbt_path_test_ignore_and_test_overwrite(dbt_repo):
         "test_overwrite:\n  models:\n    stg_orders:\n      amount:\n        - not_null\n"
     )
 
-    file_path = manifest_schema_output(cwd=str(dbt_repo))
+    files = manifest_schema_output(cwd=str(dbt_repo))
 
-    assert file_path == os.path.join(str(dbt_repo), 'dbt', 'models', 'schema.yml')
+    assert files == [os.path.join(str(dbt_repo), 'dbt', 'models', 'schema.yml')]
 
-    with open(file_path) as f:
+    with open(files[0]) as f:
         text = f.read()
 
     assert '  - name: misc_lookup\n    columns: []\n' in text
@@ -255,11 +255,11 @@ def test_manifest_path_setting_and_argument(dbt_repo):
 
     (dbt_repo / 'droughty_project.yaml').write_text("dbt_manifest_path: dbt/target/manifest.json\n")
 
-    with open(manifest_schema_output(cwd=str(dbt_repo))) as f:
+    with open(manifest_schema_output(cwd=str(dbt_repo))[0]) as f:
         assert 'misc_lookup' not in f.read()
 
     # --manifest-path wins over the setting
-    with open(manifest_schema_output(cwd=str(dbt_repo), manifest_path=str(dbt_repo / 'target' / 'manifest.json'))) as f:
+    with open(manifest_schema_output(cwd=str(dbt_repo), manifest_path=str(dbt_repo / 'target' / 'manifest.json'))[0]) as f:
         assert 'misc_lookup' in f.read()
 
 

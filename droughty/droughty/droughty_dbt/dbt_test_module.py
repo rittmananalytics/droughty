@@ -24,6 +24,11 @@ from droughty.droughty_dbt.dbt_schema_layers import (
     stale_schema_files,
     remove_or_report_stale
 )
+from droughty.droughty_dbt.dbt_schema_check import (
+    ci_check_enabled,
+    compare_schema_files,
+    print_check_result
+)
 from droughty.droughty_core.config import (
     IdentifyConfigVariables,
     ExploresVariables,
@@ -45,7 +50,9 @@ def get_all_values(nested_dictionary):
         described_columns_list
     )
 
-def schema_output():
+def generate_schema_files():
+
+    """Return ({path: YAML text}, number of tables) for the schema files droughty would write."""
 
     settings = layer_settings(droughty_project)
 
@@ -63,16 +70,44 @@ def schema_output():
         settings
     )
 
+    return files, len(model_info)
+
+def find_stale_files(files):
+
+    return stale_schema_files(
+        files,
+        IdentifyConfigVariables.git_path,
+        ExploresVariables.dbt_path,
+        ExploresVariables.dbt_tests_filename
+    )
+
+def schema_output():
+
+    files, table_count = generate_schema_files()
+
     for file_path, text in files.items():
 
         write_schema(file_path, text)
 
-    remove_or_report_stale(
-        stale_schema_files(
-            files,
-            IdentifyConfigVariables.git_path,
-            ExploresVariables.dbt_path,
-            ExploresVariables.dbt_tests_filename
-        ),
-        getattr(Common, 'clean', False)
-    )
+    remove_or_report_stale(find_stale_files(files), getattr(Common, 'clean', False))
+
+def schema_check():
+
+    """Compare the committed schema files with the warehouse without writing anything.
+
+    Returns True if in sync, False if not, and None if dbt_ci_check is false.
+    """
+
+    if not ci_check_enabled(droughty_project):
+
+        print("dbt_ci_check is false in droughty_project.yaml, so the check is skipped.")
+
+        return None
+
+    files, table_count = generate_schema_files()
+
+    result = compare_schema_files(files, find_stale_files(files), IdentifyConfigVariables.git_path)
+
+    print_check_result(result, table_count, len(files), 'droughty dbt --clean')
+
+    return result['in_sync']

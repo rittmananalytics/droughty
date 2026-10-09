@@ -28,6 +28,11 @@ from droughty.droughty_dbt.dbt_schema_layers import (
     stale_schema_files,
     remove_or_report_stale
 )
+from droughty.droughty_dbt.dbt_schema_check import (
+    ci_check_enabled,
+    compare_schema_files,
+    print_check_result
+)
 
 
 def resolve_manifest_path(cli_path, setting, git_path):
@@ -65,13 +70,9 @@ def described_columns(droughty_project, git_path):
         return []
 
 
-def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None, clean=False):
+def manifest_schema_files(git_path, droughty_project, manifest_path=None):
 
-    """Write the schema file(s) and return their paths."""
-
-    git_path = get_git_root(cwd or os.getcwd())
-
-    droughty_project = load_project_settings(project_file_path(project_dir, git_path))
+    """Return ({path: YAML text}, number of models) for the schema files droughty would write."""
 
     settings = layer_settings(droughty_project)
 
@@ -97,20 +98,65 @@ def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None, clean
         described_columns(droughty_project, git_path)
     )
 
-    dbt_path = droughty_project.get('dbt_path')
-    dbt_tests_filename = droughty_project.get('dbt_tests_filename')
+    files = schema_files(
+        entries,
+        models,
+        git_path,
+        droughty_project.get('dbt_path'),
+        droughty_project.get('dbt_tests_filename'),
+        settings
+    )
 
-    files = schema_files(entries, models, git_path, dbt_path, dbt_tests_filename, settings)
+    return files, len(models)
+
+
+def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None, clean=False):
+
+    """Write the schema file(s) and return their paths."""
+
+    git_path = get_git_root(cwd or os.getcwd())
+
+    droughty_project = load_project_settings(project_file_path(project_dir, git_path))
+
+    files, model_count = manifest_schema_files(git_path, droughty_project, manifest_path)
 
     for file_path, text in files.items():
 
         write_schema(file_path, text)
 
-    print(f"Wrote {len(models)} models to {', '.join(files)}")
+    print(f"Wrote {model_count} models to {', '.join(files)}")
 
     remove_or_report_stale(
-        stale_schema_files(files, git_path, dbt_path, dbt_tests_filename),
+        stale_schema_files(files, git_path, droughty_project.get('dbt_path'), droughty_project.get('dbt_tests_filename')),
         clean
     )
 
     return list(files)
+
+
+def manifest_schema_check(project_dir=None, manifest_path=None, cwd=None):
+
+    """Compare the committed schema files with the manifest without writing anything.
+
+    Returns True if in sync, False if not, and None if dbt_ci_check is false.
+    """
+
+    git_path = get_git_root(cwd or os.getcwd())
+
+    droughty_project = load_project_settings(project_file_path(project_dir, git_path))
+
+    if not ci_check_enabled(droughty_project):
+
+        print("dbt_ci_check is false in droughty_project.yaml, so the check is skipped.")
+
+        return None
+
+    files, model_count = manifest_schema_files(git_path, droughty_project, manifest_path)
+
+    stale = stale_schema_files(files, git_path, droughty_project.get('dbt_path'), droughty_project.get('dbt_tests_filename'))
+
+    result = compare_schema_files(files, stale, git_path)
+
+    print_check_result(result, model_count, len(files), 'droughty dbt manifest --clean')
+
+    return result['in_sync']

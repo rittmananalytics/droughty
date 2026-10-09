@@ -1,0 +1,54 @@
+version: 2
+models:
+  - name: wh_customers_dim
+    columns:
+      - name: customer_pk
+        tests:
+          - not_null
+          - unique
+      - name: customer_name
+        tests:
+          - dbt_utils.at_least_one
+      - name: created_ts
+        tests:
+          - dbt_utils.at_least_one
+      - name: valid_from
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+      - name: valid_to
+        tests:
+          - 'dbt_utils.expression_is_true:expression: valid_from < valid_to'
+          - not_null
+          - unique
+  - name: wh_orders_fact
+    columns:
+      - name: order_pk
+        tests:
+          - not_null
+          - unique
+      - name: customer_fk
+        tests:
+          - dbt_utils.at_least_one
+      - name: amount
+        tests:
+          - dbt_utils.at_least_one
+  - name: stg_ignored
+    columns:
+      - name: thing_pk
+        tests:
+          - not_null
+          - unique
+      - name: other
+        tests:
+          - dbt_utils.at_least_one
+  - name: int_overridden
+    columns:
+      - name: id_pk
+        tests:
+          - not_null
+          - unique
+      - name: status
+        tests:
+          - dbt_utils.at_least_one

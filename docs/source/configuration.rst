@@ -129,6 +129,17 @@ Full reference
    # --- dbt output ---
    dbt_path: models/                           # Directory for dbt schema.yml output
    dbt_tests_filename: schema                  # Filename for schema tests file
+   dbt_manifest_path: target/manifest.json     # Manifest read by droughty dbt manifest
+   dbt_schema_output: single                   # single or per_layer
+   dbt_layer_unmatched: warn                   # warn or fail, for models that match no layer
+   dbt_layers:                                 # Replaces the default staging, integration, warehouse layers
+     staging:
+       folders: [staging]
+       prefixes: [stg_]
+     warehouse:
+       folders: [marts]
+       prefixes: [fct_, dim_]
+       schemas: [analytics]
 
    # --- DBML output ---
    dbml_path: db_docs/                         # Directory for DBML output files
@@ -273,7 +284,7 @@ droughty_project.yaml keys
      - Required
      - Description
    * - ``profile``
-     - Yes
+     - Yes, except for ``droughty dbt manifest``
      - Name of the profile in ``~/.droughty/profile.yaml``
    * - ``lookml_path``
      - No
@@ -295,7 +306,19 @@ droughty_project.yaml keys
      - Output directory for dbt schema (default: ``models/``)
    * - ``dbt_tests_filename``
      - No
-     - dbt schema filename (default: ``schema``)
+     - dbt schema filename, without ``.yml`` (default: ``droughty_schema``)
+   * - ``dbt_manifest_path``
+     - No
+     - dbt manifest read by ``droughty dbt manifest``, relative to the git root (default: ``target/manifest.json``)
+   * - ``dbt_schema_output``
+     - No
+     - ``single`` writes one schema file; ``per_layer`` writes one file per layer (default: ``single``). See :ref:`One file per layer <cmd-dbt-layers>`
+   * - ``dbt_layers``
+     - No
+     - Layer names with the ``folders``, ``prefixes`` and ``schemas`` that match models to them. Replaces the defaults (``staging``, ``integration``, ``warehouse``)
+   * - ``dbt_layer_unmatched``
+     - No
+     - ``warn`` writes models that match no layer to an ``unassigned`` file; ``fail`` stops with an error (default: ``warn``)
    * - ``dbml_path``
      - No
      - Output directory for DBML files (default: ``db_docs/``)

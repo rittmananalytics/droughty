@@ -140,6 +140,7 @@ Full reference
        folders: [marts]
        prefixes: [fct_, dim_]
        schemas: [analytics]
+   dbt_ci_check: true                          # false makes --check skip and exit 0
 
    # --- DBML output ---
    dbml_path: db_docs/                         # Directory for DBML output files
@@ -319,6 +320,9 @@ droughty_project.yaml keys
    * - ``dbt_layer_unmatched``
      - No
      - ``warn`` writes models that match no layer to an ``unassigned`` file; ``fail`` stops with an error (default: ``warn``)
+   * - ``dbt_ci_check``
+     - No
+     - ``false`` makes ``droughty dbt --check`` and ``droughty dbt manifest --check`` skip the check and exit 0 (default: ``true``). See :ref:`Checking the schema in CI <cmd-dbt-check>`
    * - ``dbml_path``
      - No
      - Output directory for DBML files (default: ``db_docs/``)

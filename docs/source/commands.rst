@@ -202,7 +202,7 @@ Skip all test generation for specific tables entirely:
 - Columns are the ones declared in your dbt YAML files. A model with no declared columns is listed without columns, and droughty prints a warning naming it. A column added to a model's SQL appears once it is declared in a YAML file and ``dbt parse`` is run again.
 - Package models (for example ``dbt_utils``), ephemeral models, seeds and snapshots are skipped.
 - The output path, ``test_overwrite``, ``test_ignore`` and field descriptions work as they do for ``droughty dbt``.
-- Needs dbt 1.0 or later. Tested with dbt 1.8 (manifest v12).
+- Needs dbt 1.0 or later. Tested with dbt 1.8 (manifest v12). ``dbt parse`` writes the manifest from dbt 1.5; on earlier versions use ``dbt compile``.
 
 The manifest is read from ``target/manifest.json`` in the git root by default. To change this, set ``dbt_manifest_path`` in ``droughty_project.yaml`` (relative to the git root) or pass ``--manifest-path`` (relative to the current folder):
 
@@ -290,6 +290,81 @@ Switching between ``single`` and ``per_layer``, or removing a layer, leaves old 
    droughty dbt manifest --clean
 
 ``--clean`` only deletes the single file at ``dbt_path``/``dbt_tests_filename`` and layer files that start with droughty's header line. Files you wrote yourself are never touched.
+
+.. _cmd-dbt-check:
+
+**Checking the schema in CI**
+
+.. code-block:: bash
+
+   droughty dbt manifest --check
+   droughty dbt --check
+
+``--check`` builds the schema in memory and compares it with the committed files. It writes nothing. The schema is in sync when:
+
+- every file droughty would write exists and has the same content once read as YAML. Formatting and comments are ignored; models, columns, tests and descriptions must all match.
+- no old droughty files are left over (see ``--clean`` above).
+
+When the schema is out of sync, droughty lists each problem, prints a diff of the committed and generated files, and exits with code 1:
+
+.. code-block:: text
+
+   droughty schema is out of sync with the dbt models (3 problems):
+
+     - misc_lookup: in models/droughty_schema.yml but no longer generated (model deleted, renamed or ignored).
+     - stg_customers: missing, expected in models/droughty_schema.yml.
+     - stg_orders: columns to add: discount.
+
+   To fix, run `droughty dbt manifest --clean` and commit the changed files.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Exit code
+     - Meaning
+   * - ``0``
+     - In sync, or the check is switched off
+   * - ``1``
+     - Out of sync
+   * - ``2``
+     - Error, such as a missing manifest or an invalid setting
+
+Use ``droughty dbt manifest --check`` in CI. ``droughty dbt --check`` reads the warehouse, so it needs warehouse credentials, and it cannot spot models that were deleted while their tables remain in the warehouse.
+
+To switch the check off without changing your CI job, set ``dbt_ci_check: false`` in ``droughty_project.yaml``. ``--check`` then prints that it is skipped and exits with code 0.
+
+Example GitHub Actions job. ``dbt parse`` needs a ``profiles.yml`` (here in ``ci/``), but it does not connect to the warehouse:
+
+.. code-block:: yaml
+
+   # .github/workflows/droughty-check.yml
+   name: droughty schema check
+
+   on: pull_request
+
+   jobs:
+     droughty-check:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v4
+
+         - uses: actions/setup-python@v5
+           with:
+             python-version: "3.11"
+
+         - name: Install dbt and droughty
+           run: pip install dbt-bigquery droughty
+
+         - name: Build the dbt manifest
+           run: dbt deps && dbt parse
+           env:
+             DBT_PROFILES_DIR: ./ci
+
+         - name: Check the droughty schema is in sync
+           run: droughty dbt manifest --check
+
+If your dbt project is in a subfolder, run ``dbt parse`` there and pass ``--manifest-path`` or set ``dbt_manifest_path``.
 
 ----
 
@@ -564,7 +639,7 @@ Command Quick Reference
      - ``models/schema.yml``
    * - :ref:`dbt manifest <cmd-dbt-manifest>`
      - Schema includes tables from deleted models
-     - After ``dbt parse`` or ``dbt compile``
+     - After ``dbt parse`` or ``dbt compile``; with ``--check`` in CI
      - ``models/schema.yml``
    * - :ref:`dbml <cmd-dbml>`
      - ERD is always out of date

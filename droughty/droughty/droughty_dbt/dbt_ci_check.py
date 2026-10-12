@@ -182,7 +182,7 @@ def run_check(project_dir=None, manifest_path=None, cwd=None):
 
         return True
 
-    print(f"droughty check failed ({len(problems)} problems):")
+    print(f"droughty check failed ({len(problems)} problem{'' if len(problems) == 1 else 's'}):")
     print()
 
     for problem in problems:

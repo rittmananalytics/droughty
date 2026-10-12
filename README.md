@@ -346,7 +346,7 @@ A GitHub Action that fails a pull request when:
 - the droughty schema lists a model that is not in the dbt project
 - a model's entry in the droughty schema has no tests
 
-Models in `test_ignore` are skipped. It is off unless `droughty_project.yaml` sets `dbt_ci_check: true`. To use it, add this workflow to your dbt repo:
+Models in `test_ignore` are skipped. It is off unless `droughty_project.yaml` sets `droughty_dbt_ci_check: true`. To use it, add this workflow to your dbt repo:
 
 ```yaml
 # .github/workflows/droughty-check.yml
@@ -594,7 +594,7 @@ dbt_layers:                               # optional: replaces the default stagi
     folders: [marts]
     prefixes: [fct_, dim_]
     schemas: [analytics]
-dbt_ci_check: true                        # optional: turns on the droughty GitHub check (off when missing)
+droughty_dbt_ci_check: true                        # optional: turns on the droughty GitHub check (off when missing)
 
 # --- DBML output paths ---
 dbml_path: db_docs/

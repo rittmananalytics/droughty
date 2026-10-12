@@ -12,7 +12,7 @@ The check fails when:
 - a model's entry in the droughty schema has no tests
 
 Models in test_ignore are skipped. It runs only when droughty_project.yaml has
-dbt_ci_check: true. It needs the manifest only, not a profile or warehouse.
+droughty_dbt_ci_check: true. It needs the manifest only, not a profile or warehouse.
 """
 
 import argparse
@@ -70,12 +70,12 @@ PLACEHOLDER_OUTPUTS = {
 
 def ci_check_enabled(droughty_project):
 
-    """dbt_ci_check must be set to true for the check to run. It is off when missing."""
+    """droughty_dbt_ci_check must be set to true for the check to run. It is off when missing."""
 
-    enabled = droughty_project.get('dbt_ci_check', False)
+    enabled = droughty_project.get('droughty_dbt_ci_check', False)
 
     if not isinstance(enabled, bool):
-        raise CheckError(f"dbt_ci_check must be true or false, not {enabled}.")
+        raise CheckError(f"droughty_dbt_ci_check must be true or false, not {enabled}.")
 
     return enabled
 
@@ -158,7 +158,7 @@ def run_check(project_dir=None, manifest_path=None, cwd=None):
 
     if not ci_check_enabled(droughty_project):
 
-        print("dbt_ci_check is not true in droughty_project.yaml, so the droughty check is skipped.")
+        print("droughty_dbt_ci_check is not true in droughty_project.yaml, so the droughty check is skipped.")
 
         return True
 
@@ -235,7 +235,7 @@ def main(argv=None):
 
     subparsers = parser.add_subparsers(dest='step', required=True)
 
-    subparsers.add_parser('enabled', help='print true if dbt_ci_check is true, otherwise false')
+    subparsers.add_parser('enabled', help='print true if droughty_dbt_ci_check is true, otherwise false')
 
     profile = subparsers.add_parser('profile', help='write a placeholder profiles.yml for dbt parse')
     profile.add_argument('--adapter', required=True)

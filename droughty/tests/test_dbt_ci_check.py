@@ -15,7 +15,7 @@ from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
 from test_dbt_manifest import dbt_repo, fixture_manifest, write_json  # noqa: F401
 
 # int_orders_joined has no declared columns, so no tests; ignore it unless a test needs it
-ON = "dbt_ci_check: true\ntest_ignore:\n  models:\n    - int_orders_joined\n"
+ON = "droughty_dbt_ci_check: true\ntest_ignore:\n  models:\n    - int_orders_joined\n"
 
 
 def setup(repo, monkeypatch, project=ON, generate=True):
@@ -42,7 +42,7 @@ def run(capsys):
     return code, capsys.readouterr().out
 
 
-# --- the dbt_ci_check switch ---
+# --- the droughty_dbt_ci_check switch ---
 
 def test_off_when_missing():
 
@@ -51,11 +51,11 @@ def test_off_when_missing():
 
 def test_must_be_true_or_false():
 
-    with pytest.raises(CheckError, match='dbt_ci_check must be true or false'):
-        ci_check_enabled({'dbt_ci_check': 'yes'})
+    with pytest.raises(CheckError, match='droughty_dbt_ci_check must be true or false'):
+        ci_check_enabled({'droughty_dbt_ci_check': 'yes'})
 
 
-@pytest.mark.parametrize('project, expected', [("dbt_ci_check: true\n", 'true'), ("dbt_ci_check: false\n", 'false'), ("", 'false')])
+@pytest.mark.parametrize('project, expected', [("droughty_dbt_ci_check: true\n", 'true'), ("droughty_dbt_ci_check: false\n", 'false'), ("", 'false')])
 def test_enabled_step_prints_the_switch(dbt_repo, monkeypatch, capsys, project, expected):
 
     setup(dbt_repo, monkeypatch, project, generate=False)
@@ -66,7 +66,7 @@ def test_enabled_step_prints_the_switch(dbt_repo, monkeypatch, capsys, project, 
 
 def test_switched_off_check_passes_without_a_manifest(dbt_repo, monkeypatch, capsys):
 
-    setup(dbt_repo, monkeypatch, "dbt_ci_check: false\n", generate=False)
+    setup(dbt_repo, monkeypatch, "droughty_dbt_ci_check: false\n", generate=False)
     (dbt_repo / 'target' / 'manifest.json').unlink()
 
     code, out = run(capsys)
@@ -148,7 +148,7 @@ def test_deleted_model_still_in_schema(dbt_repo, monkeypatch, capsys):
 
 def test_model_without_tests(dbt_repo, monkeypatch, capsys):
 
-    setup(dbt_repo, monkeypatch, "dbt_ci_check: true\n")
+    setup(dbt_repo, monkeypatch, "droughty_dbt_ci_check: true\n")
 
     code, out = run(capsys)
 
@@ -168,7 +168,7 @@ def test_no_schema_files(dbt_repo, monkeypatch, capsys):
 
 def test_github_annotations(dbt_repo, monkeypatch, capsys):
 
-    setup(dbt_repo, monkeypatch, "dbt_ci_check: true\n")
+    setup(dbt_repo, monkeypatch, "droughty_dbt_ci_check: true\n")
     monkeypatch.setenv('GITHUB_ACTIONS', 'true')
 
     assert '::error title=droughty check::int_orders_joined' in run(capsys)[1]

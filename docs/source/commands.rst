@@ -307,7 +307,7 @@ It is off unless ``droughty_project.yaml`` sets:
 
 .. code-block:: yaml
 
-   dbt_ci_check: true
+   droughty_dbt_ci_check: true
 
 To use it, add this workflow to your dbt repo:
 
@@ -329,7 +329,7 @@ To use it, add this workflow to your dbt repo:
 
 On every pull request, the action:
 
-1. Reads ``dbt_ci_check``. If it is not ``true``, the action stops and the job passes.
+1. Reads ``droughty_dbt_ci_check``. If it is not ``true``, the action stops and the job passes.
 2. Installs the dbt adapter and runs ``dbt deps`` and ``dbt parse`` to build ``target/manifest.json``. ``dbt parse`` does not connect to the warehouse, so no credentials are needed.
 3. Compares the models in the manifest with the droughty schema files and lists each problem. Problems also show as errors on the pull request.
 

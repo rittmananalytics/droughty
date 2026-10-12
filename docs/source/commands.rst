@@ -293,53 +293,28 @@ Switching between ``single`` and ``per_layer``, or removing a layer, leaves old 
 
 .. _cmd-dbt-check:
 
-**Checking the schema in CI**
+**droughty GitHub check**
 
-.. code-block:: bash
+A GitHub Action that fails a pull request when the droughty schema has fallen behind the dbt models. It fails when:
 
-   droughty dbt manifest --check
-   droughty dbt --check
+- a dbt model has no entry in the droughty schema
+- the droughty schema lists a model that is not in the dbt project
+- a model's entry in the droughty schema has no tests
 
-``--check`` builds the schema in memory and compares it with the committed files. It writes nothing. The schema is in sync when:
+Models in ``test_ignore`` are skipped. Column and test changes do not fail the check.
 
-- every file droughty would write exists and has the same content once read as YAML. Formatting and comments are ignored; models, columns, tests and descriptions must all match.
-- no old droughty files are left over (see ``--clean`` above).
+It is off unless ``droughty_project.yaml`` sets:
 
-When the schema is out of sync, droughty lists each problem, prints a diff of the committed and generated files, and exits with code 1:
+.. code-block:: yaml
 
-.. code-block:: text
+   dbt_ci_check: true
 
-   droughty schema is out of sync with the dbt models (3 problems):
-
-     - misc_lookup: in models/droughty_schema.yml but no longer generated (model deleted, renamed or ignored).
-     - stg_customers: missing, expected in models/droughty_schema.yml.
-     - stg_orders: columns to add: discount.
-
-   To fix, run `droughty dbt manifest --clean` and commit the changed files.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 80
-
-   * - Exit code
-     - Meaning
-   * - ``0``
-     - In sync, or the check is switched off
-   * - ``1``
-     - Out of sync
-   * - ``2``
-     - Error, such as a missing manifest or an invalid setting
-
-Use ``droughty dbt manifest --check`` in CI. ``droughty dbt --check`` reads the warehouse, so it needs warehouse credentials, and it cannot spot models that were deleted while their tables remain in the warehouse.
-
-To switch the check off without changing your CI job, set ``dbt_ci_check: false`` in ``droughty_project.yaml``. ``--check`` then prints that it is skipped and exits with code 0.
-
-Example GitHub Actions job. ``dbt parse`` needs a ``profiles.yml`` (here in ``ci/``), but it does not connect to the warehouse:
+To use it, add this workflow to your dbt repo:
 
 .. code-block:: yaml
 
    # .github/workflows/droughty-check.yml
-   name: droughty schema check
+   name: droughty check
 
    on: pull_request
 
@@ -348,23 +323,40 @@ Example GitHub Actions job. ``dbt parse`` needs a ``profiles.yml`` (here in ``ci
        runs-on: ubuntu-latest
        steps:
          - uses: actions/checkout@v4
-
-         - uses: actions/setup-python@v5
+         - uses: rittmananalytics/droughty@v0.21.0
            with:
-             python-version: "3.11"
+             dbt-adapter: dbt-bigquery
 
-         - name: Install dbt and droughty
-           run: pip install dbt-bigquery droughty
+On every pull request, the action:
 
-         - name: Build the dbt manifest
-           run: dbt deps && dbt parse
-           env:
-             DBT_PROFILES_DIR: ./ci
+1. Reads ``dbt_ci_check``. If it is not ``true``, the action stops and the job passes.
+2. Installs the dbt adapter and runs ``dbt deps`` and ``dbt parse`` to build ``target/manifest.json``. ``dbt parse`` does not connect to the warehouse, so no credentials are needed.
+3. Compares the models in the manifest with the droughty schema files and lists each problem. Problems also show as errors on the pull request.
 
-         - name: Check the droughty schema is in sync
-           run: droughty dbt manifest --check
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
 
-If your dbt project is in a subfolder, run ``dbt parse`` there and pass ``--manifest-path`` or set ``dbt_manifest_path``.
+   * - Input
+     - Meaning
+   * - ``dbt-adapter``
+     - Required. dbt adapter package to install, for example ``dbt-bigquery`` or ``dbt-snowflake==1.8.2``
+   * - ``dbt-project-dir``
+     - Folder holding ``dbt_project.yml``, relative to the repository root. Default ``.``
+   * - ``profiles-dir``
+     - Folder holding a ``profiles.yml`` for ``dbt parse``. Leave empty to use a placeholder profile, which works for ``dbt-bigquery`` and ``dbt-snowflake``
+   * - ``droughty-project-file``
+     - Path to ``droughty_project.yaml``. Default is the repository root
+   * - ``python-version``
+     - Default ``3.11``
+
+The job fails with exit code 1 when there are problems and 2 on an error, such as a missing ``dbt_project.yml``.
+
+To fix a failed check, run ``droughty dbt manifest --clean`` and commit the changed schema files. A model with no columns declared in dbt YAML still has no tests after that. Add its columns to the droughty schema file, run ``dbt parse`` and ``droughty dbt manifest`` again, or add the model to ``test_ignore``.
+
+Replace ``v0.21.0`` with the droughty release tag you want, or a branch name such as ``master``. The action runs droughty from the GitHub repo at that tag, not from PyPI.
+
+To make a failed check block merging, add the ``droughty-check`` job as a required status check in the repository's branch protection settings.
 
 ----
 
@@ -639,7 +631,7 @@ Command Quick Reference
      - ``models/schema.yml``
    * - :ref:`dbt manifest <cmd-dbt-manifest>`
      - Schema includes tables from deleted models
-     - After ``dbt parse`` or ``dbt compile``; with ``--check`` in CI
+     - After ``dbt parse`` or ``dbt compile``; the :ref:`droughty GitHub check <cmd-dbt-check>` runs it in CI
      - ``models/schema.yml``
    * - :ref:`dbml <cmd-dbml>`
      - ERD is always out of date

@@ -194,6 +194,32 @@ def _generated_by_droughty(path):
         return False
 
 
+def schema_files_on_disk(git_path, dbt_path, dbt_tests_filename):
+
+    """Return the droughty schema files that exist on disk.
+
+    That is the single file, plus any <filename>_*.yml that starts with droughty's
+    header line, so files for layers removed from dbt_layers are found too.
+    """
+
+    single = schema_file_path(git_path, dbt_path, dbt_tests_filename)
+
+    layer_files = glob.glob(glob.escape(single[:-len('.yml')]) + '_*.yml')
+
+    found = []
+
+    for path in [single] + sorted(layer_files):
+
+        if not os.path.exists(path):
+            continue
+
+        # the single file has always been droughty's; layer files must carry the header
+        if path == single or _generated_by_droughty(path):
+            found.append(path)
+
+    return found
+
+
 def stale_schema_files(files, git_path, dbt_path, dbt_tests_filename):
 
     """Return droughty schema files on disk that the current run does not write.
@@ -203,23 +229,7 @@ def stale_schema_files(files, git_path, dbt_path, dbt_tests_filename):
     in two files, so they need removing.
     """
 
-    single = schema_file_path(git_path, dbt_path, dbt_tests_filename)
-
-    # every <filename>_*.yml is checked, so files for layers removed from dbt_layers are found too
-    layer_files = glob.glob(glob.escape(single[:-len('.yml')]) + '_*.yml')
-
-    stale = []
-
-    for path in [single] + sorted(layer_files):
-
-        if path in files or not os.path.exists(path):
-            continue
-
-        # the single file has always been droughty's; layer files must carry the header
-        if path == single or _generated_by_droughty(path):
-            stale.append(path)
-
-    return stale
+    return [path for path in schema_files_on_disk(git_path, dbt_path, dbt_tests_filename) if path not in files]
 
 
 def remove_or_report_stale(stale, clean):

@@ -1,0 +1,95 @@
+name: droughty dbt check
+description: >
+  Fails a pull request when a dbt model has no droughty test, or the droughty
+  schema lists a model that no longer exists. Runs only when droughty_project.yaml
+  sets dbt_ci_check to true. Needs no warehouse credentials.
+
+inputs:
+  dbt-adapter:
+    description: dbt adapter package to install, for example dbt-bigquery or dbt-snowflake. A version can be added, for example dbt-bigquery==1.8.2.
+    required: true
+  dbt-project-dir:
+    description: Folder holding dbt_project.yml, relative to the repository root.
+    default: .
+  profiles-dir:
+    description: >
+      Folder holding a profiles.yml for dbt parse, relative to the repository root.
+      Leave empty to use a placeholder profile (dbt-bigquery and dbt-snowflake only).
+      dbt parse does not connect to the warehouse, so no credentials are needed.
+    default: ''
+  droughty-project-file:
+    description: Path to droughty_project.yaml, relative to the repository root. Default is droughty_project.yaml in the repository root.
+    default: ''
+  python-version:
+    description: Python version used to run dbt and the check.
+    default: '3.11'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    # the check runs in its own environment, because droughty's pinned packages clash with dbt's
+    - name: Install the droughty check
+      shell: bash
+      run: |
+        python -m venv "$RUNNER_TEMP/droughty-venv"
+        "$RUNNER_TEMP/droughty-venv/bin/pip" install --quiet \
+          "PyYAML==6.0.2" "ruamel.yaml==0.17.21" "Markdown==3.4.1" "GitPython==3.1.44"
+
+    - name: Read dbt_ci_check from droughty_project.yaml
+      id: switch
+      shell: bash
+      env:
+        PYTHONPATH: ${{ github.action_path }}/droughty
+        PROJECT_FILE: ${{ inputs.droughty-project-file }}
+      run: |
+        args=()
+        if [ -n "$PROJECT_FILE" ]; then args+=(--project-dir "$PROJECT_FILE"); fi
+        out=$("$RUNNER_TEMP/droughty-venv/bin/python" -m droughty.droughty_dbt.dbt_ci_check "${args[@]}" enabled) || { echo "$out"; exit 2; }
+        enabled=$(echo "$out" | tail -n 1)
+        echo "enabled=$enabled" >> "$GITHUB_OUTPUT"
+        if [ "$enabled" != "true" ]; then
+          echo "dbt_ci_check is not true in droughty_project.yaml, so the droughty check is skipped."
+        fi
+
+    - name: Install dbt
+      if: steps.switch.outputs.enabled == 'true'
+      shell: bash
+      env:
+        DBT_ADAPTER: ${{ inputs.dbt-adapter }}
+      run: pip install --quiet "$DBT_ADAPTER"
+
+    - name: Build the dbt manifest
+      if: steps.switch.outputs.enabled == 'true'
+      shell: bash
+      working-directory: ${{ inputs.dbt-project-dir }}
+      env:
+        PYTHONPATH: ${{ github.action_path }}/droughty
+        DBT_ADAPTER: ${{ inputs.dbt-adapter }}
+        PROFILES_DIR: ${{ inputs.profiles-dir }}
+      run: |
+        if [ -n "$PROFILES_DIR" ]; then
+          export DBT_PROFILES_DIR="$GITHUB_WORKSPACE/$PROFILES_DIR"
+        else
+          export DBT_PROFILES_DIR="$RUNNER_TEMP/droughty-profiles"
+          "$RUNNER_TEMP/droughty-venv/bin/python" -m droughty.droughty_dbt.dbt_ci_check profile \
+            --adapter "$DBT_ADAPTER" --dbt-project-dir . --out "$DBT_PROFILES_DIR"
+        fi
+        dbt deps
+        dbt parse
+
+    - name: Run the droughty check
+      if: steps.switch.outputs.enabled == 'true'
+      shell: bash
+      env:
+        PYTHONPATH: ${{ github.action_path }}/droughty
+        PROJECT_FILE: ${{ inputs.droughty-project-file }}
+        DBT_PROJECT_DIR: ${{ inputs.dbt-project-dir }}
+      run: |
+        args=()
+        if [ -n "$PROJECT_FILE" ]; then args+=(--project-dir "$PROJECT_FILE"); fi
+        "$RUNNER_TEMP/droughty-venv/bin/python" -m droughty.droughty_dbt.dbt_ci_check "${args[@]}" \
+          run --manifest-path "$GITHUB_WORKSPACE/$DBT_PROJECT_DIR/target/manifest.json"

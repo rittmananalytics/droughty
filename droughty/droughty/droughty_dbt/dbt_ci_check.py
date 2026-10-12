@@ -194,7 +194,7 @@ def run_check(project_dir=None, manifest_path=None, cwd=None):
             print(f"::error title=droughty check::{problem}")
 
     print()
-    print("To fix, run `droughty dbt manifest --clean` and commit the changed schema files.")
+    print("To fix, run `dbt parse` and `droughty dbt manifest --clean`, then commit the changed schema files.")
 
     return False
 

@@ -191,41 +191,39 @@ After running your dbt models (``dbt run``), generate schema tests for all your 
 
    droughty dbt
 
-This scans every table in your ``test_schemas`` and writes ``models/schema.yml`` with:
+This scans every table in your ``test_schemas`` and writes ``models/schema.yml`` (the name comes from ``dbt_tests_filename``) with:
 
-- A ``unique`` test on every column ending in ``_pk``
-- A ``not_null`` test on every column
-- An ``expression_is_true: valid_from <= valid_to`` test where those columns exist
+- ``not_null`` and ``unique`` tests on every column whose name contains ``pk``
+- ``dbt_utils.expression_is_true`` (``valid_from < valid_to``), ``not_null`` and ``unique`` tests on ``valid_from`` and ``valid_to`` columns
+- ``dbt_utils.at_least_one`` tests on all other columns
 
 **Example output** (excerpt from ``models/schema.yml``):
 
 .. code-block:: yaml
 
    version: 2
-
    models:
      - name: dim_customers
        columns:
-         - name: customer_pk
-           tests:
-             - unique
-             - not_null
          - name: customer_name
            tests:
+             - dbt_utils.at_least_one
+         - name: customer_pk
+           tests:
              - not_null
+             - unique
          - name: email
            tests:
-             - not_null
-
+             - dbt_utils.at_least_one
      - name: fct_orders
        columns:
-         - name: order_pk
-           tests:
-             - unique
-             - not_null
          - name: customer_fk
            tests:
+             - dbt_utils.at_least_one
+         - name: order_pk
+           tests:
              - not_null
+             - unique
 
 Run the tests with:
 

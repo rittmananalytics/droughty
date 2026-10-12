@@ -122,13 +122,12 @@ Droughty writes files to paths relative to the root of your git repository.
 What to expect
 --------------
 
-After running ``droughty dbt``, you'll find a new (or updated) ``models/schema.yml`` containing:
+After running ``droughty dbt``, you'll find a new (or updated) ``models/droughty_schema.yml`` (or the name set by ``dbt_tests_filename``) containing:
 
 - Every table in your ``test_schemas`` as a model
-- Column definitions with data types
-- ``unique`` and ``not_null`` tests on every primary key column
-- ``not_null`` tests on all other columns
-- ``expression_is_true: valid_from <= valid_to`` where those columns exist
+- ``not_null`` and ``unique`` tests on every column whose name contains ``pk``
+- ``dbt_utils.expression_is_true`` (``valid_from < valid_to``), ``not_null`` and ``unique`` tests on ``valid_from`` and ``valid_to`` columns
+- ``dbt_utils.at_least_one`` tests on all other columns
 
 After running ``droughty lookml``, you'll find LookML ``.lkml`` files in ``lookml/`` with:
 

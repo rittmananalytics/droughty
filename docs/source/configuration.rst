@@ -140,7 +140,7 @@ Full reference
        folders: [marts]
        prefixes: [fct_, dim_]
        schemas: [analytics]
-   droughty_dbt_ci_check: true                          # turns on the droughty GitHub check (off when missing)
+   droughty_dbt_ci_check: true                 # Turns on the droughty GitHub check (off when missing)
 
    # --- DBML output ---
    dbml_path: db_docs/                         # Directory for DBML output files
@@ -322,7 +322,7 @@ droughty_project.yaml keys
      - ``warn`` writes models that match no layer to an ``unassigned`` file; ``fail`` stops with an error (default: ``warn``)
    * - ``droughty_dbt_ci_check``
      - No
-     - ``true`` turns on the droughty GitHub check; anything else skips it (default: off). See :ref:`droughty GitHub check <cmd-dbt-check>`
+     - ``true`` turns on the droughty GitHub check; ``false`` or missing skips it (default: off). Any other value stops the check with an error. See :ref:`droughty GitHub check <cmd-dbt-check>`
    * - ``dbml_path``
      - No
      - Output directory for DBML files (default: ``db_docs/``)

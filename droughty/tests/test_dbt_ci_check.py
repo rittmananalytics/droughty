@@ -130,7 +130,7 @@ def test_new_model_without_entry(dbt_repo, monkeypatch, capsys):
 
     assert code == 1
     assert 'stg_customers: no entry in the droughty schema.' in out
-    assert 'To fix, run `droughty dbt manifest --clean`' in out
+    assert 'To fix, run `dbt parse` and `droughty dbt manifest --clean`' in out
 
 
 def test_deleted_model_still_in_schema(dbt_repo, monkeypatch, capsys):

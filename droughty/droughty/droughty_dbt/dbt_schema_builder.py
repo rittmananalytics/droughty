@@ -40,11 +40,10 @@ def build_schema_entries(nested_dictionary, test_overwrite, test_ignore, describ
 
     ignore_test_keys_and_values = []
 
+    # test_overwrite is the string "None" when not configured; .items() then fails and no overrides apply
     try:
 
         if test_overwrite != None:
-
-            ignore_test_keys_and_values = []
 
             for key, value in test_overwrite.items():
 
@@ -53,13 +52,9 @@ def build_schema_entries(nested_dictionary, test_overwrite, test_ignore, describ
                 for sub_key in value.keys():
                     ignore_test_keys_and_values.append(key + "-" + sub_key)
 
-        else:
-
-            pass
-
     except:
 
-        ignore_test_keys = "None"
+        pass
 
     res = [{"version":2},{"models":None}]
 

@@ -11,8 +11,7 @@ from droughty.droughty_dbt.dbt_ci_check import (
 )
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
 
-# reuse the git repo fixture and helpers from the manifest tests
-from test_dbt_manifest import dbt_repo, fixture_manifest, write_json  # noqa: F401
+from helpers import fixture_manifest, write_json
 
 # int_orders_joined has no declared columns, so no tests; ignore it unless a test needs it
 ON = "droughty_dbt_ci_check: true\ntest_ignore:\n  models:\n    - int_orders_joined\n"

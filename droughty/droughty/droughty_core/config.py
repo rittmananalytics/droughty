@@ -1,6 +1,5 @@
 import os
 import yaml
-import git
 import warnings
 from dataclasses import dataclass
 from google.oauth2 import service_account
@@ -9,6 +8,7 @@ from snowflake.sqlalchemy import URL
 import glom
 
 from droughty.droughty_core.config_cli import Common
+from droughty.droughty_core.project_settings import get_git_root
 
 path = os.path.expanduser('~')
 
@@ -62,10 +62,6 @@ def assign_droughty_paths():
 
 assign_droughty_paths()
 
-def get_git_root(path):
-    git_repo = git.Repo(path, search_parent_directories=True)
-    git_root = git_repo.git.rev_parse("--show-toplevel")
-    return (git_root)
 
 IdentifyConfigVariables.git_path = get_git_root(os.getcwd())
 

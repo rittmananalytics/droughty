@@ -1,7 +1,5 @@
 """Tests for splitting the droughty dbt schema into one file per layer."""
 
-import os
-
 import pytest
 
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
@@ -15,8 +13,7 @@ from droughty.droughty_dbt.dbt_schema_layers import (
     schema_files,
 )
 
-# reuse the git repo fixture and command runner from the manifest tests
-from test_dbt_manifest import dbt_repo, run_droughty  # noqa: F401
+from helpers import run_droughty
 
 PER_LAYER = "dbt_schema_output: per_layer\n"
 

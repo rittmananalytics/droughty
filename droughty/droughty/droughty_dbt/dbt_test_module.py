@@ -1,17 +1,3 @@
-import lkml as looker
-from google.oauth2 import service_account
-import pandas_gbq
-from contextlib import redirect_stdout
-import pandas as pd
-import pandas
-import os
-import json
-import sys
-from itertools import chain
-
-from collections import defaultdict
-
-
 from droughty.droughty_dbt.dbt_test_base_dict import dbt_test_dict_and_schemas
 from droughty.droughty_dbt.dbt_test_field_base import described_columns_list
 from droughty.droughty_dbt.dbt_schema_builder import (
@@ -30,10 +16,6 @@ from droughty.droughty_core.config import (
     droughty_project
 )
 from droughty.droughty_core.config_cli import Common
-
-import sys
-import ruamel.yaml
-import git
 
 
 def get_all_values(nested_dictionary):

@@ -1,14 +1,8 @@
 """Tests for droughty dbt manifest: reading manifest.json and writing the schema file."""
 
-import copy
 import hashlib
-import json
 import os
-import shutil
-import subprocess
-import sys
 
-import git
 import pytest
 
 from droughty.droughty_dbt.dbt_manifest_base_dict import (
@@ -20,8 +14,7 @@ from droughty.droughty_dbt.dbt_manifest_base_dict import (
 )
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
 
-FIXTURES = os.path.join(os.path.dirname(__file__), 'fixtures')
-PACKAGE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from helpers import fixture_manifest, run_droughty, write_json
 
 EXPECTED_SCHEMA = """version: 2
 models:
@@ -68,39 +61,6 @@ models:
           - not_null
           - unique
 """
-
-
-def fixture_manifest():
-
-    with open(os.path.join(FIXTURES, 'manifest.json')) as f:
-        return json.load(f)
-
-
-def write_json(path, data):
-
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-    with open(path, 'w') as f:
-        json.dump(data, f)
-
-
-@pytest.fixture
-def dbt_repo(tmp_path):
-
-    """A git repo holding a droughty project, field descriptions and target/manifest.json."""
-
-    git.Repo.init(tmp_path)
-
-    (tmp_path / 'droughty_project.yaml').write_text(
-        "profile: does_not_exist\n"
-        "field_description_path: docs\n"
-        "field_description_file_name: field_descriptions.md\n"
-    )
-    (tmp_path / 'docs').mkdir()
-    shutil.copy(os.path.join(FIXTURES, 'field_descriptions.md'), tmp_path / 'docs' / 'field_descriptions.md')
-    write_json(str(tmp_path / 'target' / 'manifest.json'), fixture_manifest())
-
-    return tmp_path
 
 
 # --- loading ---
@@ -264,16 +224,6 @@ def test_manifest_path_setting_and_argument(dbt_repo):
 
 
 # --- command line ---
-
-def run_droughty(cwd, *args):
-
-    env = dict(os.environ, PYTHONPATH=PACKAGE_ROOT, HOME=str(cwd / 'home'))
-
-    return subprocess.run(
-        [sys.executable, '-m', 'droughty.main', *args],
-        cwd=cwd, env=env, capture_output=True, text=True
-    )
-
 
 def test_command_line_writes_schema(dbt_repo):
 

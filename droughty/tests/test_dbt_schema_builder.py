@@ -9,8 +9,8 @@ from droughty.droughty_dbt.dbt_schema_builder import (
     build_schema_entries,
     read_described_columns,
     render_schema,
-    schema_file_path,
 )
+from droughty.droughty_dbt.dbt_schema_paths import schema_file_path
 
 FIXTURES = os.path.join(os.path.dirname(__file__), 'fixtures')
 

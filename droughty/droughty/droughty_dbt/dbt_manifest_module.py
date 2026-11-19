@@ -1,21 +1,33 @@
-"""Builds the droughty dbt schema file from a dbt manifest instead of the warehouse.
+"""Builds the droughty dbt schema file from the dbt manifest instead of listing warehouse tables.
 
-Reads only droughty_project.yaml and manifest.json. No profile file or warehouse
-connection is needed.
+The model list comes from the manifest, so tables left in the warehouse by deleted or
+renamed models are never picked up. Columns for unchanged models come from the
+manifest (that is, from droughty's own schema files). New and changed models are
+built empty in a scratch target to read their real columns (see dbt_build_changed).
+
+Reads droughty_project.yaml and runs dbt. droughty's profile file is not used.
 """
 
 import os
+import tempfile
 
 from droughty.droughty_core.project_settings import (
     get_git_root,
     project_file_path,
     load_project_settings,
-    nested_setting
+    nested_setting,
+    dbt_project_dir,
+    dbt_target_path
 )
 from droughty.droughty_dbt.dbt_manifest_base_dict import (
     load_manifest,
     select_models,
     manifest_dict
+)
+from droughty.droughty_dbt.dbt_build_changed import (
+    Dbt,
+    build_settings,
+    columns_for_changed_models
 )
 from droughty.droughty_dbt.dbt_schema_builder import (
     build_schema_entries,
@@ -25,24 +37,12 @@ from droughty.droughty_dbt.dbt_schema_builder import (
 from droughty.droughty_dbt.dbt_schema_layers import (
     layer_settings,
     schema_files,
-    stale_schema_files,
     remove_or_report_stale
 )
-
-
-def resolve_manifest_path(cli_path, setting, git_path):
-
-    """--manifest-path is relative to the current directory; dbt_manifest_path is relative to the git root."""
-
-    if cli_path != None:
-
-        return os.path.abspath(cli_path)
-
-    if setting != None:
-
-        return os.path.join(git_path, setting)
-
-    return os.path.join(git_path, 'target', 'manifest.json')
+from droughty.droughty_dbt.dbt_schema_paths import (
+    stale_schema_files,
+    described_elsewhere
+)
 
 
 def described_columns(droughty_project, git_path):
@@ -65,40 +65,73 @@ def described_columns(droughty_project, git_path):
         return []
 
 
-def manifest_schema_output(project_dir=None, manifest_path=None, cwd=None, clean=False):
+def _listed(names):
 
-    """Write the schema file(s) and return their paths."""
+    names = sorted(names)
+
+    return ', '.join(names[:10]) + (' ...' if len(names) > 10 else '')
+
+
+def manifest_schema_output(project_dir=None, cwd=None, clean=False, dbt=None):
+
+    """Write the schema file(s) and return their paths. dbt can be replaced in tests."""
 
     git_path = get_git_root(cwd or os.getcwd())
 
     droughty_project = load_project_settings(project_file_path(project_dir, git_path))
 
     settings = layer_settings(droughty_project)
+    build = build_settings(droughty_project)
 
-    path = resolve_manifest_path(manifest_path, droughty_project.get('dbt_manifest_path'), git_path)
+    dbt_dir = dbt_project_dir(droughty_project, git_path)
+    dbt = dbt or Dbt(build['dbt_command'], dbt_dir)
 
-    print(f"Using dbt manifest {path}")
+    dbt_path = droughty_project.get('dbt_path')
+    dbt_tests_filename = droughty_project.get('dbt_tests_filename')
+    ignored = set(nested_setting(droughty_project, 'test_ignore', 'models') or [])
 
-    models = select_models(load_manifest(path))
+    print("Running dbt parse")
 
-    no_columns = [name for name in sorted(models) if not models[name]['columns']]
+    dbt.run(['parse'])
+
+    manifest = load_manifest(os.path.join(dbt_target_path(dbt_dir), 'manifest.json'))
+
+    models = select_models(manifest)
+
+    elsewhere = described_elsewhere(models, git_path, dbt_dir, dbt_path, dbt_tests_filename)
+
+    if elsewhere:
+
+        print(
+            f"Warning: {len(elsewhere)} models are described in their own YAML files, so droughty leaves them out "
+            f"(dbt fails if a model is described in two files): {_listed(elsewhere)}"
+        )
+
+    with tempfile.TemporaryDirectory(prefix='droughty-') as work_dir:
+
+        built = columns_for_changed_models(
+            dbt, build, git_path, dbt_dir, models, ignored | set(elsewhere),
+            manifest['metadata'].get('adapter_type'), work_dir
+        )
+
+    for name, columns in built.items():
+
+        models[name]['columns'] = columns
+
+    models = {name: model for name, model in models.items() if name not in elsewhere}
+
+    no_columns = [name for name in models if not models[name]['columns'] and name not in ignored]
 
     if no_columns:
 
-        print(
-            f"Warning: {len(no_columns)} of {len(models)} models have no columns declared in dbt YAML "
-            f"and are listed without columns: {', '.join(no_columns[:10])}{' ...' if len(no_columns) > 10 else ''}"
-        )
+        print(f"Warning: {len(no_columns)} of {len(models)} models have no columns and are listed without tests: {_listed(no_columns)}")
 
     entries = build_schema_entries(
         manifest_dict(models),
         nested_setting(droughty_project, 'test_overwrite', 'models'),
-        nested_setting(droughty_project, 'test_ignore', 'models') or [],
+        list(ignored),
         described_columns(droughty_project, git_path)
     )
-
-    dbt_path = droughty_project.get('dbt_path')
-    dbt_tests_filename = droughty_project.get('dbt_tests_filename')
 
     files = schema_files(entries, models, git_path, dbt_path, dbt_tests_filename, settings)
 

@@ -4,16 +4,16 @@ import pytest
 
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
 from droughty.droughty_dbt.dbt_schema_builder import build_schema_entries, render_schema
+from droughty.droughty_dbt.dbt_schema_paths import GENERATED_HEADER
 from droughty.droughty_dbt.dbt_schema_layers import (
     DEFAULT_LAYERS,
-    GENERATED_HEADER,
     LayerError,
     assign_layer,
     layer_settings,
     schema_files,
 )
 
-from helpers import run_droughty
+from helpers import run_droughty, write_project
 
 PER_LAYER = "dbt_schema_output: per_layer\n"
 
@@ -105,7 +105,7 @@ def test_single_output_is_unchanged():
 
 def test_per_layer_files(dbt_repo, capsys):
 
-    (dbt_repo / 'droughty_project.yaml').write_text(PER_LAYER)
+    write_project(dbt_repo, PER_LAYER)
 
     manifest_schema_output(cwd=str(dbt_repo))
 
@@ -139,7 +139,7 @@ def test_per_layer_files(dbt_repo, capsys):
 
 def test_custom_layers_and_filename(dbt_repo):
 
-    (dbt_repo / 'droughty_project.yaml').write_text(
+    write_project(dbt_repo, 
         PER_LAYER +
         "dbt_tests_filename: schema\n"
         "dbt_layers:\n"
@@ -154,7 +154,7 @@ def test_custom_layers_and_filename(dbt_repo):
 
 def test_unmatched_fail_writes_nothing(dbt_repo):
 
-    (dbt_repo / 'droughty_project.yaml').write_text(PER_LAYER + "dbt_layer_unmatched: fail\n")
+    write_project(dbt_repo, PER_LAYER + "dbt_layer_unmatched: fail\n")
 
     with pytest.raises(LayerError, match='1 models match no layer in dbt_layers: misc_lookup'):
         manifest_schema_output(cwd=str(dbt_repo))
@@ -169,7 +169,7 @@ def test_switch_to_per_layer_reports_then_cleans_single_file(dbt_repo, capsys):
     manifest_schema_output(cwd=str(dbt_repo))
     assert written(dbt_repo) == ['droughty_schema.yml']
 
-    (dbt_repo / 'droughty_project.yaml').write_text(PER_LAYER)
+    write_project(dbt_repo, PER_LAYER)
 
     manifest_schema_output(cwd=str(dbt_repo))
     assert 'droughty_schema.yml' in written(dbt_repo)
@@ -181,13 +181,13 @@ def test_switch_to_per_layer_reports_then_cleans_single_file(dbt_repo, capsys):
 
 def test_switch_to_single_cleans_layer_files_but_not_user_files(dbt_repo):
 
-    (dbt_repo / 'droughty_project.yaml').write_text(PER_LAYER)
+    write_project(dbt_repo, PER_LAYER)
     manifest_schema_output(cwd=str(dbt_repo))
 
     # a file the user wrote by hand with a layer-like name, without droughty's header
     (models_dir(dbt_repo) / 'droughty_schema_staging.yml').write_text("version: 2\nmodels: []\n")
 
-    (dbt_repo / 'droughty_project.yaml').write_text("dbt_schema_output: single\n")
+    write_project(dbt_repo, "dbt_schema_output: single\n")
     manifest_schema_output(cwd=str(dbt_repo), clean=True)
 
     assert written(dbt_repo) == ['droughty_schema.yml', 'droughty_schema_staging.yml']
@@ -195,10 +195,10 @@ def test_switch_to_single_cleans_layer_files_but_not_user_files(dbt_repo):
 
 def test_layer_with_no_models_left_is_stale(dbt_repo):
 
-    (dbt_repo / 'droughty_project.yaml').write_text(PER_LAYER)
+    write_project(dbt_repo, PER_LAYER)
     manifest_schema_output(cwd=str(dbt_repo))
 
-    (dbt_repo / 'droughty_project.yaml').write_text(
+    write_project(dbt_repo, 
         PER_LAYER + "dbt_layers:\n  staging:\n    folders: [staging, integration, warehouse, misc]\n  integration:\n    prefixes: [int_]\n"
     )
     manifest_schema_output(cwd=str(dbt_repo), clean=True)
@@ -211,7 +211,7 @@ def test_layer_with_no_models_left_is_stale(dbt_repo):
 def test_command_line_clean(dbt_repo):
 
     run_droughty(dbt_repo, 'dbt', 'manifest')
-    (dbt_repo / 'droughty_project.yaml').write_text(PER_LAYER)
+    write_project(dbt_repo, PER_LAYER)
 
     result = run_droughty(dbt_repo, 'dbt', 'manifest', '--clean')
 
@@ -222,7 +222,7 @@ def test_command_line_clean(dbt_repo):
 
 def test_command_line_reports_bad_setting(dbt_repo):
 
-    (dbt_repo / 'droughty_project.yaml').write_text("dbt_schema_output: per_folder\n")
+    write_project(dbt_repo, "dbt_schema_output: per_folder\n")
 
     result = run_droughty(dbt_repo, 'dbt', 'manifest')
 

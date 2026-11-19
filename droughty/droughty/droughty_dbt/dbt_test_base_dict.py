@@ -93,10 +93,6 @@ def recur_dictify(frame):
 
 model_name = 'model'
 
-def dbt_test_dict():
-
-    return recur_dictify(get_dbt_dict())
-
 def dbt_test_dict_and_schemas():
 
     """Run the warehouse query once and return the test dict and each table's schema."""

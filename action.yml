@@ -36,8 +36,7 @@ runs:
       shell: bash
       run: |
         python -m venv "$RUNNER_TEMP/droughty-venv"
-        "$RUNNER_TEMP/droughty-venv/bin/pip" install --quiet \
-          "PyYAML==6.0.2" "ruamel.yaml==0.17.21" "Markdown==3.4.1" "GitPython==3.1.44"
+        "$RUNNER_TEMP/droughty-venv/bin/pip" install --quiet "PyYAML==6.0.2" "GitPython==3.1.44"
 
     - name: Read droughty_dbt_ci_check from droughty_project.yaml
       id: switch
@@ -92,4 +91,4 @@ runs:
         args=()
         if [ -n "$PROJECT_FILE" ]; then args+=(--project-dir "$PROJECT_FILE"); fi
         "$RUNNER_TEMP/droughty-venv/bin/python" -m droughty.droughty_dbt.dbt_ci_check "${args[@]}" \
-          run --manifest-path "$GITHUB_WORKSPACE/$DBT_PROJECT_DIR/target/manifest.json"
+          run --dbt-project-dir "$DBT_PROJECT_DIR"

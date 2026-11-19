@@ -1,5 +1,8 @@
 """Tests for the droughty GitHub check (droughty.droughty_dbt.dbt_ci_check), run by action.yml."""
 
+import subprocess
+import sys
+
 import pytest
 import yaml
 
@@ -11,7 +14,7 @@ from droughty.droughty_dbt.dbt_ci_check import (
 )
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
 
-from helpers import fixture_manifest, write_json
+from helpers import PACKAGE_ROOT, fixture_manifest, write_json, write_project
 
 # int_orders_joined has no declared columns, so no tests; ignore it unless a test needs it
 ON = "droughty_dbt_ci_check: true\ntest_ignore:\n  models:\n    - int_orders_joined\n"
@@ -19,7 +22,7 @@ ON = "droughty_dbt_ci_check: true\ntest_ignore:\n  models:\n    - int_orders_joi
 
 def setup(repo, monkeypatch, project=ON, generate=True):
 
-    (repo / 'droughty_project.yaml').write_text(project)
+    write_project(repo, project)
 
     if generate:
         manifest_schema_output(cwd=str(repo))
@@ -130,7 +133,7 @@ def test_new_model_without_entry(dbt_repo, monkeypatch, capsys):
 
     assert code == 1
     assert 'stg_customers: no entry in the droughty schema.' in out
-    assert 'To fix, run `dbt parse` and `droughty dbt manifest --clean`' in out
+    assert 'To fix, run `droughty dbt manifest --clean`' in out
 
 
 def test_deleted_model_still_in_schema(dbt_repo, monkeypatch, capsys):
@@ -171,6 +174,60 @@ def test_github_annotations(dbt_repo, monkeypatch, capsys):
     monkeypatch.setenv('GITHUB_ACTIONS', 'true')
 
     assert '::error title=droughty check::int_orders_joined' in run(capsys)[1]
+
+
+def test_model_described_in_its_own_yaml(dbt_repo, monkeypatch, capsys):
+
+    setup(dbt_repo, monkeypatch, generate=False)
+
+    def own_yaml(nodes):
+        nodes['model.jaffle.stg_orders']['patch_path'] = 'jaffle://models/staging/_staging.yml'
+
+    set_manifest(dbt_repo, own_yaml)
+
+    code, out = run(capsys)
+
+    assert code == 1
+    assert (
+        'stg_orders: described in models/staging/_staging.yml, not in the droughty schema. '
+        'Remove its entry there so droughty can add it, or add it to test_ignore.'
+    ) in out
+
+
+def test_model_without_tests_points_to_droughty_dbt_manifest(dbt_repo, monkeypatch, capsys):
+
+    setup(dbt_repo, monkeypatch, "droughty_dbt_ci_check: true\n")
+
+    assert 'Run `droughty dbt manifest` to add its columns and tests' in run(capsys)[1]
+
+
+def test_reads_manifest_from_dbt_project_dir_and_target_path(dbt_repo, monkeypatch, capsys):
+
+    setup(dbt_repo, monkeypatch)
+
+    (dbt_repo / 'dbt').mkdir()
+    (dbt_repo / 'dbt' / 'dbt_project.yml').write_text("name: jaffle\ntarget-path: build\n")
+    (dbt_repo / 'target' / 'manifest.json').rename(dbt_repo / 'manifest.json')
+    write_json(str(dbt_repo / 'dbt' / 'build' / 'manifest.json'), fixture_manifest())
+
+    code = main(['run', '--dbt-project-dir', 'dbt'])
+
+    assert code == 0, capsys.readouterr().out
+
+
+def test_check_needs_only_pyyaml_and_gitpython():
+
+    # the action installs only these two, so markdown and ruamel.yaml must not be imported
+    code = (
+        "import sys\n"
+        "for name in ('markdown', 'ruamel', 'ruamel.yaml', 'pandas', 'lkml'):\n"
+        "    sys.modules[name] = None\n"
+        "import droughty.droughty_dbt.dbt_ci_check\n"
+    )
+
+    result = subprocess.run([sys.executable, '-c', code], cwd=PACKAGE_ROOT, capture_output=True, text=True)
+
+    assert result.returncode == 0, result.stderr
 
 
 # --- errors ---

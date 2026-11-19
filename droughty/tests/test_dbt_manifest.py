@@ -14,7 +14,7 @@ from droughty.droughty_dbt.dbt_manifest_base_dict import (
 )
 from droughty.droughty_dbt.dbt_manifest_module import manifest_schema_output
 
-from helpers import fixture_manifest, run_droughty, write_json
+from helpers import fixture_manifest, run_droughty, write_json, write_project
 
 EXPECTED_SCHEMA = """version: 2
 models:
@@ -184,12 +184,12 @@ def test_warns_about_models_without_declared_columns(dbt_repo, capsys):
 
     manifest_schema_output(cwd=str(dbt_repo))
 
-    assert '1 of 4 models have no columns declared in dbt YAML' in capsys.readouterr().out
+    assert '1 of 4 models have no columns and are listed without tests: int_orders_joined' in capsys.readouterr().out
 
 
 def test_uses_dbt_path_test_ignore_and_test_overwrite(dbt_repo):
 
-    (dbt_repo / 'droughty_project.yaml').write_text(
+    write_project(dbt_repo, 
         "dbt_path: dbt/models\n"
         "dbt_tests_filename: schema\n"
         "test_ignore:\n  models:\n    - misc_lookup\n"
@@ -207,22 +207,6 @@ def test_uses_dbt_path_test_ignore_and_test_overwrite(dbt_repo):
     assert '      - name: amount\n        tests:\n          - not_null\n' in text
 
 
-def test_manifest_path_setting_and_argument(dbt_repo):
-
-    manifest = fixture_manifest()
-    del manifest['nodes']['model.jaffle.misc_lookup']
-    write_json(str(dbt_repo / 'dbt' / 'target' / 'manifest.json'), manifest)
-
-    (dbt_repo / 'droughty_project.yaml').write_text("dbt_manifest_path: dbt/target/manifest.json\n")
-
-    with open(manifest_schema_output(cwd=str(dbt_repo))[0]) as f:
-        assert 'misc_lookup' not in f.read()
-
-    # --manifest-path wins over the setting
-    with open(manifest_schema_output(cwd=str(dbt_repo), manifest_path=str(dbt_repo / 'target' / 'manifest.json'))[0]) as f:
-        assert 'misc_lookup' in f.read()
-
-
 # --- command line ---
 
 def test_command_line_writes_schema(dbt_repo):
@@ -235,7 +219,9 @@ def test_command_line_writes_schema(dbt_repo):
 
 def test_command_line_reports_missing_manifest(dbt_repo):
 
-    result = run_droughty(dbt_repo, 'dbt', 'manifest', '--manifest-path', 'nowhere/manifest.json')
+    (dbt_repo / 'target' / 'manifest.json').unlink()
+
+    result = run_droughty(dbt_repo, 'dbt', 'manifest')
 
     assert result.returncode == 2
     assert 'No dbt manifest found' in result.stdout

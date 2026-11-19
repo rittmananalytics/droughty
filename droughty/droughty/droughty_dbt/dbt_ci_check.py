@@ -4,7 +4,7 @@ It is not a droughty command. The action calls it as:
 
     python -m droughty.droughty_dbt.dbt_ci_check enabled
     python -m droughty.droughty_dbt.dbt_ci_check profile --adapter dbt-bigquery --dbt-project-dir . --out DIR
-    python -m droughty.droughty_dbt.dbt_ci_check run --manifest-path target/manifest.json
+    python -m droughty.droughty_dbt.dbt_ci_check run --dbt-project-dir .
 
 The check fails when:
 - a dbt model has no entry in the droughty schema
@@ -12,7 +12,8 @@ The check fails when:
 - a model's entry in the droughty schema has no tests
 
 Models in test_ignore are skipped. It runs only when droughty_project.yaml has
-droughty_dbt_ci_check: true. It needs the manifest only, not a profile or warehouse.
+droughty_dbt_ci_check: true. It needs the manifest only, not a profile or warehouse,
+and imports only PyYAML and GitPython besides the standard library.
 """
 
 import argparse
@@ -20,29 +21,32 @@ import os
 import re
 import sys
 
-import git
 import yaml
 
 from droughty.droughty_core.project_settings import (
     get_git_root,
     project_file_path,
     load_project_settings,
-    nested_setting
+    nested_setting,
+    dbt_project_dir,
+    resolve_manifest_path
 )
 from droughty.droughty_dbt.dbt_manifest_base_dict import (
     ManifestError,
     load_manifest,
     select_models
 )
-from droughty.droughty_dbt.dbt_manifest_module import resolve_manifest_path
-from droughty.droughty_dbt.dbt_schema_layers import schema_files_on_disk
+from droughty.droughty_dbt.dbt_schema_paths import (
+    schema_files_on_disk,
+    described_elsewhere
+)
 
 
 class CheckError(Exception):
     pass
 
 
-ERRORS = (CheckError, ManifestError, FileNotFoundError, git.InvalidGitRepositoryError)
+ERRORS = (CheckError, ManifestError, FileNotFoundError)
 
 # dbt adapter package -> placeholder outputs for a profiles.yml that dbt parse can read.
 # dbt parse does not connect to the warehouse, so none of these values are used.
@@ -119,9 +123,15 @@ def committed_models(paths):
     return models
 
 
-def find_problems(dbt_models, schema_models, ignored, git_path):
+def find_problems(dbt_models, schema_models, ignored, git_path, elsewhere=None):
 
-    """Return a list of problems. dbt_models is the set of model names in the dbt project."""
+    """Return a list of problems.
+
+    dbt_models is the set of model names in the dbt project. elsewhere maps models
+    described in a YAML file that is not droughty's to that file.
+    """
+
+    elsewhere = elsewhere or {}
 
     def rel(path):
         return os.path.relpath(path, git_path)
@@ -130,7 +140,15 @@ def find_problems(dbt_models, schema_models, ignored, git_path):
 
     for name in sorted(dbt_models - set(schema_models)):
 
-        if name not in ignored:
+        if name in ignored:
+            continue
+
+        if name in elsewhere:
+            problems.append(
+                f"{name}: described in {rel(elsewhere[name])}, not in the droughty schema. "
+                f"Remove its entry there so droughty can add it, or add it to test_ignore."
+            )
+        else:
             problems.append(f"{name}: no entry in the droughty schema.")
 
     for name in sorted(set(schema_models) - dbt_models):
@@ -142,13 +160,13 @@ def find_problems(dbt_models, schema_models, ignored, git_path):
         if name not in ignored and not _has_tests(schema_models[name]['model']):
             problems.append(
                 f"{name}: in {rel(schema_models[name]['path'])} but has no tests. "
-                f"Declare its columns in dbt YAML, or add it to test_ignore."
+                f"Run `droughty dbt manifest` to add its columns and tests, or add it to test_ignore."
             )
 
     return problems
 
 
-def run_check(project_dir=None, manifest_path=None, cwd=None):
+def run_check(project_dir=None, manifest_path=None, dbt_dir=None, cwd=None):
 
     """Print the result and return True if the check passes or is switched off."""
 
@@ -162,19 +180,27 @@ def run_check(project_dir=None, manifest_path=None, cwd=None):
 
         return True
 
-    path = resolve_manifest_path(manifest_path, droughty_project.get('dbt_manifest_path'), git_path)
+    dbt_dir = dbt_project_dir(droughty_project, git_path, dbt_dir)
+
+    path = resolve_manifest_path(manifest_path, dbt_dir)
 
     print(f"Using dbt manifest {path}")
 
-    dbt_models = set(select_models(load_manifest(path)))
+    models = select_models(load_manifest(path))
+    dbt_models = set(models)
 
-    files = schema_files_on_disk(git_path, droughty_project.get('dbt_path'), droughty_project.get('dbt_tests_filename'))
+    dbt_path = droughty_project.get('dbt_path')
+    dbt_tests_filename = droughty_project.get('dbt_tests_filename')
+
+    files = schema_files_on_disk(git_path, dbt_path, dbt_tests_filename)
 
     schema_models = committed_models(files)
 
     ignored = set(nested_setting(droughty_project, 'test_ignore', 'models') or [])
 
-    problems = find_problems(dbt_models, schema_models, ignored, git_path)
+    elsewhere = described_elsewhere(models, git_path, dbt_dir, dbt_path, dbt_tests_filename)
+
+    problems = find_problems(dbt_models, schema_models, ignored, git_path, elsewhere)
 
     if not problems:
 
@@ -194,7 +220,7 @@ def run_check(project_dir=None, manifest_path=None, cwd=None):
             print(f"::error title=droughty check::{problem}")
 
     print()
-    print("To fix, run `dbt parse` and `droughty dbt manifest --clean`, then commit the changed schema files.")
+    print("To fix, run `droughty dbt manifest --clean`, then commit the changed schema files.")
 
     return False
 
@@ -243,7 +269,8 @@ def main(argv=None):
     profile.add_argument('--out', required=True)
 
     run = subparsers.add_parser('run', help='run the check')
-    run.add_argument('--manifest-path')
+    run.add_argument('--manifest-path', help='default <dbt project>/<target-path>/manifest.json')
+    run.add_argument('--dbt-project-dir', help='folder holding dbt_project.yml, default dbt_project_dir or the git root')
 
     args = parser.parse_args(argv)
 
@@ -266,7 +293,7 @@ def main(argv=None):
 
             return 0
 
-        return 0 if run_check(project_dir=args.project_dir, manifest_path=args.manifest_path) else 1
+        return 0 if run_check(project_dir=args.project_dir, manifest_path=args.manifest_path, dbt_dir=args.dbt_project_dir) else 1
 
     except ERRORS as e:
 

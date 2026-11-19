@@ -111,7 +111,8 @@ def root_project_name(manifest):
 
 def select_models(manifest):
 
-    """Return {model name: {original_file_path, schema, columns}} for the root project's non-ephemeral models."""
+    """Return {model name: {unique_id, original_file_path, patch_path, fqn, relation_name, schema, columns}}
+    for the root project's non-ephemeral models."""
 
     root = root_project_name(manifest)
 
@@ -150,6 +151,9 @@ def select_models(manifest):
         models[name] = {
             'unique_id': unique_id,
             'original_file_path': node.get('original_file_path'),
+            'patch_path': node.get('patch_path'),
+            'fqn': node.get('fqn'),
+            'relation_name': node.get('relation_name'),
             'schema': node.get('schema'),
             'columns': columns,
         }

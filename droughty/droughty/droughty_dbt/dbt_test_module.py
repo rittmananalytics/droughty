@@ -7,9 +7,9 @@ from droughty.droughty_dbt.dbt_schema_builder import (
 from droughty.droughty_dbt.dbt_schema_layers import (
     layer_settings,
     schema_files,
-    stale_schema_files,
     remove_or_report_stale
 )
+from droughty.droughty_dbt.dbt_schema_paths import stale_schema_files
 from droughty.droughty_core.config import (
     IdentifyConfigVariables,
     ExploresVariables,
@@ -56,5 +56,5 @@ def schema_output():
             ExploresVariables.dbt_path,
             ExploresVariables.dbt_tests_filename
         ),
-        getattr(Common, 'clean', False)
+        Common.clean
     )

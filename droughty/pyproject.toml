@@ -43,7 +43,7 @@ dedupe = ["pandas_dedupe"]
 [tool.poetry.scripts]
 droughty = "droughty.main:start"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
 
 [tool.pytest.ini_options]

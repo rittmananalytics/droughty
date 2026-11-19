@@ -4,10 +4,13 @@ Used by droughty dbt manifest. Steps:
 
 1. Get an older manifest to compare with: a saved one (state_path), or one made by
    running dbt parse on the main branch in a temporary git worktree.
-2. dbt ls finds new models, models whose SQL or macros changed, and everything
-   downstream of them. Models with no columns yet are added.
+2. dbt ls finds new models, models whose SQL or macros changed, models whose
+   droughty entry differs from the older manifest, and everything downstream of
+   them. Models with no columns yet are added.
 3. dbt run --empty builds only those models in the scratch target, with no rows.
    Unchanged upstream models are read from the older manifest's tables (--defer).
+   droughty only builds into schemas whose name contains "droughty", so it can
+   never empty a real table.
 4. dbt docs generate reads their columns into catalog.json.
 
 Settings in droughty_project.yaml:
@@ -40,6 +43,9 @@ SETTING_KEYS = ('target', 'defer_target', 'compare_branch', 'state_path', 'dbt_c
 # new models, models whose SQL or macros changed, and everything downstream of them.
 # Changes to YAML only (such as droughty's own schema files) do not change columns.
 CHANGED_SELECTOR = ['state:modified.body+', 'state:modified.macros+', 'state:new+']
+
+# droughty only builds into schemas whose name contains this, so a wrong target can never empty a real table
+SCRATCH_MARK = 'droughty'
 
 EXAMPLE = (
     f"{SETTING}:\n"
@@ -145,11 +151,13 @@ def _json_lines(text):
     return rows
 
 
-def _selectors(models):
+def _selectors(models, downstream=False):
 
     """dbt --select values for the given models, by full name so a folder with the same name is not picked up."""
 
-    return ['fqn:' + '.'.join(model['fqn']) if model.get('fqn') else model['name'] for model in models]
+    suffix = '+' if downstream else ''
+
+    return [('fqn:' + '.'.join(model['fqn']) if model.get('fqn') else model['name']) + suffix for model in models]
 
 
 def default_compare_branch(repo):
@@ -252,19 +260,49 @@ def state_from_path(settings, git_path):
     return path
 
 
-def list_models_to_build(dbt, settings, state_dir, extra_models, scratch_path):
+def list_models_to_build(dbt, settings, state_dir, extra_models, drifted_models, scratch_path):
 
-    """Return {unique_id: relation name in the scratch target} for changed models and extra_models."""
+    """Return {unique_id: {'relation_name', 'schema'} in the scratch target} for the models to build.
+
+    That is changed models and everything downstream, extra_models, and
+    drifted_models and everything downstream.
+    """
 
     output = dbt.run(
         ['ls', '--resource-type', 'model',
-         '--select', *CHANGED_SELECTOR, *_selectors(extra_models),
+         '--select', *CHANGED_SELECTOR, *_selectors(extra_models), *_selectors(drifted_models, downstream=True),
          '--state', state_dir,
          '--target', settings['target'], '--target-path', scratch_path,
-         '--output', 'json', '--output-keys', 'unique_id relation_name']
+         '--output', 'json', '--output-keys', 'unique_id relation_name schema']
     )
 
-    return {row['unique_id']: row.get('relation_name') for row in _json_lines(output) if row.get('unique_id')}
+    return {
+        row['unique_id']: {'relation_name': row.get('relation_name'), 'schema': row.get('schema')}
+        for row in _json_lines(output) if row.get('unique_id')
+    }
+
+
+def drifted(models, state_manifest):
+
+    """Models whose columns differ from the older manifest although dbt may not count them as changed.
+
+    Columns come from the droughty schema files. If they differ from the older
+    manifest, they were written on this branch from SQL that may since have
+    changed back, so they cannot be trusted.
+    """
+
+    state_nodes = state_manifest.get('nodes', {})
+
+    found = []
+
+    for name in sorted(models):
+
+        old = state_nodes.get(models[name]['unique_id'])
+
+        if old != None and set(models[name]['columns']) != set((old.get('columns') or {})):
+            found.append(dict(models[name], name=name))
+
+    return found
 
 
 def _same_relation(a, b):
@@ -277,14 +315,32 @@ def _same_relation(a, b):
 
 def check_scratch_is_separate(settings, names, models, scratch_relations, state_manifest):
 
-    """Stop before dbt run --empty could replace a real table with an empty one."""
+    """Stop before dbt run --empty could replace a real table with an empty one.
+
+    Every model must land in a schema whose name contains "droughty", and not on
+    the same table as the default target or the compare manifest.
+    """
 
     state_nodes = state_manifest.get('nodes', {})
+
+    outside = [
+        f"{name} ({scratch_relations.get(models[name]['unique_id'], {}).get('schema')})"
+        for name in names
+        if SCRATCH_MARK not in str(scratch_relations.get(models[name]['unique_id'], {}).get('schema') or '').lower()
+    ]
+
+    if outside:
+        raise BuildError(
+            f"The {settings['target']} target would build {len(outside)} models in schemas without "
+            f"'{SCRATCH_MARK}' in the name: {', '.join(outside[:10])}{' ...' if len(outside) > 10 else ''}. "
+            f"droughty builds models empty, so it only builds into a scratch dataset named like droughty_scratch. "
+            f"Check {SETTING}.target and your generate_schema_name macro."
+        )
 
     for name in names:
 
         uid = models[name]['unique_id']
-        scratch = scratch_relations.get(uid)
+        scratch = scratch_relations.get(uid, {}).get('relation_name')
 
         for label, relation in (
             ('your default dbt target', models[name].get('relation_name')),
@@ -358,7 +414,9 @@ def columns_for_changed_models(dbt, settings, git_path, dbt_dir, models, skip, a
 
     scratch_path = os.path.join(work_dir, 'scratch')
 
-    listed = list_models_to_build(dbt, settings, state_dir, no_columns, scratch_path)
+    changed_entries = [model for model in drifted(models, state_manifest) if model['name'] not in skip]
+
+    listed = list_models_to_build(dbt, settings, state_dir, no_columns, changed_entries, scratch_path)
 
     by_uid = {model['unique_id']: name for name, model in models.items()}
 

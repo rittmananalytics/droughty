@@ -6,6 +6,7 @@ folder named by FAKE_DBT_DIR (default: the current folder). fake_dbt.json can ho
     changed:        unique_ids that dbt ls reports as changed
     columns:        {unique_id: {column: type}} written to catalog.json
     relations:      {unique_id: relation name} reported by dbt ls
+    schemas:        {unique_id: schema} reported by dbt ls (default droughty_scratch)
     state_manifest: path of the manifest that dbt parse --target-path writes
     fail:           a dbt command name that should fail
 """
@@ -50,7 +51,8 @@ def selected():
             break
         values.append(value)
 
-    return values
+    # the stand-in has no model graph, so a trailing + (downstream) only selects the model itself
+    return [value.rstrip('+') for value in values]
 
 
 def selectors_for(node):
@@ -79,8 +81,9 @@ elif command == 'ls':
             continue
 
         if uid in config.get('changed', []) or selectors_for(node) & set(selected()):
-            relation = config.get('relations', {}).get(uid, f"scratch.{node['name']}")
-            print(json.dumps({'unique_id': uid, 'relation_name': relation}))
+            relation = config.get('relations', {}).get(uid, f"droughty_scratch.{node['name']}")
+            schema = config.get('schemas', {}).get(uid, 'droughty_scratch')
+            print(json.dumps({'unique_id': uid, 'relation_name': relation, 'schema': schema}))
 
 elif command == 'docs':
 

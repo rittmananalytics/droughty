@@ -222,6 +222,7 @@ def test_refuses_to_build_over_a_real_table(dbt_repo):
         dbt_repo,
         changed=['model.jaffle.stg_orders'],
         relations={'model.jaffle.stg_orders': '`proj`.`ANALYTICS_STAGING`.`stg_orders`'},
+        schemas={'model.jaffle.stg_orders': 'droughty_scratch_but_misconfigured'},
     )
 
     with pytest.raises(BuildError, match='the same table as your default dbt target'):
@@ -229,6 +230,39 @@ def test_refuses_to_build_over_a_real_table(dbt_repo):
 
     assert 'run' not in dbt_commands(dbt_repo)
     assert not (dbt_repo / 'models' / 'droughty_schema.yml').exists()
+
+
+def test_refuses_to_build_outside_a_droughty_schema(dbt_repo):
+
+    set_fake_dbt(
+        dbt_repo,
+        changed=['model.jaffle.stg_orders'],
+        schemas={'model.jaffle.stg_orders': 'analytics_staging'},
+    )
+
+    with pytest.raises(BuildError, match=r"in schemas without 'droughty' in the name: stg_orders \(analytics_staging\)"):
+        manifest_schema_output(cwd=str(dbt_repo))
+
+    assert 'run' not in dbt_commands(dbt_repo)
+    assert not (dbt_repo / 'models' / 'droughty_schema.yml').exists()
+
+
+def test_entry_that_differs_from_the_compare_manifest_is_rebuilt(dbt_repo, capsys):
+
+    # the droughty entry for stg_orders has a column main does not have, but the SQL is unchanged
+    def extra_column(manifest):
+        manifest['nodes']['model.jaffle.stg_orders']['columns']['status'] = {'name': 'status'}
+
+    set_manifest(dbt_repo, extra_column)
+    set_fake_dbt(dbt_repo, columns={'model.jaffle.stg_orders': {'order_pk': 'STRING'}})
+
+    manifest_schema_output(cwd=str(dbt_repo))
+
+    assert 'stg_orders' in capsys.readouterr().out.split('Building ')[1]
+    assert 'status' not in model_block(schema_text(dbt_repo), 'stg_orders')
+
+    ls_args = fake_dbt_calls(dbt_repo)[1]['args']
+    assert 'stg_orders+' in ls_args
 
 
 def test_dbt_failure_is_reported(dbt_repo):

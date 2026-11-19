@@ -29,6 +29,7 @@ Droughty reads your data warehouse's ``INFORMATION_SCHEMA`` and generates these 
 
    droughty lookml    # → LookML views, explores, measures
    droughty dbt       # → schema.yml with tests for every table
+   droughty dbt manifest  # → the same, for models in your dbt project only
    droughty dbml      # → ERD with all PK/FK relationships
    droughty cube      # → Cube schema with dimensions and measures
    droughty docs      # → AI-generated field descriptions
@@ -53,7 +54,7 @@ What droughty generates
      - LookML views, explores & measures
      - Looker
    * - ``dbt``
-     - Writing ``schema.yml`` tests is the task that always gets skipped. Droughty generates baseline coverage for every table instantly.
+     - Writing ``schema.yml`` tests is the task that always gets skipped. Droughty generates baseline coverage for every table instantly. ``droughty dbt manifest`` covers only models in your dbt project, and a GitHub check stops pull requests that add a model without tests.
      - ``schema.yml`` with uniqueness, not-null & validity tests
      - dbt
    * - ``dbml``

@@ -85,7 +85,7 @@ The most common usage pattern — running droughty as part of regular dbt develo
 .. code-block:: bash
 
    # After building or modifying dbt models, regenerate dbt tests
-   droughty dbt
+   droughty dbt                 # or: droughty dbt manifest --clean
 
    # Regenerate the Looker base layer before committing
    droughty lookml
@@ -190,7 +190,9 @@ When to run each command
    * - Situation
      - Command(s) to run
    * - After building or modifying dbt models
-     - ``droughty dbt``
+     - ``droughty dbt``, or ``droughty dbt manifest --clean`` to cover only models in the dbt project (see :ref:`Building from the dbt manifest <cmd-dbt-manifest>`)
+   * - On every pull request in the dbt repo
+     - The :ref:`droughty GitHub check <cmd-dbt-check>`
    * - Before committing changes that affect the warehouse schema
      - ``droughty lookml``, ``droughty dbt``
    * - Before raising a PR (for documentation)

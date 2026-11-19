@@ -209,7 +209,7 @@ Skip test generation for specific tables. They are still listed, with no columns
 It gets columns like this:
 
 1. Runs ``dbt parse`` to get the current manifest.
-2. Compares it with the main branch to find new models, models whose SQL or macros changed, and every model downstream of them. Models with no columns yet are added. On the first run that is usually every model.
+2. Compares it with the main branch to find new models, models whose SQL or macros changed, models whose droughty entry differs from main, and every model downstream of them. Models with no columns yet are added. On the first run that is usually every model.
 3. Builds only those models in a scratch dataset with ``dbt run --empty``, so the tables have the right columns and no rows. Unchanged models they read from come from the ``defer_target`` tables and are not rebuilt.
 4. Reads the columns of the models it built with ``dbt docs generate``. Every other model keeps the columns already in the droughty schema file.
 5. Writes the schema file(s).
@@ -228,7 +228,7 @@ Settings in ``droughty_project.yaml``:
      dbt_command: dbt           # optional: how to run dbt
    dbt_project_dir: .           # optional: folder holding dbt_project.yml, relative to the git root
 
-Add the scratch target to ``profiles.yml``, for example a copy of your dev target with ``dataset: droughty_scratch``. droughty stops with an error if the scratch target would write any model to the same table as your default target or ``defer_target``, so it never empties a real table.
+Add the scratch target to ``profiles.yml``, for example a copy of your dev target with ``dataset: droughty_scratch``. The dataset name must contain ``droughty``: droughty stops before building if any model would land in a schema without ``droughty`` in its name, or on the same table as your default target or ``defer_target``. This means a wrong target or a custom ``generate_schema_name`` macro can never empty a real table.
 
 - dbt runs as its own program, so it can be in a different Python environment from droughty. droughty's ``profile.yaml`` is not used; dbt uses your normal ``profiles.yml`` login.
 - To compare with the main branch, droughty checks it out into a temporary folder, runs ``dbt parse`` there and deletes the folder. Your working copy is not touched. If production saves a ``manifest.json``, set ``state_path`` to its folder to skip this.

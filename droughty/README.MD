@@ -308,7 +308,7 @@ droughty dbt manifest
 What it does:
 
 1. Runs `dbt parse` to get the current manifest.
-2. Compares it with the main branch to find new models, models whose SQL or macros changed, and every model downstream of them. Models with no columns yet are added to that list. On the first run that is usually every model.
+2. Compares it with the main branch to find new models, models whose SQL or macros changed, models whose droughty entry differs from main, and every model downstream of them. Models with no columns yet are added to that list. On the first run that is usually every model.
 3. Builds only those models in a scratch dataset with `dbt run --empty`, so the tables have the right columns and no rows. Unchanged models they read from come from your `defer_target` tables, so they are not rebuilt.
 4. Reads the columns of the models it built. Every other model keeps the columns already in the droughty schema file.
 5. Writes the schema file(s).
@@ -327,7 +327,7 @@ dbt_build_changed:
 dbt_project_dir: .           # optional: folder holding dbt_project.yml, relative to the git root
 ```
 
-Add the scratch target to your `profiles.yml`, for example a copy of your dev target with `dataset: droughty_scratch`. droughty stops with an error if the scratch target would write any model to the same table as your default target or `defer_target`, so it never empties a real table.
+Add the scratch target to your `profiles.yml`, for example a copy of your dev target with `dataset: droughty_scratch`. The dataset name must contain `droughty`: droughty stops before building if any model would land in a schema without `droughty` in its name, or on the same table as your default target or `defer_target`. This means a wrong target or a custom `generate_schema_name` macro can never empty a real table.
 
 Notes:
 

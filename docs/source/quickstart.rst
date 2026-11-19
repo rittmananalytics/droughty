@@ -129,6 +129,8 @@ After running ``droughty dbt``, you'll find a new (or updated) ``models/droughty
 - ``dbt_utils.expression_is_true`` (``valid_from < valid_to``), ``not_null`` and ``unique`` tests on ``valid_from`` and ``valid_to`` columns
 - ``dbt_utils.at_least_one`` tests on all other columns
 
+``droughty dbt`` includes every table in ``test_schemas``, including tables left behind by deleted models. To cover only the models in your dbt project, use ``droughty dbt manifest``. See :ref:`Building from the dbt manifest <cmd-dbt-manifest>`.
+
 After running ``droughty lookml``, you'll find LookML ``.lkml`` files in ``lookml/`` with:
 
 - A view for every table in your analytics schema

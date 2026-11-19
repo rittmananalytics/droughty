@@ -16,6 +16,8 @@ Droughty is an analytics engineering toolkit that reads your data warehouse's `I
 |---------|--------|-------------|
 | `droughty lookml` | LookML views, explores & measures | Looker |
 | `droughty dbt` | `schema.yml` with standard tests | dbt |
+| `droughty dbt manifest` | The same, for models in the dbt manifest only, building new and changed models empty to read their columns | dbt |
+| droughty GitHub Action | Fails a pull request when a dbt model has no droughty tests | GitHub |
 | `droughty dbml` | ERD with PK/FK relationships | dbdocs / dbdiagram.io |
 | `droughty cube` | Cube schema with dimensions & measures | Cube.js |
 | `droughty docs` | AI-generated field descriptions | Any |
@@ -255,22 +257,27 @@ include: "/lookml/base/_base_parameters.layer.lkml"
 
 ### `droughty dbt`
 
-Generates a `schema.yml` file with standard dbt tests for all tables in your `test_schemas`.
+Generates a dbt schema file with standard tests for all tables in your `test_schemas`.
 
 ```bash
 droughty dbt
 droughty dbt --env-vars enabled
 ```
 
-**Output file** (path configured in `droughty_project.yaml`):
+**Output file** (folder set by `dbt_path`, name by `dbt_tests_filename`):
 ```
-models/schema.yml
+models/droughty_schema.yml
 ```
 
 **Tests generated:**
-- `unique` — on all primary key fields (`_pk` suffix)
-- `not_null` — on all columns
-- `expression_is_true` — `valid_from <= valid_to` where both fields exist
+
+| Column name contains | Tests |
+|---|---|
+| `pk` | `not_null`, `unique` |
+| `valid_from` or `valid_to` | `dbt_utils.expression_is_true` (`valid_from < valid_to`), `not_null`, `unique` |
+| anything else, including `fk` | `dbt_utils.at_least_one` |
+
+A column with a `{% docs %}` block in your field description file also gets a `{{doc("column_name")}}` description.
 
 **Customising tests** in `droughty_project.yaml`:
 
@@ -283,12 +290,120 @@ test_overwrite:
         - not_null
         - unique
 
-# Skip all tests for specific tables
+# Skip tests for specific tables (they are listed with no columns)
 test_ignore:
   models:
     - table_to_skip
     - another_table_to_skip
 ```
+
+#### Build from the dbt manifest
+
+```bash
+droughty dbt manifest
+```
+
+`droughty dbt` lists every table in your `test_schemas`, including tables left behind by models that were deleted or renamed but never dropped. `droughty dbt manifest` takes the list of models from the dbt manifest instead, so only models in your dbt project are included.
+
+What it does:
+
+1. Runs `dbt parse` to get the current manifest.
+2. Compares it with the main branch to find new models, models whose SQL or macros changed, models whose droughty entry differs from main, and every model downstream of them. Models with no columns yet are added to that list. On the first run that is usually every model.
+3. Builds only those models in a scratch dataset with `dbt run --empty`, so the tables have the right columns and no rows. Unchanged models they read from come from your `defer_target` tables, so they are not rebuilt.
+4. Reads the columns of the models it built. Every other model keeps the columns already in the droughty schema file.
+5. Writes the schema file(s).
+
+If nothing changed, it skips steps 3 and 4 and does not touch the warehouse.
+
+Set it up in `droughty_project.yaml`:
+
+```yaml
+dbt_build_changed:
+  target: droughty_scratch   # required: a dbt target in profiles.yml that writes to a scratch dataset
+  defer_target: prod         # optional: target whose tables unchanged models are read from
+  compare_branch: main       # optional: default is origin's default branch
+  state_path: prod-artifacts # optional: folder with a saved manifest.json, used instead of compare_branch
+  dbt_command: dbt           # optional: how to run dbt
+dbt_project_dir: .           # optional: folder holding dbt_project.yml, relative to the git root
+```
+
+Add the scratch target to your `profiles.yml`, for example a copy of your dev target with `dataset: droughty_scratch`. The dataset name must contain `droughty`: droughty stops before building if any model would land in a schema without `droughty` in its name, or on the same table as your default target or `defer_target`. This means a wrong target or a custom `generate_schema_name` macro can never empty a real table.
+
+Notes:
+
+- dbt runs as its own program, so it can be in a different Python environment from droughty. droughty's `profile.yaml` is not used. dbt uses your normal `profiles.yml` login.
+- To compare with the main branch, droughty checks it out into a temporary folder, runs `dbt parse` there and deletes the folder. Your working copy is not touched. If your production runs save a `manifest.json`, point `state_path` at its folder to skip this.
+- Set `defer_target` to your production target if you have one. Without it, unchanged models are read from the tables of your default target, and old columns in those tables can carry into models that use `select *`.
+- The empty tables stay in the scratch dataset and are replaced on the next run. Set a default table expiry on the dataset if you want them removed.
+- A model already described in its own YAML file is left out, with a warning, because dbt fails if a model is described in two files.
+- Package models (such as `dbt_utils`), ephemeral models, seeds and snapshots are skipped.
+- Needs dbt 1.8 or later (for `--empty`). Tested end to end with dbt-core 1.13.0b1 and dbt-duckdb.
+
+If dbt fails, droughty prints the end of dbt's output and exits with code 2 without writing any files.
+
+#### One file per layer
+
+Set `dbt_schema_output: per_layer` to write one file per layer instead of one file. This works with `droughty dbt` and `droughty dbt manifest`:
+
+```
+models/droughty_schema_staging.yml
+models/droughty_schema_integration.yml
+models/droughty_schema_warehouse.yml
+models/droughty_schema_unassigned.yml    # only if some models match no layer
+```
+
+A model goes to the first layer that matches, in this order:
+
+1. A folder in its file path, such as `models/staging/` (`droughty dbt manifest` only)
+2. The start of its name: `stg_`, `int_` or `wh_` by default
+3. The warehouse schema it is built in
+
+Set `dbt_layers` to use your own layers, and `dbt_layer_unmatched: fail` to stop with an error when a model matches no layer. A layer with no models gets no file.
+
+#### Remove old files
+
+Switching between `single` and `per_layer`, or removing a layer, leaves old droughty files behind. dbt fails if a model is described in two files, so droughty warns about them. Add `--clean` to delete them:
+
+```bash
+droughty dbt --clean
+droughty dbt manifest --clean
+```
+
+`--clean` only deletes droughty's single schema file and layer files that start with droughty's `# Generated by droughty` line.
+
+#### droughty GitHub check
+
+A GitHub Action that fails a pull request when:
+
+- a dbt model has no entry in the droughty schema
+- the droughty schema lists a model that is not in the dbt project
+- a model's entry in the droughty schema has no tests
+
+Models in `test_ignore` are skipped. Column and test changes do not fail the check. It is designed for schema files written by `droughty dbt manifest`: a schema written by `droughty dbt` lists every warehouse table, so the check reports seeds and left-behind tables too.
+
+It is off unless `droughty_project.yaml` sets `droughty_dbt_ci_check: true`. To use it, add this workflow to your dbt repo:
+
+```yaml
+# .github/workflows/droughty-check.yml
+name: droughty check
+
+on: pull_request
+
+jobs:
+  droughty-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rittmananalytics/droughty@v0.21.0
+        with:
+          dbt-adapter: dbt-bigquery
+```
+
+The action runs `dbt deps` and `dbt parse` to build the manifest, then compares it with the droughty schema files. `dbt parse` does not connect to the warehouse, so no credentials are needed: the action writes a placeholder `profiles.yml` for `dbt-bigquery` and `dbt-snowflake`, or you can pass your own with `profiles-dir`. Other inputs: `dbt-project-dir` (folder holding `dbt_project.yml`), `droughty-project-file` and `python-version`. If your dbt project reads environment variables with `env_var()` and no default, set them on the job, because `dbt parse` needs them.
+
+To fix a failed check, run `droughty dbt manifest --clean`, then commit the changed files. A model described in its own YAML file is reported as such: remove its entry there so droughty can add it, or add it to `test_ignore`.
+
+Replace `v0.21.0` with a droughty release tag or branch. The action runs droughty from this GitHub repo, not from PyPI. To make a failed check block merging, add the job as a required status check in the repository's branch protection settings.
 
 ---
 
@@ -503,6 +618,21 @@ lookml_base_path: views/
 # --- dbt output paths ---
 dbt_path: models/
 dbt_tests_filename: schema
+dbt_project_dir: .                        # optional: folder holding dbt_project.yml
+dbt_build_changed:                        # needed by droughty dbt manifest
+  target: droughty_scratch                # dbt target that writes to a scratch dataset
+  defer_target: prod                      # optional
+dbt_schema_output: single                 # optional: single (default) or per_layer
+dbt_layer_unmatched: warn                 # optional: warn (default) or fail
+dbt_layers:                               # optional: replaces the default staging, integration, warehouse layers
+  staging:
+    folders: [staging]
+    prefixes: [stg_]
+  warehouse:
+    folders: [marts]
+    prefixes: [fct_, dim_]
+    schemas: [analytics]
+droughty_dbt_ci_check: true               # optional: turns on the droughty GitHub check (off when missing)
 
 # --- DBML output paths ---
 dbml_path: db_docs/
@@ -652,6 +782,9 @@ git add lookml/
 # Use env vars — no local files needed
 droughty dbt --env-vars enabled
 droughty lookml --env-vars enabled
+
+# To fail pull requests when a dbt model has no droughty tests,
+# use the droughty GitHub Action (see droughty dbt above)
 ```
 
 ---

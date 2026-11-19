@@ -129,6 +129,21 @@ Full reference
    # --- dbt output ---
    dbt_path: models/                           # Directory for dbt schema.yml output
    dbt_tests_filename: schema                  # Filename for schema tests file
+   dbt_project_dir: .                          # Folder holding dbt_project.yml
+   dbt_build_changed:                          # Needed by droughty dbt manifest
+     target: droughty_scratch                  # dbt target that writes to a scratch dataset
+     defer_target: prod                        # dbt target whose tables unchanged models are read from
+   dbt_schema_output: single                   # single or per_layer
+   dbt_layer_unmatched: warn                   # warn or fail, for models that match no layer
+   dbt_layers:                                 # Replaces the default staging, integration, warehouse layers
+     staging:
+       folders: [staging]
+       prefixes: [stg_]
+     warehouse:
+       folders: [marts]
+       prefixes: [fct_, dim_]
+       schemas: [analytics]
+   droughty_dbt_ci_check: true                 # Turns on the droughty GitHub check (off when missing)
 
    # --- DBML output ---
    dbml_path: db_docs/                         # Directory for DBML output files
@@ -273,7 +288,7 @@ droughty_project.yaml keys
      - Required
      - Description
    * - ``profile``
-     - Yes
+     - Yes, except for ``droughty dbt manifest``
      - Name of the profile in ``~/.droughty/profile.yaml``
    * - ``lookml_path``
      - No
@@ -295,7 +310,25 @@ droughty_project.yaml keys
      - Output directory for dbt schema (default: ``models/``)
    * - ``dbt_tests_filename``
      - No
-     - dbt schema filename (default: ``schema``)
+     - dbt schema filename, without ``.yml`` (default: ``droughty_schema``)
+   * - ``dbt_project_dir``
+     - No
+     - Folder holding ``dbt_project.yml``, relative to the git root (default: the git root). Used by ``droughty dbt manifest`` and the droughty GitHub check
+   * - ``dbt_build_changed``
+     - For ``droughty dbt manifest``
+     - ``target`` (required), ``defer_target``, ``compare_branch``, ``state_path`` and ``dbt_command``. See :ref:`Building from the dbt manifest <cmd-dbt-manifest>`
+   * - ``dbt_schema_output``
+     - No
+     - ``single`` writes one schema file; ``per_layer`` writes one file per layer (default: ``single``). See :ref:`One file per layer <cmd-dbt-layers>`
+   * - ``dbt_layers``
+     - No
+     - Layer names with the ``folders``, ``prefixes`` and ``schemas`` that match models to them. Replaces the defaults (``staging``, ``integration``, ``warehouse``)
+   * - ``dbt_layer_unmatched``
+     - No
+     - ``warn`` writes models that match no layer to an ``unassigned`` file; ``fail`` stops with an error (default: ``warn``)
+   * - ``droughty_dbt_ci_check``
+     - No
+     - ``true`` turns on the droughty GitHub check; ``false`` or missing skips it (default: off). Any other value stops the check with an error. See :ref:`droughty GitHub check <cmd-dbt-check>`
    * - ``dbml_path``
      - No
      - Output directory for DBML files (default: ``db_docs/``)

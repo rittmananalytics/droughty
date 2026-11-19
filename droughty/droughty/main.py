@@ -12,25 +12,35 @@ warnings.filterwarnings("ignore", "Your application has authenticated using end 
 warnings.filterwarnings("once", "Project hasn't been configured, hence access to all projects")
 warnings.filterwarnings("ignore", "read_gbq is deprecated and will be removed in a future version")
 
-from droughty.droughty_lookml.lookml_cli import (
-    lookml_base,
-    lookml_explore,
-    lookml_measures,
-    lookml_pop
-)
-from droughty.droughty_cube.cube_cli import (
-    base,
-    explore,
-    measures
-)
-
-from droughty.droughty_dbt.dbt_test_cli import tests
-from droughty.droughty_dbml.dbml_cli import erd
 from droughty.droughty_core.config_cli import Common
-from droughty.droughty_core.config import ExploresVariables
-from droughty.droughty_docs.docs_cli import docs
-from droughty.droughty_qa.qa_agent_cli import qa
-from droughty.droughty_stage.stage_cli import stage
+
+# droughty dbt manifest works from local files only, so it skips the imports
+# below, which load the profile and connect to the warehouse
+
+if Common.args_command == 'dbt' and Common.dbt_command == 'manifest':
+
+    from droughty.droughty_dbt.dbt_manifest_cli import manifest
+
+else:
+
+    from droughty.droughty_lookml.lookml_cli import (
+        lookml_base,
+        lookml_explore,
+        lookml_measures,
+        lookml_pop
+    )
+    from droughty.droughty_cube.cube_cli import (
+        base,
+        explore,
+        measures
+    )
+
+    from droughty.droughty_dbt.dbt_test_cli import tests
+    from droughty.droughty_dbml.dbml_cli import erd
+    from droughty.droughty_core.config import ExploresVariables
+    from droughty.droughty_docs.docs_cli import docs
+    from droughty.droughty_qa.qa_agent_cli import qa
+    from droughty.droughty_stage.stage_cli import stage
 
 
 def start():
@@ -73,7 +83,13 @@ def start():
 
     elif Common.args_command == 'dbt':
 
-        tests()
+        if Common.dbt_command == 'manifest':
+
+            manifest()
+
+        else:
+
+            tests()
 
     elif Common.args_command == 'docs':
 

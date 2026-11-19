@@ -12,6 +12,8 @@ class Common:
     project_id: str
     datasets: str
     table: str
+    dbt_command: str
+    clean: bool
 
 
 
@@ -58,6 +60,16 @@ def profile_func():
     dbt.add_argument('--profile-dir', type=str, required=False)
     dbt.add_argument('--project-dir', type=str, required=False, help='the directory of the droughty project')
     dbt.add_argument('--env-vars', type=str, choices=['enabled'], required=False, help='enables the use of environment variables')
+    dbt.add_argument('--clean', action='store_true', help='delete old droughty schema files that are no longer written')
+
+    # dbt manifest (takes the model list from the dbt manifest instead of the warehouse)
+    # shared options use SUPPRESS so a value given before "manifest" is not reset to None
+
+    dbt_subparser = dbt.add_subparsers(dest='dbt_command')
+
+    dbt_manifest = dbt_subparser.add_parser('manifest', help='build the dbt schema from the dbt manifest, building new and changed models empty to read their columns')
+    dbt_manifest.add_argument('--project-dir', type=str, required=False, default=argparse.SUPPRESS, help='the directory of the droughty project')
+    dbt_manifest.add_argument('--clean', action='store_true', default=argparse.SUPPRESS, help='delete old droughty schema files that are no longer written')
 
     # docs 
 
@@ -100,6 +112,8 @@ def profile_func():
     Common.project_id = getattr(args, 'project_id', None)
     Common.datasets = getattr(args, 'datasets', None)
     Common.table = getattr(args, 'table', None)
+    Common.dbt_command = getattr(args, 'dbt_command', None)
+    Common.clean = getattr(args, 'clean', False)
 
  
 profile_func()

@@ -1,0 +1,190 @@
+"""Splits the droughty dbt schema into one file per layer (staging, integration, warehouse).
+
+Settings in droughty_project.yaml, all optional:
+
+    dbt_schema_output: single        # or per_layer
+    dbt_layer_unmatched: warn        # or fail
+    dbt_layers:                      # replaces the defaults below when set
+      staging:
+        folders: [staging]
+        prefixes: [stg_]
+        schemas: []
+
+A model goes to the first layer whose rule matches, checked in this order:
+folder in the model's file path (manifest source only), name prefix, then
+warehouse schema. Nothing here reads droughty config or the warehouse.
+"""
+
+import os
+import re
+
+from droughty.droughty_dbt.dbt_schema_builder import render_schema
+from droughty.droughty_dbt.dbt_schema_paths import GENERATED_HEADER, schema_file_path, layer_file_path
+
+
+SCHEMA_OUTPUT_VALUES = ('single', 'per_layer')
+LAYER_UNMATCHED_VALUES = ('warn', 'fail')
+UNASSIGNED = 'unassigned'
+
+DEFAULT_LAYERS = {
+    'staging': {'folders': ['staging'], 'prefixes': ['stg_'], 'schemas': []},
+    'integration': {'folders': ['integration'], 'prefixes': ['int_'], 'schemas': []},
+    'warehouse': {'folders': ['warehouse'], 'prefixes': ['wh_'], 'schemas': []},
+}
+
+class LayerError(Exception):
+    pass
+
+
+def _as_list(value, layer, key):
+
+    if value == None:
+        return []
+
+    if isinstance(value, str):
+        return [value]
+
+    if isinstance(value, list) and all(isinstance(v, str) for v in value):
+        return value
+
+    raise LayerError(f"dbt_layers.{layer}.{key} must be a name or a list of names.")
+
+
+def layer_settings(droughty_project):
+
+    """Read and check dbt_schema_output, dbt_layer_unmatched and dbt_layers."""
+
+    schema_output = droughty_project.get('dbt_schema_output') or 'single'
+    layer_unmatched = droughty_project.get('dbt_layer_unmatched') or 'warn'
+    layers = droughty_project.get('dbt_layers')
+
+    if schema_output not in SCHEMA_OUTPUT_VALUES:
+        raise LayerError(f"dbt_schema_output must be one of {', '.join(SCHEMA_OUTPUT_VALUES)}, not {schema_output}.")
+
+    if layer_unmatched not in LAYER_UNMATCHED_VALUES:
+        raise LayerError(f"dbt_layer_unmatched must be one of {', '.join(LAYER_UNMATCHED_VALUES)}, not {layer_unmatched}.")
+
+    if layers == None:
+
+        rules = DEFAULT_LAYERS
+
+    else:
+
+        if not isinstance(layers, dict) or not layers:
+            raise LayerError("dbt_layers must map each layer name to its folders, prefixes and schemas.")
+
+        rules = {}
+
+        for layer, rule in layers.items():
+
+            if not isinstance(layer, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', layer) or layer == UNASSIGNED:
+                raise LayerError(f"dbt_layers: {layer} cannot be used as a layer name. Use letters, numbers, _ or -, and not '{UNASSIGNED}'.")
+
+            if rule != None and not isinstance(rule, dict):
+                raise LayerError(f"dbt_layers.{layer} must have folders, prefixes or schemas.")
+
+            rule = rule or {}
+
+            unknown = set(rule) - {'folders', 'prefixes', 'schemas'}
+
+            if unknown:
+                raise LayerError(f"dbt_layers.{layer} has unknown keys: {', '.join(sorted(unknown))}. Use folders, prefixes or schemas.")
+
+            rules[layer] = {key: _as_list(rule.get(key), layer, key) for key in ('folders', 'prefixes', 'schemas')}
+
+    return {'schema_output': schema_output, 'layer_unmatched': layer_unmatched, 'layers': rules}
+
+
+def assign_layer(name, original_file_path, schema, rules):
+
+    """Return the layer for a model, or None if no rule matches."""
+
+    if original_file_path:
+
+        folders = original_file_path.replace('\\', '/').split('/')[:-1]
+
+        for folder in folders:
+            for layer, rule in rules.items():
+                if folder in rule['folders']:
+                    return layer
+
+    for layer, rule in rules.items():
+        if any(name.startswith(prefix) for prefix in rule['prefixes']):
+            return layer
+
+    if schema:
+
+        for layer, rule in rules.items():
+            if schema.lower() in [s.lower() for s in rule['schemas']]:
+                return layer
+
+    return None
+
+
+def schema_files(entries, model_info, git_path, dbt_path, dbt_tests_filename, settings):
+
+    """Return {file path: YAML text} for every schema file droughty should write.
+
+    entries is the output of build_schema_entries. model_info maps each model
+    name to {'original_file_path': ..., 'schema': ...}; either may be None.
+    """
+
+    if settings['schema_output'] == 'single':
+
+        return {schema_file_path(git_path, dbt_path, dbt_tests_filename): render_schema(entries)}
+
+    header, models = entries[:2], entries[2:]
+
+    by_layer = {}
+    unmatched = []
+
+    for model in models:
+
+        name = model[0]['name']
+        info = model_info.get(name, {})
+        layer = assign_layer(name, info.get('original_file_path'), info.get('schema'), settings['layers'])
+
+        if layer == None:
+            unmatched.append(name)
+            layer = UNASSIGNED
+
+        by_layer.setdefault(layer, []).append(model)
+
+    if unmatched:
+
+        listed = ', '.join(unmatched[:10]) + (' ...' if len(unmatched) > 10 else '')
+
+        if settings['layer_unmatched'] == 'fail':
+            raise LayerError(f"{len(unmatched)} models match no layer in dbt_layers: {listed}")
+
+        print(f"Warning: {len(unmatched)} models match no layer and are written to the {UNASSIGNED} file: {listed}")
+
+    files = {}
+
+    for layer in list(settings['layers']) + [UNASSIGNED]:
+
+        if layer in by_layer:
+
+            path = layer_file_path(git_path, dbt_path, dbt_tests_filename, layer)
+            files[path] = GENERATED_HEADER + render_schema(header + by_layer[layer])
+
+    return files
+
+
+def remove_or_report_stale(stale, clean):
+
+    if not stale:
+        return
+
+    if clean:
+
+        for path in stale:
+            os.remove(path)
+            print(f"Removed old droughty schema file {path}")
+
+    else:
+
+        print(
+            f"Warning: {len(stale)} old droughty schema files are no longer written: {', '.join(stale)}. "
+            f"dbt fails if a model is described in two files. Re-run with --clean to delete them."
+        )

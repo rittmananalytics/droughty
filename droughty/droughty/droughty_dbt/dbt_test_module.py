@@ -1,164 +1,60 @@
-import lkml as looker
-from google.oauth2 import service_account
-import pandas_gbq
-from contextlib import redirect_stdout
-import pandas as pd
-import pandas
-import os
-import json
-import sys
-from itertools import chain
-
-from collections import defaultdict
-
-
-from droughty.droughty_dbt.dbt_test_base_dict import dbt_test_dict
+from droughty.droughty_dbt.dbt_test_base_dict import dbt_test_dict_and_schemas
 from droughty.droughty_dbt.dbt_test_field_base import described_columns_list
+from droughty.droughty_dbt.dbt_schema_builder import (
+    build_schema_entries,
+    write_schema
+)
+from droughty.droughty_dbt.dbt_schema_layers import (
+    layer_settings,
+    schema_files,
+    remove_or_report_stale
+)
+from droughty.droughty_dbt.dbt_schema_paths import stale_schema_files
 from droughty.droughty_core.config import (
     IdentifyConfigVariables,
-    ExploresVariables
+    ExploresVariables,
+    droughty_project
 )
-
-import sys
-import ruamel.yaml
-import git
+from droughty.droughty_core.config_cli import Common
 
 
 def get_all_values(nested_dictionary):
 
-    test_overwrite = ExploresVariables.test_overwrite
-
-    try:
-        
-        if test_overwrite != None:
-    
-            ignore_test_keys_and_values = []
-
-            for key, value in test_overwrite.items():
-
-                nested_dictionary[key].update(value)
-
-                for sub_key in value.keys():
-                    ignore_test_keys_and_values.append(key + "-" + sub_key)
-
-        else:
-        
-            pass
-
-    except:
-
-        ignore_test_keys = "None"
-
-    res = [{"version":2},{"models":None}]
-    
-    for key,value in nested_dictionary.items():
-            
-            seq = []
-
-            for key1,value1 in value.items():
-
-                if key + "-" + key1 not in ignore_test_keys_and_values and not key in ExploresVariables.test_ignore:
-
-                    if key1 in described_columns_list:
-
-                        if "pk" in key1 and "not_null" not in value1 and "unique" not in value1:
-                            
-                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["not_null","unique"]}
-                            seq.append(elem)
-                            
-                        elif "fk" in key1:
-                            
-                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["dbt_utils.at_least_one"]}
-                            seq.append(elem)   
-                            
-                        elif "valid_to" in key1 or "valid_from" in key1:
-                            
-                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
-                            seq.append(elem)  
-
-                        elif "pk" not in key1 or "fk" not in key1:
-                    
-                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": [""+"dbt_utils.at_least_one"]}
-                            seq.append(elem)  
-
-                        elif "pk" not in key1 or "fk" not in key1:
-                    
-                            elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}"}
-                            seq.append(elem)  
-
-                    elif key1 not in described_columns_list:
-
-                            if "pk" in key1:
-                                
-                                elem = {"name": key1, "tests": ["not_null","unique"]}
-                                seq.append(elem)
-                                
-                            elif "fk" in key1:
-                                
-                                elem = {"name": key1, "tests": ["dbt_utils.at_least_one"]}
-                                seq.append(elem)   
-                                
-                            elif "valid_to" in key1 or "valid_from" in key1:
-                                
-                                elem = {"name": key1, "tests": ["dbt_utils.expression_is_true"":""expression"":"" valid_from < valid_to","not_null","unique"]}
-                                seq.append(elem)  
-
-                            elif "pk" not in key1 or "fk" not in key1:
-                        
-                                elem = {"name": key1, "tests": [""+"dbt_utils.at_least_one"]}
-                                seq.append(elem)
-                    
-                elif key + "-" + key1 in ignore_test_keys_and_values and key not in ExploresVariables.test_ignore:
-                    
-                    if key1 in described_columns_list:
-
-                            
-                        elem = {"name": key1, "description": "{{doc("+'"'+key1+'"'+")}}", "tests": value1}
-                        seq.append(elem)
-
-                    elif key1 not in described_columns_list:
-
-                        elem = {"name": key1, "tests": value1}
-                        seq.append(elem)
-            
-            res.append([{"name": key, "columns": seq}])
-
-    return res
+    return build_schema_entries(
+        nested_dictionary,
+        ExploresVariables.test_overwrite,
+        ExploresVariables.test_ignore,
+        described_columns_list
+    )
 
 def schema_output():
 
-    if ExploresVariables.dbt_path == None:
-    
-        git_path = IdentifyConfigVariables.git_path
+    settings = layer_settings(droughty_project)
 
-        rel_path = "models"
+    nested_dictionary, schemas = dbt_test_dict_and_schemas()
 
-        path = os.path.join(git_path, rel_path)
+    # the warehouse has no dbt file paths, so tables are assigned to layers by name prefix or schema
+    model_info = {name: {'original_file_path': None, 'schema': schemas.get(name)} for name in nested_dictionary}
 
-    elif ExploresVariables.dbt_path != None:
+    files = schema_files(
+        get_all_values(nested_dictionary),
+        model_info,
+        IdentifyConfigVariables.git_path,
+        ExploresVariables.dbt_path,
+        ExploresVariables.dbt_tests_filename,
+        settings
+    )
 
-        path = os.path.join(IdentifyConfigVariables.git_path,ExploresVariables.dbt_path)
+    for file_path, text in files.items():
 
-    if not os.path.exists(path):
-        os.makedirs(path)
+        write_schema(file_path, text)
 
-    if ExploresVariables.dbt_tests_filename != None:
-
-        filename = ExploresVariables.dbt_tests_filename
-        
-    else:
-
-        filename = 'droughty_schema'
-  
-    suffix = '.yml'
-
-    extension = filename+suffix
-
-    with open(os.path.join(path,extension), 'w') as file:
-
-        with redirect_stdout(file):
-
-            for i in get_all_values(dbt_test_dict()):
-                yaml = ruamel.yaml.YAML()
-                yaml.indent(mapping=2, sequence=4, offset=2)
-                yaml.dump(i,file)
+    remove_or_report_stale(
+        stale_schema_files(
+            files,
+            IdentifyConfigVariables.git_path,
+            ExploresVariables.dbt_path,
+            ExploresVariables.dbt_tests_filename
+        ),
+        Common.clean
+    )

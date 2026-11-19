@@ -191,41 +191,39 @@ After running your dbt models (``dbt run``), generate schema tests for all your 
 
    droughty dbt
 
-This scans every table in your ``test_schemas`` and writes ``models/schema.yml`` with:
+This scans every table in your ``test_schemas`` and writes ``models/schema.yml`` (the name comes from ``dbt_tests_filename``) with:
 
-- A ``unique`` test on every column ending in ``_pk``
-- A ``not_null`` test on every column
-- An ``expression_is_true: valid_from <= valid_to`` test where those columns exist
+- ``not_null`` and ``unique`` tests on every column whose name contains ``pk``
+- ``dbt_utils.expression_is_true`` (``valid_from < valid_to``), ``not_null`` and ``unique`` tests on ``valid_from`` and ``valid_to`` columns
+- ``dbt_utils.at_least_one`` tests on all other columns
 
 **Example output** (excerpt from ``models/schema.yml``):
 
 .. code-block:: yaml
 
    version: 2
-
    models:
      - name: dim_customers
        columns:
-         - name: customer_pk
-           tests:
-             - unique
-             - not_null
          - name: customer_name
            tests:
+             - dbt_utils.at_least_one
+         - name: customer_pk
+           tests:
              - not_null
+             - unique
          - name: email
            tests:
-             - not_null
-
+             - dbt_utils.at_least_one
      - name: fct_orders
        columns:
-         - name: order_pk
-           tests:
-             - unique
-             - not_null
          - name: customer_fk
            tests:
+             - dbt_utils.at_least_one
+         - name: order_pk
+           tests:
              - not_null
+             - unique
 
 Run the tests with:
 
@@ -256,6 +254,62 @@ To skip test generation for a table entirely:
      models:
        - raw_events_log
        - tmp_dedupe_working
+
+**Only models in your dbt project: droughty dbt manifest**
+
+``droughty dbt`` writes an entry for every table in ``test_schemas``, including tables left behind by models you deleted or renamed. ``droughty dbt manifest`` takes the model list from dbt instead. For new and changed models it builds empty copies in a scratch dataset and reads their columns there, so old tables and old columns in your dev dataset never get in. See :ref:`Building from the dbt manifest <cmd-dbt-manifest>` for the full details.
+
+1. Add a scratch target to your dbt ``profiles.yml``. Copy your dev output and give it its own dataset:
+
+   .. code-block:: yaml
+
+      my_project:
+        target: dev
+        outputs:
+          dev:
+            type: bigquery
+            method: oauth
+            project: my-gcp-project
+            dataset: dbt_dev
+            threads: 4
+          prod:
+            type: bigquery
+            method: oauth
+            project: my-gcp-project
+            dataset: analytics
+            threads: 4
+          droughty_scratch:
+            type: bigquery
+            method: oauth
+            project: my-gcp-project
+            dataset: droughty_scratch
+            threads: 4
+
+2. Tell droughty about it in ``droughty_project.yaml``:
+
+   .. code-block:: yaml
+
+      dbt_build_changed:
+        target: droughty_scratch
+        defer_target: prod
+
+3. After adding or changing models, run:
+
+   .. code-block:: bash
+
+      droughty dbt manifest --clean
+
+   droughty runs ``dbt parse``, compares with your main branch, builds only the new and changed models (and the models downstream of them) as empty tables in ``droughty_scratch``, reads their columns and writes the schema file. The first run builds every model once, because none have columns yet. After that only changed models are built, and a run with no model changes does not use BigQuery at all.
+
+4. Commit the changed schema files.
+
+.. tip::
+
+   In BigQuery, set a default table expiration on the ``droughty_scratch`` dataset (for example 1 day). The empty tables are only needed while droughty runs.
+
+.. warning::
+
+   The scratch dataset name must contain ``droughty``. droughty stops before building if any model would land in a dataset without ``droughty`` in its name, or on the same table as your default target or ``defer_target``. If your ``generate_schema_name`` macro sends models to fixed datasets (for example ``staging``) for some targets, make sure it does not do that for the scratch target, or droughty will refuse to run.
 
 ----
 
@@ -398,7 +452,7 @@ Here is how droughty fits into a day-to-day dbt + BigQuery development cycle:
    dbt run
 
    # 2. Regenerate schema tests to cover new tables/columns
-   droughty dbt
+   droughty dbt                 # or: droughty dbt manifest --clean
 
    # 3. Run tests
    dbt test
@@ -478,6 +532,8 @@ In a CI/CD pipeline, use environment variables instead of local files:
              git add models/schema.yml lookml/
              git diff --staged --quiet || git commit -m "chore: regenerate droughty outputs"
              git push
+
+To fail a pull request that adds a dbt model without droughty tests, use the droughty GitHub check. It needs no BigQuery credentials. See :ref:`droughty GitHub check <cmd-dbt-check>`.
 
 ----
 

@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
+    "dbt_version": "1.8.7",
+    "project_name": "jaffle"
+  },
+  "nodes": {
+    "model.jaffle.stg_orders": {
+      "resource_type": "model",
+      "package_name": "jaffle",
+      "name": "stg_orders",
+      "original_file_path": "models/staging/stg_orders.sql",
+      "schema": "analytics_staging",
+      "config": {"materialized": "view"},
+      "columns": {
+        "order_pk": {"name": "order_pk", "data_type": "string"},
+        "customer_fk": {"name": "customer_fk", "data_type": "string"},
+        "amount": {"name": "amount", "data_type": null}
+      }
+    },
+    "model.jaffle.int_orders_joined": {
+      "resource_type": "model",
+      "package_name": "jaffle",
+      "name": "int_orders_joined",
+      "original_file_path": "models/integration/int_orders_joined.sql",
+      "schema": "analytics_integration",
+      "config": {"materialized": "view"},
+      "columns": {}
+    },
+    "model.jaffle.wh_orders_fact": {
+      "resource_type": "model",
+      "package_name": "jaffle",
+      "name": "wh_orders_fact",
+      "original_file_path": "models/warehouse/wh_orders_fact.sql",
+      "schema": "analytics",
+      "config": {"materialized": "table"},
+      "columns": {
+        "valid_to": {"name": "valid_to"},
+        "order_pk": {"name": "order_pk", "data_type": "string"},
+        "valid_from": {"name": "valid_from"},
+        "customer_fk": {"name": "customer_fk"}
+      }
+    },
+    "model.jaffle.misc_lookup": {
+      "resource_type": "model",
+      "package_name": "jaffle",
+      "name": "misc_lookup",
+      "original_file_path": "models/misc/misc_lookup.sql",
+      "schema": "analytics",
+      "config": {"materialized": "table"},
+      "columns": {"lookup_pk": {"name": "lookup_pk"}}
+    },
+    "model.jaffle.int_helper": {
+      "resource_type": "model",
+      "package_name": "jaffle",
+      "name": "int_helper",
+      "original_file_path": "models/integration/int_helper.sql",
+      "schema": "analytics_integration",
+      "config": {"materialized": "ephemeral"},
+      "columns": {"helper_pk": {"name": "helper_pk"}}
+    },
+    "model.dbt_utils.package_model": {
+      "resource_type": "model",
+      "package_name": "dbt_utils",
+      "name": "package_model",
+      "original_file_path": "models/package_model.sql",
+      "schema": "analytics",
+      "config": {"materialized": "table"},
+      "columns": {}
+    },
+    "seed.jaffle.country_codes": {
+      "resource_type": "seed",
+      "package_name": "jaffle",
+      "name": "country_codes",
+      "original_file_path": "seeds/country_codes.csv",
+      "schema": "analytics",
+      "config": {"materialized": "seed"},
+      "columns": {}
+    },
+    "test.jaffle.not_null_stg_orders_order_pk": {
+      "resource_type": "test",
+      "package_name": "jaffle",
+      "name": "not_null_stg_orders_order_pk",
+      "original_file_path": "models/staging/droughty_schema.yml",
+      "schema": "analytics_dbt_test__audit",
+      "config": {"materialized": "test"},
+      "columns": {}
+    }
+  },
+  "sources": {},
+  "macros": {}
+}

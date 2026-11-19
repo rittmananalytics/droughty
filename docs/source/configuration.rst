@@ -129,7 +129,10 @@ Full reference
    # --- dbt output ---
    dbt_path: models/                           # Directory for dbt schema.yml output
    dbt_tests_filename: schema                  # Filename for schema tests file
-   dbt_manifest_path: target/manifest.json     # Manifest read by droughty dbt manifest
+   dbt_project_dir: .                          # Folder holding dbt_project.yml
+   dbt_build_changed:                          # Needed by droughty dbt manifest
+     target: droughty_scratch                  # dbt target that writes to a scratch dataset
+     defer_target: prod                        # dbt target whose tables unchanged models are read from
    dbt_schema_output: single                   # single or per_layer
    dbt_layer_unmatched: warn                   # warn or fail, for models that match no layer
    dbt_layers:                                 # Replaces the default staging, integration, warehouse layers
@@ -308,9 +311,12 @@ droughty_project.yaml keys
    * - ``dbt_tests_filename``
      - No
      - dbt schema filename, without ``.yml`` (default: ``droughty_schema``)
-   * - ``dbt_manifest_path``
+   * - ``dbt_project_dir``
      - No
-     - dbt manifest read by ``droughty dbt manifest``, relative to the git root (default: ``target/manifest.json``)
+     - Folder holding ``dbt_project.yml``, relative to the git root (default: the git root). Used by ``droughty dbt manifest`` and the droughty GitHub check
+   * - ``dbt_build_changed``
+     - For ``droughty dbt manifest``
+     - ``target`` (required), ``defer_target``, ``compare_branch``, ``state_path`` and ``dbt_command``. See :ref:`Building from the dbt manifest <cmd-dbt-manifest>`
    * - ``dbt_schema_output``
      - No
      - ``single`` writes one schema file; ``per_layer`` writes one file per layer (default: ``single``). See :ref:`One file per layer <cmd-dbt-layers>`
